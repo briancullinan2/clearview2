@@ -1,0 +1,215 @@
+<Page
+	x:Class="EPICClearView.Patient.Add" 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:patient="clr-namespace:EPICClearView.Patient" 
+    xmlns:macros="clr-namespace:EPICClearView.Macros" 
+    xmlns:helpers="clr-namespace:EPICDataLayer.Helpers;assembly=DataLayer"
+    xmlns:system="clr-namespace:System;assembly=mscorlib" 
+    xmlns:converters="clr-namespace:EPICClearView.Utilities.Converters"
+    xmlns:customization="clr-namespace:EPICDataLayer.Customization;assembly=DataLayer"
+    xmlns:ribbon="clr-namespace:System.Windows.Controls.Ribbon;assembly=System.Windows.Controls.Ribbon"
+    mc:Ignorable="d"
+	Title="Add Patient">
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary
+					Source="/Themes/ClearView.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+			<BitmapImage
+				UriSource="/Resources/0175-camera.png"
+				x:Key="NewCapture" />
+			<BitmapImage
+				UriSource="/Resources/0040-save.png"
+				x:Key="Save" />
+			<BitmapImage
+				UriSource="/Resources/1001-cancel.png"
+				x:Key="Cancel" />
+			<converters:EnumDisplayNameConverter
+				x:Key="EnumDisplayNameConverter" />
+            <ribbon:RibbonContextualTabGroup
+				RibbonContextualTabGroup.Header="Options"
+				UIElement.Visibility="Visible"
+				Control.Background="#FF008080"
+				Control.BorderBrush="#FF008080"
+				x:Key="SearchGroup" />
+			<ribbon:RibbonTab
+				Header="Search"
+				x:Key="SearchOptions">
+				<ribbon:RibbonGroup>
+					<ribbon:RibbonButton
+						Label="Save and Close"
+						LargeImageSource="{StaticResource Save}"
+						Click="SaveClose_Click" />
+                    <ribbon:RibbonButton
+						Label="New Capture"
+						LargeImageSource="{StaticResource NewCapture}" />
+				</ribbon:RibbonGroup>
+			</ribbon:RibbonTab>
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition />
+			<RowDefinition
+				Height="Auto" />
+		</Grid.RowDefinitions>
+		<StackPanel
+			Orientation="Horizontal"
+			Grid.Row="2"
+			HorizontalAlignment="Right">
+			<Button
+				Name="Save"
+				Margin="5"
+				Padding="3"
+				IsEnabled="False"
+				Click="Save_Click">
+				<StackPanel
+					Orientation="Horizontal">
+					<Image
+						Source="{StaticResource Save}"
+						Height="25"
+						Width="25"
+						Margin="3,0">
+						<FrameworkElement.Style>
+							<Style
+								TargetType="{x:Type Image}">
+								<Style.Triggers>
+									<DataTrigger
+										Value="False"
+										Binding="{Binding IsEnabled, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}}">
+										<Setter
+											Property="UIElement.Opacity"
+											Value=".5" />
+									</DataTrigger>
+								</Style.Triggers>
+							</Style>
+						</FrameworkElement.Style>
+					</Image>
+					<TextBlock
+						VerticalAlignment="Center"
+						HorizontalAlignment="Center"
+						Text="Save Changes" />
+				</StackPanel>
+			</Button>
+			<Button
+				Margin="5"
+				Padding="3"
+				CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}}">
+				<StackPanel
+					Orientation="Horizontal">
+					<Image
+						Source="{StaticResource Cancel}"
+						Height="25"
+						Width="25"
+						Margin="3,0" />
+					<TextBlock
+						VerticalAlignment="Center"
+						HorizontalAlignment="Center"
+						Text="Close" />
+				</StackPanel>
+			</Button>
+		</StackPanel>
+		<TabControl
+			TabStripPlacement="Left">
+			<TabItem
+				Header="Demographics">
+				<ScrollViewer
+					HorizontalScrollBarVisibility="Auto"
+					VerticalScrollBarVisibility="Auto">
+					<Grid
+						VerticalAlignment="Top">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition />
+							<ColumnDefinition
+								Width="Auto" />
+							<ColumnDefinition />
+						</Grid.ColumnDefinitions>
+						<Grid.RowDefinitions>
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+						</Grid.RowDefinitions>
+						<Label
+							Content="First Name:"
+							Grid.Row="0" />
+						<TextBox
+							Name="FirstName"
+							Grid.Row="1"
+							Margin="5"
+							MinWidth="150"
+							MaxLength="{x:Static helpers:PatientFields+FirstName.MaxLength}"
+							Text="{Binding Path=Patient.FirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}" />
+						<Label
+							Content="MI:"
+							Grid.Column="1"
+							Grid.Row="0" />
+						<TextBox
+							Name="MiddleInitial"
+							Grid.Row="1"
+							Grid.Column="1"
+							Margin="5"
+							MinWidth="30"
+							Text="{Binding Path=Patient.MiddleInitial, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}"
+							MaxLength="1" />
+						<Label
+							Content="Last Name:"
+							Grid.Column="2"
+							Grid.Row="0" />
+						<TextBox
+							Name="LastName"
+							Grid.Row="1"
+							Grid.Column="2"
+							Margin="5"
+							MinWidth="150"
+							Text="{Binding Path=Patient.LastName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}"
+							MaxLength="{x:Static helpers:PatientFields+FirstName.MaxLength}" />
+						<Label
+							Content="Birth Date:"
+							Grid.Row="2" />
+						<DatePicker
+							Name="BirthDate"
+							Grid.Row="3"
+							Margin="5"
+							Text="{Binding Path=Patient.BirthDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}"
+							SelectedDateChanged="BirthDate_SelectedDateChanged" />
+						<Label
+							Content="Age:"
+							Grid.Row="2"
+							Grid.Column="1" />
+						<TextBox
+							Name="Age"
+							Grid.Row="3"
+							Grid.Column="1"
+							Margin="5"
+							MinWidth="30"
+							IsReadOnly="True"
+							IsTabStop="False" />
+						<Label
+							Content="Gender:"
+							Grid.Row="2"
+							Grid.Column="2" />
+						<ComboBox
+							Name="Gender"
+							Grid.Row="3"
+							Grid.Column="2"
+							Margin="5"
+							ItemsSource="{Binding Source={x:Type customization:Gender}, Converter={StaticResource EnumDisplayNameConverter}}"
+							SelectedItem="{Binding Path=Patient.Gender, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<TextBlock
+										Text="{Binding}" />
+                                </DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ComboBox>
+					</Grid>
+				</ScrollViewer>
+			</TabItem>
+		</TabControl>
+	</Grid>
+</Page>

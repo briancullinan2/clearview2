@@ -1,0 +1,144 @@
+<Page
+	x:Class="EPICClearView.Capture.Manage" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    mc:Ignorable="d"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" 
+    xmlns:ribbon="clr-namespace:System.Windows.Controls.Ribbon;assembly=System.Windows.Controls.Ribbon"
+	Title="Account Management" d:DesignHeight="400" d:DesignWidth="600">
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary
+					Source="/Themes/ClearView.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+			<BitmapImage
+				UriSource="/Resources/5001-web_search.png"
+				x:Key="Globe" />
+			<ribbon:RibbonContextualTabGroup
+				Header="Navigation"
+				UIElement.Visibility="Visible"
+				Control.Background="#FFFF0000"
+				Control.BorderBrush="#FFFF0000"
+				x:Key="ManageGroup" />
+			<ribbon:RibbonTab
+				Header="EPIC Central"
+				x:Key="ManageOptions">
+				<ribbon:RibbonGroup
+					Header="Account">
+					<ribbon:RibbonToggleButton
+						UIElement.Focusable="False"
+						UIElement.IsHitTestVisible="False"
+						IsChecked="True"
+						Label="Manage"
+						LargeImageSource="{StaticResource Globe}" />
+				</ribbon:RibbonGroup>
+				<ribbon:RibbonGroup
+					Header="EPIC Central">
+					<ribbon:RibbonToggleButton
+						Label="Locations"
+						LargeImageSource="{StaticResource Globe}"
+						Click="Locations_Click" />
+				</ribbon:RibbonGroup>
+                <ribbon:RibbonGroup
+	Header="Account Information"
+	Grid.Row="0"
+	Grid.Column="0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Label
+			Content="Last Sync"
+			Grid.Column="0"
+			Grid.Row="0" />
+                        <Label
+			Content="Never"
+			Grid.Column="1"
+			Grid.Row="0" />
+                        <Label
+			Content="Scans Remaining"
+			Grid.Column="0"
+			Grid.Row="1" />
+                        <Label
+			Content="0"
+			Grid.Column="1"
+			Grid.Row="1" />
+                        <Label
+			Content="Grace Scans"
+			Grid.Column="0"
+			Grid.Row="2" />
+                        <Label
+			Content="0"
+			Grid.Column="1"
+			Grid.Row="2" />
+                    </Grid>
+                </ribbon:RibbonGroup>
+                <ribbon:RibbonGroup
+	Header="Configuration"
+	Grid.Row="1"
+	Grid.Column="0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Label
+			Grid.Column="0"
+			Grid.Row="0"
+			Grid.ColumnSpan="2"
+			VerticalAlignment="Center">
+                            <TextBlock
+				TextWrapping="WrapWithOverflow"
+				Text="Warn when the remaining scan balance is less than or equal to the number specified below:" />
+                        </Label>
+                        <xctk:IntegerUpDown
+			Grid.Row="1"
+			Grid.Column="1"
+			FrameworkElement.VerticalAlignment="Center" />
+                        <Label
+			Grid.Column="0"
+			Grid.Row="1"
+			Content="Warning threashold:"
+			VerticalAlignment="Center" />
+                        <Button
+			Content="Apply Settings"
+			Grid.Column="0"
+			Grid.ColumnSpan="2"
+			Grid.Row="2"
+			HorizontalAlignment="Center"
+			VerticalAlignment="Center" />
+                    </Grid>
+                </ribbon:RibbonGroup>
+            </ribbon:RibbonTab>
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<Grid
+		ClipToBounds="True">
+		<Grid.RowDefinitions>
+			<RowDefinition />
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition />
+		</Grid.ColumnDefinitions>
+		<StackPanel
+			MaxWidth="250">
+		</StackPanel>
+		<Frame
+			Name="Navigator"
+			Source="https://google.com"
+			Grid.Column="1" />
+	</Grid>
+</Page>

@@ -1,0 +1,113 @@
+<Page
+	x:Class="EPICClearView.Welcome" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:utilities="clr-namespace:EPICClearView.Utilities"
+	Title="Welcome" xmlns:epic="clr-namespace:EPICClearView">
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary
+					Source="/Themes/ClearView.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition
+				Width="Auto" />
+			<ColumnDefinition />
+		</Grid.ColumnDefinitions>
+		<Grid
+			Background="{StaticResource BackgroundBrush}">
+			<StackPanel
+				Margin="2,0,10,0">
+				<StackPanel
+					Orientation="Horizontal"
+					Margin="0,20">
+					<Image
+						Source="{StaticResource LogoDrawing}"
+						Height="32"
+						Width="32" />
+					<Label
+						Content="Welcome To ClearView"
+						FontSize="22"
+						FontWeight="Light"
+						VerticalAlignment="Center"
+						Foreground="{StaticResource LightForeground}" />
+				</StackPanel>
+				<StackPanel
+					Margin="32,0,0,0">
+					<Label
+						Content="Start"
+						FontSize="16"
+						Foreground="{StaticResource LightForeground}" />
+					<Label
+						FontSize="14"
+						Style="{StaticResource LightLinkButton}"
+						Content="Create a new patient..." />
+					<Label
+						FontSize="14"
+						Style="{StaticResource LightLinkButton}"
+						Content="Find a report..." />
+					<Label
+						FontSize="14"
+						Style="{StaticResource LightLinkButton}"
+						Content="Find a report..." />
+				</StackPanel>
+				<StackPanel
+					Margin="32,32,0,0">
+					<Label
+						Content="Recent Activity"
+						FontSize="16"
+						Foreground="{StaticResource LightForeground}" />
+					<Label
+						FontSize="14"
+						Style="{StaticResource LightLinkButton}"
+						Content="Scanned Patient Nancy..." />
+					<Label
+						FontSize="14"
+						Style="{StaticResource LightLinkButton}"
+						Content="Added Patient Kim..." />
+					<Label
+						FontSize="14"
+						Style="{StaticResource LightLinkButton}"
+						Content="Viewed report Lloyd..." />
+				</StackPanel>
+			</StackPanel>
+		</Grid>
+		<Grid
+			Background="{StaticResource WindowBrush}"
+			Column="1">
+			<StackPanel
+				Margin="10,0,2,0">
+				<StackPanel
+					Orientation="Horizontal"
+					Margin="0,20">
+					<Label
+						FontSize="22"
+						FontWeight="Light"
+						VerticalAlignment="Center" />
+				</StackPanel>
+				<StackPanel
+					Margin="32,0,0,0">
+					<Label
+						Content="Get Started"
+						FontSize="16" />
+					<Label
+						FontSize="14"
+						Style="{StaticResource LinkButton}"
+						Content="Learn how to scan" />
+					<Label
+						FontSize="14"
+						Style="{StaticResource LinkButton}"
+						Content="Take the ClearView quiz" />
+					<Label
+						FontSize="14"
+						Style="{StaticResource LinkButton}"
+						Content="Log in to EPIC Central" />
+				</StackPanel>
+			</StackPanel>
+		</Grid>
+	</Grid>
+</Page>

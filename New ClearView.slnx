@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="DataLayer/DataLayer.csproj" />
+  <Project Path="New ClearView/EPICClearView.csproj" />
+</Solution>

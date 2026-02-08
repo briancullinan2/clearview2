@@ -1,0 +1,158 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:system="clr-namespace:System;assembly=mscorlib">
+	<Color
+		x:Key="Window">White</Color>
+	<Color
+		x:Key="ClearViewForeground">DarkBlue</Color>
+	<Color
+		x:Key="ClearViewGreen">#66CC22</Color>
+	<Color
+		x:Key="ClearViewBlue">#112266</Color>
+	<Color
+		x:Key="WelcomeBackground">#336699</Color>
+	<Color
+		x:Key="WelcomeForeground">WhiteSmoke</Color>
+	<Color
+		x:Key="EpicDarkPurple">#113366</Color>
+	<Color
+		x:Key="EpicPurple">#9988CC</Color>
+	<Color
+		x:Key="EpicGreen">#AABB66</Color>
+	<Color
+		x:Key="EpicLightGreen">#77CC44</Color>
+	<Color
+		x:Key="MiddleLightDisabled">LightGray</Color>
+	<Color
+		x:Key="LightDisabled">#FFC2C2C2</Color>
+	<Color
+		x:Key="Disabled">#FF79848C</Color>
+	<LinearGradientBrush
+		EndPoint="0.5,1"
+		StartPoint="0.5,0"
+		x:Key="RedCloseButton">
+		<GradientStop
+			Color="#CC2200"
+			Offset="0" />
+		<GradientStop
+			Color="DarkRed"
+			Offset="1" />
+	</LinearGradientBrush>
+	<LinearGradientBrush
+		EndPoint="0.5,1"
+		StartPoint="0.5,0"
+		x:Key="GrayCloseButton">
+		<GradientStop
+			Color="LightGray"
+			Offset="0" />
+		<GradientStop
+			Color="#FFC2C2C2"
+			Offset="1" />
+	</LinearGradientBrush>
+	<Thickness
+		x:Key="ControlBorderThickness">1</Thickness>
+	<Thickness
+		x:Key="ControlPaddingThickness">2</Thickness>
+	<Thickness
+		x:Key="ControlMarginThickness">5</Thickness>
+	<system:Double
+		x:Key="ControlStrokeThickness">2</system:Double>
+	<system:Double
+		x:Key="ControlFontSize">12</system:Double>
+	<system:Double
+		x:Key="BulletSize">16</system:Double>
+	<SolidColorBrush
+		Color="White"
+		x:Key="WindowBrush" />
+	<SolidColorBrush
+		Color="#112266"
+		x:Key="ForegroundBrush" />
+	<SolidColorBrush
+		Color="#336699"
+		x:Key="BackgroundBrush" />
+	<SolidColorBrush
+		Color="WhiteSmoke"
+		x:Key="LightForeground" />
+	<SolidColorBrush
+		Color="#9988CC"
+		x:Key="MiddleLightBrush" />
+	<SolidColorBrush
+		Color="#AABB66"
+		x:Key="LightAccentBrush" />
+	<SolidColorBrush
+		Color="#77CC44"
+		x:Key="AccentBrush" />
+	<SolidColorBrush
+		Color="LightGray"
+		x:Key="MiddleLightDisabledBrush" />
+	<SolidColorBrush
+		Color="#FFC2C2C2"
+		x:Key="LightDisabledBrush" />
+	<SolidColorBrush
+		Color="#FF79848C"
+		x:Key="DisabledBrush" />
+	<SolidColorBrush
+		Color="Transparent"
+		x:Key="TransparentBrush" />
+	<Style
+		TargetType="{x:Type Label}"
+		x:Key="LightLinkButton">
+		<Setter
+			Property="Foreground"
+			Value="{StaticResource LightForeground}" />
+		<Setter
+			Property="FrameworkElement.Cursor"
+			Value="Hand" />
+		<Style.Triggers>
+			<DataTrigger
+				Value="True"
+				Binding="{Binding IsMouseOver}">
+				<Setter
+					Property="Foreground"
+					Value="{StaticResource MiddleLightBrush}" />
+			</DataTrigger>
+		</Style.Triggers>
+	</Style>
+	<Style
+		TargetType="{x:Type Label}"
+		x:Key="LinkButton">
+		<Setter
+			Property="Foreground"
+			Value="{StaticResource ForegroundBrush}" />
+		<Setter
+			Property="FrameworkElement.Cursor"
+			Value="Hand" />
+		<Style.Triggers>
+			<DataTrigger
+				Value="True"
+				Binding="{Binding IsMouseOver}">
+				<Setter
+					Property="Foreground"
+					Value="{StaticResource ForegroundBrush}" />
+			</DataTrigger>
+		</Style.Triggers>
+	</Style>
+	<GeometryDrawing
+		Geometry="F1 M386.28,265.092 C386.28,371.748 299.808,458.22 193.14,458.22 C86.472,458.22 0,371.748 0,265.092 C0,158.424 86.472,71.952 193.14,71.952 C299.808,71.952 386.28,158.424 386.28,265.092"
+		Brush="{StaticResource ForegroundBrush}"
+		x:Key="BlueStuff" />
+	<GeometryDrawing
+		Geometry="F1 M372.672,232.452 C372.672,313.572 306.912,379.344 225.78,379.344 C144.66,379.344 78.888,313.572 78.888,232.452 C78.888,151.32 144.66,85.56 225.78,85.56 C306.912,85.56 372.672,151.32 372.672,232.452"
+		Brush="{StaticResource AccentBrush}"
+		x:Key="GreenStuff" />
+	<GeometryDrawing
+		Geometry="F1 M251.7,220.392 L156.336,141.18 L249.816,339.504 L444.9,0 L251.7,220.392"
+		Brush="{StaticResource ForegroundBrush}"
+		x:Key="CheckMark" />
+	<DrawingGroup
+		x:Key="Logo" />
+	<DrawingBrush
+		Stretch="Uniform"
+		Drawing="{StaticResource Logo}"
+		x:Key="LogoBrush" />
+	<DrawingImage
+		Drawing="{StaticResource Logo}"
+		x:Key="LogoDrawing" />
+	<Style
+		TargetType="{x:Type ScrollViewer}"
+		x:Key="HorizontalScroller">
+	</Style>
+</ResourceDictionary>
