@@ -30,6 +30,12 @@
 				x:Key="Cancel" />
 			<converters:EnumDisplayNameConverter
 				x:Key="EnumDisplayNameConverter" />
+            <ObjectDataProvider x:Key="GenderData" MethodName="GetValues"
+                            ObjectType="{x:Type system:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="customization:Gender" />
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
             <ribbon:RibbonContextualTabGroup
 				RibbonContextualTabGroup.Header="Options"
 				UIElement.Visibility="Visible"
@@ -198,12 +204,12 @@
 							Grid.Row="3"
 							Grid.Column="2"
 							Margin="5"
-							ItemsSource="{Binding Source={x:Type customization:Gender}, Converter={StaticResource EnumDisplayNameConverter}}"
+							ItemsSource="{Binding Source={StaticResource GenderData}}"
 							SelectedItem="{Binding Path=Patient.Gender, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}">
 							<ItemsControl.ItemTemplate>
 								<DataTemplate>
-									<TextBlock
-										Text="{Binding}" />
+                                    <TextBlock Text="{Binding Converter={StaticResource EnumDisplayNameConverter}, 
+                                     ConverterParameter={x:Type customization:Gender}}" />
                                 </DataTemplate>
 							</ItemsControl.ItemTemplate>
 						</ComboBox>
