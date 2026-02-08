@@ -1,6 +1,6 @@
-﻿using EPICClearView.Macros;
-using EPICClearView.Utilities;
-using EPICClearView.Utilities.Extensions;
+﻿using EPIC.ClearView.Macros;
+using EPIC.ClearView.Utilities;
+using EPIC.ClearView.Utilities.Extensions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -18,7 +18,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace EPICClearView
+namespace EPIC.ClearView
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -164,6 +164,17 @@ namespace EPICClearView
         // Token: 0x04000194 RID: 404
         public static readonly DependencyProperty UserProperty = DependencyProperty.Register("User", typeof(object), typeof(MainWindow), new PropertyMetadata(null));
 
+        private void AccountWelcome_Checked(object sender, RoutedEventArgs e)
+        {
+            Uri uri = new Uri("/Welcome.xaml", UriKind.Relative);
+            Navigation.ShowTab(uri, true);
+        }
+
+        private void AccountWelcome_Unchecked(object sender, RoutedEventArgs e)
+        {
+            var tab = this.Tabs.Items.OfType<TabItem>().FirstOrDefault(x => (x.Content as Frame).Source.OriginalString.Trim('/').Contains("Welcome.xaml"));
+            Navigation.CloseTab(tab);
+        }
 
     }
 }

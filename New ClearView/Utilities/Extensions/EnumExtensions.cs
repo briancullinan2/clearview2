@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 
-namespace EPICClearView.Utilities.Extensions
+namespace EPIC.ClearView.Utilities.Extensions
 {
 	// Token: 0x02000058 RID: 88
 	public static class EnumExtensions

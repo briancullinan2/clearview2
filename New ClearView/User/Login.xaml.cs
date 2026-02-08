@@ -13,7 +13,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Markup;
 
-namespace EPICClearView.User
+namespace EPIC.ClearView.User
 {
 	// Token: 0x02000049 RID: 73
 	public partial class Login : Page

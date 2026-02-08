@@ -1,5 +1,5 @@
-﻿using EPICClearView;
-using EPICClearView.Utilities;
+﻿using EPIC.ClearView;
+using EPIC.ClearView.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 
-namespace EPICClearView.Utilities.Converters
+namespace EPIC.ClearView.Utilities.Converters
 {
 	// Token: 0x02000056 RID: 86
 	[ValueConversion(typeof(object), typeof(Visibility))]

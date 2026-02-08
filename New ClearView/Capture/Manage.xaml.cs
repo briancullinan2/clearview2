@@ -5,9 +5,9 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Markup;
-using EPICClearView.Macros;
+using EPIC.ClearView.Macros;
 
-namespace EPICClearView.Capture
+namespace EPIC.ClearView.Capture
 {
 	// Token: 0x0200006D RID: 109
 	public partial class Manage : Page
@@ -24,5 +24,10 @@ namespace EPICClearView.Capture
 		{
 			this.Navigator.Source = new Uri("https://google.com", UriKind.Absolute);
 		}
-	}
+
+        private void RibbonToggleButton_Unchecked(object sender, RoutedEventArgs e)
+        {
+            Navigation.CloseTab(this);
+        }
+    }
 }

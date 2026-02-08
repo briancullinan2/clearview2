@@ -1,13 +1,13 @@
-﻿using EPICDataLayer.Customization;
+﻿using EPIC.DataLayer.Customization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EPICDataLayer
+namespace EPIC.DataLayer.Entities
 {
-    public class PatientEntity
+    public class Patient
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }

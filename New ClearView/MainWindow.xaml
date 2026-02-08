@@ -1,306 +1,253 @@
-﻿<Window  xmlns:fluent="urn:fluent-ribbon" x:Class="EPICClearView.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:EPICClearView"
-        xmlns:utilities="clr-namespace:EPICClearView.Utilities"
-        xmlns:ribbon="clr-namespace:System.Windows.Controls.Ribbon;assembly=System.Windows.Controls.Ribbon"
-        mc:Ignorable="d"
-        Title="EPIC ClearView (tm)" Height="450" Width="800" WindowStartupLocation="CenterScreen">
+﻿<Window
+    x:Class="EPIC.ClearView.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:EPIC.ClearView;assembly=EPICClearView"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ribbon="clr-namespace:System.Windows.Controls.Ribbon;assembly=System.Windows.Controls.Ribbon"
+    xmlns:system="clr-namespace:System.Globalization;assembly=mscorlib"
+    xmlns:utilities="clr-namespace:EPIC.ClearView.Utilities;assembly=EPICClearView"
+    Title="EPIC ClearView (tm)"
+    d:DesignHeight="600"
+    d:DesignWidth="800"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
     <Window.TaskbarItemInfo>
         <TaskbarItemInfo />
     </Window.TaskbarItemInfo>
     <FrameworkElement.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary
-				Source="/Themes/ClearView.xaml" />
+                <ResourceDictionary Source="/Themes/ClearView.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <BitmapImage
-			UriSource="Resources/5001-web_search.png"
-			x:Key="Globe" />
-            <BitmapImage
-			UriSource="Resources/4502-users.png"
-			x:Key="Patients" />
-            <BitmapImage
-			UriSource="Resources/0176-scaner.png"
-			x:Key="Captures" />
-            <BitmapImage
-			UriSource="Resources/0197-report.png"
-			x:Key="Reports" />
-            <BitmapImage
-			UriSource="Resources/4505-user_add.png"
-			x:Key="AddUser" />
-            <BitmapImage
-			UriSource="Resources/4504-user_search.png"
-			x:Key="SearchUser" />
-            <BitmapImage
-			UriSource="Resources/0204-scroll_search.png"
-			x:Key="ViewAlert" />
-            <BitmapImage
-			UriSource="Resources/1004-warning.png"
-			x:Key="ViewAlerts" />
-            <BitmapImage
-			UriSource="Resources/0155-keys.png"
-			x:Key="ChangeLogin" />
-            <BitmapImage
-			UriSource="Resources/0020-options_edit.png"
-			x:Key="Settings" />
-            <BitmapImage
-			UriSource="Resources/0145-task_edit.png"
-			x:Key="UpdateLogin" />
-            <BitmapImage
-			UriSource="Resources/1005-exit.png"
-			x:Key="Exit" />
-            <BitmapImage
-			UriSource="Resources/Clearview.png"
-			x:Key="ClearView" />
-            <BitmapImage
-			UriSource="Resources/0080-doc_ok.png"
-			x:Key="Permissions" />
-            <BitmapImage
-			UriSource="Resources/0175-camera.png"
-			x:Key="Calibrate" />
-            <BitmapImage
-			UriSource="Resources/ClearViewBackground.png"
-			x:Key="ClearViewBackground" />
+            <BitmapImage x:Key="Globe" UriSource="Resources/5001-web_search.png" />
+            <BitmapImage x:Key="Patients" UriSource="Resources/4502-users.png" />
+            <BitmapImage x:Key="Captures" UriSource="Resources/0176-scaner.png" />
+            <BitmapImage x:Key="Reports" UriSource="Resources/0197-report.png" />
+            <BitmapImage x:Key="AddUser" UriSource="Resources/4505-user_add.png" />
+            <BitmapImage x:Key="SearchUser" UriSource="Resources/4504-user_search.png" />
+            <BitmapImage x:Key="ViewAlert" UriSource="Resources/0204-scroll_search.png" />
+            <BitmapImage x:Key="ViewAlerts" UriSource="Resources/1004-warning.png" />
+            <BitmapImage x:Key="ChangeLogin" UriSource="Resources/0155-keys.png" />
+            <BitmapImage x:Key="Settings" UriSource="Resources/0020-options_edit.png" />
+            <BitmapImage x:Key="UpdateLogin" UriSource="Resources/0145-task_edit.png" />
+            <BitmapImage x:Key="Exit" UriSource="Resources/1005-exit.png" />
+            <BitmapImage x:Key="ClearView" UriSource="Resources/Clearview.png" />
+            <BitmapImage x:Key="Permissions" UriSource="Resources/0080-doc_ok.png" />
+            <BitmapImage x:Key="Calibrate" UriSource="Resources/0175-camera.png" />
+            <BitmapImage x:Key="ClearViewBackground" UriSource="Resources/ClearViewBackground.png" />
         </ResourceDictionary>
     </FrameworkElement.Resources>
-    <Grid
-		Name="MainGrid">
+    <Grid Name="MainGrid">
         <Grid.RowDefinitions>
-            <RowDefinition
-				Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition />
-            <RowDefinition
-				Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Frame
-    Visibility="Hidden"
-	Name="Login"
-	Grid.RowSpan="2"
-	Grid.Row="1"
-	Grid.Column="0"
-	Panel.ZIndex="1"
-	Background="#FFFFFFFF"
-	NavigationUIVisibility="Hidden"
-	Source="/EPICClearView;component/User/Login.xaml"
-	LoadCompleted="Login_OnLoadCompleted">
+            Name="Login"
+            Grid.Row="1"
+            Grid.RowSpan="2"
+            Grid.Column="0"
+            Panel.ZIndex="1"
+            Background="#FFFFFFFF"
+            LoadCompleted="Login_OnLoadCompleted"
+            NavigationUIVisibility="Hidden"
+            Source="/EPIC.ClearView;component/User/Login.xaml"
+            Visibility="Hidden">
             <FrameworkElement.Style>
                 <Style>
                     <Style.Triggers>
-                        <DataTrigger
-					Binding="{Binding Path=User}"
-					Value="{x:Null}">
-                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=User}" Value="{x:Null}" />
                     </Style.Triggers>
                 </Style>
             </FrameworkElement.Style>
         </Frame>
         <ribbon:Ribbon
-             Margin="0,-22,0,0"
-	Panel.ZIndex="1"
-	x:Name="Ribbon">
+            x:Name="Ribbon"
+            Margin="0,-22,0,0"
+            Panel.ZIndex="1">
             <Ribbon.ApplicationMenu>
-                <RibbonApplicationMenu Visibility="Collapsed">
-                </RibbonApplicationMenu>
+                <RibbonApplicationMenu Visibility="Collapsed" />
             </Ribbon.ApplicationMenu>
-            <ribbon:RibbonTab Header="Services" x:Name="Services">
-                <ribbon:RibbonGroup
-                    Header="Account"
-				    Name="Account">
+            <ribbon:RibbonTab x:Name="Services" Header="Services">
+                <ribbon:RibbonGroup Name="Account" Header="Account">
+                    <ribbon:RibbonToggleButton
+                        Name="AccountWelcome"
+                        Checked="AccountWelcome_Checked"
+                        IsChecked="{Binding ElementName=Tabs, Path=Items, Mode=OneWay, Converter={StaticResource UriTabExistsConverter}, ConverterParameter='Welcome.xaml', ConverterCulture={x:Static system:CultureInfo.InvariantCulture}}"
+                        Label="Welcome"
+                        LargeImageSource="{StaticResource ClearView}"
+                        Unchecked="AccountWelcome_Unchecked" />
                     <ribbon:RibbonButton
-                        LargeImageSource="{StaticResource Globe}"
+                        Name="AccountManage"
+                        Click="AccountManage_Click"
                         Label="Manage"
-					    Name="AccountManage"
-					Click="AccountManage_Click" />
+                        LargeImageSource="{StaticResource Globe}" />
+                </ribbon:RibbonGroup>
+                <ribbon:RibbonGroup Name="Clearview" Header="ClearView">
+                    <ribbon:RibbonButton
+                        Name="Patients"
+                        Click="Patients_Click"
+                        Label="Patients"
+                        LargeImageSource="{StaticResource Patients}" />
+                    <ribbon:RibbonButton
+                        Name="NewCapture"
+                        Click="NewCapture_Click"
+                        Label="New Capture"
+                        LargeImageSource="{StaticResource Captures}" />
+                    <ribbon:RibbonButton
+                        Name="Captures"
+                        Click="Captures_Click"
+                        Label="Captures &amp; Reports"
+                        LargeImageSource="{StaticResource Reports}" />
+                    <ribbon:RibbonButton
+                        Name="Calibrate"
+                        Click="Calibrate_Click"
+                        Label="Calibrate"
+                        LargeImageSource="{StaticResource Calibrate}" />
+                </ribbon:RibbonGroup>
+                <ribbon:RibbonGroup Name="UserOptions" Header="User Options">
+                    <ribbon:RibbonButton
+                        Name="UserAdd"
+                        Click="UserAdd_Click"
+                        Label="Add User"
+                        LargeImageSource="{StaticResource AddUser}" />
+                    <ribbon:RibbonButton
+                        Name="UserSearch"
+                        Click="UserSearch_Click"
+                        Label="Search User"
+                        LargeImageSource="{StaticResource SearchUser}" />
+                    <ribbon:RibbonButton
+                        Name="UserPermission"
+                        Click="UserPermission_Click"
+                        Label="Permissions"
+                        LargeImageSource="{StaticResource Permissions}" />
                 </ribbon:RibbonGroup>
                 <ribbon:RibbonGroup
-				Name="Clearview"
-				Header="ClearView">
-                    <ribbon:RibbonButton
-					Name="Patients"
-					Label="Patients"
-					LargeImageSource="{StaticResource Patients}"
-					Click="Patients_Click" />
-                    <ribbon:RibbonButton
-					Name="NewCapture"
-					Label="New Capture"
-					LargeImageSource="{StaticResource Captures}"
-					Click="NewCapture_Click" />
-                    <ribbon:RibbonButton
-					Name="Captures"
-					Label="Captures &amp; Reports"
-					LargeImageSource="{StaticResource Reports}"
-					Click="Captures_Click" />
-                    <ribbon:RibbonButton
-					Name="Calibrate"
-					Label="Calibrate"
-					LargeImageSource="{StaticResource Calibrate}"
-					Click="Calibrate_Click" />
-                </ribbon:RibbonGroup>
-                <ribbon:RibbonGroup
-Name="UserOptions"
-Header="User Options">
-                    <ribbon:RibbonButton
-				Name="UserAdd"
-				Label="Add User"
-				LargeImageSource="{StaticResource AddUser}"
-				Click="UserAdd_Click" />
-                    <ribbon:RibbonButton
-				Name="UserSearch"
-				Label="Search User"
-				LargeImageSource="{StaticResource SearchUser}"
-				Click="UserSearch_Click" />
-                    <ribbon:RibbonButton
-				Name="UserPermission"
-				Label="Permissions"
-				LargeImageSource="{StaticResource Permissions}"
-				Click="UserPermission_Click" />
-                </ribbon:RibbonGroup>
-                <ribbon:RibbonGroup
-Name="AlertServices"
-Header="Alert Services"
-FrameworkElement.Margin="0">
+                    Name="AlertServices"
+                    FrameworkElement.Margin="0"
+                    Header="Alert Services">
                     <ribbon:RibbonComboBox
-  SelectionBoxWidth="62"
-  VerticalAlignment="Center" 
-  IsEditable="True" >
-                        <ribbon:RibbonGallery SelectedValue="Green"
-          SelectedValuePath="Content"
-          MaxColumnCount="1"
-				Name="AlertsBox"
-				FrameworkElement.MinWidth="100"
-				FrameworkElement.MaxWidth="400"
-				FrameworkElement.MinHeight="60"
-				ItemsControl.DisplayMemberPath="Title"
-				IsVisibleChanged="AlertsBox_IsVisibleChanged">
+                        VerticalAlignment="Center"
+                        IsEditable="True"
+                        SelectionBoxWidth="62">
+                        <ribbon:RibbonGallery
+                            Name="AlertsBox"
+                            FrameworkElement.MaxWidth="400"
+                            FrameworkElement.MinHeight="60"
+                            FrameworkElement.MinWidth="100"
+                            IsVisibleChanged="AlertsBox_IsVisibleChanged"
+                            ItemsControl.DisplayMemberPath="Title"
+                            MaxColumnCount="1"
+                            SelectedValue="Green"
+                            SelectedValuePath="Content">
                             <ribbon:RibbonGalleryCategory>
                                 <ribbon:RibbonGalleryItem Content="Green" Foreground="Green" />
                             </ribbon:RibbonGalleryCategory>
                         </ribbon:RibbonGallery>
                     </ribbon:RibbonComboBox>
                     <ribbon:RibbonButton
-				Name="AlertView"
-				Label="View Selected"
-				LargeImageSource="{StaticResource ViewAlert}"
-				Click="Alerts_View">
+                        Name="AlertView"
+                        Click="Alerts_View"
+                        Label="View Selected"
+                        LargeImageSource="{StaticResource ViewAlert}">
                         <FrameworkElement.Style>
                             <Style>
                                 <Style.Triggers>
-                                    <DataTrigger
-								Value="0"
-								Binding="{Binding ElementName=AlertsBox, Path=Items.Count}">
-                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding ElementName=AlertsBox, Path=Items.Count}" Value="0" />
                                 </Style.Triggers>
                             </Style>
                         </FrameworkElement.Style>
                     </ribbon:RibbonButton>
                     <ribbon:RibbonButton
-				Name="AlertViewAll"
-				Label="View All"
-				LargeImageSource="{StaticResource ViewAlerts}"
-				Click="Alerts_ViewAll" />
+                        Name="AlertViewAll"
+                        Click="Alerts_ViewAll"
+                        Label="View All"
+                        LargeImageSource="{StaticResource ViewAlerts}" />
                 </ribbon:RibbonGroup>
-                <ribbon:RibbonGroup
-Name="Application"
-Header="Application">
+                <ribbon:RibbonGroup Name="Application" Header="Application">
                     <ribbon:RibbonButton
-				Name="ApplicationSettings"
-				Label="Settings"
-				LargeImageSource="{StaticResource Settings}"
-				Click="ApplicationSettings_Click" />
+                        Name="ApplicationSettings"
+                        Click="ApplicationSettings_Click"
+                        Label="Settings"
+                        LargeImageSource="{StaticResource Settings}" />
                     <ribbon:RibbonButton
-				Name="ApplicationChangeLogin"
-				Label="Change Login"
-				LargeImageSource="{StaticResource ChangeLogin}"
-				Click="ApplicationChangeLogin_Click" />
+                        Name="ApplicationChangeLogin"
+                        Click="ApplicationChangeLogin_Click"
+                        Label="Change Login"
+                        LargeImageSource="{StaticResource ChangeLogin}"
+                        SmallImageSource="{StaticResource ChangeLogin}" />
                     <ribbon:RibbonButton
-				Name="ApplicationUpdateLogin"
-				Label="Update Login Info"
-				LargeImageSource="{StaticResource UpdateLogin}" />
+                        Name="ApplicationUpdateLogin"
+                        Label="Update Login Info"
+                        LargeImageSource="{StaticResource UpdateLogin}"
+                        SmallImageSource="{StaticResource UpdateLogin}" />
                     <ribbon:RibbonButton
-				Name="Exit"
-				Label="Exit"
-				LargeImageSource="{StaticResource Exit}" />
+                        Name="Exit"
+                        Label="Exit"
+                        LargeImageSource="{StaticResource Exit}"
+                        SmallImageSource="{StaticResource Exit}" />
                 </ribbon:RibbonGroup>
             </ribbon:RibbonTab>
         </ribbon:Ribbon>
         <TabControl
-	Name="Tabs"
-	Panel.ZIndex="0"
-	Grid.Column="0"
-	Grid.Row="1">
+            Name="Tabs"
+            Grid.Row="1"
+            Grid.Column="0"
+            Panel.ZIndex="0"
+            DockPanel.Dock="Right">
             <TabItem
-		Header="Welcome"
-		IsSelected="True">
-                <Frame
-			NavigationUIVisibility="Hidden"
-			Source="/Welcome.xaml" />
+                Header="Welcome"
+                HeaderTemplate="{StaticResource TabClosable}"
+                IsSelected="True">
+                <Frame NavigationUIVisibility="Hidden" Source="/Welcome.xaml" />
             </TabItem>
         </TabControl>
-        <StatusBar
-	Grid.Row="2"
-	Margin="0">
-            <StatusBarItem
-		Width="100">
-                <Label
-			Name="Clock" />
+        <StatusBar Grid.Row="2" Margin="0">
+            <StatusBarItem Width="100">
+                <Label Name="Clock" />
             </StatusBarItem>
             <Separator />
-            <StatusBarItem
-		Width="150">
-                <Label
-			Content="License: Unknown" />
+            <StatusBarItem Width="150">
+                <Label Content="License: Unknown" />
             </StatusBarItem>
             <Separator />
-            <StatusBarItem
-		Width="150">
-                <Label
-			Name="Scanner"
-			Content="Scanner: Unknown" />
+            <StatusBarItem Width="150">
+                <Label Name="Scanner" Content="Scanner: Unknown" />
             </StatusBarItem>
             <Separator />
-            <StatusBarItem
-		Width="150">
-                <Label
-			Name="Camera"
-			Content="Camera: Unknown" />
+            <StatusBarItem Width="150">
+                <Label Name="Camera" Content="Camera: Unknown" />
             </StatusBarItem>
             <Separator />
-            <StatusBarItem
-		Width="150">
-                <Label
-			Content="Synchronizer: Unknown" />
+            <StatusBarItem Width="150">
+                <Label Content="Synchronizer: Unknown" />
             </StatusBarItem>
             <StatusBarItem Padding="0">
                 <Control.Template>
-                    <ControlTemplate
-				TargetType="{x:Type StatusBarItem}">
+                    <ControlTemplate TargetType="{x:Type StatusBarItem}">
                         <Border
-					BorderBrush="{TemplateBinding BorderBrush}"
-					BorderThickness="{TemplateBinding BorderThickness}"
-					Background="{TemplateBinding Background}"
-					Padding="{TemplateBinding Padding}"
-					SnapsToDevicePixels="True"
-					UseLayoutRounding="True">
+                            Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            SnapsToDevicePixels="True"
+                            UseLayoutRounding="True">
                             <ContentPresenter
-						ContentTemplate="{TemplateBinding ContentTemplate}"
-						Content="{TemplateBinding Content}"
-						ContentStringFormat="{TemplateBinding ContentStringFormat}"
-						SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-						VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-						UseLayoutRounding="{TemplateBinding UseLayoutRounding}" />
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                Content="{TemplateBinding Content}"
+                                ContentStringFormat="{TemplateBinding ContentStringFormat}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                UseLayoutRounding="{TemplateBinding UseLayoutRounding}" />
                         </Border>
                         <ControlTemplate.Triggers>
-                            <Trigger
-						Property="IsEnabled"
-						Value="False">
-                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False" />
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Control.Template>

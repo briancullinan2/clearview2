@@ -6,7 +6,7 @@ using System.Globalization;
 using System.Resources;
 using System.Runtime.CompilerServices;
 
-namespace EPICClearView.Patient
+namespace EPIC.ClearView.Patient
 {
 	// Token: 0x02000021 RID: 33
 	[GeneratedCode("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
@@ -28,7 +28,7 @@ namespace EPICClearView.Patient
 			{
 				if (object.ReferenceEquals(Patient.resourceMan, null))
 				{
-					ResourceManager resourceManager = new ResourceManager("EPICClearView.Patient.Patient", typeof(Patient).Assembly);
+					ResourceManager resourceManager = new ResourceManager("EPIC.ClearView.Patient.Patient", typeof(Patient).Assembly);
 					Patient.resourceMan = resourceManager;
 				}
 				return Patient.resourceMan;

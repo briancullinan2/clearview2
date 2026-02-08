@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Windows.Input;
 
-namespace EPICClearView.Utilities.Commands
+namespace EPIC.ClearView.Utilities.Commands
 {
 	// Token: 0x0200006B RID: 107
 	public class RelayCommand : ICommand

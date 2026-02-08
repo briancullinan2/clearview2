@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{0F4FAD98-2ACC-42B7-9CD8-09E23E9C5C2E}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>EPICClearView</RootNamespace>
+    <RootNamespace>EPIC.ClearView</RootNamespace>
     <AssemblyName>EPICClearView</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -36,7 +36,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>EPICClearView.App</StartupObject>
+    <StartupObject>EPIC.ClearView.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ControlzEx, Version=7.0.0.0, Culture=neutral, PublicKeyToken=69f1c32f803d307e, processorArchitecture=MSIL">
@@ -149,6 +149,10 @@
     <Compile Include="Capture\Manage.xaml.cs">
       <DependentUpon>Manage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Capture\Settings.xaml.cs">
+      <DependentUpon>Settings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Capture\SettingsError.cs" />
     <Compile Include="Macros\Navigation.cs" />
     <Compile Include="Patient\Add.xaml.cs">
       <DependentUpon>Add.xaml</DependentUpon>
@@ -156,6 +160,9 @@
     <Compile Include="Patient\Patient.cs" />
     <Compile Include="Patient\Search.xaml.cs">
       <DependentUpon>Search.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Themes\ClearView.xaml.cs">
+      <DependentUpon>ClearView.xaml</DependentUpon>
     </Compile>
     <Compile Include="User\Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
@@ -166,11 +173,18 @@
     <Compile Include="Utilities\Converters\PermissionVisibilityConverter.cs" />
     <Compile Include="Utilities\Extensions\DependencyObjectExtensions.cs" />
     <Compile Include="Utilities\Extensions\EnumExtensions.cs" />
+    <Compile Include="Utilities\FormChecker.xaml.cs">
+      <DependentUpon>FormChecker.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Utilities\StaticEnvironment.cs" />
     <Compile Include="Welcome.xaml.cs">
       <DependentUpon>Welcome.xaml</DependentUpon>
     </Compile>
     <Page Include="Capture\Manage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Capture\Settings.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -215,6 +229,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="User\Login.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Utilities\FormChecker.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

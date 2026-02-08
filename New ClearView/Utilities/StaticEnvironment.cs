@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Windows;
 
-namespace EPICClearView.Utilities
+namespace EPIC.ClearView.Utilities
 {
 	// Token: 0x02000064 RID: 100
 	public static class StaticEnvironment

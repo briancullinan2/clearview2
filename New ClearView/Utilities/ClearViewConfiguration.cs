@@ -5,9 +5,10 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
-using EPICClearView.Properties;
+using EPIC.ClearView.Properties;
+using EPIC.DataLayer.Entities;
 
-namespace EPICClearView.Utilities
+namespace EPIC.ClearView.Utilities
 {
 	// Token: 0x0200004D RID: 77
 	public class ClearViewConfiguration
@@ -79,8 +80,10 @@ namespace EPICClearView.Utilities
 			}
 		}
 
-		// Token: 0x060002AD RID: 685 RVA: 0x00016944 File Offset: 0x00014B44
-		public static string NewGuid()
+        public Device Device { get; internal set; }
+
+        // Token: 0x060002AD RID: 685 RVA: 0x00016944 File Offset: 0x00014B44
+        public static string NewGuid()
 		{
 			return ""; // ClearViewConfiguration.ToHexString(ClearViewConfiguration.Current.Device.UidQualifier, 6) + "-" + Guid.NewGuid();
 		}

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EPICDataLayer.Helpers
+namespace EPIC.DataLayer.Helpers
 {
     public static class PatientFields
     {

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
-using EPICClearView.Utilities.Extensions;
+using EPIC.ClearView.Utilities.Extensions;
 
-namespace EPICClearView.Utilities.Converters
+namespace EPIC.ClearView.Utilities.Converters
 {
 	// Token: 0x02000054 RID: 84
 	[ValueConversion(typeof(object), typeof(string))]

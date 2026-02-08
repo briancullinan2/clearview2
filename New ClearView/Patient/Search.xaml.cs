@@ -11,13 +11,13 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Markup;
-using EPICClearView.Macros;
-using EPICClearView.Utilities.Extensions;
-using EPICDataLayer;
+using EPIC.ClearView.Macros;
+using EPIC.ClearView.Utilities.Extensions;
+using EPIC.DataLayer.Entities;
 using Microsoft.Win32;
 using Xceed.Wpf.Toolkit;
 
-namespace EPIC.Patient
+namespace EPIC.ClearView.Patient
 {
 	// Token: 0x02000069 RID: 105
 	public partial class Search : Page
@@ -42,7 +42,7 @@ namespace EPIC.Patient
 		}
 
 		// Token: 0x0600032C RID: 812 RVA: 0x0001A608 File Offset: 0x00018808
-		private void CreatePatientContacts(List<PatientEntity> patients)
+		private void CreatePatientContacts(List<DataLayer.Entities.Patient> patients)
 		{
 		}
 
@@ -69,5 +69,10 @@ namespace EPIC.Patient
 
 		// Token: 0x04000180 RID: 384
 		private string _tempPath;
-	}
+
+        private void RibbonToggleButton_Unchecked(object sender, RoutedEventArgs e)
+        {
+            Navigation.CloseTab(this);
+        }
+    }
 }

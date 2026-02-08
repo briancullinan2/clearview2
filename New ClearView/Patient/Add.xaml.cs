@@ -8,11 +8,11 @@ using System.Web;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Markup;
-using EPICClearView.Macros;
-using EPICClearView.Utilities;
-using EPICDataLayer;
+using EPIC.ClearView.Macros;
+using EPIC.ClearView.Utilities;
+using EPIC.DataLayer;
 
-namespace EPICClearView.Patient
+namespace EPIC.ClearView.Patient
 {
 	// Token: 0x02000020 RID: 32
 	public partial class Add : Page
@@ -20,11 +20,11 @@ namespace EPICClearView.Patient
         // Token: 0x17000062 RID: 98
         // (get) Token: 0x060001AF RID: 431 RVA: 0x0001126C File Offset: 0x0000F46C
         // (set) Token: 0x060001B0 RID: 432 RVA: 0x0001128E File Offset: 0x0000F48E
-        public PatientEntity Patient
+        public DataLayer.Entities.Patient Patient
         {
             get
             {
-                return (PatientEntity)GetValue(Add.PatientProperty);
+                return (DataLayer.Entities.Patient)GetValue(Add.PatientProperty);
             }
             set
             {
@@ -35,7 +35,7 @@ namespace EPICClearView.Patient
         // Token: 0x060001B1 RID: 433 RVA: 0x000113EC File Offset: 0x0000F5EC
         public Add()
 		{
-            Patient = new PatientEntity();
+            Patient = new DataLayer.Entities.Patient();
             this.InitializeComponent();
             Navigation.InsertRibbon(this);
         }
@@ -80,6 +80,11 @@ namespace EPICClearView.Patient
 		}
 
 		// Token: 0x040000ED RID: 237
-		public static readonly DependencyProperty PatientProperty = DependencyProperty.Register("Patient", typeof(PatientEntity), typeof(Add), new PropertyMetadata(new PatientEntity()));
-	}
+		public static readonly DependencyProperty PatientProperty = DependencyProperty.Register("Patient", typeof(DataLayer.Entities.Patient), typeof(Add), new PropertyMetadata(new DataLayer.Entities.Patient()));
+
+        private void RibbonToggleButton_Unchecked(object sender, RoutedEventArgs e)
+        {
+            SaveClose_Click(sender, e);
+        }
+    }
 }

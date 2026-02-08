@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media;
-using EPICClearView.Utilities.Extensions;
+using EPIC.ClearView.Utilities.Extensions;
 
-namespace EPICClearView.Utilities.Extensions
+namespace EPIC.ClearView.Utilities.Extensions
 {
 	// Token: 0x02000067 RID: 103
 	public static class DependencyObjectExtensions

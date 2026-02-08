@@ -5,11 +5,11 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Navigation;
-using EPICClearView.Utilities.Commands;
-using EPICClearView.Utilities.Extensions;
+using EPIC.ClearView.Utilities.Commands;
+using EPIC.ClearView.Utilities.Extensions;
 using System.Windows.Controls.Ribbon;
 
-namespace EPICClearView.Macros
+namespace EPIC.ClearView.Macros
 {
 	// Token: 0x02000016 RID: 22
 	public static class Navigation
@@ -179,8 +179,9 @@ namespace EPICClearView.Macros
 					TabItem newTab = new TabItem
 					{
 						Content = frame,
-						Header = new Grid()
-					};
+						Header = new Grid(),
+                        HeaderTemplate = mainWindow.TryFindResource("TabClosable") as DataTemplate
+                    };
 					frame.LoadCompleted += delegate(object sender, NavigationEventArgs args)
 					{
 						newTab.Header = ((Page)frame.Content).Title;

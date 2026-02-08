@@ -6,7 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Markup;
 
-namespace EPICClearView
+namespace EPIC.ClearView
 {
 	// Token: 0x0200006C RID: 108
 	public partial class Welcome : Page
