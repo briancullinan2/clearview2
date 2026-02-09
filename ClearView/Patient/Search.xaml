@@ -1,0 +1,200 @@
+<Page
+    x:Class="EPIC.ClearView.Patient.Search"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:EPIC.ClearView.Utilities.Converters;assembly=EPICClearView"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:patient="clr-namespace:EPIC.ClearView.Patient;assembly=EPICClearView"
+    xmlns:ribbon="clr-namespace:System.Windows.Controls.Ribbon;assembly=System.Windows.Controls.Ribbon"
+    Title="Search Patients">
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Themes/ClearView.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <BitmapImage x:Key="Find" UriSource="/Resources/0025-search.png" />
+            <BitmapImage x:Key="NewPatient" UriSource="/Resources/Person-add.jpg" />
+            <BitmapImage x:Key="NewCapture" UriSource="/Resources/0175-camera.png" />
+            <BitmapImage x:Key="ViewPatient" UriSource="/Resources/member-search-icon.gif" />
+            <BitmapImage x:Key="ExportData" UriSource="/Resources/0180-address_book.png" />
+            <BitmapImage x:Key="Patients" UriSource="/Resources/4502-users.png" />
+
+            <ribbon:RibbonTab x:Key="SearchOptions">
+                <RibbonTab.Header>
+                    <TextBlock
+                        Margin="-10,-10,-10,0"
+                        Padding="10,10,10,0"
+                        Text="Search">
+                        <TextBlock.Background>
+                            <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                <LinearGradientBrush.GradientStops>
+                                    <GradientStop Offset="0" Color="#AAFFA500" />
+                                    <GradientStop Offset="1" Color="#00FFA500" />
+                                </LinearGradientBrush.GradientStops>
+                            </LinearGradientBrush>
+                        </TextBlock.Background>
+                    </TextBlock>
+                </RibbonTab.Header>
+                <ribbon:RibbonGroup Header="ClearView">
+                    <ribbon:RibbonToggleButton
+                        IsChecked="True"
+                        Label="Patients"
+                        LargeImageSource="{StaticResource Patients}"
+                        Unchecked="RibbonToggleButton_Unchecked" />
+                </ribbon:RibbonGroup>
+                <ribbon:RibbonGroup Header="Actions">
+                    <ribbon:RibbonButton Label="Export Data" LargeImageSource="{StaticResource ExportData}" />
+                    <ribbon:RibbonButton Label="New Patient" LargeImageSource="{StaticResource NewPatient}" />
+                    <ribbon:RibbonButton Label="New Capture" LargeImageSource="{StaticResource NewCapture}" />
+                    <ribbon:RibbonButton Label="View Patient" LargeImageSource="{StaticResource ViewPatient}" />
+                </ribbon:RibbonGroup>
+            </ribbon:RibbonTab>
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="50" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Label
+                Grid.Column="0"
+                VerticalAlignment="Center"
+                Content="Search:" />
+            <TextBox
+                Name="SearchText"
+                Grid.Row="1"
+                Grid.Column="1"
+                MinWidth="100"
+                Margin="5"
+                VerticalAlignment="Center"
+                TextChanged="Search_TextChanged" />
+            <Button
+                Grid.RowSpan="2"
+                Grid.Column="2"
+                Margin="5"
+                Padding="3"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal">
+                    <Image
+                        Width="20"
+                        Height="20"
+                        Margin="3,0"
+                        Source="{StaticResource Find}" />
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Find</TextBlock>
+                </StackPanel>
+            </Button>
+        </Grid>
+        <Grid Column="0" Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Content="Status: 0 records found" />
+            <StackPanel
+                Grid.Column="1"
+                HorizontalAlignment="Right"
+                Orientation="Horizontal">
+                <Button
+                    Margin="5"
+                    Padding="3"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Click="Export_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <Image
+                            Width="25"
+                            Height="25"
+                            Margin="3,0"
+                            Source="{StaticResource ExportData}" />
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Export Data</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button
+                    Margin="5"
+                    Padding="3"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Click="NewPatient_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <Image
+                            Width="25"
+                            Height="25"
+                            Margin="3,0"
+                            Source="{StaticResource NewPatient}" />
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">New Patient</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button
+                    Margin="5"
+                    Padding="3"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Click="NewCapture_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <Image
+                            Width="25"
+                            Height="25"
+                            Margin="3,0"
+                            Source="{StaticResource NewCapture}" />
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">New Capture</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button
+                    Margin="5"
+                    Padding="3"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal">
+                        <Image
+                            Width="25"
+                            Height="25"
+                            Margin="3,0"
+                            Source="{StaticResource ViewPatient}" />
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">View Patient</TextBlock>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Grid>
+        <DataGrid
+            Name="Patients"
+            Grid.Row="1"
+            AutoGenerateColumns="False"
+            CanUserResizeRows="False"
+            IsReadOnly="True"
+            SelectionMode="Extended">
+            <DataGrid.CellStyle>
+                <Style TargetType="{x:Type DataGridCell}">
+                    <Setter Property="BorderThickness" Value="0" />
+                </Style>
+            </DataGrid.CellStyle>
+            <DataGrid.RowHeaderTemplate>
+                <DataTemplate>
+                    <CheckBox Name="RowCheck" IsChecked="{Binding Path=IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" />
+                </DataTemplate>
+            </DataGrid.RowHeaderTemplate>
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding FirstName}" Header="First Name" />
+                <DataGridTextColumn Binding="{Binding LastName}" Header="Last Name" />
+                <DataGridTextColumn Binding="{Binding Gender, Converter={StaticResource EnumDisplayNameConverter}}" Header="Gender" />
+                <DataGridTextColumn Binding="{Binding PatientId}" Header="Patient Id" />
+                <DataGridTextColumn Binding="{Binding BirthDate, StringFormat={}{0:ddMMMyyyy}}" Header="Birth Date" />
+                <DataGridCheckBoxColumn Binding="{x:Null}" Header="Archived" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Page>

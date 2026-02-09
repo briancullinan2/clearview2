@@ -1,7 +1,15 @@
 <Solution>
+  <Project Path="CameraInterface/CameraInterface.csproj" Id="3038d588-bcbf-4f15-8e31-159bb694a12d">
+    <BuildDependency Project="DataLayer/DataLayer.csproj" />
+  </Project>
+  <Project Path="ClearView/ClearView.csproj" Id="0dcc1a2f-22f4-4154-8c80-e80e9dde4df1">
+    <BuildDependency Project="CameraInterface/CameraInterface.csproj" />
+    <BuildDependency Project="DataLayer/DataLayer.csproj" />
+  </Project>
   <Project Path="DataLayer/DataLayer.csproj" Id="c842e7fc-bef2-4431-81b5-716abbbbd032" />
   <Project Path="LegacyResources/LegacyResources.csproj" Id="3369c397-be7d-4501-ae5f-3c5ec76c8239" />
   <Project Path="New ClearView/EPICClearView.csproj" Id="0f4fad98-2acc-42b7-9cd8-09e23e9c5c2e">
+    <BuildDependency Project="CameraInterface/CameraInterface.csproj" />
     <BuildDependency Project="DataLayer/DataLayer.csproj" />
   </Project>
 </Solution>

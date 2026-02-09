@@ -20,7 +20,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\New ClearView\bin\Debug\</OutputPath>
+    <OutputPath>..\ClearView\bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -146,32 +146,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Utilities\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Capture\resources\0l.gif" />
-    <Content Include="Capture\resources\0r.gif" />
-    <Content Include="Capture\resources\1l.gif" />
-    <Content Include="Capture\resources\1r.gif" />
-    <Content Include="Capture\resources\2l.gif" />
-    <Content Include="Capture\resources\2r.gif" />
-    <Content Include="Capture\resources\3l.gif" />
-    <Content Include="Capture\resources\3r.gif" />
-    <Content Include="Capture\resources\4l.gif" />
-    <Content Include="Capture\resources\4r.gif" />
-    <Content Include="Capture\resources\5l.gif" />
-    <Content Include="Capture\resources\5r.gif" />
-    <Content Include="Capture\resources\ccw.png" />
-    <Content Include="Capture\resources\cw.png" />
-    <Content Include="Capture\resources\down.png" />
-    <Content Include="Capture\resources\left.png" />
-    <Content Include="Capture\resources\right.png" />
-    <Content Include="Capture\resources\up.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="Capture\resources\ribbontabscrollviewer.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Capture\Capture.resx">

@@ -2,6 +2,7 @@
     x:Class="EPIC.ClearView.Capture.Settings"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:camera="clr-namespace:CameraInterface;assembly=CameraInterface"
     xmlns:converters="clr-namespace:EPIC.DataLayer.Converters;assembly=DataLayer"
     xmlns:customization="clr-namespace:EPIC.DataLayer.Customization;assembly=DataLayer"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -56,17 +57,30 @@
                     <x:Type TypeName="customization:PulseDuration" />
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
-            <converters:EnumDisplayNameConverter x:Key="EnumDisplayNameConverter" />
-            <ribbon:RibbonContextualTabGroup
-                x:Key="SettingsGroup"
-                Control.Background="#FF800080"
-                Control.BorderBrush="#FF800080"
-                RibbonContextualTabGroup.Header="Options"
-                UIElement.Visibility="Visible" />
-            <ribbon:RibbonTab
-                x:Key="SettingsOptions"
-                Name="SettingsOptions"
-                Header="Options">
+            <BitmapImage x:Key="Settings" UriSource="/Resources/0020-options_edit.png" />
+            <ribbon:RibbonTab x:Key="SettingsOptions" Name="SettingsOptions">
+                <RibbonTab.Header>
+                    <TextBlock
+                        Margin="-10,-10,-10,0"
+                        Padding="10,10,10,0"
+                        Text="Search">
+                        <TextBlock.Background>
+                            <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                <LinearGradientBrush.GradientStops>
+                                    <GradientStop Offset="0" Color="#AA800080" />
+                                    <GradientStop Offset="1" Color="#00800080" />
+                                </LinearGradientBrush.GradientStops>
+                            </LinearGradientBrush>
+                        </TextBlock.Background>
+                    </TextBlock>
+                </RibbonTab.Header>
+                <ribbon:RibbonGroup Header="Application">
+                    <ribbon:RibbonToggleButton
+                        IsChecked="True"
+                        Label="Settings"
+                        LargeImageSource="{StaticResource Settings}"
+                        Unchecked="RibbonToggleButton_Unchecked" />
+                </ribbon:RibbonGroup>
                 <ribbon:RibbonGroup Header="Device Settings">
                     <ribbon:RibbonButton
                         Click="SaveClose_Click"
@@ -79,6 +93,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
@@ -89,7 +104,7 @@
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel
-            Grid.Row="2"
+            Grid.Row="3"
             HorizontalAlignment="Right"
             Orientation="Horizontal">
             <Button
@@ -138,11 +153,155 @@
                 </StackPanel>
             </Button>
         </StackPanel>
+        <GroupBox
+            Grid.Row="1"
+            Height="Auto"
+            HorizontalAlignment="Right"
+            Header="Device Preview">
+            <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
+                <FrameworkElement.Resources>
+                    <ResourceDictionary>
+                        <ResourceDictionary.MergedDictionaries>
+                            <ResourceDictionary Source="/Themes/ClearView.xaml" />
+                        </ResourceDictionary.MergedDictionaries>
+                    </ResourceDictionary>
+                </FrameworkElement.Resources>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Image
+                    Name="DevicePreview"
+                    MinWidth="100"
+                    MinHeight="100"
+                    Margin="5"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top" />
+                <Slider
+                    Name="ZoomSlider"
+                    Grid.Row="1"
+                    Margin="5"
+                    Maximum="10"
+                    Minimum="1"
+                    Value="{Binding Zoom, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            </Grid>
+        </GroupBox>
         <TabControl
             Name="MainTabControl"
-            Grid.Row="1"
+            Grid.Row="2"
             TabStripPlacement="Left">
-            <TabItem Name="SettingsTab" Header="Device Settings">
+            <TabItem Name="CameraTab" Header="Camera Settings">
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                    <WrapPanel
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        Orientation="Vertical">
+                        <GroupBox Header="Camera Settings">
+                            <Grid
+                                Margin="6"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition MinWidth="120" />
+                                    <ColumnDefinition MinWidth="160" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <!--  Camera selector (re-uses CameraSelect ComboBox in Device tab)  -->
+                                <Label
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    VerticalAlignment="Center"
+                                    Content="Active Camera:" />
+
+                                <!--  Gain  -->
+                                <Label
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    VerticalAlignment="Center"
+                                    Content="Gain:" />
+                                <xctk:IntegerUpDown
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    Margin="5"
+                                    Value="{Binding SelectedItem.Gain, RelativeSource={RelativeSource AncestorType={x:Type Page}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                                <!--  Brightness  -->
+                                <Label
+                                    Grid.Row="2"
+                                    Grid.Column="0"
+                                    VerticalAlignment="Center"
+                                    Content="Brightness:" />
+                                <xctk:IntegerUpDown
+                                    Grid.Row="2"
+                                    Grid.Column="1"
+                                    Margin="5"
+                                    Value="{Binding SelectedItem.Brightness, RelativeSource={RelativeSource AncestorType={x:Type Page}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                                <!--  Exposure  -->
+                                <Label
+                                    Grid.Row="3"
+                                    Grid.Column="0"
+                                    VerticalAlignment="Center"
+                                    Content="Exposure:" />
+                                <xctk:IntegerUpDown
+                                    Grid.Row="3"
+                                    Grid.Column="1"
+                                    Margin="5"
+                                    Value="{Binding SelectedItem.Exposure, RelativeSource={RelativeSource AncestorType={x:Type Page}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                                <!--  Width  -->
+                                <Label
+                                    Grid.Row="4"
+                                    Grid.Column="0"
+                                    VerticalAlignment="Center"
+                                    Content="Width:" />
+                                <xctk:IntegerUpDown
+                                    Grid.Row="4"
+                                    Grid.Column="1"
+                                    Margin="5"
+                                    Value="{Binding SelectedItem.FrameWidth, RelativeSource={RelativeSource AncestorType={x:Type Page}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                                <!--  Height  -->
+                                <Label
+                                    Grid.Row="5"
+                                    Grid.Column="0"
+                                    VerticalAlignment="Center"
+                                    Content="Height:" />
+                                <xctk:IntegerUpDown
+                                    Grid.Row="5"
+                                    Grid.Column="1"
+                                    Margin="5"
+                                    Value="{Binding SelectedItem.FrameHeight, RelativeSource={RelativeSource AncestorType={x:Type Page}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <ComboBox
+                                    x:Name="CameraSelect_Copy"
+                                    Grid.Column="1"
+                                    Margin="5"
+                                    VerticalAlignment="Center"
+                                    DisplayMemberPath="."
+                                    ItemsSource="{Binding Cameras, RelativeSource={x:Static camera:CameraManager.Current}, Mode=OneWay, UpdateSourceTrigger=Explicit}"
+                                    SelectedItem="{Binding SelectedItem.Camera, ElementName=DeviceSelect, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    SelectionChanged="CameraSelect_SelectionChanged" />
+                            </Grid>
+                        </GroupBox>
+                    </WrapPanel>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem
+                Name="DeviceTab"
+                Header="Device Settings"
+                IsSelected="True">
                 <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                     <WrapPanel
                         HorizontalAlignment="Left"
@@ -188,6 +347,7 @@
                                     Grid.Row="1"
                                     Grid.Column="1"
                                     Margin="5"
+                                    VerticalAlignment="Center"
                                     DisplayMemberPath="."
                                     SelectedItem="{Binding SelectedItem.Camera, ElementName=DeviceSelect, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                     SelectionChanged="CameraSelect_SelectionChanged" />
@@ -497,6 +657,7 @@
                                     Grid.ColumnSpan="6"
                                     MinWidth="100"
                                     HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
                                     SelectedItem="{Binding CalibrationSetting.BinDepth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}">
                                     <system:Int32>2</system:Int32>
                                     <system:Int32>4</system:Int32>

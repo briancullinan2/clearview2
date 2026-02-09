@@ -21,6 +21,8 @@ namespace EPIC.DataLayer.Entities
         public DateTime? LastActivityTime { get; set; }
         public string Firmware { get; set; }
         public string Camera { get; set; }
+        public int Height { get; set; }
+        public int Width { get; set; }
         public IEnumerable<DeviceSetting> Settings { get; set; }
         public IEnumerable<DeviceCalibrationSetting> CalibrationSettings { get; set; }
     }

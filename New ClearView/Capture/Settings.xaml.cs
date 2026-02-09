@@ -18,6 +18,7 @@ using EPIC.ClearView.Utilities.Extensions;
 using Xceed.Wpf.Toolkit;
 using EPIC.DataLayer.Entities;
 using EPIC.DataLayer.Customization;
+using CameraInterface;
 
 namespace EPIC.ClearView.Capture
 {
@@ -44,9 +45,9 @@ namespace EPIC.ClearView.Capture
 		{
 			InitializeComponent();
 			Navigation.InsertRibbon(this);
+            /*
 			FormChecker.Events[this.SettingsTab].Changed += this.OnChanged;
 			FormChecker.Events[this.SettingsTab].Unchanged += this.OnUnchanged;
-            /*
 			this.DeviceSelect.Loaded += delegate(object sender, RoutedEventArgs args)
 			{
 				FormChecker.Events[this.SettingsTab].Include(this.DeviceSelect.FindChild<ComboBox>(null));
@@ -56,38 +57,36 @@ namespace EPIC.ClearView.Capture
 			{
 				this.CameraSelect.Items.Add(newItem);
 			}
-			if (CameraManager.Current.Cameras == null)
-			{
-				CameraManager.Current.Changed += this.AddCurrentCameras;
-			}
-			else
-			{
-				this.AddCurrentCameras(null);
-			}
 			this.Firmware.ItemsSource = from x in Assembly.GetAssembly(typeof(IControllable)).GetTypes()
 			where x.GetInterfaces().Contains(typeof(IControllable))
 			select x.Name;
 			this.DeviceSelect.ItemsSource = list;
 			this.DeviceSelect.SelectedItem = ClearViewConfiguration.Current.Device;
 			*/
+            if (CameraManager.Current.Cameras == null)
+            {
+                CameraManager.Current.Changed += this.AddCurrentCameras;
+            }
+            else
+            {
+                this.AddCurrentCameras(null);
+            }
         }
 
-        /*
-		// Token: 0x06000071 RID: 113 RVA: 0x00005728 File Offset: 0x00003928
-		private void AddCurrentCameras(CameraManager.CamerasChangedEventArgs args)
-		{
-			this.CameraSelect.Dispatcher.Invoke(delegate()
-			{
-				foreach (ICapturable capturable in CameraManager.Current.Cameras)
-				{
-					if (!this.CameraSelect.Items.Contains(capturable.DisplayName))
-					{
-						this.CameraSelect.Items.Add(capturable.DisplayName);
-					}
-				}
-			});
-		}
-		*/
+        // Token: 0x06000071 RID: 113 RVA: 0x00005728 File Offset: 0x00003928
+        private void AddCurrentCameras(CameraManager.CamerasChangedEventArgs args)
+        {
+            this.CameraSelect.Dispatcher.Invoke(delegate ()
+            {
+                foreach (ICapturable capturable in CameraManager.Current.Cameras)
+                {
+                    if (!this.CameraSelect.Items.Contains(capturable.DisplayName))
+                    {
+                        this.CameraSelect.Items.Add(capturable.DisplayName);
+                    }
+                }
+            });
+        }
 
         // Token: 0x06000072 RID: 114 RVA: 0x00005748 File Offset: 0x00003948
         private void CameraSelect_SelectionChanged(object sender, SelectionChangedEventArgs selectionChangedEventArgs)
@@ -304,5 +303,10 @@ namespace EPIC.ClearView.Capture
 
 		// Token: 0x0400003F RID: 63
 		public static readonly DependencyProperty CalibrationSettingProperty = DependencyProperty.Register("CalibrationSetting", typeof(DeviceCalibrationSetting), typeof(Settings), new PropertyMetadata(DefaultCalibration));
-	}
+
+        private void RibbonToggleButton_Unchecked(object sender, RoutedEventArgs e)
+        {
+			Navigation.CloseTab(this);
+        }
+    }
 }

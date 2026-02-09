@@ -1,0 +1,234 @@
+<Page
+	x:Class="EPIC.User.Permissions" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:entityClasses="clr-namespace:EPICClearViewDL.EntityClasses;assembly=EPICClearViewDL" xmlns:macros="clr-namespace:EPIC.Macros" xmlns:fluent="clr-namespace:Fluent;assembly=Fluent"
+	Title="Permissions" xmlns:user="clr-namespace:EPIC.User">
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary
+					Source="/Themes/ClearView.xaml" />
+				<ResourceDictionary
+					Source="/Resources/FormChecker.xaml" />
+				<ResourceDictionary
+					Source="/Resources/DataGridStyles.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+			<BitmapImage
+				UriSource="/Resources/1003-delete.png"
+				x:Key="Remove" />
+			<BitmapImage
+				UriSource="/Resources/1002-add.png"
+				x:Key="Add" />
+			<BitmapImage
+				UriSource="/Resources/0040-save.png"
+				x:Key="Save" />
+			<BitmapImage
+				UriSource="/Resources/1001-cancel.png"
+				x:Key="Cancel" />
+			<fluent:RibbonContextualTabGroup
+				RibbonContextualTabGroup.Header="Options"
+				UIElement.Visibility="Visible"
+				Control.Background="#FFFFFF00"
+				Control.BorderBrush="#FFFFFF00"
+				x:Key="SearchGroup" />
+			<fluent:RibbonTabItem
+				RibbonTabItem.Header="Search"
+				RibbonTabItem.Group="{StaticResource SearchGroup}"
+				x:Key="SearchOptions">
+				<fluent:RibbonGroupBox>
+					<fluent:Button
+						Button.Header="Add Role"
+						Button.LargeIcon="{StaticResource Add}"
+						Click="AddRole_Click" />
+				</fluent:RibbonGroupBox>
+			</fluent:RibbonTabItem>
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition />
+			<RowDefinition
+				Height="Auto" />
+		</Grid.RowDefinitions>
+		<TabControl
+			TabStripPlacement="Left">
+			<TabItem
+				Name="RolesTab"
+				Header="Roles">
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition />
+						<RowDefinition
+							Height="Auto" />
+					</Grid.RowDefinitions>
+					<DataGrid
+						Name="Roles"
+						AutoGenerateColumns="False"
+						GridLinesVisibility="None"
+						BorderThickness="0"
+						CellStyle="{StaticResource BlankCellStyle}"
+						AlternatingRowBackground="#FFF0F8FF"
+						IsReadOnly="True"
+						SelectionMode="Single"
+						SelectionUnit="Cell"
+						RowHeaderStyle="{StaticResource BlankRowHeader}"
+						ColumnHeaderStyle="{StaticResource BlankColumnHeader}"
+						CanUserResizeColumns="False"
+						CanUserResizeRows="False"
+						Template="{StaticResource BlankGridTemplate}"
+						Background="#00FFFFFF">
+						<DataGrid.Columns>
+							<DataGridTemplateColumn
+								Header="Name"
+								Width="100">
+								<DataGridTemplateColumn.CellTemplate>
+									<DataTemplate>
+										<!--Unknown connection ID: 4-->
+										<TextBox
+											VerticalAlignment="Top"
+											Text="{Binding Path=Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+									</DataTemplate>
+								</DataGridTemplateColumn.CellTemplate>
+							</DataGridTemplateColumn>
+							<DataGridTemplateColumn
+								Header="Description"
+								Width="200">
+								<DataGridTemplateColumn.CellTemplate>
+									<DataTemplate>
+										<TextBox
+											TextWrapping="Wrap"
+											AcceptsReturn="True"
+											Text="{Binding Path=Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+									</DataTemplate>
+								</DataGridTemplateColumn.CellTemplate>
+							</DataGridTemplateColumn>
+							<DataGridTemplateColumn
+								Width="200">
+								<DataGridTemplateColumn.CellTemplate>
+									<DataTemplate>
+										<!--Unknown connection ID: 5-->
+										<Button
+											VerticalAlignment="Center"
+											HorizontalAlignment="Center"
+											Margin="5"
+											Padding="3">
+											<StackPanel
+												Orientation="Horizontal">
+												<Image
+													Source="{StaticResource Remove}"
+													Height="25"
+													Width="25"
+													Margin="3,0" />
+												<TextBlock
+													VerticalAlignment="Center"
+													HorizontalAlignment="Center">Remove</TextBlock>
+											</StackPanel>
+										</Button>
+									</DataTemplate>
+								</DataGridTemplateColumn.CellTemplate>
+							</DataGridTemplateColumn>
+						</DataGrid.Columns>
+					</DataGrid>
+					<StackPanel
+						Orientation="Horizontal"
+						Grid.Row="1"
+						HorizontalAlignment="Right">
+						<Button
+							VerticalAlignment="Center"
+							HorizontalAlignment="Center"
+							Margin="5"
+							Padding="3"
+							Click="AddRole_Click">
+							<StackPanel
+								Orientation="Horizontal">
+								<Image
+									Source="{StaticResource Add}"
+									Height="25"
+									Width="25"
+									Margin="3,0" />
+								<TextBlock
+									VerticalAlignment="Center"
+									HorizontalAlignment="Center">Add Role</TextBlock>
+							</StackPanel>
+						</Button>
+					</StackPanel>
+				</Grid>
+			</TabItem>
+			<TabItem
+				Header="Permissions">
+				<DataGrid
+					Name="PermissionsGrid"
+					AutoGenerateColumns="False"
+					GridLinesVisibility="None"
+					BorderThickness="0"
+					CellStyle="{StaticResource BlankCellStyle}"
+					AlternatingRowBackground="#FFF0F8FF"
+					Background="#00FFFFFF"
+					SelectionMode="Single"
+					SelectionUnit="Cell"
+					RowHeaderStyle="{StaticResource BlankRowHeader}"
+					ColumnHeaderStyle="{StaticResource BlankColumnHeader}"
+					CanUserResizeColumns="False"
+					CanUserResizeRows="False"
+					Template="{StaticResource BlankGridTemplate}"
+					EnableRowVirtualization="False"
+					EnableColumnVirtualization="False" />
+			</TabItem>
+		</TabControl>
+		<StackPanel
+			Orientation="Horizontal"
+			Grid.Row="1"
+			HorizontalAlignment="Right">
+			<Button
+				Name="Save"
+				Margin="5"
+				Padding="3"
+				IsEnabled="False"
+				Click="Save_Click">
+				<StackPanel
+					Orientation="Horizontal">
+					<Image
+						Source="{StaticResource Save}"
+						Height="25"
+						Width="25"
+						Margin="3,0">
+						<FrameworkElement.Style>
+							<Style
+								TargetType="{x:Type Image}">
+								<Style.Triggers>
+									<DataTrigger
+										Value="False"
+										Binding="{Binding IsEnabled, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}}">
+										<Setter
+											Property="UIElement.Opacity"
+											Value=".5" />
+									</DataTrigger>
+								</Style.Triggers>
+							</Style>
+						</FrameworkElement.Style>
+					</Image>
+					<TextBlock
+						VerticalAlignment="Center"
+						HorizontalAlignment="Center"
+						Text="Save Changes" />
+				</StackPanel>
+			</Button>
+			<Button
+				Margin="5"
+				Padding="3"
+				Command="{x:Static macros:Navigation.CloseTabCommand}"
+				CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}}">
+				<StackPanel
+					Orientation="Horizontal">
+					<Image
+						Source="{StaticResource Cancel}"
+						Height="25"
+						Width="25"
+						Margin="3,0" />
+					<TextBlock
+						VerticalAlignment="Center"
+						HorizontalAlignment="Center"
+						Text="Close" />
+				</StackPanel>
+			</Button>
+		</StackPanel>
+	</Grid>
+</Page>

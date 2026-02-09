@@ -5,3 +5,6 @@ packages
 DataLayer/bin
 DataLayer/obj
 LegacyResources/obj
+CameraInterface/obj
+*/bin
+*/obj
