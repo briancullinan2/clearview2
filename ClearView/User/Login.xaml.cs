@@ -95,7 +95,7 @@ namespace EPIC.ClearView.User
 
 		// Token: 0x0200004A RID: 74
 		// (Invoke) Token: 0x06000286 RID: 646
-		public delegate void LoggedInHandler(/* UserEntity user */);
+		public delegate void LoggedInHandler(/* DataLayer.Entities.User user */);
 
 		// Token: 0x0200004B RID: 75
 		// (Invoke) Token: 0x0600028A RID: 650

@@ -9,13 +9,18 @@
     <AssemblyName>EPICClearView</AssemblyName>
     <RootNamespace>EPIC.ClearView</RootNamespace>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <StartupObject>EPIC.ClearView.SplashWindow</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="User\Add.xaml.cs" />
-    <Compile Remove="User\Permissions.xaml.cs" />
-    <Compile Remove="User\Search.xaml.cs" />
+    <Compile Remove="Capture\Alerts.xaml.cs" />
+    <Compile Remove="Capture\Calibrate.xaml.cs" />
+    <Compile Remove="Capture\Scan.xaml.cs" />
+    <Compile Remove="Capture\Search.xaml.cs" />
     <Compile Remove="Utilities\Converters\DeviceSettingStringConverter.cs" />
+    <Compile Remove="Utilities\Converters\PermissionBooleanConverter.cs" />
+    <Compile Remove="Utilities\Converters\PermissionHasChildrenFontWeightConverter.cs" />
+    <Compile Remove="Utilities\Converters\PermissionHasChildrenTristateConverter.cs" />
     <Compile Remove="Utilities\Extensions\IconExtensions.cs" />
     <Compile Remove="Utilities\Extensions\InteropExtensions.cs" />
     <Compile Remove="Utilities\Extensions\OldWindow.cs" />
@@ -23,9 +28,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Page Remove="User\Add.xaml" />
-    <Page Remove="User\Permissions.xaml" />
-    <Page Remove="User\Search.xaml" />
+    <None Remove="clearview.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="Capture\Alerts.xaml" />
+    <Page Remove="Capture\Calibrate.xaml" />
+    <Page Remove="Capture\Scan.xaml" />
+    <Page Remove="Capture\Search.xaml" />
   </ItemGroup>
 
   <!-- ApplicationDefinition is implicitly included by the SDK when UseWPF is true;
@@ -34,6 +44,8 @@
   <ItemGroup>
     <PackageReference Include="DirectShowLib" Version="1.0.0" />
     <PackageReference Include="Emgu.CV" Version="4.12.0.5764" />
+    <PackageReference Include="Emgu.CV.Bitmap" Version="4.12.0.5764" />
+    <PackageReference Include="Emgu.CV.runtime.windows" Version="4.12.0.5764" />
     <PackageReference Include="Extended.Wpf.Toolkit" Version="5.0.0" />
     <PackageReference Include="log4net" Version="3.2.0" />
     <PackageReference Include="System.Management" Version="10.0.2" />
@@ -51,6 +63,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="clearview.png" />
     <Resource Include="Resources\0002-folder_doc.png" />
     <Resource Include="Resources\0005-time_edit.png" />
     <Resource Include="Resources\0009-doc_search.png" />

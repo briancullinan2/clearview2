@@ -6,12 +6,10 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Markup;
-using EPIC.Macros;
-using EPIC.Resources;
-using EPICClearViewDL.EntityClasses;
-using Fluent;
+using EPIC.ClearView.Macros;
+using EPIC.DataLayer;
 
-namespace EPIC.User
+namespace EPIC.ClearView.User
 {
 	// Token: 0x02000048 RID: 72
 	public partial class Add : Page
@@ -19,11 +17,11 @@ namespace EPIC.User
 		// Token: 0x17000086 RID: 134
 		// (get) Token: 0x06000260 RID: 608 RVA: 0x00013FD4 File Offset: 0x000121D4
 		// (set) Token: 0x06000261 RID: 609 RVA: 0x00013FF6 File Offset: 0x000121F6
-		public UserEntity User
+		public DataLayer.Entities.User User
 		{
 			get
 			{
-				return (UserEntity)base.GetValue(Add.UserProperty);
+				return (DataLayer.Entities.User)base.GetValue(Add.UserProperty);
 			}
 			set
 			{
@@ -35,10 +33,11 @@ namespace EPIC.User
 		public Add()
 		{
 			this.InitializeComponent();
+			Navigation.InsertRibbon(this);
 			base.Loaded += delegate(object sender2, RoutedEventArgs args2)
 			{
-				FormChecker.Events[this].Changed += this.OnChanged;
-				FormChecker.Events[this].Unchanged += this.OnUnchanged;
+				//FormChecker.Events[this].Changed += this.OnChanged;
+				//FormChecker.Events[this].Unchanged += this.OnUnchanged;
 			};
 		}
 
@@ -103,7 +102,7 @@ namespace EPIC.User
 		// Token: 0x06000266 RID: 614 RVA: 0x0001433F File Offset: 0x0001253F
 		private void Save_Click(object sender, RoutedEventArgs e)
 		{
-			this.User.Save();
+			//this.User.Save();
 		}
 
 		// Token: 0x06000267 RID: 615 RVA: 0x0001434E File Offset: 0x0001254E
@@ -114,6 +113,11 @@ namespace EPIC.User
 		}
 
 		// Token: 0x04000140 RID: 320
-		public static readonly DependencyProperty UserProperty = DependencyProperty.Register("User", typeof(UserEntity), typeof(Add), new PropertyMetadata(new UserEntity()));
-	}
+		public static readonly DependencyProperty UserProperty = DependencyProperty.Register("User", typeof(DataLayer.Entities.User), typeof(Add), new PropertyMetadata(new DataLayer.Entities.User()));
+
+        private void RibbonToggleButton_Unchecked(object sender, RoutedEventArgs e)
+        {
+			Navigation.CloseTab(this);
+        }
+    }
 }

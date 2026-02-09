@@ -27,9 +27,15 @@ namespace EPIC.ClearView
     {
         public MainWindow()
         {
+            ContentRendered += MainWindow_OnContentRendered;
             InitializeComponent();
         }
 
+        private void MainWindow_OnContentRendered(object? sender, EventArgs e)
+        {
+            SplashWindow.MainWindowOnContentRendered();
+            ContentRendered -= MainWindow_OnContentRendered;
+        }
 
         // Token: 0x06000353 RID: 851 RVA: 0x0001B508 File Offset: 0x00019708
         private void NextTab(object o)

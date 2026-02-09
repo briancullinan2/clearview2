@@ -1,12 +1,10 @@
 ﻿using System;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
-using Emgu.CV.Structure;
-using log4net;
-using System.Drawing;
 
 namespace EPIC.CameraInterface
 {
+
     /// <summary>
     /// Controls all other cameras using the Emgu Open CV library.
     /// </summary>
@@ -29,34 +27,33 @@ namespace EPIC.CameraInterface
         {
             try
             {
-				this._capture = new VideoCapture(CameraManager.Current.Cameras.IndexOf(this));
+				this._capture = new VideoCapture();
                 this.Height = 240;
                 this.Width = 320;
                 this._capture.ImageGrabbed += this.ProcessFrame;
                 this._capture.Start();
+                var success = this._capture.Grab();
             }
             catch (Exception ex)
             {
-                EmguGeneric.Log.Error("There was an error starting OpenCV.", ex);
+                Log.Error("There was an error starting OpenCV.", ex);
             }
         }
 
-        // Token: 0x06000041 RID: 65 RVA: 0x000032E0 File Offset: 0x000014E0
-        private void ProcessFrame(object sender, EventArgs e)
+        public void Capture()
         {
             try
             {
-                _capture.ImageGrabbed += _capture_ImageGrabbed;
                 var success = this._capture.Grab();
-                _capture.ImageGrabbed -= _capture_ImageGrabbed;
             }
             catch (Exception ex)
             {
-                EmguGeneric.Log.Debug("An error occurred while capturing the frame.", ex);
+                Log.Debug("An error occurred while capturing the frame.", ex);
             }
         }
 
-        private void _capture_ImageGrabbed(object? sender, EventArgs e)
+
+        private void ProcessFrame(object? sender, EventArgs e)
         {
             Mat frame = new Mat();
             _capture.Retrieve(frame, 0);
@@ -184,9 +181,6 @@ namespace EPIC.CameraInterface
         // (get) Token: 0x06000054 RID: 84 RVA: 0x000034EF File Offset: 0x000016EF
         // (set) Token: 0x06000055 RID: 85 RVA: 0x000034F7 File Offset: 0x000016F7
         public object UniqueIdentifier { get; set; }
-
-        // Token: 0x04000010 RID: 16
-        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(typeof(EmguGeneric));
 
         // Token: 0x04000011 RID: 17
         private VideoCapture _capture;

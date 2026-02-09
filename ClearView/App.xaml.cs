@@ -1,10 +1,18 @@
-﻿using System;
+﻿using EPIC.ClearView.Utilities;
+using log4net;
+using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace EPIC.ClearView
 {
@@ -28,18 +36,70 @@ namespace EPIC.ClearView
             };
         }
 
-        protected override void OnStartup(StartupEventArgs e)
+        // Token: 0x06000346 RID: 838 RVA: 0x0001AF80 File Offset: 0x00019180
+        private void Application_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
-            //Application.ResourceAssembly = typeof(App).Assembly;
-            //base.OnStartup(e);
-
-            // Use a full Pack URI to be explicit if the names are mismatched
-            // Format: /AssemblyName;component/PathToXAML
-            //var resourceUri = new Uri("/EPICClearView;component/" + StartupUri.ToString(), UriKind.Relative);
-
-            //MainWindow = (Window)Application.LoadComponent(resourceUri);
-            //MainWindow.Show();
+            try
+            {
+                e.Handled = true;
+                Log.Fatal("A fatal error occurred.", e.Exception);
+            }
+            catch
+            {
+            }
         }
+
+        // Token: 0x06000347 RID: 839 RVA: 0x0001AFF0 File Offset: 0x000191F0
+        private void App_OnStartup(object sender, StartupEventArgs e)
+        {
+            //AppDomain.CurrentDomain.AssemblyLoad += delegate (object? o, AssemblyLoadEventArgs args)
+            //{
+            //    Log.Debug(string.Format("Loaded: {0}", args.LoadedAssembly.FullName));
+            //};
+            //AppDomain.CurrentDomain.DomainUnload += delegate (object? o, EventArgs args)
+            //{
+            //};
+        }
+
+        // Token: 0x06000348 RID: 840 RVA: 0x0001B078 File Offset: 0x00019278
+        internal void Load_Plugins()
+        {
+            if (this._plugins == null)
+            {
+                this._plugins = new List<Type>();
+                string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? "";
+                if(!Directory.Exists(Path.Combine(path, "Plugins")))
+                {
+                    return;
+                }
+                string[] files = Directory.GetFiles(Path.Combine(path, "Plugins"));
+                foreach (string text in files)
+                {
+                    if (!(Path.GetExtension(text) != ".dll"))
+                    {
+                        try
+                        {
+                            Assembly assembly = Assembly.LoadFrom(text);
+                            List<Type> list = (from x in assembly.GetTypes()
+                                               where typeof(IPluggable).IsAssignableFrom(x)
+                                               select x).ToList<Type>();
+                            foreach (Type type in list)
+                            {
+                                this._plugins.Add(type);
+                                RuntimeHelpers.RunClassConstructor(type.TypeHandle);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Debug(string.Format("There was an error loading the plugin: {0}", text), ex);
+                        }
+                    }
+                }
+            }
+        }
+
+        // Token: 0x0400018D RID: 397
+        private List<Type> _plugins;
 
     }
 }

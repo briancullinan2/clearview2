@@ -1,281 +1,241 @@
 <Page
-	x:Class="EPIC.User.Add" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:user="clr-namespace:EPIC.User" xmlns:macros="clr-namespace:EPIC.Macros" xmlns:entityClasses="clr-namespace:EPICClearViewDL.EntityClasses;assembly=EPICClearViewDL" xmlns:fluent="clr-namespace:Fluent;assembly=Fluent"
-	Title="Add User"
-	SnapsToDevicePixels="True"
-	UseLayoutRounding="True"
-	SizeChanged="Page_SizeChanged">
-	<FrameworkElement.Resources>
-		<ResourceDictionary>
-			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary
-					Source="/Themes/ClearView.xaml" />
-				<ResourceDictionary
-					Source="/Resources/FormChecker.xaml" />
-			</ResourceDictionary.MergedDictionaries>
-			<BitmapImage
-				UriSource="/Resources/0040-save.png"
-				x:Key="Save" />
-			<BitmapImage
-				UriSource="/Resources/1001-cancel.png"
-				x:Key="Cancel" />
-			<fluent:RibbonContextualTabGroup
-				RibbonContextualTabGroup.Header="Options"
-				UIElement.Visibility="Visible"
-				Control.Background="#FFEE82EE"
-				Control.BorderBrush="#FFEE82EE"
-				x:Key="SearchGroup" />
-			<fluent:RibbonTabItem
-				RibbonTabItem.Header="Search"
-				RibbonTabItem.Group="{StaticResource SearchGroup}"
-				x:Key="SearchOptions">
-				<fluent:RibbonGroupBox>
-					<fluent:Button
-						Button.Header="Save and Close"
-						Button.LargeIcon="{StaticResource Save}"
-						Click="SaveClose_Click" />
-				</fluent:RibbonGroupBox>
-			</fluent:RibbonTabItem>
-		</ResourceDictionary>
-	</FrameworkElement.Resources>
-	<Grid>
-		<FrameworkElement.Resources>
-			<ResourceDictionary>
-				<ResourceDictionary.MergedDictionaries>
-					<ResourceDictionary
-						Source="/Themes/ClearView.xaml" />
-				</ResourceDictionary.MergedDictionaries>
-			</ResourceDictionary>
-		</FrameworkElement.Resources>
-		<Grid.RowDefinitions>
-			<RowDefinition />
-			<RowDefinition
-				Height="Auto" />
-		</Grid.RowDefinitions>
-		<StackPanel
-			Orientation="Horizontal"
-			Grid.Row="2"
-			HorizontalAlignment="Right">
-			<Button
-				Name="Save"
-				Margin="5"
-				Padding="3"
-				IsEnabled="False"
-				Click="Save_Click">
-				<StackPanel
-					Orientation="Horizontal">
-					<Image
-						Source="{StaticResource Save}"
-						Height="25"
-						Width="25"
-						Margin="3,0">
-						<FrameworkElement.Style>
-							<Style
-								TargetType="{x:Type Image}">
-								<Style.Triggers>
-									<DataTrigger
-										Value="False"
-										Binding="{Binding IsEnabled, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}}">
-										<Setter
-											Property="UIElement.Opacity"
-											Value=".5" />
-									</DataTrigger>
-								</Style.Triggers>
-							</Style>
-						</FrameworkElement.Style>
-					</Image>
-					<TextBlock
-						VerticalAlignment="Center"
-						HorizontalAlignment="Center"
-						Text="Save Changes" />
-				</StackPanel>
-			</Button>
-			<Button
-				Margin="5"
-				Padding="3"
-				Command="{x:Static macros:Navigation.CloseTabCommand}"
-				CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}}">
-				<StackPanel
-					Orientation="Horizontal">
-					<Image
-						Source="{StaticResource Cancel}"
-						Height="25"
-						Width="25"
-						Margin="3,0" />
-					<TextBlock
-						VerticalAlignment="Center"
-						HorizontalAlignment="Center"
-						Text="Close" />
-				</StackPanel>
-			</Button>
-		</StackPanel>
-		<WrapPanel
-			Orientation="Horizontal"
-			VerticalAlignment="Top"
-			HorizontalAlignment="Left">
-			<GroupBox
-				Header="Login Info"
-				HorizontalAlignment="Left"
-				VerticalAlignment="Top">
-				<FrameworkElement.Resources>
-					<ResourceDictionary>
-						<ResourceDictionary.MergedDictionaries>
-							<ResourceDictionary
-								Source="/Themes/ClearView.xaml" />
-						</ResourceDictionary.MergedDictionaries>
-					</ResourceDictionary>
-				</FrameworkElement.Resources>
-				<ScrollViewer
-					HorizontalScrollBarVisibility="Auto"
-					VerticalScrollBarVisibility="Auto">
-					<Grid
-						VerticalAlignment="Top"
-						HorizontalAlignment="Left">
-						<Grid.ColumnDefinitions>
-							<ColumnDefinition
-								MinWidth="200" />
-							<ColumnDefinition />
-						</Grid.ColumnDefinitions>
-						<Grid.RowDefinitions>
-							<RowDefinition />
-							<RowDefinition />
-							<RowDefinition />
-							<RowDefinition />
-							<RowDefinition />
-							<RowDefinition />
-						</Grid.RowDefinitions>
-						<Label
-							Content="User Name:" />
-						<TextBox
-							Grid.Row="1"
-							Margin="5"
-							Text="{Binding User.Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type user:Add}}}" />
-						<Label
-							Content="Password:"
-							Grid.Row="2" />
-						<PasswordBox
-							Grid.Row="3"
-							Margin="5" />
-						<Label
-							Content="Confirm Password:"
-							Grid.Row="4" />
-						<PasswordBox
-							Grid.Row="5"
-							Margin="5" />
-						<CheckBox
-							Content="Enabled"
-							Grid.Column="1"
-							Grid.RowSpan="6"
-							VerticalAlignment="Top"
-							Margin="5"
-							IsChecked="{Binding User.IsActive, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type user:Add}}}" />
-					</Grid>
-				</ScrollViewer>
-			</GroupBox>
-			<GroupBox
-				Header="General Info"
-				HorizontalAlignment="Left"
-				VerticalAlignment="Top">
-				<FrameworkElement.Resources>
-					<ResourceDictionary>
-						<ResourceDictionary.MergedDictionaries>
-							<ResourceDictionary
-								Source="/Themes/ClearView.xaml" />
-						</ResourceDictionary.MergedDictionaries>
-					</ResourceDictionary>
-				</FrameworkElement.Resources>
-				<ScrollViewer
-					HorizontalScrollBarVisibility="Auto"
-					VerticalScrollBarVisibility="Auto">
-					<Grid
-						VerticalAlignment="Top"
-						HorizontalAlignment="Left">
-						<Grid.ColumnDefinitions>
-							<ColumnDefinition />
-							<ColumnDefinition />
-						</Grid.ColumnDefinitions>
-						<Grid.RowDefinitions>
-							<RowDefinition />
-							<RowDefinition />
-							<RowDefinition />
-							<RowDefinition />
-						</Grid.RowDefinitions>
-						<Label
-							Content="First Name:" />
-						<TextBox
-							Grid.Row="1"
-							Margin="5"
-							MinWidth="150"
-							Text="{Binding User.FirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type user:Add}}}" />
-						<Label
-							Content="Last Name:"
-							Grid.Column="2" />
-						<TextBox
-							Grid.Row="1"
-							Margin="5"
-							MinWidth="150"
-							Grid.Column="2"
-							Text="{Binding User.LastName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type user:Add}}}" />
-						<Label
-							Content="E-mail:"
-							Grid.Row="2"
-							Grid.ColumnSpan="2" />
-						<TextBox
-							Grid.Row="3"
-							Grid.ColumnSpan="2"
-							Margin="5"
-							Text="{Binding User.EmailAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type user:Add}}}" />
-					</Grid>
-				</ScrollViewer>
-			</GroupBox>
-			<GroupBox
-				Header="Role Assignment">
-				<FrameworkElement.Resources>
-					<ResourceDictionary>
-						<ResourceDictionary.MergedDictionaries>
-							<ResourceDictionary
-								Source="/Themes/ClearView.xaml" />
-						</ResourceDictionary.MergedDictionaries>
-					</ResourceDictionary>
-				</FrameworkElement.Resources>
-				<ScrollViewer
-					HorizontalScrollBarVisibility="Auto"
-					VerticalScrollBarVisibility="Auto">
-					<ListBox
-						MinWidth="300"
-						MinHeight="150"
-						VerticalAlignment="Top"
-						HorizontalAlignment="Left">
-						<FrameworkElement.Resources>
-							<ResourceDictionary>
-								<Style
-									TargetType="{x:Type ListBoxItem}"
-									x:Key="{x:Type ListBoxItem}">
-									<Setter
-										Property="FrameworkElement.UseLayoutRounding"
-										Value="True" />
-									<Setter
-										Property="UIElement.SnapsToDevicePixels"
-										Value="True" />
-									<Setter
-										Property="FrameworkElement.OverridesDefaultStyle"
-										Value="True" />
-									<Setter
-										Property="Template">
-										<Setter.Value>
-											<ControlTemplate
-												TargetType="{x:Type ListBoxItem}">
-												<CheckBox
-													IsChecked="{Binding Path=IsSelected, RelativeSource={RelativeSource TemplatedParent}}"
-													Content="{Binding Path=Name}" />
-											</ControlTemplate>
-										</Setter.Value>
-									</Setter>
-								</Style>
-							</ResourceDictionary>
-						</FrameworkElement.Resources>
-					</ListBox>
-				</ScrollViewer>
-			</GroupBox>
-		</WrapPanel>
-	</Grid>
+    x:Class="EPIC.ClearView.User.Add"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ribbon="clr-namespace:System.Windows.Controls.Ribbon;assembly=System.Windows.Controls.Ribbon"
+    Title="Add User"
+    SizeChanged="Page_SizeChanged"
+    SnapsToDevicePixels="True"
+    UseLayoutRounding="True">
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Themes/ClearView.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <BitmapImage x:Key="Save" UriSource="/Resources/0040-save.png" />
+            <BitmapImage x:Key="Cancel" UriSource="/Resources/1001-cancel.png" />
+            <BitmapImage x:Key="NewUser" UriSource="/Resources/4505-user_add.png" />
+            <ribbon:RibbonTab x:Key="UserOptions">
+                <RibbonTab.Header>
+                    <TextBlock
+                        Margin="-10,-10,-10,0"
+                        Padding="10,10,10,0"
+                        Text="Options">
+                        <TextBlock.Background>
+                            <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                <LinearGradientBrush.GradientStops>
+                                    <GradientStop Offset="0" Color="#AAEE82EE" />
+                                    <GradientStop Offset="1" Color="#00EE82EE" />
+                                </LinearGradientBrush.GradientStops>
+                            </LinearGradientBrush>
+                        </TextBlock.Background>
+                    </TextBlock>
+                </RibbonTab.Header>
+                <ribbon:RibbonGroup Header="User Options">
+                    <ribbon:RibbonToggleButton
+                        IsChecked="True"
+                        Label="New User"
+                        LargeImageSource="{StaticResource NewUser}"
+                        Unchecked="RibbonToggleButton_Unchecked" />
+                </ribbon:RibbonGroup>
+                <ribbon:RibbonGroup>
+                    <ribbon:RibbonButton
+                        Click="SaveClose_Click"
+                        Label="Save and Close"
+                        LargeImageSource="{StaticResource Save}" />
+                </ribbon:RibbonGroup>
+            </ribbon:RibbonTab>
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+    <Grid>
+        <FrameworkElement.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <ResourceDictionary Source="/Themes/ClearView.xaml" />
+                </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary>
+        </FrameworkElement.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <StackPanel
+            Grid.Row="2"
+            HorizontalAlignment="Right"
+            Orientation="Horizontal">
+            <Button
+                Name="Save"
+                Margin="5"
+                Padding="3"
+                Click="Save_Click"
+                IsEnabled="False">
+                <StackPanel Orientation="Horizontal">
+                    <Image
+                        Width="25"
+                        Height="25"
+                        Margin="3,0"
+                        Source="{StaticResource Save}">
+                        <FrameworkElement.Style>
+                            <Style TargetType="{x:Type Image}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsEnabled, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}}" Value="False">
+                                        <Setter Property="UIElement.Opacity" Value=".5" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </FrameworkElement.Style>
+                    </Image>
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Text="Save Changes" />
+                </StackPanel>
+            </Button>
+            <Button Margin="5" Padding="3">
+                <StackPanel Orientation="Horizontal">
+                    <Image
+                        Width="25"
+                        Height="25"
+                        Margin="3,0"
+                        Source="{StaticResource Cancel}" />
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Text="Close" />
+                </StackPanel>
+            </Button>
+        </StackPanel>
+        <WrapPanel
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Orientation="Horizontal">
+            <GroupBox
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Header="Login Info">
+                <FrameworkElement.Resources>
+                    <ResourceDictionary>
+                        <ResourceDictionary.MergedDictionaries>
+                            <ResourceDictionary Source="/Themes/ClearView.xaml" />
+                        </ResourceDictionary.MergedDictionaries>
+                    </ResourceDictionary>
+                </FrameworkElement.Resources>
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                    <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition MinWidth="200" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Label Content="User Name:" />
+                        <TextBox
+                            Grid.Row="1"
+                            Margin="5"
+                            Text="{Binding User.Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}" />
+                        <Label Grid.Row="2" Content="Password:" />
+                        <PasswordBox Grid.Row="3" Margin="5" />
+                        <Label Grid.Row="4" Content="Confirm Password:" />
+                        <PasswordBox Grid.Row="5" Margin="5" />
+                        <CheckBox
+                            Grid.RowSpan="6"
+                            Grid.Column="1"
+                            Margin="5"
+                            VerticalAlignment="Top"
+                            Content="Enabled"
+                            IsChecked="{Binding User.IsActive, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}" />
+                    </Grid>
+                </ScrollViewer>
+            </GroupBox>
+            <GroupBox
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Header="General Info">
+                <FrameworkElement.Resources>
+                    <ResourceDictionary>
+                        <ResourceDictionary.MergedDictionaries>
+                            <ResourceDictionary Source="/Themes/ClearView.xaml" />
+                        </ResourceDictionary.MergedDictionaries>
+                    </ResourceDictionary>
+                </FrameworkElement.Resources>
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                    <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Label Content="First Name:" />
+                        <TextBox
+                            Grid.Row="1"
+                            MinWidth="150"
+                            Margin="5"
+                            Text="{Binding User.FirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}" />
+                        <Label Grid.Column="2" Content="Last Name:" />
+                        <TextBox
+                            Grid.Row="1"
+                            Grid.Column="2"
+                            MinWidth="150"
+                            Margin="5"
+                            Text="{Binding User.LastName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}" />
+                        <Label
+                            Grid.Row="2"
+                            Grid.ColumnSpan="2"
+                            Content="E-mail:" />
+                        <TextBox
+                            Grid.Row="3"
+                            Grid.ColumnSpan="2"
+                            Margin="5"
+                            Text="{Binding User.EmailAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}" />
+                    </Grid>
+                </ScrollViewer>
+            </GroupBox>
+            <GroupBox Header="Role Assignment">
+                <FrameworkElement.Resources>
+                    <ResourceDictionary>
+                        <ResourceDictionary.MergedDictionaries>
+                            <ResourceDictionary Source="/Themes/ClearView.xaml" />
+                        </ResourceDictionary.MergedDictionaries>
+                    </ResourceDictionary>
+                </FrameworkElement.Resources>
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                    <ListBox
+                        MinWidth="300"
+                        MinHeight="150"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top">
+                        <FrameworkElement.Resources>
+                            <ResourceDictionary>
+                                <Style x:Key="{x:Type ListBoxItem}" TargetType="{x:Type ListBoxItem}">
+                                    <Setter Property="FrameworkElement.UseLayoutRounding" Value="True" />
+                                    <Setter Property="UIElement.SnapsToDevicePixels" Value="True" />
+                                    <Setter Property="FrameworkElement.OverridesDefaultStyle" Value="True" />
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                                <CheckBox Content="{Binding Path=Name}" IsChecked="{Binding Path=IsSelected, RelativeSource={RelativeSource TemplatedParent}}" />
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </ResourceDictionary>
+                        </FrameworkElement.Resources>
+                    </ListBox>
+                </ScrollViewer>
+            </GroupBox>
+        </WrapPanel>
+    </Grid>
 </Page>

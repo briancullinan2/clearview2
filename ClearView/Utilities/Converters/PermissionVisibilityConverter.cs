@@ -27,35 +27,35 @@ namespace EPIC.ClearView.Utilities.Converters
 				string permission = values.FirstOrDefault((object x) => x is string) as string;
                 /*
 				object obj;
-				if ((obj = values.FirstOrDefault((object x) => x is UserEntity)) == null)
+				if ((obj = values.FirstOrDefault((object x) => x is DataLayer.Entities.User)) == null)
 				{
 					obj = ((mainWindow != null) ? mainWindow.User : null);
 				}
-				UserEntity userEntity = obj as UserEntity;
+				DataLayer.Entities.User DataLayer.Entities.User = obj as DataLayer.Entities.User;
 				if (!string.IsNullOrEmpty(permission))
 				{
 					try
 					{
-						List<RoleEntity> list;
-						if (userEntity == null)
+						List<DataLayer.Entities.Role> list;
+						if (DataLayer.Entities.User == null)
 						{
 							list = (from x in new LinqMetaData().Role
 							where x.Name == "Anonymous"
-							select x).ToList<RoleEntity>();
+							select x).ToList<DataLayer.Entities.Role>();
 						}
 						else
 						{
-							list = (from x in userEntity.Roles
-							select x.Role).ToList<RoleEntity>();
+							list = (from x in DataLayer.Entities.User.Roles
+							select x.Role).ToList<DataLayer.Entities.Role>();
 						}
-						List<RoleEntity> source = list;
-						if (source.Any((RoleEntity x) => x.Permissions.Any((RolePermissionEntity y) => y.Permission.Name == permission)))
+						List<DataLayer.Entities.Role> source = list;
+						if (source.Any((DataLayer.Entities.Role x) => x.Permissions.Any((RoleDataLayer.Entities.Permission y) => y.Permission.Name == permission)))
 						{
 							return Visibility.Visible;
 						}
-						if (!new LinqMetaData().Permission.Any((PermissionEntity x) => x.Name == permission))
+						if (!new LinqMetaData().Permission.Any((DataLayer.Entities.Permission x) => x.Name == permission))
 						{
-							new PermissionEntity
+							new DataLayer.Entities.Permission
 							{
 								Name = permission,
 								Description = ""

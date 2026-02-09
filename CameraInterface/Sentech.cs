@@ -330,12 +330,12 @@ namespace EPIC.CameraInterface
 					{
 						this.LogError(StCam.GetLastError(this._cameraCapture));
 					}
-					Sentech.Log.Debug("Camera opened.");
+					Log.Debug("Camera opened.");
 				}
 			}
 			catch (Exception ex)
 			{
-				Sentech.Log.Error("There was an error opening the Sentech camera.", ex);
+				Log.Error("There was an error opening the Sentech camera.", ex);
 				throw;
 			}
 			finally
@@ -344,13 +344,27 @@ namespace EPIC.CameraInterface
 			}
 		}
 
-		/// <summary>
-		/// Occurs when a frame is captures from the camera.
-		/// </summary>
-		// Token: 0x14000004 RID: 4
-		// (add) Token: 0x0600007C RID: 124 RVA: 0x00003BD4 File Offset: 0x00001DD4
-		// (remove) Token: 0x0600007D RID: 125 RVA: 0x00003C44 File Offset: 0x00001E44
-		public event FrameCallback Captured
+
+		public void Capture()
+		{
+            if (!StCam.StartTransfer(this._cameraCapture))
+            {
+                this.LogError(StCam.GetLastError(this._cameraCapture));
+            }
+            //this._callback = new StCam.fStCamPreviewBitmapCallbackFunc(this.Callback);
+            //if (!StCam.AddPreviewBitmapCallback(this._cameraCapture, this._callback, IntPtr.Zero, out this._mDwPreviewGdiCallbackNo))
+            //{
+            //    this.LogError(StCam.GetLastError(this._cameraCapture));
+            //}
+        }
+
+        /// <summary>
+        /// Occurs when a frame is captures from the camera.
+        /// </summary>
+        // Token: 0x14000004 RID: 4
+        // (add) Token: 0x0600007C RID: 124 RVA: 0x00003BD4 File Offset: 0x00001DD4
+        // (remove) Token: 0x0600007D RID: 125 RVA: 0x00003C44 File Offset: 0x00001E44
+        public event FrameCallback Captured
 		{
 			[MethodImpl(MethodImplOptions.Synchronized)]
 			add
@@ -430,7 +444,7 @@ namespace EPIC.CameraInterface
 					}
 					catch (Exception ex)
 					{
-						Sentech.Log.Error("Error in frame callback, continuing.", ex);
+						Log.Error("Error in frame callback, continuing.", ex);
 					}
 				}
 			}
@@ -464,7 +478,7 @@ namespace EPIC.CameraInterface
 						this.LogError(StCam.GetLastError(this._cameraCapture));
 					}
 					StCam.Close(this._cameraCapture);
-					Sentech.Log.Debug("Camera closed.");
+					Log.Debug("Camera closed.");
 					this._cameraCapture = IntPtr.Zero;
 				}
 			}
@@ -490,7 +504,7 @@ namespace EPIC.CameraInterface
 					Sentech.FreeLibrary(ptrlpSource);
 				}
 			}
-			Sentech.Log.Error(strErrorMsg.ToString());
+			Log.Error(strErrorMsg.ToString());
 			throw new Exception(strErrorMsg.ToString());
 		}
 
@@ -502,9 +516,6 @@ namespace EPIC.CameraInterface
 
 		// Token: 0x04000017 RID: 23
 		private readonly Semaphore _waiter;
-
-		// Token: 0x04000018 RID: 24
-        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(typeof(Sentech));
 
 		// Token: 0x04000019 RID: 25
 		private IntPtr _cameraCapture;

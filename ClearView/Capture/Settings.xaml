@@ -25,6 +25,7 @@
             <BitmapImage x:Key="NewDevice" UriSource="/Resources/0176-scaner.png" />
             <BitmapImage x:Key="Save" UriSource="/Resources/0040-save.png" />
             <BitmapImage x:Key="Cancel" UriSource="/Resources/1001-cancel.png" />
+            <BitmapImage x:Key="Captures" UriSource="/Resources/0176-scaner.png" />
             <ObjectDataProvider
                 x:Key="Voltages"
                 MethodName="GetValues"
@@ -63,7 +64,7 @@
                     <TextBlock
                         Margin="-10,-10,-10,0"
                         Padding="10,10,10,0"
-                        Text="Search">
+                        Text="Settings">
                         <TextBlock.Background>
                             <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
                                 <LinearGradientBrush.GradientStops>
@@ -178,7 +179,9 @@
                     Name="DevicePreview"
                     MinWidth="100"
                     MinHeight="100"
-                    Margin="5"
+                    MaxWidth="300"
+                    MaxHeight="300"
+                    Margin="10"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top" />
                 <Slider
@@ -188,6 +191,24 @@
                     Maximum="10"
                     Minimum="1"
                     Value="{Binding Zoom, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <Button
+                    Grid.Row="2"
+                    Margin="5"
+                    Padding="3"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Click="CapturePreview_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <Image
+                            Width="25"
+                            Height="25"
+                            Margin="3,0"
+                            Source="{StaticResource Captures}" />
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Run Text="Capture Preview" />
+                        </TextBlock>
+                    </StackPanel>
+                </Button>
             </Grid>
         </GroupBox>
         <TabControl
@@ -216,6 +237,7 @@
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
 
                                 <!--  Camera selector (re-uses CameraSelect ComboBox in Device tab)  -->
@@ -223,69 +245,86 @@
                                     Grid.Row="0"
                                     Grid.Column="0"
                                     VerticalAlignment="Center"
-                                    Content="Active Camera:" />
-
-                                <!--  Gain  -->
+                                    Content="Camera Driver:" />
                                 <Label
                                     Grid.Row="1"
                                     Grid.Column="0"
                                     VerticalAlignment="Center"
+                                    Content="Active Camera:" />
+
+
+                                <!--  Gain  -->
+                                <Label
+                                    Grid.Row="2"
+                                    Grid.Column="0"
+                                    VerticalAlignment="Center"
                                     Content="Gain:" />
                                 <xctk:IntegerUpDown
-                                    Grid.Row="1"
+                                    Grid.Row="2"
                                     Grid.Column="1"
                                     Margin="5"
                                     Value="{Binding SelectedItem.Gain, RelativeSource={RelativeSource AncestorType={x:Type Page}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                                 <!--  Brightness  -->
                                 <Label
-                                    Grid.Row="2"
+                                    Grid.Row="3"
                                     Grid.Column="0"
                                     VerticalAlignment="Center"
                                     Content="Brightness:" />
                                 <xctk:IntegerUpDown
-                                    Grid.Row="2"
+                                    Grid.Row="3"
                                     Grid.Column="1"
                                     Margin="5"
                                     Value="{Binding SelectedItem.Brightness, RelativeSource={RelativeSource AncestorType={x:Type Page}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                                 <!--  Exposure  -->
                                 <Label
-                                    Grid.Row="3"
+                                    Grid.Row="4"
                                     Grid.Column="0"
                                     VerticalAlignment="Center"
                                     Content="Exposure:" />
                                 <xctk:IntegerUpDown
-                                    Grid.Row="3"
+                                    Grid.Row="4"
                                     Grid.Column="1"
                                     Margin="5"
                                     Value="{Binding SelectedItem.Exposure, RelativeSource={RelativeSource AncestorType={x:Type Page}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                                 <!--  Width  -->
                                 <Label
-                                    Grid.Row="4"
+                                    Grid.Row="5"
                                     Grid.Column="0"
                                     VerticalAlignment="Center"
                                     Content="Width:" />
                                 <xctk:IntegerUpDown
-                                    Grid.Row="4"
+                                    Grid.Row="5"
                                     Grid.Column="1"
                                     Margin="5"
                                     Value="{Binding SelectedItem.FrameWidth, RelativeSource={RelativeSource AncestorType={x:Type Page}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                                 <!--  Height  -->
                                 <Label
-                                    Grid.Row="5"
+                                    Grid.Row="6"
                                     Grid.Column="0"
                                     VerticalAlignment="Center"
                                     Content="Height:" />
                                 <xctk:IntegerUpDown
-                                    Grid.Row="5"
+                                    Grid.Row="6"
                                     Grid.Column="1"
                                     Margin="5"
                                     Value="{Binding SelectedItem.FrameHeight, RelativeSource={RelativeSource AncestorType={x:Type Page}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                 <ComboBox
                                     x:Name="CameraSelect_Copy"
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    Margin="5"
+                                    VerticalAlignment="Center"
+                                    DisplayMemberPath="."
+                                    ItemsSource="{Binding CameraManager.Cameras, RelativeSource={RelativeSource AncestorType={x:Type Page}}, Mode=OneWay, UpdateSourceTrigger=Explicit}"
+                                    SelectedItem="{Binding SelectedItem.Camera, ElementName=DeviceSelect, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    SelectionChanged="CameraSelect_SelectionChanged" />
+                                <ComboBox
+                                    x:Name="CameraDriver"
+                                    Grid.Row="0"
                                     Grid.Column="1"
                                     Margin="5"
                                     VerticalAlignment="Center"

@@ -11,6 +11,7 @@
     Title="EPIC ClearView (tm)"
     d:DesignHeight="800"
     d:DesignWidth="1200"
+    Icon="/clearview.png"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <Window.TaskbarItemInfo>
@@ -36,6 +37,7 @@
             <BitmapImage x:Key="ClearView" UriSource="Resources/Clearview.png" />
             <BitmapImage x:Key="Permissions" UriSource="Resources/0080-doc_ok.png" />
             <BitmapImage x:Key="Calibrate" UriSource="Resources/0175-camera.png" />
+            <BitmapImage x:Key="Languages" UriSource="Resources/language-skill.jpg" />
             <BitmapImage x:Key="ClearViewBackground" UriSource="Resources/ClearViewBackground.png" />
         </ResourceDictionary>
     </FrameworkElement.Resources>
@@ -73,7 +75,8 @@
             x:Name="Ribbon"
             Grid.ColumnSpan="2"
             Margin="0,-22,0,0"
-            Panel.ZIndex="1">
+            Panel.ZIndex="1"
+            ShowQuickAccessToolBarOnTop="False">
             <Ribbon.ApplicationMenu>
                 <RibbonApplicationMenu Visibility="Collapsed" />
             </Ribbon.ApplicationMenu>
@@ -136,9 +139,33 @@
                     FrameworkElement.Margin="0"
                     Header="Alert Services">
                     <ribbon:RibbonComboBox
-                        VerticalAlignment="Center"
-                        IsEditable="True"
+                        VerticalContentAlignment="Stretch"
+                        CanAddToQuickAccessToolBarDirectly="False"
+                        IsEditable="False"
+                        IsReadOnly="True"
                         SelectionBoxWidth="62">
+                        <RibbonComboBox.ControlSizeDefinition>
+                            <RibbonControlSizeDefinition
+                                ImageSize="Collapsed"
+                                IsCollapsed="False"
+                                IsLabelVisible="False" />
+                        </RibbonComboBox.ControlSizeDefinition>
+                        <ribbon:RibbonComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <TextBox
+                                        VerticalAlignment="Stretch"
+                                        VerticalContentAlignment="Stretch"
+                                        AcceptsReturn="True"
+                                        TextWrapping="Wrap"
+                                        VerticalScrollBarVisibility="Auto" />
+                                </Grid>
+
+                            </DataTemplate>
+                        </ribbon:RibbonComboBox.ItemTemplate>
                         <ribbon:RibbonGallery
                             Name="AlertsBox"
                             FrameworkElement.MaxWidth="400"
@@ -147,11 +174,8 @@
                             IsVisibleChanged="AlertsBox_IsVisibleChanged"
                             ItemsControl.DisplayMemberPath="Title"
                             MaxColumnCount="1"
-                            SelectedValue="Green"
                             SelectedValuePath="Content">
-                            <ribbon:RibbonGalleryCategory>
-                                <ribbon:RibbonGalleryItem Content="Green" Foreground="Green" />
-                            </ribbon:RibbonGalleryCategory>
+                            <ribbon:RibbonGalleryCategory />
                         </ribbon:RibbonGallery>
                     </ribbon:RibbonComboBox>
                     <ribbon:RibbonButton
@@ -195,6 +219,11 @@
                         Label="Exit"
                         LargeImageSource="{StaticResource Exit}"
                         SmallImageSource="{StaticResource Exit}" />
+                    <ribbon:RibbonButton
+                        Name="Languages"
+                        Label="Languages"
+                        LargeImageSource="{StaticResource Languages}"
+                        SmallImageSource="{StaticResource Languages}" />
                 </ribbon:RibbonGroup>
             </ribbon:RibbonTab>
         </ribbon:Ribbon>

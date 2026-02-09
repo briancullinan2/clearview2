@@ -133,6 +133,9 @@
     <Compile Include="Entities\Device.cs" />
     <Compile Include="Entities\DeviceCalibrationSetting.cs" />
     <Compile Include="Entities\DeviceSetting.cs" />
+    <Compile Include="Entities\Permission.cs" />
+    <Compile Include="Entities\Role.cs" />
+    <Compile Include="Entities\User.cs" />
     <Compile Include="Extensions\DependencyObjectExtensions.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Helpers.cs" />

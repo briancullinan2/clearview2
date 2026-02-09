@@ -1,167 +1,151 @@
 <Page
-	x:Class="EPIC.User.Search" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:fluent="clr-namespace:Fluent;assembly=Fluent"
-	Title="Search Users" xmlns:user="clr-namespace:EPIC.User">
-	<FrameworkElement.Resources>
-		<ResourceDictionary>
-			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary
-					Source="/Themes/ClearView.xaml" />
-			</ResourceDictionary.MergedDictionaries>
-			<BitmapImage
-				UriSource="/Resources/0025-search.png"
-				x:Key="Find" />
-			<BitmapImage
-				UriSource="/Resources/4505-user_add.png"
-				x:Key="NewUser" />
-			<BitmapImage
-				UriSource="/Resources/4504-user_search.png"
-				x:Key="ViewUser" />
-			<fluent:RibbonContextualTabGroup
-				RibbonContextualTabGroup.Header="Options"
-				UIElement.Visibility="Visible"
-				Control.Background="#FF008000"
-				Control.BorderBrush="#FF008000"
-				x:Key="SearchGroup" />
-			<fluent:RibbonTabItem
-				RibbonTabItem.Header="Search"
-				RibbonTabItem.Group="{StaticResource SearchGroup}"
-				x:Key="SearchOptions">
-				<fluent:RibbonGroupBox>
-					<fluent:Button
-						Button.Header="New User"
-						Button.LargeIcon="{StaticResource NewUser}" />
-				</fluent:RibbonGroupBox>
-			</fluent:RibbonTabItem>
-		</ResourceDictionary>
-	</FrameworkElement.Resources>
-	<Grid>
-		<FrameworkElement.Resources>
-			<ResourceDictionary>
-				<ResourceDictionary.MergedDictionaries>
-					<ResourceDictionary
-						Source="/Themes/ClearView.xaml" />
-				</ResourceDictionary.MergedDictionaries>
-			</ResourceDictionary>
-		</FrameworkElement.Resources>
-		<Grid.RowDefinitions>
-			<RowDefinition
-				Height="Auto" />
-			<RowDefinition />
-			<RowDefinition
-				Height="50" />
-		</Grid.RowDefinitions>
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition />
-		</Grid.ColumnDefinitions>
-		<Grid
-			Row="0">
-			<Grid.RowDefinitions>
-				<RowDefinition />
-				<RowDefinition />
-			</Grid.RowDefinitions>
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition />
-				<ColumnDefinition />
-			</Grid.ColumnDefinitions>
-			<Label
-				Content="Search:"
-				Grid.Column="0" />
-			<TextBox
-				Name="SearchText"
-				MinWidth="100"
-				Grid.Column="0"
-				Grid.Row="1"
-				Margin="5"
-				TextChanged="Search_TextChanged" />
-			<Button
-				Grid.RowSpan="2"
-				Grid.Column="1"
-				VerticalAlignment="Center"
-				HorizontalAlignment="Right"
-				Margin="5"
-				Padding="3">
-				<StackPanel
-					Orientation="Horizontal">
-					<Image
-						Source="{StaticResource Find}"
-						Height="20"
-						Width="20"
-						Margin="3,0" />
-					<TextBlock
-						VerticalAlignment="Center"
-						HorizontalAlignment="Center">Find</TextBlock>
-				</StackPanel>
-			</Button>
-		</Grid>
-		<Grid
-			Column="0"
-			Row="2">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition />
-				<ColumnDefinition
-					Width="Auto" />
-			</Grid.ColumnDefinitions>
-			<Label
-				Content="Status: 0 records found"
-				Grid.Column="0" />
-			<StackPanel
-				Grid.Column="1"
-				Orientation="Horizontal"
-				HorizontalAlignment="Right">
-				<Button
-					VerticalAlignment="Center"
-					HorizontalAlignment="Center"
-					Margin="5"
-					Padding="3"
-					Click="NewUser_Click">
-					<StackPanel
-						Orientation="Horizontal">
-						<Image
-							Source="{StaticResource NewUser}"
-							Height="25"
-							Width="25"
-							Margin="3,0" />
-						<TextBlock
-							VerticalAlignment="Center"
-							HorizontalAlignment="Center">New User</TextBlock>
-					</StackPanel>
-				</Button>
-				<Button
-					VerticalAlignment="Center"
-					HorizontalAlignment="Center"
-					Margin="5"
-					Padding="3">
-					<StackPanel
-						Orientation="Horizontal">
-						<Image
-							Source="{StaticResource ViewUser}"
-							Height="25"
-							Width="25"
-							Margin="3,0" />
-						<TextBlock
-							VerticalAlignment="Center"
-							HorizontalAlignment="Center">View User</TextBlock>
-					</StackPanel>
-				</Button>
-			</StackPanel>
-		</Grid>
-		<DataGrid
-			Name="Users"
-			Grid.Row="1">
-			<DataGrid.Columns>
-				<DataGridTextColumn
-					Header="First Name"
-					Binding="{Binding FirstName}" />
-				<DataGridTextColumn
-					Header="Last Name"
-					Binding="{Binding LastName}" />
-				<DataGridTextColumn
-					Header="User Name"
-					Binding="{Binding Username}" />
-				<DataGridCheckBoxColumn
-					Header="Active"
-					Binding="{Binding IsActive}" />
-			</DataGrid.Columns>
-		</DataGrid>
-	</Grid>
+    x:Class="EPIC.ClearView.User.Search"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ribbon="clr-namespace:System.Windows.Controls.Ribbon;assembly=System.Windows.Controls.Ribbon"
+    Title="Search Users">
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Themes/ClearView.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <BitmapImage x:Key="Find" UriSource="/Resources/0025-search.png" />
+            <BitmapImage x:Key="NewUser" UriSource="/Resources/4505-user_add.png" />
+            <BitmapImage x:Key="ViewUser" UriSource="/Resources/4504-user_search.png" />
+            <BitmapImage x:Key="SearchUser" UriSource="/Resources/4504-user_search.png" />
+            <ribbon:RibbonTab x:Key="SearchOptions">
+                <RibbonTab.Header>
+                    <TextBlock
+                        Margin="-10,-10,-10,0"
+                        Padding="10,10,10,0"
+                        Text="Options">
+                        <TextBlock.Background>
+                            <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                <LinearGradientBrush.GradientStops>
+                                    <GradientStop Offset="0" Color="#AA008000" />
+                                    <GradientStop Offset="1" Color="#00008000" />
+                                </LinearGradientBrush.GradientStops>
+                            </LinearGradientBrush>
+                        </TextBlock.Background>
+                    </TextBlock>
+                </RibbonTab.Header>
+                <ribbon:RibbonGroup Header="User Options">
+                    <ribbon:RibbonToggleButton
+                        IsChecked="True"
+                        Label="Search"
+                        LargeImageSource="{StaticResource SearchUser}"
+                        Unchecked="RibbonToggleButton_Unchecked" />
+                </ribbon:RibbonGroup>
+                <ribbon:RibbonGroup>
+                    <ribbon:RibbonButton Label="New User" LargeImageSource="{StaticResource NewUser}" />
+                </ribbon:RibbonGroup>
+            </ribbon:RibbonTab>
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+    <Grid>
+        <FrameworkElement.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <ResourceDictionary Source="/Themes/ClearView.xaml" />
+                </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary>
+        </FrameworkElement.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="50" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Label
+                Grid.Column="0"
+                VerticalAlignment="Center"
+                Content="Search:" />
+            <TextBox
+                Name="SearchText"
+                Grid.Row="1"
+                Grid.Column="1"
+                MinWidth="100"
+                Margin="5"
+                VerticalAlignment="Center"
+                TextChanged="Search_TextChanged" />
+            <Button
+                Grid.RowSpan="2"
+                Grid.Column="2"
+                Margin="5"
+                Padding="3"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal">
+                    <Image
+                        Width="20"
+                        Height="20"
+                        Margin="3,0"
+                        Source="{StaticResource Find}" />
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Find</TextBlock>
+                </StackPanel>
+            </Button>
+        </Grid>
+        <Grid Column="0" Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Content="Status: 0 records found" />
+            <StackPanel
+                Grid.Column="1"
+                HorizontalAlignment="Right"
+                Orientation="Horizontal">
+                <Button
+                    Margin="5"
+                    Padding="3"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Click="NewUser_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <Image
+                            Width="25"
+                            Height="25"
+                            Margin="3,0"
+                            Source="{StaticResource NewUser}" />
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">New User</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button
+                    Margin="5"
+                    Padding="3"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal">
+                        <Image
+                            Width="25"
+                            Height="25"
+                            Margin="3,0"
+                            Source="{StaticResource ViewUser}" />
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">View User</TextBlock>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Grid>
+        <DataGrid Name="Users" Grid.Row="1">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding FirstName}" Header="First Name" />
+                <DataGridTextColumn Binding="{Binding LastName}" Header="Last Name" />
+                <DataGridTextColumn Binding="{Binding Username}" Header="User Name" />
+                <DataGridCheckBoxColumn Binding="{Binding IsActive}" Header="Active" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
 </Page>

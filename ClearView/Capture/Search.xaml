@@ -1,0 +1,234 @@
+<Page
+	x:Class="EPIC.Capture.Search" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:fluent="clr-namespace:Fluent;assembly=Fluent"
+	Title="Search Captures" xmlns:capture="clr-namespace:EPIC.Capture">
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary
+					Source="/Themes/ClearView.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+			<BitmapImage
+				UriSource="/Resources/0025-search.png"
+				x:Key="Find" />
+			<BitmapImage
+				UriSource="/Resources/0002-folder_doc.png"
+				x:Key="ExportData" />
+			<BitmapImage
+				UriSource="/Resources/0009-doc_search.png"
+				x:Key="ViewReport" />
+			<BitmapImage
+				UriSource="/Resources/0021-options_search.png"
+				x:Key="ViewCalibration" />
+			<BitmapImage
+				UriSource="/Resources/0175-camera.png"
+				x:Key="ViewCapture" />
+			<BitmapImage
+				UriSource="/Resources/billing_update.gif"
+				x:Key="Compare" />
+			<fluent:RibbonContextualTabGroup
+				RibbonContextualTabGroup.Header="Options"
+				UIElement.Visibility="Visible"
+				Control.Background="#FF0000FF"
+				Control.BorderBrush="#FF0000FF"
+				x:Key="SearchGroup" />
+			<fluent:RibbonTabItem
+				RibbonTabItem.Header="Search"
+				RibbonTabItem.Group="{StaticResource SearchGroup}"
+				x:Key="SearchOptions">
+				<fluent:RibbonGroupBox>
+					<fluent:Button
+						Button.Header="Export Data"
+						Button.LargeIcon="{StaticResource ExportData}" />
+					<fluent:Button
+						Button.Header="View Report"
+						Button.LargeIcon="{StaticResource ViewReport}" />
+					<fluent:Button
+						Button.Header="View Calibration"
+						Button.LargeIcon="{StaticResource ViewCalibration}" />
+					<fluent:Button
+						Button.Header="View Capture"
+						Button.LargeIcon="{StaticResource ViewCapture}" />
+					<fluent:Button
+						Button.Header="Compare"
+						Button.LargeIcon="{StaticResource Compare}" />
+				</fluent:RibbonGroupBox>
+			</fluent:RibbonTabItem>
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition
+				Height="Auto" />
+			<RowDefinition />
+			<RowDefinition
+				Height="50" />
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition />
+		</Grid.ColumnDefinitions>
+		<Grid
+			Row="0">
+			<Grid.RowDefinitions>
+				<RowDefinition />
+				<RowDefinition />
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition />
+				<ColumnDefinition />
+			</Grid.ColumnDefinitions>
+			<Label
+				Content="Search:"
+				Grid.Column="0" />
+			<TextBox
+				Name="SearchText"
+				MinWidth="100"
+				Grid.Column="0"
+				Grid.Row="1"
+				Margin="5"
+				TextChanged="Search_TextChanged" />
+			<Button
+				Grid.RowSpan="2"
+				Grid.Column="1"
+				VerticalAlignment="Center"
+				HorizontalAlignment="Right"
+				Margin="5"
+				Padding="3">
+				<StackPanel
+					Orientation="Horizontal">
+					<Image
+						Source="{StaticResource Find}"
+						Height="20"
+						Width="20"
+						Margin="3,0" />
+					<TextBlock
+						VerticalAlignment="Center"
+						HorizontalAlignment="Center">Find</TextBlock>
+				</StackPanel>
+			</Button>
+		</Grid>
+		<Grid
+			Column="0"
+			Row="2">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition />
+				<ColumnDefinition
+					Width="Auto" />
+			</Grid.ColumnDefinitions>
+			<Label
+				Content="Status: 0 records found"
+				Grid.Column="0" />
+			<StackPanel
+				Grid.Column="1"
+				Orientation="Horizontal"
+				HorizontalAlignment="Right">
+				<Button
+					VerticalAlignment="Center"
+					HorizontalAlignment="Center"
+					Margin="5"
+					Padding="3">
+					<StackPanel
+						Orientation="Horizontal">
+						<Image
+							Source="{StaticResource ExportData}"
+							Height="25"
+							Width="25"
+							Margin="3,0" />
+						<TextBlock
+							VerticalAlignment="Center"
+							HorizontalAlignment="Center">Export Data</TextBlock>
+					</StackPanel>
+				</Button>
+				<Button
+					VerticalAlignment="Center"
+					HorizontalAlignment="Center"
+					Margin="5"
+					Padding="3"
+					Click="ViewReport_Click">
+					<StackPanel
+						Orientation="Horizontal">
+						<Image
+							Source="{StaticResource ViewReport}"
+							Height="25"
+							Width="25"
+							Margin="3,0" />
+						<TextBlock
+							VerticalAlignment="Center"
+							HorizontalAlignment="Center">View Report</TextBlock>
+					</StackPanel>
+				</Button>
+				<Button
+					VerticalAlignment="Center"
+					HorizontalAlignment="Center"
+					Margin="5"
+					Padding="3">
+					<StackPanel
+						Orientation="Horizontal">
+						<Image
+							Source="{StaticResource ViewCalibration}"
+							Height="25"
+							Width="25"
+							Margin="3,0" />
+						<TextBlock
+							VerticalAlignment="Center"
+							HorizontalAlignment="Center">View Calibration</TextBlock>
+					</StackPanel>
+				</Button>
+				<Button
+					VerticalAlignment="Center"
+					HorizontalAlignment="Center"
+					Margin="5"
+					Padding="3">
+					<StackPanel
+						Orientation="Horizontal">
+						<Image
+							Source="{StaticResource ViewCapture}"
+							Height="25"
+							Width="25"
+							Margin="3,0" />
+						<TextBlock
+							VerticalAlignment="Center"
+							HorizontalAlignment="Center">View Capture</TextBlock>
+					</StackPanel>
+				</Button>
+			</StackPanel>
+		</Grid>
+		<DataGrid
+			Name="Treatments"
+			Grid.Row="1"
+			AutoGenerateColumns="False"
+			IsReadOnly="True"
+			SelectionMode="Extended"
+			CanUserResizeRows="False">
+			<DataGrid.RowHeaderTemplate>
+				<DataTemplate>
+					<CheckBox
+						Name="RowCheck"
+						IsChecked="{Binding Path=IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" />
+				</DataTemplate>
+			</DataGrid.RowHeaderTemplate>
+			<DataGrid.Columns>
+				<DataGridTextColumn
+					Header="Patient Name"
+					Binding="{x:Null}" />
+				<DataGridTextColumn
+					Header="Treatment Id"
+					Binding="{x:Null}" />
+				<DataGridTextColumn
+					Header="Version"
+					Binding="{x:Null}" />
+				<DataGridTextColumn
+					Header="Run Notes"
+					Binding="{x:Null}" />
+				<DataGridTextColumn
+					Header="Scan Type"
+					Binding="{x:Null}" />
+				<DataGridTextColumn
+					Header="Scan Date"
+					Binding="{x:Null}" />
+				<DataGridCheckBoxColumn
+					Header="Archived"
+					Binding="{x:Null}" />
+			</DataGrid.Columns>
+		</DataGrid>
+	</Grid>
+</Page>

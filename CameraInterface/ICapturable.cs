@@ -36,13 +36,15 @@ namespace EPIC.CameraInterface
 		// Token: 0x0600002D RID: 45
 		void Close();
 
-		/// <summary>
-		/// Desired frames per second.
-		/// </summary>
-		// Token: 0x17000005 RID: 5
-		// (get) Token: 0x0600002E RID: 46
-		// (set) Token: 0x0600002F RID: 47
-		double FramesPerSecond { get; set; }
+		void Capture();
+
+        /// <summary>
+        /// Desired frames per second.
+        /// </summary>
+        // Token: 0x17000005 RID: 5
+        // (get) Token: 0x0600002E RID: 46
+        // (set) Token: 0x0600002F RID: 47
+        double FramesPerSecond { get; set; }
 
 		/// <summary>
 		/// Brightness adjustment for the camera.

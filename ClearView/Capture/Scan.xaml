@@ -1,0 +1,582 @@
+<Page
+	x:Class="EPIC.Capture.Scan" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:controls="clr-namespace:EPIC.Controls" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" xmlns:converters="clr-namespace:EPIC.Utilities.Converters"
+	Title="New Scan"
+	SnapsToDevicePixels="True"
+	UseLayoutRounding="True" xmlns:capture="clr-namespace:EPIC.Capture"
+	DataContext="{Binding RelativeSource={RelativeSource Self}}"
+	Loaded="Scan_Loaded">
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary
+					Source="/Themes/ClearView.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+			<BitmapImage
+				UriSource="/Resources/1001-cancel.png"
+				x:Key="Cancel" />
+			<BitmapImage
+				UriSource="/Resources/0002-folder_doc.png"
+				x:Key="ExportData" />
+			<BitmapImage
+				UriSource="/Resources/0009-doc_search.png"
+				x:Key="ViewReport" />
+			<BitmapImage
+				UriSource="/Resources/0175-camera.png"
+				x:Key="ViewCapture" />
+			<converters:DeviceSettingStringConverter
+				x:Key="DeviceSettingStringConverter" />
+			<BitmapImage
+				UriSource="Resources/0L.gif"
+				x:Key="Hand0L" />
+			<BitmapImage
+				UriSource="Resources/0R.gif"
+				x:Key="Hand0R" />
+			<BitmapImage
+				UriSource="Resources/Left.png"
+				x:Key="Left" />
+			<BitmapImage
+				UriSource="Resources/Right.png"
+				x:Key="Right" />
+			<BitmapImage
+				UriSource="Resources/Up.png"
+				x:Key="Up" />
+			<BitmapImage
+				UriSource="Resources/Down.png"
+				x:Key="Down" />
+			<BitmapImage
+				UriSource="Resources/CCW.png"
+				x:Key="CCW" />
+			<BitmapImage
+				UriSource="Resources/CW.png"
+				x:Key="CW" />
+			<BitmapImage
+				UriSource="Resources/1L.gif"
+				x:Key="Hand1L" />
+			<BitmapImage
+				UriSource="Resources/1R.gif"
+				x:Key="Hand1R" />
+			<BitmapImage
+				UriSource="Resources/2L.gif"
+				x:Key="Hand2L" />
+			<BitmapImage
+				UriSource="Resources/2R.gif"
+				x:Key="Hand2R" />
+			<BitmapImage
+				UriSource="Resources/3L.gif"
+				x:Key="Hand3L" />
+			<BitmapImage
+				UriSource="Resources/3R.gif"
+				x:Key="Hand3R" />
+			<BitmapImage
+				UriSource="Resources/4L.gif"
+				x:Key="Hand4L" />
+			<BitmapImage
+				UriSource="Resources/4R.gif"
+				x:Key="Hand4R" />
+			<BitmapImage
+				UriSource="Resources/5L.gif"
+				x:Key="Hand5L" />
+			<BitmapImage
+				UriSource="Resources/5R.gif"
+				x:Key="Hand5R" />
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<ScrollViewer
+		VerticalScrollBarVisibility="Auto"
+		HorizontalScrollBarVisibility="Auto">
+		<Grid
+			VerticalAlignment="Center"
+			HorizontalAlignment="Center">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition />
+				<ColumnDefinition />
+				<ColumnDefinition />
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition />
+				<RowDefinition />
+				<RowDefinition />
+				<RowDefinition
+					Height="Auto" />
+			</Grid.RowDefinitions>
+			<StackPanel
+				Grid.Column="0"
+				Orientation="Vertical"
+				HorizontalAlignment="Right">
+				<Label
+					Content="Captured Image"
+					HorizontalAlignment="Center" />
+				<Border
+					BorderThickness="1"
+					Margin="5"
+					HorizontalAlignment="Center">
+					<FrameworkElement.Style>
+						<Style>
+							<Setter
+								Property="BorderBrush"
+								Value="{x:Null}" />
+							<Style.Triggers>
+								<DataTrigger
+									Binding="{Binding ElementName=Capture, Path=Source}"
+									Value="{x:Null}">
+									<Setter
+										Property="BorderBrush"
+										Value="#FF000000" />
+								</DataTrigger>
+							</Style.Triggers>
+						</Style>
+					</FrameworkElement.Style>
+					<Grid>
+						<Image
+							Name="Capture"
+							Height="240"
+							Width="320"
+							Source="{Binding Selected.Image}" />
+						<Image
+							Stretch="None"
+							Source="{Binding Selected.Orientation}">
+							<FrameworkElement.Style>
+								<Style
+									TargetType="{x:Type Image}">
+									<Setter
+										Property="Visibility"
+										Value="Visible" />
+									<Style.Triggers>
+										<DataTrigger
+											Value="False"
+											Binding="{Binding ElementName=ShowAxis, Path=IsChecked}">
+											<Setter
+												Property="Visibility"
+												Value="Hidden" />
+										</DataTrigger>
+									</Style.Triggers>
+								</Style>
+							</FrameworkElement.Style>
+						</Image>
+					</Grid>
+				</Border>
+				<StackPanel
+					Orientation="Horizontal"
+					HorizontalAlignment="Center">
+					<Label
+						Content="Angle:"
+						VerticalAlignment="Center"
+						Padding="2" />
+					<RepeatButton
+						Tag="CounterClockwise"
+						VerticalAlignment="Center"
+						Click="Move_Click">
+						<Image
+							Source="{StaticResource CCW}" />
+					</RepeatButton>
+					<toolkit:IntegerUpDown
+						IntegerUpDown.Name="Angle"
+						FrameworkElement.VerticalAlignment="Center"
+						NumericUpDown_x0060_1.Maximum="359"
+						FrameworkElement.MinWidth="45" xmlns:toolkit="clr-namespace:Xceed.Wpf.Toolkit;assembly=WPFToolkit.Extended"
+						p13:UpDownBase_x0060_1.Value="{Binding Selected.Result.Angle}"
+						x:Name="Angle" xmlns:p13="clr-namespace:Xceed.Wpf.Toolkit.Primitives;assembly=WPFToolkit.Extended" />
+					<RepeatButton
+						Tag="Clockwise"
+						VerticalAlignment="Center"
+						Click="Move_Click">
+						<Image
+							Source="{StaticResource CW}" />
+					</RepeatButton>
+					<Label
+						Content="X:"
+						VerticalAlignment="Center"
+						Padding="2" />
+					<RepeatButton
+						Tag="Left"
+						VerticalAlignment="Center"
+						Click="Move_Click">
+						<Image
+							Source="{StaticResource Left}" />
+					</RepeatButton>
+					<IntegerUpDown
+						IntegerUpDown.Name="X"
+						FrameworkElement.VerticalAlignment="Center"
+						NumericUpDown_x0060_1.Minimum="0"
+						FrameworkElement.MinWidth="45"
+						p13:UpDownBase_x0060_1.Value="{Binding Selected.Result.CenterX}"
+						x:Name="X" xmlns:p13="clr-namespace:Xceed.Wpf.Toolkit.Primitives;assembly=WPFToolkit.Extended" xmlns="clr-namespace:Xceed.Wpf.Toolkit;assembly=WPFToolkit.Extended" />
+					<RepeatButton
+						Tag="Right"
+						VerticalAlignment="Center"
+						Click="Move_Click">
+						<Image
+							Source="{StaticResource Right}" />
+					</RepeatButton>
+					<Label
+						Content="Y:"
+						VerticalAlignment="Center"
+						Padding="2" />
+					<RepeatButton
+						Tag="Up"
+						VerticalAlignment="Center"
+						Click="Move_Click">
+						<Image
+							Source="{StaticResource Up}" />
+					</RepeatButton>
+					<IntegerUpDown
+						IntegerUpDown.Name="Y"
+						FrameworkElement.VerticalAlignment="Center"
+						FrameworkElement.MinWidth="45"
+						p13:UpDownBase_x0060_1.Value="{Binding Selected.Result.CenterY}"
+						x:Name="Y" xmlns:p13="clr-namespace:Xceed.Wpf.Toolkit.Primitives;assembly=WPFToolkit.Extended" xmlns="clr-namespace:Xceed.Wpf.Toolkit;assembly=WPFToolkit.Extended" />
+					<RepeatButton
+						Tag="Down"
+						VerticalAlignment="Center"
+						Click="Move_Click">
+						<Image
+							Source="{StaticResource Down}" />
+					</RepeatButton>
+				</StackPanel>
+			</StackPanel>
+			<StackPanel
+				Grid.Column="1"
+				Orientation="Vertical"
+				HorizontalAlignment="Left">
+				<Label
+					Content="Finger Preview"
+					HorizontalAlignment="Center" />
+				<Border
+					BorderThickness="1"
+					Margin="5"
+					HorizontalAlignment="Center">
+					<FrameworkElement.Style>
+						<Style>
+							<Setter
+								Property="BorderBrush"
+								Value="{x:Null}" />
+							<Style.Triggers>
+								<DataTrigger
+									Binding="{Binding ElementName=Preview, Path=Source}"
+									Value="{x:Null}">
+									<Setter
+										Property="BorderBrush"
+										Value="#FF000000" />
+								</DataTrigger>
+							</Style.Triggers>
+						</Style>
+					</FrameworkElement.Style>
+					<Grid>
+						<Image
+							Name="Preview"
+							Height="240"
+							Width="320" />
+						<Image
+							Stretch="None"
+							Source="{Binding Selected.Orientation}">
+							<FrameworkElement.Style>
+								<Style
+									TargetType="{x:Type Image}">
+									<Setter
+										Property="Visibility"
+										Value="Visible" />
+									<Style.Triggers>
+										<DataTrigger
+											Value="False"
+											Binding="{Binding ElementName=ShowAxis, Path=IsChecked}">
+											<Setter
+												Property="Visibility"
+												Value="Hidden" />
+										</DataTrigger>
+									</Style.Triggers>
+								</Style>
+							</FrameworkElement.Style>
+						</Image>
+					</Grid>
+				</Border>
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition />
+						<ColumnDefinition />
+						<ColumnDefinition />
+					</Grid.ColumnDefinitions>
+					<CheckBox
+						Name="ShowAxis"
+						Content="Show Axis/Angle"
+						Margin="5"
+						VerticalAlignment="Center"
+						IsChecked="True" />
+					<Button
+						Grid.Column="1"
+						Content="Live Preview"
+						HorizontalAlignment="Center"
+						Margin="1"
+						Click="Live_Click" />
+					<Label
+						Grid.Column="2"
+						HorizontalAlignment="Right"
+						VerticalAlignment="Center"
+						Padding="2"
+						Content="{Binding Settings, Converter={StaticResource DeviceSettingStringConverter}}" />
+				</Grid>
+			</StackPanel>
+			<Grid
+				Column="2">
+				<Grid.RowDefinitions>
+					<RowDefinition
+						Height="Auto" />
+					<RowDefinition />
+				</Grid.RowDefinitions>
+				<Border
+					Margin="0,30,0,0"
+					BorderThickness="2"
+					BorderBrush="#FF808080">
+					<StackPanel
+						Orientation="Horizontal">
+						<Image
+							Name="LeftHand"
+							RenderOptions.BitmapScalingMode="HighQuality"
+							Source="{StaticResource Hand0L}"
+							Height="138"
+							Width="138" />
+						<Image
+							Name="RightHand"
+							RenderOptions.BitmapScalingMode="HighQuality"
+							Source="{StaticResource Hand0R}"
+							Height="138"
+							Width="138" />
+					</StackPanel>
+				</Border>
+				<GroupBox
+					Grid.Row="1"
+					Header="System Messages">
+					<Label
+						Content="" />
+				</GroupBox>
+			</Grid>
+			<GroupBox
+				Grid.Row="1"
+				Grid.ColumnSpan="3"
+				Margin="5"
+				Header="Images without Capacitive Barrier">
+				<StackPanel
+					Name="ImagesWOBarrier"
+					Orientation="Horizontal"
+					HorizontalAlignment="Center">
+					<controls:FingerImage
+						Finished="FingerImage_Finished"
+						MouseLeftButtonUp="Select_Image"
+						MouseRightButtonUp="Load_Image"
+						Tag="1R"
+						Margin="5" />
+					<controls:FingerImage
+						Finished="FingerImage_Finished"
+						MouseLeftButtonUp="Select_Image"
+						MouseRightButtonUp="Load_Image"
+						Tag="2R"
+						Margin="5" />
+					<controls:FingerImage
+						Finished="FingerImage_Finished"
+						MouseLeftButtonUp="Select_Image"
+						MouseRightButtonUp="Load_Image"
+						Tag="3R"
+						Margin="5" />
+					<controls:FingerImage
+						Finished="FingerImage_Finished"
+						MouseLeftButtonUp="Select_Image"
+						MouseRightButtonUp="Load_Image"
+						Tag="4R"
+						Margin="5" />
+					<controls:FingerImage
+						Finished="FingerImage_Finished"
+						MouseLeftButtonUp="Select_Image"
+						MouseRightButtonUp="Load_Image"
+						Tag="5R"
+						Margin="5" />
+					<controls:FingerImage
+						Finished="FingerImage_Finished"
+						MouseLeftButtonUp="Select_Image"
+						MouseRightButtonUp="Load_Image"
+						Tag="1L"
+						Margin="5" />
+					<controls:FingerImage
+						Finished="FingerImage_Finished"
+						MouseLeftButtonUp="Select_Image"
+						MouseRightButtonUp="Load_Image"
+						Tag="2L"
+						Margin="5" />
+					<controls:FingerImage
+						Finished="FingerImage_Finished"
+						MouseLeftButtonUp="Select_Image"
+						MouseRightButtonUp="Load_Image"
+						Tag="3L"
+						Margin="5" />
+					<controls:FingerImage
+						Finished="FingerImage_Finished"
+						MouseLeftButtonUp="Select_Image"
+						MouseRightButtonUp="Load_Image"
+						Tag="4L"
+						Margin="5" />
+					<controls:FingerImage
+						Finished="FingerImage_Finished"
+						MouseLeftButtonUp="Select_Image"
+						MouseRightButtonUp="Load_Image"
+						Tag="5L"
+						Margin="5" />
+				</StackPanel>
+			</GroupBox>
+			<GroupBox
+				Grid.Row="2"
+				Grid.ColumnSpan="3"
+				Margin="5"
+				Header="Images with Capacitive Barrier">
+				<StackPanel
+					Name="ImagesWBarrier"
+					Orientation="Horizontal"
+					HorizontalAlignment="Center">
+					<controls:FingerImage
+						Finished="FingerImage_Finished"
+						MouseLeftButtonUp="Select_Image"
+						MouseRightButtonUp="Load_Image"
+						Filtered="True"
+						Tag="1R"
+						Margin="5" />
+					<controls:FingerImage
+						Finished="FingerImage_Finished"
+						MouseLeftButtonUp="Select_Image"
+						MouseRightButtonUp="Load_Image"
+						Filtered="True"
+						Tag="2R"
+						Margin="5" />
+					<controls:FingerImage
+						Finished="FingerImage_Finished"
+						MouseLeftButtonUp="Select_Image"
+						MouseRightButtonUp="Load_Image"
+						Filtered="True"
+						Tag="3R"
+						Margin="5" />
+					<controls:FingerImage
+						Finished="FingerImage_Finished"
+						MouseLeftButtonUp="Select_Image"
+						MouseRightButtonUp="Load_Image"
+						Filtered="True"
+						Tag="4R"
+						Margin="5" />
+					<controls:FingerImage
+						Finished="FingerImage_Finished"
+						MouseLeftButtonUp="Select_Image"
+						MouseRightButtonUp="Load_Image"
+						Filtered="True"
+						Tag="5R"
+						Margin="5" />
+					<controls:FingerImage
+						Finished="FingerImage_Finished"
+						MouseLeftButtonUp="Select_Image"
+						MouseRightButtonUp="Load_Image"
+						Filtered="True"
+						Tag="1L"
+						Margin="5" />
+					<controls:FingerImage
+						Finished="FingerImage_Finished"
+						MouseLeftButtonUp="Select_Image"
+						MouseRightButtonUp="Load_Image"
+						Filtered="True"
+						Tag="2L"
+						Margin="5" />
+					<controls:FingerImage
+						Finished="FingerImage_Finished"
+						MouseLeftButtonUp="Select_Image"
+						MouseRightButtonUp="Load_Image"
+						Filtered="True"
+						Tag="3L"
+						Margin="5" />
+					<controls:FingerImage
+						Finished="FingerImage_Finished"
+						MouseLeftButtonUp="Select_Image"
+						MouseRightButtonUp="Load_Image"
+						Filtered="True"
+						Tag="4L"
+						Margin="5" />
+					<controls:FingerImage
+						Finished="FingerImage_Finished"
+						MouseLeftButtonUp="Select_Image"
+						MouseRightButtonUp="Load_Image"
+						Filtered="True"
+						Tag="5L"
+						Margin="5" />
+				</StackPanel>
+			</GroupBox>
+			<Button
+				Grid.Row="3"
+				HorizontalAlignment="Left"
+				Margin="5"
+				Padding="3">
+				<StackPanel
+					Orientation="Horizontal">
+					<Image
+						Source="{StaticResource ExportData}"
+						Height="25"
+						Width="25"
+						Margin="3,0" />
+					<TextBlock
+						VerticalAlignment="Center"
+						HorizontalAlignment="Center">Export Data</TextBlock>
+				</StackPanel>
+			</Button>
+			<StackPanel
+				Grid.Row="3"
+				Orientation="Horizontal"
+				Grid.Column="1"
+				Grid.ColumnSpan="2"
+				HorizontalAlignment="Right">
+				<Button
+					VerticalAlignment="Center"
+					HorizontalAlignment="Center"
+					Margin="5"
+					Padding="3"
+					Click="ViewReport_Click">
+					<StackPanel
+						Orientation="Horizontal">
+						<Image
+							Source="{StaticResource ViewReport}"
+							Height="25"
+							Width="25"
+							Margin="3,0" />
+						<TextBlock
+							VerticalAlignment="Center"
+							HorizontalAlignment="Center">View Report</TextBlock>
+					</StackPanel>
+				</Button>
+				<Button
+					VerticalAlignment="Center"
+					HorizontalAlignment="Center"
+					Margin="5"
+					Padding="3"
+					Click="Capture_Click">
+					<StackPanel
+						Orientation="Horizontal">
+						<Image
+							Source="{StaticResource ViewCapture}"
+							Height="25"
+							Width="25"
+							Margin="3,0" />
+						<TextBlock
+							VerticalAlignment="Center"
+							HorizontalAlignment="Center">Capture Image</TextBlock>
+					</StackPanel>
+				</Button>
+				<Button
+					Margin="5"
+					Padding="3">
+					<StackPanel
+						Orientation="Horizontal">
+						<Image
+							Source="{StaticResource Cancel}"
+							Height="25"
+							Width="25"
+							Margin="3,0" />
+						<TextBlock
+							VerticalAlignment="Center"
+							HorizontalAlignment="Center"
+							Text="Close" />
+					</StackPanel>
+				</Button>
+			</StackPanel>
+		</Grid>
+	</ScrollViewer>
+</Page>

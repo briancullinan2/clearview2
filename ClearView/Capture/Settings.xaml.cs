@@ -1,4 +1,10 @@
-﻿using System;
+﻿using EPIC.CameraInterface;
+using EPIC.ClearView.Macros;
+using EPIC.ClearView.Utilities;
+using EPIC.ClearView.Utilities.Extensions;
+using EPIC.DataLayer.Customization;
+using EPIC.DataLayer.Entities;
+using System;
 using System.CodeDom.Compiler;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,17 +13,15 @@ using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Interop;
 using System.Windows.Markup;
-using EPIC.ClearView.Macros;
-using EPIC.ClearView.Utilities;
-using EPIC.ClearView.Utilities.Extensions;
+using System.Windows.Media.Imaging;
+using System.Xml.Linq;
 using Xceed.Wpf.Toolkit;
-using EPIC.DataLayer.Entities;
-using EPIC.DataLayer.Customization;
-using EPIC.CameraInterface;
 
 namespace EPIC.ClearView.Capture
 {
@@ -309,6 +313,63 @@ namespace EPIC.ClearView.Capture
         private void RibbonToggleButton_Unchecked(object sender, RoutedEventArgs e)
         {
 			Navigation.CloseTab(this);
+        }
+
+        private async void StartWebcamLoop()
+        {
+            // Set to 15ms
+            using var timer = new PeriodicTimer(TimeSpan.FromMilliseconds(15));
+
+            try
+            {
+                while (await timer.WaitForNextTickAsync(_cts.Token))
+                {
+                    _capturable.Capture();
+                    if (DateTime.Now - _start > TimeSpan.FromSeconds(2))
+					{
+						StopLoop();
+                    }
+                }
+            }
+            catch (OperationCanceledException) { /* Handle shutdown */ }
+        }
+
+        // Call this when the page closes
+        private void StopLoop() {
+			_cts.Cancel();
+            _capturable.Captured -= FrameCallback;
+            _capturable.Close();
+        }
+        
+		private CancellationTokenSource _cts = new();
+
+		private ICapturable _capturable;
+
+        private void FrameCallback(IntPtr hBitmap)
+		{
+            Application.Current.Dispatcher.Invoke(() => {
+                DevicePreview.Source = Imaging.CreateBitmapSourceFromHBitmap(
+                    hBitmap,
+                    IntPtr.Zero,
+                    Int32Rect.Empty,
+                    BitmapSizeOptions.FromEmptyOptions());
+            });
+            DeleteObject(hBitmap);
+        }
+        // Essential Win32 import to prevent memory leaks
+        [DllImport("gdi32.dll")]
+        public static extern bool DeleteObject(IntPtr hObject);
+
+		private DateTime _start;
+
+        private void CapturePreview_Click(object sender, RoutedEventArgs e)
+        {
+            _capturable = CameraManager.Current.Cameras.FirstOrDefault((ICapturable x) => x.DisplayName.Equals(CameraSelect.SelectedValue));
+            _capturable.Captured += FrameCallback;
+            _capturable.Open();
+			StartWebcamLoop();
+			_start = DateTime.Now;
+
         }
     }
 }

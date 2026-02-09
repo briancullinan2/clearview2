@@ -70,7 +70,7 @@ namespace EPIC.CameraInterface
                     }
                     catch (Exception ex)
                     {
-                        CameraManager.Log.Error("Error handling device arrival event.", ex);
+                        Log.Error("Error handling device arrival event.", ex);
                     }
                 };
                 this._deviceWatcher.Start();
@@ -90,7 +90,7 @@ namespace EPIC.CameraInterface
             catch
             {
                 // fallback to synchronous execution if ParallelWork isn't present
-                try { this.GetCameras(); } catch (Exception ex) { CameraManager.Log.Error("There was an error getting the cameras.", ex); }
+                try { this.GetCameras(); } catch (Exception ex) { Log.Error("There was an error getting the cameras.", ex); }
             }
             // Register application shutdown if WPF Application is available
             try
@@ -174,42 +174,33 @@ namespace EPIC.CameraInterface
 		// Token: 0x06000017 RID: 23 RVA: 0x00002CFC File Offset: 0x00000EFC
 		private IEnumerable<string> GetPluggedInDevices()
 		{
-			using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT Name FROM CIM_LogicalDevice"))
-			{
-				List<ManagementBaseObject> collection = searcher.Get().OfType<ManagementBaseObject>().ToList<ManagementBaseObject>();
-				foreach (ManagementObject obj in collection)
-				{
-					string? name;
-					try
-					{
-						name = obj.GetPropertyValue("Description")?.ToString();
-					}
-					catch (ManagementException)
-					{
-						try
-						{
-                            name = obj.GetPropertyValue("Name")?.ToString();
-                        }
-                        catch ( Exception e )
-						{
-							continue;
-						}
-					}
-					if (!string.IsNullOrEmpty(name))
-					{
-						yield return name;
-					}
-				}
-			}
-			yield break;
-		}
+            // Filter by 'Present' status and limit to likely camera categories
+            // "SELECT Name, Description FROM Win32_PnPEntity WHERE Present = True"
+            var searcher = new ManagementObjectSearcher(
+                "SELECT Name, Description FROM Win32_PnPEntity WHERE ConfigManagerErrorCode = 0");
+
+            var devices = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+            using (var collection = searcher.Get())
+            {
+                foreach (ManagementBaseObject obj in collection)
+                {
+                    var desc = obj["Description"]?.ToString();
+                    var name = obj["Name"]?.ToString();
+
+                    if (!string.IsNullOrEmpty(desc)) devices.Add(desc);
+                    if (!string.IsNullOrEmpty(name)) devices.Add(name);
+                }
+            }
+            return devices;
+        }
 
 		// Token: 0x06000018 RID: 24 RVA: 0x00003178 File Offset: 0x00001378
 		private IEnumerable<ICapturable> GetValidCameras(IEnumerable<DsDevice> devices)
 		{
 			List<string> pluggedin = this.GetPluggedInDevices().ToList<string>();
 			string list = string.Join("\n", pluggedin);
-			CameraManager.Log.Debug("Plugged in devices:\n" + list);
+			Log.Debug("Plugged in devices:\n" + list);
 			foreach (DsDevice device in devices)
 			{
 				string deviceName = device.Name;
@@ -227,7 +218,7 @@ namespace EPIC.CameraInterface
 				}
 				catch (Exception ex)
 				{
-					CameraManager.Log.Error("Error getting device name.", ex);
+					Log.Error("Error getting device name.", ex);
 					continue;
 				}
 				foreach (Type @interface in from y in this._interfaces
@@ -255,7 +246,7 @@ namespace EPIC.CameraInterface
 					}
 					catch (Exception ex2)
 					{
-						CameraManager.Log.Error("Error loading camera list.", ex2);
+						Log.Error("Error loading camera list.", ex2);
 					}
 					if (camera != null)
 					{
@@ -277,15 +268,12 @@ namespace EPIC.CameraInterface
 			}
 			catch (Exception e)
 			{
-				CameraManager.Log.Error("There was an error connecting to the device.", e);
+				Log.Error("There was an error connecting to the device.", e);
 
                 result = default(TCapturable);
 			}
 			return result;
 		}
-
-        // Token: 0x04000005 RID: 5
-        private static readonly ILog Log = log4net.LogManager.GetLogger(typeof(CameraManager));
 
 		// Token: 0x04000006 RID: 6
 		private static CameraManager _instance;

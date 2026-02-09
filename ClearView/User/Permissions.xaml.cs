@@ -12,17 +12,11 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Markup;
-using EPIC.Macros;
-using EPIC.Resources;
-using EPIC.Utilities.Converters;
-using EPIC.Utilities.Extensions;
-using EPICClearViewDL.EntityClasses;
-using EPICClearViewDL.HelperClasses;
-using EPICClearViewDL.Linq;
-using Fluent;
-using log4net;
+using EPIC.ClearView.Macros;
+using EPIC.ClearView.Utilities.Converters;
+using EPIC.ClearView.Utilities.Extensions;
 
-namespace EPIC.User
+namespace EPIC.ClearView.User
 {
 	// Token: 0x0200004C RID: 76
 	public partial class Permissions : Page, IStyleConnector
@@ -34,13 +28,14 @@ namespace EPIC.User
 			Navigation.InsertRibbon(this);
 			base.Loaded += delegate(object sender2, RoutedEventArgs args2)
 			{
-				FormChecker.Events[this].Changed += this.OnChanged;
-				FormChecker.Events[this].Unchanged += this.OnUnchanged;
+				//FormChecker.Events[this].Changed += this.OnChanged;
+				//FormChecker.Events[this].Unchanged += this.OnUnchanged;
 			};
-			this.Roles.ItemsSource = new ObservableCollection<RoleEntity>(new LinqMetaData().Role.ToList<RoleEntity>());
-			((ObservableCollection<RoleEntity>)this.Roles.ItemsSource).CollectionChanged += this.OnRoleCollectionChanged;
+			/*
+			this.Roles.ItemsSource = new ObservableCollection<DataLayer.Entities.Role>(new LinqMetaData().Role.ToList<DataLayer.Entities.Role>());
+			((ObservableCollection<DataLayer.Entities.Role>)this.Roles.ItemsSource).CollectionChanged += this.OnRoleCollectionChanged;
 			this._permissionConverter = new PermissionBooleanConverter();
-			this._permissions = new Dictionary<RoleEntity, Dictionary<PermissionEntity, bool>>();
+			this._permissions = new Dictionary<DataLayer.Entities.Role, Dictionary<DataLayer.Entities.Permission, bool>>();
 			FrameworkElementFactory frameworkElementFactory = new FrameworkElementFactory(typeof(Label));
 			frameworkElementFactory.SetValue(ContentControl.ContentProperty, new Binding("Description")
 			{
@@ -65,25 +60,26 @@ namespace EPIC.User
 			});
 			foreach (object obj in this.Roles.ItemsSource)
 			{
-				RoleEntity role = (RoleEntity)obj;
+				DataLayer.Entities.Role role = (DataLayer.Entities.Role)obj;
 				this.AddColumn(role);
 			}
 			this.PermissionsGrid.ItemsSource = from x in new LinqMetaData().Permission
 			where x.Description != ""
 			orderby x.ParentId, x.ParentId == (decimal?)x.PermissionId descending, x.Description
 			select x;
+			*/
 		}
 
 		// Token: 0x0600028E RID: 654 RVA: 0x000154DC File Offset: 0x000136DC
-		private void AddColumn(RoleEntity role)
+		private void AddColumn(DataLayer.Entities.Role role)
 		{
-			this._permissions.Add(role, new Dictionary<PermissionEntity, bool>());
+			this._permissions.Add(role, new Dictionary<DataLayer.Entities.Permission, bool>());
 			FrameworkElementFactory frameworkElementFactory = new FrameworkElementFactory(typeof(CheckBox));
 			frameworkElementFactory.SetValue(ToggleButton.IsCheckedProperty, new Binding("Name")
 			{
 				Mode = BindingMode.OneWay,
-				Converter = this._permissionConverter,
-				ConverterParameter = role
+				//Converter = this._permissionConverter,
+				//ConverterParameter = role
 			});
 			frameworkElementFactory.SetValue(FrameworkElement.HorizontalAlignmentProperty, HorizontalAlignment.Center);
 			frameworkElementFactory.SetValue(FrameworkElement.VerticalAlignmentProperty, VerticalAlignment.Center);
@@ -105,6 +101,7 @@ namespace EPIC.User
 		{
 			if (!this._suppressChecking)
 			{
+				/*
 				this._suppressChecking = true;
 				CheckBox checkBox = sender as CheckBox;
 				if (checkBox != null)
@@ -112,26 +109,26 @@ namespace EPIC.User
 					DataGridCell dataGridCell = checkBox.FindAncestor<DataGridCell>();
 					if (dataGridCell != null)
 					{
-						PermissionEntity permissionEntity = dataGridCell.DataContext as PermissionEntity;
-						if (permissionEntity != null)
+						DataLayer.Entities.Permission DataLayer.Entities.Permission = dataGridCell.DataContext as DataLayer.Entities.Permission;
+						if (DataLayer.Entities.Permission != null)
 						{
 							int num = this.PermissionsGrid.Columns.IndexOf(dataGridCell.Column);
-							RoleEntity role = this._permissions.Keys.ToList<RoleEntity>()[num - 1];
-							this._permissions[role][permissionEntity] = (checkBox.IsChecked ?? false);
-							if (permissionEntity.ParentId != null && permissionEntity.ParentId != permissionEntity.PermissionId)
+							DataLayer.Entities.Role role = this._permissions.Keys.ToList<DataLayer.Entities.Role>()[num - 1];
+							this._permissions[role][DataLayer.Entities.Permission] = (checkBox.IsChecked ?? false);
+							if (DataLayer.Entities.Permission.ParentId != null && DataLayer.Entities.Permission.ParentId != DataLayer.Entities.Permission.PermissionId)
 							{
-								List<PermissionEntity> source = permissionEntity.Parent.Children.Except(new PermissionEntity[]
+								List<DataLayer.Entities.Permission> source = DataLayer.Entities.Permission.Parent.Children.Except(new DataLayer.Entities.Permission[]
 								{
-									permissionEntity.Parent
-								}).ToList<PermissionEntity>();
-								CheckBox checkFromEntity = this.GetCheckFromEntity(permissionEntity.Parent, num);
+									DataLayer.Entities.Permission.Parent
+								}).ToList<DataLayer.Entities.Permission>();
+								CheckBox checkFromEntity = this.GetCheckFromEntity(DataLayer.Entities.Permission.Parent, num);
 								if (checkFromEntity != null)
 								{
-									if (source.All((PermissionEntity x) => this._permissions[role].ContainsKey(x) && this._permissions[role][x]))
+									if (source.All((DataLayer.Entities.Permission x) => this._permissions[role].ContainsKey(x) && this._permissions[role][x]))
 									{
 										checkFromEntity.IsChecked = new bool?(true);
 									}
-									else if (source.All((PermissionEntity x) => !this._permissions[role].ContainsKey(x) || !this._permissions[role][x]))
+									else if (source.All((DataLayer.Entities.Permission x) => !this._permissions[role].ContainsKey(x) || !this._permissions[role][x]))
 									{
 										checkFromEntity.IsChecked = new bool?(false);
 									}
@@ -141,21 +138,21 @@ namespace EPIC.User
 									}
 								}
 							}
-							if (permissionEntity.Children.Any<PermissionEntity>())
+							if (DataLayer.Entities.Permission.Children.Any<DataLayer.Entities.Permission>())
 							{
-								foreach (CheckBox checkBox2 in from child in permissionEntity.Children.Except(new PermissionEntity[]
+								foreach (CheckBox checkBox2 in from child in DataLayer.Entities.Permission.Children.Except(new DataLayer.Entities.Permission[]
 								{
-									permissionEntity
+									DataLayer.Entities.Permission
 								})
-								select this.GetCheckFromEntity(child, this._permissions.Keys.ToList<RoleEntity>().IndexOf(role) + 1) into child
+								select this.GetCheckFromEntity(child, this._permissions.Keys.ToList<DataLayer.Entities.Role>().IndexOf(role) + 1) into child
 								where child != null
 								select child)
 								{
 									checkBox2.IsChecked = new bool?(checkBox.IsChecked ?? false);
 								}
-								foreach (PermissionEntity key in permissionEntity.Children.Except(new PermissionEntity[]
+								foreach (DataLayer.Entities.Permission key in DataLayer.Entities.Permission.Children.Except(new DataLayer.Entities.Permission[]
 								{
-									permissionEntity
+									DataLayer.Entities.Permission
 								}))
 								{
 									this._permissions[role][key] = (checkBox.IsChecked ?? false);
@@ -165,12 +162,14 @@ namespace EPIC.User
 						}
 					}
 				}
+				*/
 			}
 		}
 
 		// Token: 0x06000290 RID: 656 RVA: 0x00015A88 File Offset: 0x00013C88
-		private CheckBox GetCheckFromEntity(PermissionEntity child, int column)
+		private CheckBox GetCheckFromEntity(DataLayer.Entities.Permission child, int column)
 		{
+			/*
 			DataGridRow dataGridRow = this.PermissionsGrid.ItemContainerGenerator.ContainerFromItem(child) as DataGridRow;
 			if (dataGridRow != null)
 			{
@@ -180,11 +179,12 @@ namespace EPIC.User
 					return dataGridCell.FindChild(null);
 				}
 			}
+			*/
 			return null;
 		}
 
 		// Token: 0x06000291 RID: 657 RVA: 0x00015B1C File Offset: 0x00013D1C
-		private void RemoveColumn(RoleEntity role)
+		private void RemoveColumn(DataLayer.Entities.Role role)
 		{
 			this.PermissionsGrid.Columns.Remove(this.PermissionsGrid.Columns.First((DataGridColumn x) => x.Header.ToString() == role.Name));
 		}
@@ -196,7 +196,7 @@ namespace EPIC.User
 			{
 				foreach (object obj in args.NewItems)
 				{
-					RoleEntity role = (RoleEntity)obj;
+					DataLayer.Entities.Role role = (DataLayer.Entities.Role)obj;
 					this.AddColumn(role);
 				}
 			}
@@ -204,7 +204,7 @@ namespace EPIC.User
 			{
 				foreach (object obj2 in args.OldItems)
 				{
-					RoleEntity role = (RoleEntity)obj2;
+					DataLayer.Entities.Role role = (DataLayer.Entities.Role)obj2;
 					this.RemoveColumn(role);
 				}
 			}
@@ -231,7 +231,7 @@ namespace EPIC.User
 		private void AddRole_Click(object sender, RoutedEventArgs e)
 		{
 			this.RolesTab.IsSelected = true;
-			((ObservableCollection<RoleEntity>)this.Roles.ItemsSource).Add(new RoleEntity());
+			((ObservableCollection<DataLayer.Entities.Role>)this.Roles.ItemsSource).Add(new DataLayer.Entities.Role());
 		}
 
 		// Token: 0x06000296 RID: 662 RVA: 0x00015CC0 File Offset: 0x00013EC0
@@ -240,13 +240,15 @@ namespace EPIC.User
 			Button button = sender as Button;
 			if (button != null)
 			{
+				/*
 				DataGridCell dataGridCell = button.FindAncestor<DataGridCell>();
-				RoleEntity roleEntity = dataGridCell.DataContext as RoleEntity;
-				if (roleEntity != null)
+				DataLayer.Entities.Role DataLayer.Entities.Role = dataGridCell.DataContext as DataLayer.Entities.Role;
+				if (DataLayer.Entities.Role != null)
 				{
-					((ObservableCollection<RoleEntity>)this.Roles.ItemsSource).Remove(roleEntity);
+					((ObservableCollection<DataLayer.Entities.Role>)this.Roles.ItemsSource).Remove(DataLayer.Entities.Role);
 					return;
 				}
+				*/
 			}
 			throw new NotImplementedException();
 		}
@@ -254,14 +256,15 @@ namespace EPIC.User
 		// Token: 0x06000297 RID: 663 RVA: 0x00015DBC File Offset: 0x00013FBC
 		private void Save_Click(object sender, RoutedEventArgs e)
 		{
+			/*
 			using (Transaction transaction = new Transaction(IsolationLevel.ReadCommitted, "edit permissions"))
 			{
 				try
 				{
-					foreach (KeyValuePair<RoleEntity, Dictionary<PermissionEntity, bool>> keyValuePair in this._permissions.ToList<KeyValuePair<RoleEntity, Dictionary<PermissionEntity, bool>>>())
+					foreach (KeyValuePair<DataLayer.Entities.Role, Dictionary<DataLayer.Entities.Permission, bool>> keyValuePair in this._permissions.ToList<KeyValuePair<DataLayer.Entities.Role, Dictionary<DataLayer.Entities.Permission, bool>>>())
 					{
 						transaction.Add(keyValuePair.Key);
-						if (!((ObservableCollection<RoleEntity>)this.Roles.ItemsSource).Contains(keyValuePair.Key))
+						if (!((ObservableCollection<DataLayer.Entities.Role>)this.Roles.ItemsSource).Contains(keyValuePair.Key))
 						{
 							this._permissions.Remove(keyValuePair.Key);
 							keyValuePair.Key.Permissions.DeleteMulti();
@@ -269,20 +272,20 @@ namespace EPIC.User
 						}
 						else
 						{
-							using (Dictionary<PermissionEntity, bool>.Enumerator enumerator2 = keyValuePair.Value.GetEnumerator())
+							using (Dictionary<DataLayer.Entities.Permission, bool>.Enumerator enumerator2 = keyValuePair.Value.GetEnumerator())
 							{
 								while (enumerator2.MoveNext())
 								{
-									KeyValuePair<PermissionEntity, bool> permission = enumerator2.Current;
+									KeyValuePair<DataLayer.Entities.Permission, bool> permission = enumerator2.Current;
 									bool flag;
-									if (keyValuePair.Key.Permissions.Any(delegate(RolePermissionEntity x)
+									if (keyValuePair.Key.Permissions.Any(delegate(RoleDataLayer.Entities.Permission x)
 									{
 										decimal permissionId2 = x.PermissionId;
-										KeyValuePair<PermissionEntity, bool> permission2 = permission;
+										KeyValuePair<DataLayer.Entities.Permission, bool> permission2 = permission;
 										return permissionId2 == permission2.Key.PermissionId;
 									}))
 									{
-										KeyValuePair<PermissionEntity, bool> permission3 = permission;
+										KeyValuePair<DataLayer.Entities.Permission, bool> permission3 = permission;
 										flag = permission3.Value;
 									}
 									else
@@ -291,16 +294,16 @@ namespace EPIC.User
 									}
 									if (flag)
 									{
-										if (!keyValuePair.Key.Permissions.All(delegate(RolePermissionEntity x)
+										if (!keyValuePair.Key.Permissions.All(delegate(RoleDataLayer.Entities.Permission x)
 										{
 											decimal permissionId2 = x.PermissionId;
-											KeyValuePair<PermissionEntity, bool> permission2 = permission;
+											KeyValuePair<DataLayer.Entities.Permission, bool> permission2 = permission;
 											return permissionId2 != permission2.Key.PermissionId;
 										}))
 										{
 											goto IL_1F2;
 										}
-										KeyValuePair<PermissionEntity, bool> permission3 = permission;
+										KeyValuePair<DataLayer.Entities.Permission, bool> permission3 = permission;
 										if (!permission3.Value)
 										{
 											goto IL_1F2;
@@ -312,10 +315,10 @@ namespace EPIC.User
 										IL_1F3:
 										if (!flag2)
 										{
-											RolePermissionEntity rolePermissionEntity = keyValuePair.Key.Permissions.AddNew();
-											RolePermissionEntity rolePermissionEntity2 = rolePermissionEntity;
+											RoleDataLayer.Entities.Permission roleDataLayer.Entities.Permission = keyValuePair.Key.Permissions.AddNew();
+											RoleDataLayer.Entities.Permission roleDataLayer.Entities.Permission2 = roleDataLayer.Entities.Permission;
 											permission3 = permission;
-											rolePermissionEntity2.PermissionId = permission3.Key.PermissionId;
+											roleDataLayer.Entities.Permission2.PermissionId = permission3.Key.PermissionId;
 											continue;
 										}
 										continue;
@@ -323,18 +326,18 @@ namespace EPIC.User
 										flag2 = true;
 										goto IL_1F3;
 									}
-									RolePermissionEntity rolePermissionEntity3 = keyValuePair.Key.Permissions.First(delegate(RolePermissionEntity x)
+									RoleDataLayer.Entities.Permission roleDataLayer.Entities.Permission3 = keyValuePair.Key.Permissions.First(delegate(RoleDataLayer.Entities.Permission x)
 									{
 										decimal permissionId2 = x.PermissionId;
-										KeyValuePair<PermissionEntity, bool> permission2 = permission;
+										KeyValuePair<DataLayer.Entities.Permission, bool> permission2 = permission;
 										return permissionId2 == permission2.Key.PermissionId;
 									});
-									keyValuePair.Key.Permissions.Remove(rolePermissionEntity3);
-									transaction.Add(rolePermissionEntity3);
-									rolePermissionEntity3.Delete();
+									keyValuePair.Key.Permissions.Remove(roleDataLayer.Entities.Permission3);
+									transaction.Add(roleDataLayer.Entities.Permission3);
+									roleDataLayer.Entities.Permission3.Delete();
 								}
 							}
-							if (((ObservableCollection<RoleEntity>)this.Roles.ItemsSource).Contains(keyValuePair.Key))
+							if (((ObservableCollection<DataLayer.Entities.Role>)this.Roles.ItemsSource).Contains(keyValuePair.Key))
 							{
 								keyValuePair.Key.Save(true);
 							}
@@ -353,9 +356,10 @@ namespace EPIC.User
 			MainWindow mainWindow = Application.Current.MainWindow as MainWindow;
 			if (mainWindow != null)
 			{
-				UserEntity user = mainWindow.User;
-				mainWindow.User = new LinqMetaData().User.First((UserEntity x) => x.UserId == user.UserId);
+				DataLayer.Entities.User user = mainWindow.User;
+				mainWindow.User = new LinqMetaData().User.First((DataLayer.Entities.User x) => x.UserId == user.UserId);
 			}
+			*/
 		}
 
 		// Token: 0x06000298 RID: 664 RVA: 0x000161E8 File Offset: 0x000143E8
@@ -367,12 +371,14 @@ namespace EPIC.User
 				DataGridCell dataGridCell = textBox.FindAncestor<DataGridCell>();
 				if (dataGridCell != null)
 				{
-					RoleEntity roleEntity = dataGridCell.DataContext as RoleEntity;
-					if (roleEntity != null)
+					/*
+					DataLayer.Entities.Role DataLayer.Entities.Role = dataGridCell.DataContext as DataLayer.Entities.Role;
+					if (DataLayer.Entities.Role != null)
 					{
-						int index = this._permissions.Keys.ToList<RoleEntity>().IndexOf(roleEntity) + 1;
+						int index = this._permissions.Keys.ToList<DataLayer.Entities.Role>().IndexOf(DataLayer.Entities.Role) + 1;
 						this.PermissionsGrid.Columns[index].Header = textBox.Text;
 					}
+					*/
 				}
 			}
 		}
@@ -394,19 +400,21 @@ namespace EPIC.User
 			}
 		}
 
-		// Token: 0x04000154 RID: 340
-		private static readonly ILog Log = LogManager.GetLogger(typeof(Permissions));
-
 		// Token: 0x04000155 RID: 341
-		private readonly PermissionBooleanConverter _permissionConverter;
+		//private readonly PermissionBooleanConverter _permissionConverter;
 
 		// Token: 0x04000156 RID: 342
-		private readonly Dictionary<RoleEntity, Dictionary<PermissionEntity, bool>> _permissions;
+		private readonly Dictionary<DataLayer.Entities.Role, Dictionary<DataLayer.Entities.Permission, bool>> _permissions;
 
 		// Token: 0x04000157 RID: 343
 		private bool _collectionChanged;
 
 		// Token: 0x04000158 RID: 344
 		private bool _suppressChecking;
-	}
+
+        private void RibbonToggleButton_Unchecked(object sender, RoutedEventArgs e)
+        {
+			Navigation.CloseTab(this);
+        }
+    }
 }
