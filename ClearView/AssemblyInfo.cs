@@ -8,3 +8,8 @@ using System.Windows;
                                                 //(used if a resource is not found in the page,
                                                 // app, or any theme specific resource dictionaries)
 )]
+
+
+// Reference to Log4Net configuration file.
+[assembly: log4net.Config.XmlConfigurator(ConfigFile = "log4net.xml", Watch = true)]
+

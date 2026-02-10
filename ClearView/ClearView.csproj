@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net10.0-windows</TargetFramework>
+    <TargetFramework>net10.0-windows8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
@@ -25,6 +25,8 @@
     <Compile Remove="Utilities\Extensions\InteropExtensions.cs" />
     <Compile Remove="Utilities\Extensions\OldWindow.cs" />
     <Compile Remove="Utilities\Extensions\QueryableExtensions.cs" />
+    <Compile Remove="Utilities\Logging\AsyncAppender.cs" />
+    <Compile Remove="Utilities\Logging\ExceptionLogAppender.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -48,17 +50,25 @@
     <PackageReference Include="Emgu.CV.runtime.windows" Version="4.12.0.5764" />
     <PackageReference Include="Extended.Wpf.Toolkit" Version="5.0.0" />
     <PackageReference Include="log4net" Version="3.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.2" />
     <PackageReference Include="System.Management" Version="10.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CameraInterface\CameraInterface.csproj" />
+    <ProjectReference Include="..\DataLayer\DataLayer.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="CameraInterface">
       <HintPath>..\ClearView\bin\Debug\CameraInterface.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
+      <Private>True</Private>
     </Reference>
     <Reference Include="DataLayer">
       <HintPath>..\ClearView\bin\Debug\DataLayer.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
 
@@ -113,6 +123,15 @@
     <Compile Update="MainWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="App.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="log4net.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

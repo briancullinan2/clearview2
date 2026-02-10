@@ -1,16 +1,9 @@
 ﻿using EPIC.ClearView.Utilities;
-using log4net;
-using System;
-using System.CodeDom.Compiler;
-using System.Collections.Generic;
-using System.Configuration;
+using EPIC.ClearView.Utilities.Logging;
 using System.Data;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -50,15 +43,18 @@ namespace EPIC.ClearView
         }
 
         // Token: 0x06000347 RID: 839 RVA: 0x0001AFF0 File Offset: 0x000191F0
-        private void App_OnStartup(object sender, StartupEventArgs e)
+        protected override void OnStartup(StartupEventArgs e)
         {
-            //AppDomain.CurrentDomain.AssemblyLoad += delegate (object? o, AssemblyLoadEventArgs args)
-            //{
-            //    Log.Debug(string.Format("Loaded: {0}", args.LoadedAssembly.FullName));
-            //};
-            //AppDomain.CurrentDomain.DomainUnload += delegate (object? o, EventArgs args)
-            //{
-            //};
+            log4net.Config.XmlConfigurator.Configure(new System.IO.FileInfo("log4net.xml"));
+            base.OnStartup(e);
+            AppDomain.CurrentDomain.AssemblyLoad += delegate (object? o, AssemblyLoadEventArgs args)
+            {
+                Log.Debug(string.Format("Loaded: {0}", args.LoadedAssembly.FullName));
+            };
+            AppDomain.CurrentDomain.DomainUnload += delegate (object? o, EventArgs args)
+            {
+            };
+
         }
 
         // Token: 0x06000348 RID: 840 RVA: 0x0001B078 File Offset: 0x00019278
@@ -68,7 +64,7 @@ namespace EPIC.ClearView
             {
                 this._plugins = new List<Type>();
                 string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? "";
-                if(!Directory.Exists(Path.Combine(path, "Plugins")))
+                if (!Directory.Exists(Path.Combine(path, "Plugins")))
                 {
                     return;
                 }

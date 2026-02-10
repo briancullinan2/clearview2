@@ -139,6 +139,7 @@
                     FrameworkElement.Margin="0"
                     Header="Alert Services">
                     <ribbon:RibbonComboBox
+                        Name="AlertsFace"
                         VerticalContentAlignment="Stretch"
                         CanAddToQuickAccessToolBarDirectly="False"
                         IsEditable="False"
@@ -160,6 +161,7 @@
                                         VerticalAlignment="Stretch"
                                         VerticalContentAlignment="Stretch"
                                         AcceptsReturn="True"
+                                        Text="{Binding SelectedItem, ElementName=AlertsBox}"
                                         TextWrapping="Wrap"
                                         VerticalScrollBarVisibility="Auto" />
                                 </Grid>
@@ -174,9 +176,7 @@
                             IsVisibleChanged="AlertsBox_IsVisibleChanged"
                             ItemsControl.DisplayMemberPath="Title"
                             MaxColumnCount="1"
-                            SelectedValuePath="Content">
-                            <ribbon:RibbonGalleryCategory />
-                        </ribbon:RibbonGallery>
+                            SelectedValuePath="Content" />
                     </ribbon:RibbonComboBox>
                     <ribbon:RibbonButton
                         Name="AlertView"

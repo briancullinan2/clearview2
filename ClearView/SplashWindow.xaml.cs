@@ -1,57 +1,55 @@
-﻿using System;
-using System.CodeDom.Compiler;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Security.Permissions;
-using System.Threading;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Markup;
+using System.Windows.Input;
 using System.Windows.Navigation;
 using System.Windows.Threading;
-using static Emgu.CV.VideoCapture;
 
 namespace EPIC.ClearView
 {
-	// Token: 0x02000047 RID: 71
-	public partial class SplashWindow : Window
-	{
-		// Token: 0x06000256 RID: 598 RVA: 0x00013D64 File Offset: 0x00011F64
-		private static void CurrentDomainOnAssemblyLoad(object sender, AssemblyLoadEventArgs args)
-		{
-			SplashWindow._splash.Dispatcher.Invoke(delegate()
-			{
-				SplashWindow._splash.Message.Content = string.Format("Loaded: {0}", args.LoadedAssembly.FullName);
-				SplashWindow._splash.Progress.Value = (double)((int)((double)SplashWindow._completed / (double)SplashWindow._total * 100.0));
-			});
-			SplashWindow.DoEvents();
-		}
+    // Token: 0x02000047 RID: 71
+    public partial class SplashWindow : Window
+    {
+        // Token: 0x06000256 RID: 598 RVA: 0x00013D64 File Offset: 0x00011F64
+        private static void CurrentDomainOnAssemblyLoad(object sender, AssemblyLoadEventArgs args)
+        {
+            SplashWindow._splash.Dispatcher.Invoke(delegate ()
+            {
+                SplashWindow._splash.Message.Content = string.Format("Loaded: {0}", args.LoadedAssembly.FullName);
+                SplashWindow._splash.Progress.Value = (double)((int)((double)SplashWindow._completed / (double)SplashWindow._total * 100.0));
+            });
+            SplashWindow.DoEvents();
+        }
 
-		// Token: 0x06000257 RID: 599 RVA: 0x00013DA2 File Offset: 0x00011FA2
-		private static void AppOnNavigated(object sender, NavigationEventArgs navigationEventArgs)
-		{
+        // Token: 0x06000257 RID: 599 RVA: 0x00013DA2 File Offset: 0x00011FA2
+        private static void AppOnNavigated(object sender, NavigationEventArgs navigationEventArgs)
+        {
             MainWindowOnContentRendered();
             SplashWindow._app.Navigated -= SplashWindow.AppOnNavigated;
-		}
+        }
 
         private static void AppOnActivated(object? sender, EventArgs e)
         {
-			MainWindowOnContentRendered();
+            MainWindowOnContentRendered();
             _app.Activated -= SplashWindow.AppOnActivated;
         }
 
         // Token: 0x06000258 RID: 600 RVA: 0x00013E5C File Offset: 0x0001205C
         public static void MainWindowOnContentRendered()
-		{
-			if(_splash == null)
-			{
-				return;
-			}
+        {
+            if (_splash == null)
+            {
+                return;
+            }
 
-            SplashWindow._app.MainWindow.Dispatcher.BeginInvoke(new Action(delegate()
-			{
-				SplashWindow._splash.Close();
+            SplashWindow._app.MainWindow.Dispatcher.BeginInvoke(new Action(delegate ()
+            {
+                if (_splash == null)
+                {
+                    return;
+                }
+
+                SplashWindow._splash.Close();
                 _splash = null;
                 AppDomain.CurrentDomain.AssemblyLoad -= SplashWindow.CurrentDomainOnAssemblyLoad;
                 SplashWindow._app.MainWindow.Activate();
@@ -59,82 +57,107 @@ namespace EPIC.ClearView
             }), DispatcherPriority.SystemIdle, new object[0]);
         }
 
-		public string Version
-		{
-			get
-			{
+        public string Version
+        {
+            get
+            {
                 var infoVersion = Assembly.GetExecutingAssembly()
     .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?
     .InformationalVersion;
-				return infoVersion;
+                return infoVersion;
             }
-		}
+        }
 
-		public object Icon
-		{
-			get
-			{
-				return Application.Current.MainWindow.Icon;
-			}
-		}
+        public object Icon
+        {
+            get
+            {
+                return Application.Current.MainWindow.Icon;
+            }
+        }
 
 
-		// Token: 0x06000259 RID: 601 RVA: 0x00013EBE File Offset: 0x000120BE
-		private SplashWindow()
-		{
-			this.InitializeComponent();
-		}
+        // Token: 0x06000259 RID: 601 RVA: 0x00013EBE File Offset: 0x000120BE
+        private SplashWindow()
+        {
+            this.InitializeComponent();
+        }
 
-		// Token: 0x0600025A RID: 602 RVA: 0x00013ED0 File Offset: 0x000120D0
-		[SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
-		private static void DoEvents()
-		{
-			DispatcherFrame dispatcherFrame = new DispatcherFrame();
-			Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.Render, new DispatcherOperationCallback(SplashWindow.ExitFrames), dispatcherFrame);
-			try
-			{
-				Dispatcher.PushFrame(dispatcherFrame);
-			}
-			catch (InvalidOperationException)
-			{
-			}
-		}
+        // Token: 0x0600025A RID: 602 RVA: 0x00013ED0 File Offset: 0x000120D0
+        [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
+        private static void DoEvents()
+        {
+            DispatcherFrame dispatcherFrame = new DispatcherFrame();
+            Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.Render, new DispatcherOperationCallback(SplashWindow.ExitFrames), dispatcherFrame);
+            try
+            {
+                Dispatcher.PushFrame(dispatcherFrame);
+            }
+            catch (InvalidOperationException)
+            {
+            }
+        }
 
-		// Token: 0x0600025B RID: 603 RVA: 0x00013F20 File Offset: 0x00012120
-		private static object ExitFrames(object frame)
-		{
-			((DispatcherFrame)frame).Continue = false;
-			return null;
-		}
+        // Token: 0x0600025B RID: 603 RVA: 0x00013F20 File Offset: 0x00012120
+        private static object ExitFrames(object frame)
+        {
+            ((DispatcherFrame)frame).Continue = false;
+            return null;
+        }
 
         [STAThread] // Required for WPF UI threads
         public static void Main()
         {
             // 2. Launch Splash immediately on the UI thread
             _splash = new SplashWindow();
-            _splash.Show();
 
-            // 1. Initialize the App instance manually
-            _app = new EPIC.ClearView.App();
-            _app.Activated += SplashWindow.AppOnActivated;
-            _app.InitializeComponent();
+            _splash.Dispatcher.Invoke(new Action(_splash.StartApp));
 
-            // 3. Start the app loop
-            // This will block until app.Shutdown() is called
-            _app.Run();
+            _splash.ShowDialog();
+        }
 
+        private CancellationTokenSource _cts = new();
+
+        [STAThread] // Required for WPF UI threads
+        private async void StartApp()
+        {
+            // Set to 15ms
+            using var timer = new PeriodicTimer(TimeSpan.FromMilliseconds(1000));
+
+            try
+            {
+                while (await timer.WaitForNextTickAsync(_cts.Token))
+                {
+
+                    // Check for 'Shift' or 'F12' during splash
+                    if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.F12))
+                    {
+                        return;
+                    }
+
+                    // 1. Initialize the App instance manually
+                    _app = new EPIC.ClearView.App();
+                    _app.Activated += SplashWindow.AppOnActivated;
+                    _app.InitializeComponent();
+
+                    // 3. Start the app loop
+                    // This will block until app.Shutdown() is called
+                    _app.Run();
+                }
+            }
+            catch (OperationCanceledException) { /* Handle shutdown */ }
         }
 
         // Token: 0x04000136 RID: 310
         private static SplashWindow? _splash;
 
-		// Token: 0x04000137 RID: 311
-		private static int _total;
+        // Token: 0x04000137 RID: 311
+        private static int _total;
 
-		// Token: 0x04000138 RID: 312
-		private static int _completed;
+        // Token: 0x04000138 RID: 312
+        private static int _completed;
 
-		// Token: 0x04000139 RID: 313
-		private static App _app;
-	}
+        // Token: 0x04000139 RID: 313
+        private static App _app;
+    }
 }

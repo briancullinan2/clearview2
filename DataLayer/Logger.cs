@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace EPIC.ClearView
+namespace EPIC.DataLayer
 {
-    using System.Runtime.CompilerServices;
-    using System.IO;
     using log4net;
+    using System.IO;
+    using System.Runtime.CompilerServices;
 
     public static class Log
     {
@@ -16,12 +14,6 @@ namespace EPIC.ClearView
         public static void Error(object message, Exception ex = null, [CallerFilePath] string callerPath = "")
         {
             GetLogger(callerPath).Error(message, ex);
-        }
-
-        public static void Fatal(object message, Exception ex = null, [CallerFilePath] string callerPath = "")
-        {
-            GetLogger(callerPath).Fatal(message, ex);
-            App.Current.Shutdown();
         }
 
         public static void Debug(object message, Exception ex = null, [CallerFilePath] string callerPath = "")

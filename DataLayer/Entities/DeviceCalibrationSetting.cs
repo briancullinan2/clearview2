@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EPIC.DataLayer.Entities
 {
-    public class DeviceCalibrationSetting
+    [Table("DeviceCalibrationSetting")]
+    [PrimaryKey(nameof(Id))]
+    public class DeviceCalibrationSetting : IEntity
     {
         public double SigmaRegionOuter { get; set; }
         public double SigmaRegionInner { get; set; }
@@ -27,6 +26,7 @@ namespace EPIC.DataLayer.Entities
         public double SigmaMeansTotal { get; set; }
         public double SigmaMeansClumps { get; set; }
         public int BinDepth { get; set; }
-        public object DeviceId { get; set; }
+        public int DeviceId { get; set; }
+        public int Id { get; set; }
     }
 }

@@ -1,22 +1,9 @@
 ﻿using EPIC.ClearView.Macros;
-using EPIC.ClearView.Utilities;
-using EPIC.ClearView.Utilities.Extensions;
-using System;
-using System.Collections.Generic;
+using EPIC.ClearView.Utilities.Logging;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace EPIC.ClearView
 {
@@ -143,6 +130,29 @@ namespace EPIC.ClearView
         // Token: 0x06000362 RID: 866 RVA: 0x0001BD7C File Offset: 0x00019F7C
         public void UpdateAlerts()
         {
+            try
+            {
+                var context = DataLayer.TranslationContext.Current["Data Source=:memory:"];
+                if (AlertsFace == null)
+                {
+                    return;
+                }
+
+                if (this.AlertsBox == null /* || this.AlertsBox.Visibility != Visibility.Visible */)
+                {
+                    return;
+                }
+                this.AlertsBox.ItemsSource = null;
+                this.AlertsBox.ItemsSource = (from x in context.Messages
+                                              where x.IsActive
+                                              orderby x.CreateTime descending
+                                              select x).ToList();
+                this.AlertsBox.SelectedItem = this.AlertsBox.Items.OfType<DataLayer.Entities.Message>().FirstOrDefault<DataLayer.Entities.Message>();
+            }
+            catch (Exception ex)
+            {
+                Log.Error("There was an error retrieving the alerts.", ex);
+            }
         }
 
         // Token: 0x06000363 RID: 867 RVA: 0x0001BE84 File Offset: 0x0001A084

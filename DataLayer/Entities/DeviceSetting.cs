@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EPIC.DataLayer.Entities
 {
-    public class DeviceSetting
+    [Table("DeviceSetting")]
+    public class DeviceSetting : IEntity
     {
         public int Frequency { get; set; }
         public int PulseDuration { get; set; }
@@ -15,6 +12,7 @@ namespace EPIC.DataLayer.Entities
         public int Voltage { get; set; }
         public int Brightness { get; set; }
         public int Gain { get; set; }
-        public object DeviceId { get; set; }
+        public int DeviceId { get; set; }
+        public int Id { get; set; }
     }
 }

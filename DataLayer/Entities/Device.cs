@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EPIC.DataLayer.Entities
 {
-    public class Device
+    [Table("Device")]
+    public class Device : IEntity
     {
         public bool IsDefault { get; set; }
-        public object DeviceId { get; set; }
+        public int DeviceId { get; set; }
         public string UniqueIdentifier { get; set; }
         public int UidQualifier { get; set; }
         public int DeviceState { get; set; }
