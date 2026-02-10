@@ -1,5 +1,6 @@
-﻿using EPIC.ClearView.Macros;
-using EPIC.ClearView.Utilities.Logging;
+﻿using EPIC.CameraInterface;
+using EPIC.ClearView.Macros;
+using EPIC.ClearView.Utilities;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,7 +16,12 @@ namespace EPIC.ClearView
         public MainWindow()
         {
             ContentRendered += MainWindow_OnContentRendered;
+            //base.InputBindings.Add(new InputBinding(new RelayCommand(new Action<object>(this.NextTab), null), new KeyGesture(Key.Tab, ModifierKeys.Control)));
+            //base.InputBindings.Add(new InputBinding(new RelayCommand(new Action<object>(this.PreviousTab), null), new KeyGesture(Key.Tab, ModifierKeys.Control | ModifierKeys.Shift)));
+            //Task.Run(new Action(this.ClockThread));
+
             InitializeComponent();
+            Task.Run(new Action(ClockThread));
         }
 
         private void MainWindow_OnContentRendered(object? sender, EventArgs e)
@@ -46,10 +52,58 @@ namespace EPIC.ClearView
             }
         }
 
+        private CancellationTokenSource _cts = new();
         // Token: 0x06000355 RID: 853 RVA: 0x0001B774 File Offset: 0x00019974
-        private void ClockThread()
+        private async void ClockThread()
         {
+            using var timer = new PeriodicTimer(TimeSpan.FromMilliseconds(900));
+            try
+            {
+                while (await timer.WaitForNextTickAsync(_cts.Token) && !this._isClosing)
+                {
+                    try
+                    {
+                        await Dispatcher.BeginInvoke(new Action(delegate ()
+                        {
+                            this.Clock.Content = DateTime.Now.ToLongTimeString();
+                            //if (DeviceManager.Current.Devices != null && DeviceManager.Current.Devices.Any<IControllable>())
+                            //{
+                            //    Scanner.Content = string.Format("Scanner: {0}", "Available");
+                            //}
+                            //else
+                            {
+                                Scanner.Content = string.Format("Scanner: {0}", "Unavailable");
+                            }
+                            bool flag;
+                            if (CameraManager.Current.Cameras != null)
+                            {
+                                flag = !CameraManager.Current.Cameras.Any((ICapturable x) => x.DisplayName == ClearViewConfiguration.Current.Device?.Camera);
+                            }
+                            else
+                            {
+                                flag = true;
+                            }
+                            if (!flag)
+                            {
+                                Camera.Content = string.Format("Camera: {0}", "Available");
+                            }
+                            else
+                            {
+                                Camera.Content = string.Format("Camera: {0}", "Unavailable");
+                            }
+                        }));
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                    }
+                }
+            }
+            catch (OperationCanceledException) { /* Handle shutdown */ }
         }
+
 
         // Token: 0x06000356 RID: 854 RVA: 0x0001B920 File Offset: 0x00019B20
         private void AccountManage_Click(object sender, RoutedEventArgs e)
@@ -151,7 +205,7 @@ namespace EPIC.ClearView
             }
             catch (Exception ex)
             {
-                Log.Error("There was an error retrieving the alerts.", ex);
+                Utilities.Logging.Log.Error("There was an error retrieving the alerts.", ex);
             }
         }
 
@@ -179,6 +233,7 @@ namespace EPIC.ClearView
 
         // Token: 0x04000194 RID: 404
         public static readonly DependencyProperty UserProperty = DependencyProperty.Register("User", typeof(object), typeof(MainWindow), new PropertyMetadata(null));
+        private bool _isClosing;
 
         private void AccountWelcome_Checked(object sender, RoutedEventArgs e)
         {

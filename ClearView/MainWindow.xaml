@@ -48,8 +48,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="17*" />
-            <ColumnDefinition Width="783*" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Frame
             Name="Login"
@@ -240,13 +239,12 @@
                 <Frame NavigationUIVisibility="Hidden" Source="/Welcome.xaml" />
             </TabItem>
         </TabControl>
-        <StatusBar
-            Grid.Row="2"
-            Grid.RowSpan="2"
-            Grid.ColumnSpan="2"
-            Height="20">
-            <StatusBarItem Width="100">
-                <Label Name="Clock" />
+        <StatusBar Grid.Row="2" VerticalAlignment="Bottom">
+            <StatusBarItem Width="Auto" MinWidth="100">
+                <Label
+                    Name="Clock"
+                    VerticalAlignment="Center"
+                    Content="12:00:00 1/1/2001" />
             </StatusBarItem>
             <Separator />
             <StatusBarItem Width="150">

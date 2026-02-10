@@ -62,8 +62,8 @@ namespace EPIC.ClearView
             get
             {
                 var infoVersion = Assembly.GetExecutingAssembly()
-    .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?
-    .InformationalVersion;
+                                          .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?
+                                          .InformationalVersion;
                 return infoVersion;
             }
         }
