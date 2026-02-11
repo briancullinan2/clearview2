@@ -1,0 +1,11 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Themes/Buttons/ButtonBase.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+    <Style
+        x:Key="{x:Type RepeatButton}"
+        BasedOn="{StaticResource ButtonsBaseStyle}"
+        TargetType="{x:Type RepeatButton}">
+        <Setter Property="FrameworkElement.OverridesDefaultStyle" Value="True" />
+    </Style>
+</ResourceDictionary>

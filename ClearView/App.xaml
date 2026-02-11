@@ -4,5 +4,22 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:EPIC.ClearView;assembly=EPICClearView"
     StartupUri="MainWindow.xaml">
-    <Application.Resources />
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Themes/ClearView.xaml" />
+                <ResourceDictionary Source="/Themes/Textboxes/PasswordBox.xaml" />
+                <ResourceDictionary Source="/Themes/Textboxes/RichTextBox.xaml" />
+                <ResourceDictionary Source="/Themes/Textboxes/TextBox.xaml" />
+                <ResourceDictionary Source="/Themes/Buttons/Button.xaml" />
+                <ResourceDictionary Source="/Themes/Buttons/CheckBox.xaml" />
+                <ResourceDictionary Source="/Themes/Buttons/RadioButton.xaml" />
+                <ResourceDictionary Source="/Themes/Buttons/RepeatButton.xaml" />
+                <ResourceDictionary Source="/Themes/Buttons/ToggleButton.xaml" />
+                <ResourceDictionary Source="/Themes/Scrolls/ScrollViewer.xaml" />
+                <ResourceDictionary Source="/Themes/Scrolls/ScrollBar.xaml" />
+                <ResourceDictionary Source="/Themes/Application/Window.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
 </Application>

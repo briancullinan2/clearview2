@@ -1,137 +1,147 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net10.0-windows8.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <UseWPF>true</UseWPF>
-    <AssemblyName>EPICClearView</AssemblyName>
-    <RootNamespace>EPIC.ClearView</RootNamespace>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <StartupObject>EPIC.ClearView.SplashWindow</StartupObject>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net10.0-windows8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UseWPF>true</UseWPF>
+		<AssemblyName>EPICClearView</AssemblyName>
+		<RootNamespace>EPIC.ClearView</RootNamespace>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<StartupObject>EPIC.ClearView.SplashWindow</StartupObject>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Capture\Alerts.xaml.cs" />
-    <Compile Remove="Capture\Calibrate.xaml.cs" />
-    <Compile Remove="Capture\Scan.xaml.cs" />
-    <Compile Remove="Capture\Search.xaml.cs" />
-    <Compile Remove="Utilities\Converters\DeviceSettingStringConverter.cs" />
-    <Compile Remove="Utilities\Converters\PermissionBooleanConverter.cs" />
-    <Compile Remove="Utilities\Converters\PermissionHasChildrenFontWeightConverter.cs" />
-    <Compile Remove="Utilities\Converters\PermissionHasChildrenTristateConverter.cs" />
-    <Compile Remove="Utilities\Extensions\IconExtensions.cs" />
-    <Compile Remove="Utilities\Extensions\InteropExtensions.cs" />
-    <Compile Remove="Utilities\Extensions\OldWindow.cs" />
-    <Compile Remove="Utilities\Extensions\QueryableExtensions.cs" />
-    <Compile Remove="Utilities\Logging\AsyncAppender.cs" />
-    <Compile Remove="Utilities\Logging\ExceptionLogAppender.cs" />
-  </ItemGroup>
+	<Target Name="GeneratePerFile" BeforeTargets="CoreCompile">
+		<ItemGroup>
+			<FilesToProcess Include="@(Page)" Condition="'%(Extension)' == '.xaml'" />
+		</ItemGroup>
 
-  <ItemGroup>
-    <None Remove="clearview.png" />
-  </ItemGroup>
+		<Exec Command="..\ClearView\bin\Debug\PermissionGenerator.exe &quot;%(FilesToProcess.FullPath)|$(RootNamespace)|$(IntermediateOutputPath)|$(ProjectDir)"
+			  LogStandardErrorAsError="true" />
+	</Target>
 
-  <ItemGroup>
-    <Page Remove="Capture\Alerts.xaml" />
-    <Page Remove="Capture\Calibrate.xaml" />
-    <Page Remove="Capture\Scan.xaml" />
-    <Page Remove="Capture\Search.xaml" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="Capture\Alerts.xaml.cs" />
+		<Compile Remove="Capture\Calibrate.xaml.cs" />
+		<Compile Remove="Capture\Scan.xaml.cs" />
+		<Compile Remove="Capture\Search.xaml.cs" />
+		<Compile Remove="Utilities\Converters\DeviceSettingStringConverter.cs" />
+		<Compile Remove="Utilities\Converters\PermissionBooleanConverter.cs" />
+		<Compile Remove="Utilities\Converters\PermissionHasChildrenFontWeightConverter.cs" />
+		<Compile Remove="Utilities\Converters\PermissionHasChildrenTristateConverter.cs" />
+		<Compile Remove="Utilities\Extensions\IconExtensions.cs" />
+		<Compile Remove="Utilities\Extensions\InteropExtensions.cs" />
+		<Compile Remove="Utilities\Extensions\OldWindow.cs" />
+		<Compile Remove="Utilities\Extensions\QueryableExtensions.cs" />
+		<Compile Remove="Utilities\Logging\AsyncAppender.cs" />
+		<Compile Remove="Utilities\Logging\ExceptionLogAppender.cs" />
+	</ItemGroup>
 
-  <!-- ApplicationDefinition is implicitly included by the SDK when UseWPF is true;
+	<ItemGroup>
+		<None Remove="clearview.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Page Remove="Capture\Alerts.xaml" />
+		<Page Remove="Capture\Calibrate.xaml" />
+		<Page Remove="Capture\Scan.xaml" />
+		<Page Remove="Capture\Search.xaml" />
+	</ItemGroup>
+
+	<!-- ApplicationDefinition is implicitly included by the SDK when UseWPF is true;
        remove explicit declaration to avoid duplicate ApplicationDefinition error. -->
 
-  <ItemGroup>
-    <PackageReference Include="DirectShowLib" Version="1.0.0" />
-    <PackageReference Include="Emgu.CV" Version="4.12.0.5764" />
-    <PackageReference Include="Emgu.CV.Bitmap" Version="4.12.0.5764" />
-    <PackageReference Include="Emgu.CV.runtime.windows" Version="4.12.0.5764" />
-    <PackageReference Include="Extended.Wpf.Toolkit" Version="5.0.0" />
-    <PackageReference Include="log4net" Version="3.2.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.2" />
-    <PackageReference Include="System.Management" Version="10.0.2" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="DirectShowLib" Version="1.0.0" />
+		<PackageReference Include="Emgu.CV" Version="4.12.0.5764" />
+		<PackageReference Include="Emgu.CV.Bitmap" Version="4.12.0.5764" />
+		<PackageReference Include="Emgu.CV.runtime.windows" Version="4.12.0.5764" />
+		<PackageReference Include="Extended.Wpf.Toolkit" Version="5.0.0" />
+		<PackageReference Include="log4net" Version="3.2.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.2" />
+		<PackageReference Include="System.Management" Version="10.0.2" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\CameraInterface\CameraInterface.csproj" />
-    <ProjectReference Include="..\DataLayer\DataLayer.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\CameraInterface\CameraInterface.csproj" />
+		<ProjectReference Include="..\DataLayer\DataLayer.csproj" />
+		<ProjectReference Include="..\PermissionGenerator\PermissionGenerator.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="CameraInterface">
-      <HintPath>..\ClearView\bin\Debug\CameraInterface.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="DataLayer">
-      <HintPath>..\ClearView\bin\Debug\DataLayer.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-      <Private>True</Private>
-    </Reference>
-  </ItemGroup>
+	<ItemGroup>
+		<Reference Include="CameraInterface">
+			<HintPath>..\ClearView\bin\Debug\CameraInterface.dll</HintPath>
+			<EmbedInteropTypes>False</EmbedInteropTypes>
+			<Private>True</Private>
+		</Reference>
+		<Reference Include="DataLayer">
+			<HintPath>..\ClearView\bin\Debug\DataLayer.dll</HintPath>
+			<EmbedInteropTypes>False</EmbedInteropTypes>
+			<Private>True</Private>
+		</Reference>
+	</ItemGroup>
 
-  <ItemGroup>
-    <Resource Include="clearview.png" />
-    <Resource Include="Resources\0002-folder_doc.png" />
-    <Resource Include="Resources\0005-time_edit.png" />
-    <Resource Include="Resources\0009-doc_search.png" />
-    <Resource Include="Resources\0016-cd_search.png" />
-    <Resource Include="Resources\0020-options_edit.png" />
-    <Resource Include="Resources\0021-options_search.png" />
-    <Resource Include="Resources\0025-search.png" />
-    <Resource Include="Resources\0040-save.png" />
-    <Resource Include="Resources\0063-undo.png" />
-    <Resource Include="Resources\0080-doc_ok.png" />
-    <Resource Include="Resources\0132-lock.png" />
-    <Resource Include="Resources\0135-picture_preview.png" />
-    <Resource Include="Resources\0145-task_edit.png" />
-    <Resource Include="Resources\0155-keys.png" />
-    <Resource Include="Resources\0175-camera.png" />
-    <Resource Include="Resources\0176-scaner.png" />
-    <Resource Include="Resources\0180-address_book.png" />
-    <Resource Include="Resources\0186-refresh.png" />
-    <Resource Include="Resources\0197-report.png" />
-    <Resource Include="Resources\0204-scroll_search.png" />
-    <Resource Include="Resources\1000-ok.png" />
-    <Resource Include="Resources\1001-cancel.png" />
-    <Resource Include="Resources\1002-add.png" />
-    <Resource Include="Resources\1003-delete.png" />
-    <Resource Include="Resources\1004-warning.png" />
-    <Resource Include="Resources\1005-exit.png" />
-    <Resource Include="Resources\2004-arrow_right2.png" />
-    <Resource Include="Resources\4502-users.png" />
-    <Resource Include="Resources\4504-user_search.png" />
-    <Resource Include="Resources\4505-user_add.png" />
-    <Resource Include="Resources\5001-web_search.png" />
-    <Resource Include="Resources\9012-surgeon.png" />
-    <Resource Include="Resources\billing_update.gif" />
-    <Resource Include="Resources\calibration_sentech.bmp" />
-    <Resource Include="Resources\clearview.ico" />
-    <Resource Include="Resources\clearview.png" />
-    <Resource Include="Resources\clearviewbackground.png" />
-    <Resource Include="Resources\dbs.ico" />
-    <Resource Include="Resources\member-search-icon.gif" />
-    <Resource Include="Resources\person-add.jpg" />
-  </ItemGroup>
+	<ItemGroup>
+		<Resource Include="clearview.png" />
+		<Resource Include="Resources\0002-folder_doc.png" />
+		<Resource Include="Resources\0005-time_edit.png" />
+		<Resource Include="Resources\0009-doc_search.png" />
+		<Resource Include="Resources\0016-cd_search.png" />
+		<Resource Include="Resources\0020-options_edit.png" />
+		<Resource Include="Resources\0021-options_search.png" />
+		<Resource Include="Resources\0025-search.png" />
+		<Resource Include="Resources\0040-save.png" />
+		<Resource Include="Resources\0063-undo.png" />
+		<Resource Include="Resources\0080-doc_ok.png" />
+		<Resource Include="Resources\0132-lock.png" />
+		<Resource Include="Resources\0135-picture_preview.png" />
+		<Resource Include="Resources\0145-task_edit.png" />
+		<Resource Include="Resources\0155-keys.png" />
+		<Resource Include="Resources\0175-camera.png" />
+		<Resource Include="Resources\0176-scaner.png" />
+		<Resource Include="Resources\0180-address_book.png" />
+		<Resource Include="Resources\0186-refresh.png" />
+		<Resource Include="Resources\0197-report.png" />
+		<Resource Include="Resources\0204-scroll_search.png" />
+		<Resource Include="Resources\1000-ok.png" />
+		<Resource Include="Resources\1001-cancel.png" />
+		<Resource Include="Resources\1002-add.png" />
+		<Resource Include="Resources\1003-delete.png" />
+		<Resource Include="Resources\1004-warning.png" />
+		<Resource Include="Resources\1005-exit.png" />
+		<Resource Include="Resources\2004-arrow_right2.png" />
+		<Resource Include="Resources\4502-users.png" />
+		<Resource Include="Resources\4504-user_search.png" />
+		<Resource Include="Resources\4505-user_add.png" />
+		<Resource Include="Resources\5001-web_search.png" />
+		<Resource Include="Resources\9012-surgeon.png" />
+		<Resource Include="Resources\billing_update.gif" />
+		<Resource Include="Resources\calibration_sentech.bmp" />
+		<Resource Include="Resources\clearview.ico" />
+		<Resource Include="Resources\clearview.png" />
+		<Resource Include="Resources\clearviewbackground.png" />
+		<Resource Include="Resources\dbs.ico" />
+		<Resource Include="Resources\member-search-icon.gif" />
+		<Resource Include="Resources\person-add.jpg" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Compile Update="App.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="MainWindow.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Update="App.xaml.cs">
+			<SubType>Code</SubType>
+		</Compile>
+		<Compile Update="MainWindow.xaml.cs">
+			<SubType>Code</SubType>
+		</Compile>
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Update="App.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="log4net.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<None Update="App.config">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="log4net.xml">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
 </Project>

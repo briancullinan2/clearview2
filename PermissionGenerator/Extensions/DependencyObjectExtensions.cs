@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Media;
 
-namespace EPIC.ClearView.Utilities.Extensions
+namespace EPIC.PermissionGenerator.Extensions
 {
     // Token: 0x02000067 RID: 103
     public static class DependencyObjectExtensions

@@ -259,8 +259,12 @@
                 <Label Name="Camera" Content="Camera: Unknown" />
             </StatusBarItem>
             <Separator />
-            <StatusBarItem Width="150">
+            <StatusBarItem Width="Auto">
                 <Label Content="Synchronizer: Unknown" />
+            </StatusBarItem>
+            <Separator />
+            <StatusBarItem Width="Auto">
+                <Label Name="Assembly" Content="Aseembly: Unknown" />
             </StatusBarItem>
             <StatusBarItem Padding="0">
                 <Control.Template>

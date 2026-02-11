@@ -1,41 +1,111 @@
-﻿using System;
-using System.CodeDom.Compiler;
-using System.Collections.Generic;
+﻿using EPIC.ClearView.Macros;
+using EPIC.ClearView.Utilities.Extensions;
+using EPIC.DataLayer;
+using EPIC.DataLayer.Entities;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Linq;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
-using System.Windows.Markup;
-using EPIC.ClearView.Macros;
-using EPIC.ClearView.Utilities.Converters;
-using EPIC.ClearView.Utilities.Extensions;
 
 namespace EPIC.ClearView.User
 {
-	// Token: 0x0200004C RID: 76
-	public partial class Permissions : Page, IStyleConnector
-	{
-		// Token: 0x0600028D RID: 653 RVA: 0x0001519C File Offset: 0x0001339C
-		public Permissions()
-		{
-			this.InitializeComponent();
-			Navigation.InsertRibbon(this);
-			base.Loaded += delegate(object sender2, RoutedEventArgs args2)
-			{
-				//FormChecker.Events[this].Changed += this.OnChanged;
-				//FormChecker.Events[this].Unchanged += this.OnUnchanged;
-			};
-			/*
-			this.Roles.ItemsSource = new ObservableCollection<DataLayer.Entities.Role>(new LinqMetaData().Role.ToList<DataLayer.Entities.Role>());
+    // Token: 0x0200004C RID: 76
+    public partial class Permissions : Page
+    {
+        // Token: 0x0600028D RID: 653 RVA: 0x0001519C File Offset: 0x0001339C
+        public Permissions()
+        {
+            this.InitializeComponent();
+            Navigation.InsertRibbon(this);
+            base.Loaded += delegate (object sender2, RoutedEventArgs args2)
+            {
+                //FormChecker.Events[this].Changed += this.OnChanged;
+                //FormChecker.Events[this].Unchanged += this.OnUnchanged;
+            };
+
+            // we specify the memory data context here because we know the information will be synchronized before close.
+            //   this will be a standard formchecker.xaml function
+            RolesData = new ObservableCollection<DataLayer.Entities.Role>(TranslationContext.Current["Data Source=:memory:"].Roles.ToList());
+            RolesData.CollectionChanged += this.OnRoleCollectionChanged;
+            var view = CollectionViewSource.GetDefaultView(RolesData);
+            view.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
+
+            if (RolesData.Count == 0)
+            {
+                RolesData.Add(new DataLayer.Entities.Role
+                {
+                    Name = "Admin",
+                    Description = "General administrator, full control"
+                });
+                RolesData.Add(new DataLayer.Entities.Role
+                {
+                    Name = "Client",
+                    Description = "General client, like a doctor or nurse"
+                });
+                RolesData.Add(new DataLayer.Entities.Role
+                {
+                    Name = "Tech",
+                    Description = "General technician, device certified"
+                });
+                RolesData.Add(new DataLayer.Entities.Role
+                {
+                    Name = "Guest",
+                    Description = "General guest, for emergent use"
+                });
+            }
+
+            // TODO: add fancy as fuck assembly level introspection with reflection to automatically generate permissions sets for:
+            //    * every actionable control, buttons, texts, headers, closes, ribbons, etc
+            //    * tab ownership and sharing, login switching, hiding panels but leaving data open
+            //    * automatically collapsing or hiding elements based on permissions
+            //    * database row level permissions, tech can add scans but not mailing address, this group can access these patients
+            //    * content sharing permissions, reporting, syncronizing, data sharing signatures
+            PermissionData = new ObservableCollection<DataLayer.Entities.Permission>(TranslationContext.Current["Data Source=:memory:"].Permissions.ToList());
+            // Do this after setting your ItemsSource
+            var view2 = CollectionViewSource.GetDefaultView(PermissionData);
+            view2.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
+
+            foreach (object obj in this.RolesData)
+            {
+                DataLayer.Entities.Role role = (DataLayer.Entities.Role)obj;
+                this.AddColumn(role);
+            }
+
+            this._bamls = PermissionGenerator.Utilities.GetBamlFiles(typeof(App).Assembly);
+
+            foreach (string bamlPath in _bamls)
+            {
+                var name = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Path.GetFileNameWithoutExtension(bamlPath));
+                string defaultNamespace = string.Join(".", Path.GetDirectoryName(bamlPath).Replace('\\', '/')
+                                                .Split('/')
+                                                .Select(s => System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(s)));
+
+                PermissionData.Add(new DataLayer.Entities.Permission
+                {
+                    Name = "Pages." + typeof(App).Namespace + (!String.IsNullOrWhiteSpace(defaultNamespace)
+                            ? "." + defaultNamespace : "") + "." + name + ".Access",
+                    Description = "Page access to " + name + ".baml in the " + (String.IsNullOrWhiteSpace(defaultNamespace)
+                            ? "top" : defaultNamespace) + " file layer"
+                });
+            }
+
+            /*
+            
+                var Permissions = IntrospectXaml(bamlPath);
+                foreach (var permission in Permissions)
+                {
+                    PermissionData.Add(permission);
+                }
+            }
+            */
+
+            /*
 			((ObservableCollection<DataLayer.Entities.Role>)this.Roles.ItemsSource).CollectionChanged += this.OnRoleCollectionChanged;
 			this._permissionConverter = new PermissionBooleanConverter();
-			this._permissions = new Dictionary<DataLayer.Entities.Role, Dictionary<DataLayer.Entities.Permission, bool>>();
 			FrameworkElementFactory frameworkElementFactory = new FrameworkElementFactory(typeof(Label));
 			frameworkElementFactory.SetValue(ContentControl.ContentProperty, new Binding("Description")
 			{
@@ -58,50 +128,66 @@ namespace EPIC.ClearView.User
 					VisualTree = frameworkElementFactory
 				}
 			});
-			foreach (object obj in this.Roles.ItemsSource)
-			{
-				DataLayer.Entities.Role role = (DataLayer.Entities.Role)obj;
-				this.AddColumn(role);
-			}
 			this.PermissionsGrid.ItemsSource = from x in new LinqMetaData().Permission
 			where x.Description != ""
 			orderby x.ParentId, x.ParentId == (decimal?)x.PermissionId descending, x.Description
 			select x;
 			*/
-		}
+        }
 
-		// Token: 0x0600028E RID: 654 RVA: 0x000154DC File Offset: 0x000136DC
-		private void AddColumn(DataLayer.Entities.Role role)
-		{
-			this._permissions.Add(role, new Dictionary<DataLayer.Entities.Permission, bool>());
-			FrameworkElementFactory frameworkElementFactory = new FrameworkElementFactory(typeof(CheckBox));
-			frameworkElementFactory.SetValue(ToggleButton.IsCheckedProperty, new Binding("Name")
-			{
-				Mode = BindingMode.OneWay,
-				//Converter = this._permissionConverter,
-				//ConverterParameter = role
-			});
-			frameworkElementFactory.SetValue(FrameworkElement.HorizontalAlignmentProperty, HorizontalAlignment.Center);
-			frameworkElementFactory.SetValue(FrameworkElement.VerticalAlignmentProperty, VerticalAlignment.Center);
-			frameworkElementFactory.AddHandler(ToggleButton.CheckedEvent, new RoutedEventHandler(this.PermissionChecked));
-			frameworkElementFactory.AddHandler(ToggleButton.UncheckedEvent, new RoutedEventHandler(this.PermissionChecked));
-			this.PermissionsGrid.Columns.Add(new DataGridTemplateColumn
-			{
-				Width = 150.0,
-				Header = role.Name,
-				CellTemplate = new DataTemplate
-				{
-					VisualTree = frameworkElementFactory
-				}
-			});
-		}
 
-		// Token: 0x0600028F RID: 655 RVA: 0x000156EC File Offset: 0x000138EC
-		private void PermissionChecked(object sender, RoutedEventArgs args)
-		{
-			if (!this._suppressChecking)
-			{
-				/*
+        // Token: 0x0600028E RID: 654 RVA: 0x000154DC File Offset: 0x000136DC
+        private void AddColumn(DataLayer.Entities.Role role, bool canResize = false)
+        {
+            var col = this.PermissionsGrid.Columns.FirstOrDefault((DataGridColumn x) => x.Header.ToString() == role.Name);
+            if (col != null)
+            {
+                return;
+            }
+            FrameworkElementFactory frameworkElementFactory;
+            if (role.Name == "Name" || role.Name == "Description")
+            {
+                frameworkElementFactory = new FrameworkElementFactory(typeof(Label));
+                frameworkElementFactory.SetValue(Label.ContentProperty, new Binding(role.Name)
+                {
+                    Mode = BindingMode.TwoWay,
+                    UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+                });
+                frameworkElementFactory.SetValue(FrameworkElement.HorizontalAlignmentProperty, HorizontalAlignment.Left);
+                frameworkElementFactory.SetValue(FrameworkElement.VerticalAlignmentProperty, VerticalAlignment.Top);
+            }
+            else
+            {
+                frameworkElementFactory = new FrameworkElementFactory(typeof(CheckBox));
+                frameworkElementFactory.SetValue(FrameworkElement.HorizontalAlignmentProperty, HorizontalAlignment.Center);
+                frameworkElementFactory.SetValue(FrameworkElement.VerticalAlignmentProperty, VerticalAlignment.Center);
+            }
+            //frameworkElementFactory.SetValue(ToggleButton.IsCheckedProperty, new Binding("Name")
+            //{
+            //    Mode = BindingMode.OneWay,
+            //Converter = this._permissionConverter,
+            //ConverterParameter = role
+            //});
+            frameworkElementFactory.AddHandler(ToggleButton.CheckedEvent, new RoutedEventHandler(this.PermissionChecked));
+            frameworkElementFactory.AddHandler(ToggleButton.UncheckedEvent, new RoutedEventHandler(this.PermissionChecked));
+            this.PermissionsGrid.Columns.Add(new DataGridTemplateColumn
+            {
+                Width = 150.0,
+                Header = role.Name,
+                CanUserResize = canResize,
+                CellTemplate = new DataTemplate
+                {
+                    VisualTree = frameworkElementFactory
+                }
+            });
+        }
+
+        // Token: 0x0600028F RID: 655 RVA: 0x000156EC File Offset: 0x000138EC
+        private void PermissionChecked(object sender, RoutedEventArgs args)
+        {
+            if (!this._suppressChecking)
+            {
+                /*
 				this._suppressChecking = true;
 				CheckBox checkBox = sender as CheckBox;
 				if (checkBox != null)
@@ -163,13 +249,13 @@ namespace EPIC.ClearView.User
 					}
 				}
 				*/
-			}
-		}
+            }
+        }
 
-		// Token: 0x06000290 RID: 656 RVA: 0x00015A88 File Offset: 0x00013C88
-		private CheckBox GetCheckFromEntity(DataLayer.Entities.Permission child, int column)
-		{
-			/*
+        // Token: 0x06000290 RID: 656 RVA: 0x00015A88 File Offset: 0x00013C88
+        private CheckBox GetCheckFromEntity(DataLayer.Entities.Permission child, int column)
+        {
+            /*
 			DataGridRow dataGridRow = this.PermissionsGrid.ItemContainerGenerator.ContainerFromItem(child) as DataGridRow;
 			if (dataGridRow != null)
 			{
@@ -180,83 +266,101 @@ namespace EPIC.ClearView.User
 				}
 			}
 			*/
-			return null;
-		}
+            return null;
+        }
 
-		// Token: 0x06000291 RID: 657 RVA: 0x00015B1C File Offset: 0x00013D1C
-		private void RemoveColumn(DataLayer.Entities.Role role)
-		{
-			this.PermissionsGrid.Columns.Remove(this.PermissionsGrid.Columns.First((DataGridColumn x) => x.Header.ToString() == role.Name));
-		}
+        // Token: 0x06000291 RID: 657 RVA: 0x00015B1C File Offset: 0x00013D1C
+        private void RemoveColumn(DataLayer.Entities.Role role)
+        {
+            var col = this.PermissionsGrid.Columns.FirstOrDefault((DataGridColumn x) => x.Header.ToString() == role.Name);
+            if (col == null)
+            {
+                return;
+            }
+            var columns = this.PermissionsGrid.Columns.Where(x => x != col);
+            this.PermissionsGrid.Columns.Clear();
+            PermissionsGrid.ItemsSource = null;
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                this.AddColumn(new Role { Name = "Name" }, canResize: true);
+                this.AddColumn(new Role { Name = "Description" }, canResize: true);
+                foreach (object obj in this.RolesData)
+                {
+                    DataLayer.Entities.Role role = (DataLayer.Entities.Role)obj;
+                    this.AddColumn(role);
+                }
+                PermissionsGrid.ItemsSource = PermissionData;
+                PermissionsGrid.UpdateLayout();
 
-		// Token: 0x06000292 RID: 658 RVA: 0x00015B68 File Offset: 0x00013D68
-		private void OnRoleCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
-		{
-			if (args.NewItems != null)
-			{
-				foreach (object obj in args.NewItems)
-				{
-					DataLayer.Entities.Role role = (DataLayer.Entities.Role)obj;
-					this.AddColumn(role);
-				}
-			}
-			if (args.OldItems != null)
-			{
-				foreach (object obj2 in args.OldItems)
-				{
-					DataLayer.Entities.Role role = (DataLayer.Entities.Role)obj2;
-					this.RemoveColumn(role);
-				}
-			}
-			this._collectionChanged = true;
-			this.Save.IsEnabled = true;
-		}
+            }), System.Windows.Threading.DispatcherPriority.Loaded);
+        }
 
-		// Token: 0x06000293 RID: 659 RVA: 0x00015C58 File Offset: 0x00013E58
-		private void OnChanged(object sender, RoutedEventArgs routedEventArgs)
-		{
-			this.Save.IsEnabled = true;
-		}
+        // Token: 0x06000292 RID: 658 RVA: 0x00015B68 File Offset: 0x00013D68
+        private void OnRoleCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
+        {
+            if (args.NewItems != null)
+            {
+                foreach (object obj in args.NewItems)
+                {
+                    DataLayer.Entities.Role role = (DataLayer.Entities.Role)obj;
+                    this.AddColumn(role);
+                }
+            }
+            if (args.OldItems != null)
+            {
+                foreach (object obj2 in args.OldItems)
+                {
+                    DataLayer.Entities.Role role = (DataLayer.Entities.Role)obj2;
+                    this.RemoveColumn(role);
+                }
+            }
+            this._collectionChanged = true;
+            this.Save.IsEnabled = true;
+        }
 
-		// Token: 0x06000294 RID: 660 RVA: 0x00015C68 File Offset: 0x00013E68
-		private void OnUnchanged(object sender, RoutedEventArgs routedEventArgs)
-		{
-			if (!this._collectionChanged)
-			{
-				this.Save.IsEnabled = false;
-			}
-		}
+        // Token: 0x06000293 RID: 659 RVA: 0x00015C58 File Offset: 0x00013E58
+        private void OnChanged(object sender, RoutedEventArgs routedEventArgs)
+        {
+            this.Save.IsEnabled = true;
+        }
 
-		// Token: 0x06000295 RID: 661 RVA: 0x00015C92 File Offset: 0x00013E92
-		private void AddRole_Click(object sender, RoutedEventArgs e)
-		{
-			this.RolesTab.IsSelected = true;
-			((ObservableCollection<DataLayer.Entities.Role>)this.Roles.ItemsSource).Add(new DataLayer.Entities.Role());
-		}
+        // Token: 0x06000294 RID: 660 RVA: 0x00015C68 File Offset: 0x00013E68
+        private void OnUnchanged(object sender, RoutedEventArgs routedEventArgs)
+        {
+            if (!this._collectionChanged)
+            {
+                this.Save.IsEnabled = false;
+            }
+        }
 
-		// Token: 0x06000296 RID: 662 RVA: 0x00015CC0 File Offset: 0x00013EC0
-		private void RemoveRole_Click(object sender, RoutedEventArgs e)
-		{
-			Button button = sender as Button;
-			if (button != null)
-			{
-				/*
-				DataGridCell dataGridCell = button.FindAncestor<DataGridCell>();
-				DataLayer.Entities.Role DataLayer.Entities.Role = dataGridCell.DataContext as DataLayer.Entities.Role;
-				if (DataLayer.Entities.Role != null)
-				{
-					((ObservableCollection<DataLayer.Entities.Role>)this.Roles.ItemsSource).Remove(DataLayer.Entities.Role);
-					return;
-				}
-				*/
-			}
-			throw new NotImplementedException();
-		}
+        // Token: 0x06000295 RID: 661 RVA: 0x00015C92 File Offset: 0x00013E92
+        private void AddRole_Click(object sender, RoutedEventArgs e)
+        {
+            this.RolesTab.IsSelected = true;
+            ((ObservableCollection<DataLayer.Entities.Role>)this.Roles.ItemsSource).Add(new DataLayer.Entities.Role());
+        }
 
-		// Token: 0x06000297 RID: 663 RVA: 0x00015DBC File Offset: 0x00013FBC
-		private void Save_Click(object sender, RoutedEventArgs e)
-		{
-			/*
+        // Token: 0x06000296 RID: 662 RVA: 0x00015CC0 File Offset: 0x00013EC0
+        private void RemoveRole_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+            if (button != null)
+            {
+                DataGridCell dataGridCell = button.FindAncestor<DataGridCell>();
+                DataLayer.Entities.Role Role = dataGridCell.DataContext as DataLayer.Entities.Role;
+                if (Role != null)
+                {
+                    ((ObservableCollection<DataLayer.Entities.Role>)this.Roles.ItemsSource).Remove(Role);
+                    return;
+                }
+            }
+            throw new NotImplementedException();
+        }
+
+        // Token: 0x06000297 RID: 663 RVA: 0x00015DBC File Offset: 0x00013FBC
+        private void Save_Click(object sender, RoutedEventArgs e)
+        {
+            /*
 			using (Transaction transaction = new Transaction(IsolationLevel.ReadCommitted, "edit permissions"))
 			{
 				try
@@ -360,61 +464,64 @@ namespace EPIC.ClearView.User
 				mainWindow.User = new LinqMetaData().User.First((DataLayer.Entities.User x) => x.UserId == user.UserId);
 			}
 			*/
-		}
+        }
 
-		// Token: 0x06000298 RID: 664 RVA: 0x000161E8 File Offset: 0x000143E8
-		private void Name_TextChanged(object sender, TextChangedEventArgs e)
-		{
-			TextBox textBox = sender as TextBox;
-			if (textBox != null)
-			{
-				DataGridCell dataGridCell = textBox.FindAncestor<DataGridCell>();
-				if (dataGridCell != null)
-				{
-					/*
-					DataLayer.Entities.Role DataLayer.Entities.Role = dataGridCell.DataContext as DataLayer.Entities.Role;
-					if (DataLayer.Entities.Role != null)
-					{
-						int index = this._permissions.Keys.ToList<DataLayer.Entities.Role>().IndexOf(DataLayer.Entities.Role) + 1;
-						this.PermissionsGrid.Columns[index].Header = textBox.Text;
-					}
-					*/
-				}
-			}
-		}
+        // Token: 0x06000298 RID: 664 RVA: 0x000161E8 File Offset: 0x000143E8
+        private void Name_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+            if (textBox != null)
+            {
+                DataGridCell dataGridCell = textBox.FindAncestor<DataGridCell>();
+                if (dataGridCell != null)
+                {
+                    DataLayer.Entities.Role Role = dataGridCell.DataContext as DataLayer.Entities.Role;
+                    if (Role != null)
+                    {
+                        int index = RolesData.IndexOf(Role);
+                        this.PermissionsGrid.Columns[index + 2].Header = textBox.Text;
+                    }
+                }
+            }
+        }
 
-		// Token: 0x0600029B RID: 667 RVA: 0x00016370 File Offset: 0x00014570
-		[GeneratedCode("PresentationBuildTasks", "4.0.0.0")]
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		[DebuggerNonUserCode]
-		void IStyleConnector.Connect(int connectionId, object target)
-		{
-			switch (connectionId)
-			{
-			case 4:
-				((TextBox)target).TextChanged += this.Name_TextChanged;
-				break;
-			case 5:
-				((Button)target).Click += this.RemoveRole_Click;
-				break;
-			}
-		}
+        /*
+        // Token: 0x0600029B RID: 667 RVA: 0x00016370 File Offset: 0x00014570
+        [GeneratedCode("PresentationBuildTasks", "4.0.0.0")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DebuggerNonUserCode]
+        void IStyleConnector.Connect(int connectionId, object target)
+        {
+            switch (connectionId)
+            {
+                case 4:
+                    ((TextBox)target).TextChanged += this.Name_TextChanged;
+                    break;
+                case 5:
+                    ((Button)target).Click += this.RemoveRole_Click;
+                    break;
+            }
+        }
+        */
 
-		// Token: 0x04000155 RID: 341
-		//private readonly PermissionBooleanConverter _permissionConverter;
+        // Token: 0x04000155 RID: 341
+        //private readonly PermissionBooleanConverter _permissionConverter;
 
-		// Token: 0x04000156 RID: 342
-		private readonly Dictionary<DataLayer.Entities.Role, Dictionary<DataLayer.Entities.Permission, bool>> _permissions;
+        public ObservableCollection<Permission> PermissionData { get; private set; }
 
-		// Token: 0x04000157 RID: 343
-		private bool _collectionChanged;
+        private IEnumerable<string> _bamls;
 
-		// Token: 0x04000158 RID: 344
-		private bool _suppressChecking;
+        // Token: 0x04000157 RID: 343
+        private bool _collectionChanged;
+
+        // Token: 0x04000158 RID: 344
+        private bool _suppressChecking;
+
+        public ObservableCollection<DataLayer.Entities.Role> RolesData { get; private set; }
 
         private void RibbonToggleButton_Unchecked(object sender, RoutedEventArgs e)
         {
-			Navigation.CloseTab(this);
+            Navigation.CloseTab(this);
         }
     }
 }

@@ -65,6 +65,7 @@ namespace EPIC.ClearView
                     {
                         await Dispatcher.BeginInvoke(new Action(delegate ()
                         {
+                            Assembly.Content = string.Format("Assembly: {0}", System.Reflection.Assembly.GetAssembly(typeof(App)));
                             this.Clock.Content = DateTime.Now.ToLongTimeString();
                             //if (DeviceManager.Current.Devices != null && DeviceManager.Current.Devices.Any<IControllable>())
                             //{

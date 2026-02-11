@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "PermissionGenerator": {
+      "commandName": "Project",
+      "commandLineArgs": "\"C:\\Users\\briancullinan\\source\\repos\\New ClearView\\ClearView\\Capture\\Manage.xaml\"|EPIC.ClearView|obj\\Debug\\|\"C:\\Users\\briancullinan\\source\\repos\\New ClearView\\ClearView\""
+    }
+  }
+}

@@ -12,6 +12,8 @@ This is an open source medical CRUD "template" boilerplate whatever you want to 
 
 I thought it would be cool to relive it and update it to run on Windows 10+ instead of Windows XP and show how deeply I've thought about all those rules and implemented them in a modern way.
 I hope this reads like I was fired from being myself, because that's what it felt like.
+All this wasted code written because my countrymen think it's more fun to bullshit around with "interviews" instead of just being normal and looking at the problem solving on full display on GitHub.
+Shit I might write my own ERP, study app, and fintech app in WPF after this.
 
 ## History
 
@@ -36,6 +38,7 @@ The original version had so much extra weight of UI controls that panels would f
 
 ## TODO
 
+* Add relevant article comments in code.
 * Finished importing old panels.
 * Fix DB wiring to use standard ADO.
 * Finish permission auto apply feature.
@@ -53,6 +56,7 @@ When I started:
 https://web.archive.org/web/20120204062334/http://www.epicdiagnostics.com/
 
 When I was ended:
-https://web.archive.org/web/20130903110820/http://www.epicdiagnostics.com/clearview
+https://web.archive.org/web/20180125054151/http://epicdiagnostics.com/
 
+CRU2YQSS
 

@@ -1,0 +1,20 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:permissions="clr-namespace:EPIC.PermissionGenerator;assembly=PermissionGenerator">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Themes/ClearView.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+    <Style x:Key="{x:Type Window}" TargetType="{x:Type Window}">
+        <Setter Property="Background" Value="{StaticResource WindowBrush}" />
+        <Setter Property="BorderBrush">
+            <Setter.Value>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="{StaticResource EpicGreen}" />
+                    <GradientStop Offset="1.0" Color="{StaticResource EpicLightGreen}" />
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="BorderThickness" Value="3" />
+    </Style>
+</ResourceDictionary>

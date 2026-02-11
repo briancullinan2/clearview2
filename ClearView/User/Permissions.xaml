@@ -73,36 +73,47 @@
                         AutoGenerateColumns="False"
                         Background="#00FFFFFF"
                         BorderThickness="0"
-                        CanUserResizeColumns="False"
+                        CanUserResizeColumns="True"
                         CanUserResizeRows="False"
                         CellStyle="{StaticResource BlankCellStyle}"
                         ColumnHeaderStyle="{StaticResource BlankColumnHeader}"
                         GridLinesVisibility="None"
                         IsReadOnly="True"
+                        ItemsSource="{Binding RolesData, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
                         RowHeaderStyle="{StaticResource BlankRowHeader}"
                         SelectionMode="Single"
                         SelectionUnit="Cell"
                         Template="{StaticResource BlankGridTemplate}">
                         <DataGrid.Columns>
-                            <DataGridTemplateColumn Width="100" Header="Name">
+                            <DataGridTemplateColumn
+                                Width="100"
+                                CanUserResize="True"
+                                Header="Name">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <!--  Unknown connection ID: 4  -->
-                                        <TextBox VerticalAlignment="Top" Text="{Binding Path=Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                        <TextBox
+                                            VerticalAlignment="Top"
+                                            Text="{Binding Path=Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                            TextChanged="Name_TextChanged" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Width="200" Header="Description">
+                            <DataGridTemplateColumn
+                                Width="200"
+                                CanUserResize="True"
+                                Header="Description">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBox
+                                            VerticalContentAlignment="Top"
                                             AcceptsReturn="True"
                                             Text="{Binding Path=Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                             TextWrapping="Wrap" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Width="200">
+                            <DataGridTemplateColumn Width="200" CanUserResize="False">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <!--  Unknown connection ID: 5  -->
@@ -110,7 +121,8 @@
                                             Margin="5"
                                             Padding="3"
                                             HorizontalAlignment="Center"
-                                            VerticalAlignment="Center">
+                                            VerticalAlignment="Center"
+                                            Click="RemoveRole_Click">
                                             <StackPanel Orientation="Horizontal">
                                                 <Image
                                                     Width="25"
@@ -147,26 +159,30 @@
                     </StackPanel>
                 </Grid>
             </TabItem>
-            <TabItem Header="Permissions">
+            <TabItem Header="Permissions" IsSelected="True">
                 <DataGrid
                     Name="PermissionsGrid"
                     AlternatingRowBackground="#FFF0F8FF"
                     AutoGenerateColumns="False"
                     Background="#00FFFFFF"
                     BorderThickness="0"
-                    CanUserResizeColumns="False"
+                    CanUserResizeColumns="True"
                     CanUserResizeRows="False"
                     CellStyle="{StaticResource BlankCellStyle}"
                     ColumnHeaderStyle="{StaticResource BlankColumnHeader}"
                     EnableColumnVirtualization="False"
                     EnableRowVirtualization="False"
                     GridLinesVisibility="None"
+                    ItemsSource="{Binding PermissionData, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
                     RowHeaderStyle="{StaticResource BlankRowHeader}"
                     SelectionMode="Single"
                     SelectionUnit="Cell"
                     Template="{StaticResource BlankGridTemplate}">
                     <DataGrid.Columns>
-                        <DataGridTemplateColumn Width="100" Header="Name">
+                        <DataGridTemplateColumn
+                            Width="100"
+                            CanUserResize="True"
+                            Header="Name">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <!--  Unknown connection ID: 4  -->
@@ -174,7 +190,10 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Width="200" Header="Description">
+                        <DataGridTemplateColumn
+                            Width="200"
+                            CanUserResize="True"
+                            Header="Description">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <!--  Unknown connection ID: 4  -->

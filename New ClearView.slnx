@@ -10,4 +10,5 @@
     <BuildDependency Project="DataLayer/DataLayer.csproj" />
   </Project>
   <Project Path="DataLayer/DataLayer.csproj" Id="c842e7fc-bef2-4431-81b5-716abbbbd032" />
+  <Project Path="PermissionGenerator/PermissionGenerator.csproj" Id="18ec7a7c-f11d-4d00-aa68-88125874c4c6" />
 </Solution>
