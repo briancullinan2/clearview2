@@ -59,15 +59,6 @@ namespace EPIC.PermissionGenerator
         [STAThread]
         public static void Main(string[] args2)
         {
-            Console.WriteLine("Fuck: " + Environment.CommandLine);
-            var args = Environment.CommandLine.Trim('"').ToString().TrimStart(Environment.ProcessPath).Trim("dll").Trim("\" ").TrimEnd('\\').ToString().Split('|');
-            // This is just to ensure the static constructor runs when the assembly is loaded in the designer.
-            foreach (var arg in args)
-            {
-                Console.WriteLine($"Argument: {arg}");
-            }
-            // 1. Initialize a "Headless" Application context
-            // This is required if the XAML uses {StaticResource} or {DynamicResource}
             if (System.Windows.Application.Current == null)
             {
                 new System.Windows.Application { ShutdownMode = ShutdownMode.OnExplicitShutdown };
