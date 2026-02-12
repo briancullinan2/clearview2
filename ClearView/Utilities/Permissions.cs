@@ -3,8 +3,14 @@ using System.Collections;
 using System.IO;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Baml2006;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Xaml;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace EPIC.ClearView.Utilities
 {
@@ -113,6 +119,8 @@ namespace EPIC.ClearView.Utilities
             return IntrospectXaml(assembly, root, bamlPath);
         }
 
+        /*
+
         private static System.Reflection.Assembly _assembly;
 
         // ok new strategy load the entire mock app in dev mode to generate permissions files, then restart the app to bind them with the DLL plugin compiled
@@ -186,6 +194,7 @@ namespace EPIC.ClearView.Utilities
 
             return null;
         }
+        */
 
 
         // Utility to check some basic type information before the class actually loads
@@ -528,6 +537,8 @@ namespace EPIC.ClearView.Utilities
         }
 
 
+        /*
+
         public static byte[] DecompileBamlStream(System.Reflection.Assembly assembly, byte[] bamlStream)
         {
             var location = String.IsNullOrEmpty(assembly.Location) ? Path.Join(AppDomain.CurrentDomain.BaseDirectory, assembly.ManifestModule.ScopeName ?? (assembly.GetName().Name + ".dll")) : assembly.Location;
@@ -559,7 +570,7 @@ namespace EPIC.ClearView.Utilities
             {
                 string name = invocation.Method.Name;
 
-                if (name.Contains("Source") && name.Contains("set_") /* invocation.Proxy is ResourceDictionary dict */)
+                if (name.Contains("Source") && name.Contains("set_") /* invocation.Proxy is ResourceDictionary dict *//*)
                 {
                     var uri = invocation.Arguments[0] as Uri;
                     // Logic: Redirect "themes/clearview.xaml" to a local file path or embedded resource
@@ -615,12 +626,12 @@ namespace EPIC.ClearView.Utilities
 
             return proxyType;
         }
-
+        */
 
         public static void GenerateFromAssembly(System.Reflection.Assembly assembly)
         {
             // TODO: loop through all bamls in assembly
-            var bamls = PermissionGenerator.Utilities.GetBamlFiles(assembly);
+            var bamls = Permissions.GetBamlFiles(assembly);
             Console.WriteLine($"Found {bamls.Count()} BAML files in assembly {assembly.FullName}");
 
             //foreach (var bam in bamls)
@@ -746,7 +757,7 @@ namespace EPIC.ClearView.Utilities
 
             var application = assembly.GetTypes().FirstOrDefault(t => typeof(System.Windows.Application).IsAssignableFrom(t));
 
-            var Permissions = Utilities.IntrospectXaml(assembly, root as FrameworkElement, baseUri.LocalPath);
+            var Permissions = IntrospectXaml(assembly, root as FrameworkElement, baseUri.LocalPath);
             var defaultNamespace = GetNamespaceFromPackUri(baseUri);
 
             string CODE_TEMPLATE = $@"
@@ -788,11 +799,8 @@ namespace {application.Namespace}.{defaultNamespace} {{
             return args;
         }
 
-        public static void SaveBitmap(UIElement element, string path)
+        public static RenderTargetBitmap RenderBitmap(UIElement element)
         {
-            // Placeholder: Implement logic to render the UIElement to a bitmap and save it
-            // This would involve using RenderTargetBitmap and encoding it to PNG or JPEG
-            // CRITICAL: This allows relative paths like "themes/clearview.xaml" to resolve
             Size renderSize = new Size(1024, 768);
             element.Measure(renderSize);
             element.Arrange(new Rect(renderSize));
@@ -805,6 +813,16 @@ namespace {application.Namespace}.{defaultNamespace} {{
                 96, 96, // DPI
                 PixelFormats.Pbgra32);
             rtb.Render(element);
+            rtb.Freeze();
+            return rtb;
+        }
+
+        public static void SaveBitmap(UIElement element, string path)
+        {
+            // Placeholder: Implement logic to render the UIElement to a bitmap and save it
+            // This would involve using RenderTargetBitmap and encoding it to PNG or JPEG
+            // CRITICAL: This allows relative paths like "themes/clearview.xaml" to resolve
+            var rtb = RenderBitmap(element);
 
             // 4. Save to a file so you can open it
             var encoder = new PngBitmapEncoder();

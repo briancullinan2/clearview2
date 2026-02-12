@@ -12,11 +12,21 @@
                 <ResourceDictionary Source="/Themes/ClearView.xaml" />
                 <ResourceDictionary Source="/Resources/DataGridStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <BitmapImage x:Key="Find" UriSource="/Resources/0025-search.png" />
             <BitmapImage x:Key="Remove" UriSource="/Resources/1003-delete.png" />
             <BitmapImage x:Key="Add" UriSource="/Resources/1002-add.png" />
             <BitmapImage x:Key="Save" UriSource="/Resources/0040-save.png" />
             <BitmapImage x:Key="Cancel" UriSource="/Resources/1001-cancel.png" />
             <BitmapImage x:Key="Permissions" UriSource="/Resources/0080-doc_ok.png" />
+            <DataTemplate x:Key="PatientLinkTemplate">
+                <TextBlock TextWrapping="Wrap">
+                    <Run Foreground="Gray" Text="{Binding Path=Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <Hyperlink NavigateUri="{Binding Path=Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" RequestNavigate="Hyperlink_RequestNavigate">
+                        <Run FontWeight="Bold" Text="Load permissions from " />
+                        <Run FontWeight="Bold" Text="{Binding Path=Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </Hyperlink>
+                </TextBlock>
+            </DataTemplate>
             <ribbon:RibbonContextualTabGroup
                 x:Key="SearchGroup"
                 Control.Background="#FFFFFF00"
@@ -57,10 +67,49 @@
     </FrameworkElement.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition />
             <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="50" />
         </Grid.RowDefinitions>
-        <TabControl TabStripPlacement="Left">
+        <Grid Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Label
+                Grid.Column="0"
+                VerticalAlignment="Center"
+                Content="Search:" />
+            <TextBox
+                Name="SearchText"
+                Grid.Row="1"
+                Grid.Column="1"
+                MinWidth="100"
+                Margin="5"
+                VerticalAlignment="Center"
+                TextChanged="Search_TextChanged" />
+            <Button
+                Grid.RowSpan="2"
+                Grid.Column="2"
+                Margin="5"
+                Padding="3"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal">
+                    <Image
+                        Width="20"
+                        Height="20"
+                        Margin="3,0"
+                        Source="{StaticResource Find}" />
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Find</TextBlock>
+                </StackPanel>
+            </Button>
+        </Grid>
+        <TabControl Grid.Row="1" TabStripPlacement="Left">
             <TabItem Name="RolesTab" Header="Roles">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -193,20 +242,14 @@
                         <DataGridTemplateColumn
                             Width="200"
                             CanUserResize="True"
-                            Header="Description">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <!--  Unknown connection ID: 4  -->
-                                    <Label VerticalAlignment="Center" Content="{Binding Path=Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                            CellTemplate="{StaticResource PatientLinkTemplate}"
+                            Header="Description" />
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>
         </TabControl>
         <StackPanel
-            Grid.Row="1"
+            Grid.Row="2"
             HorizontalAlignment="Right"
             Orientation="Horizontal">
             <Button

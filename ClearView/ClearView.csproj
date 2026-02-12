@@ -12,6 +12,17 @@
 		<StartupObject>EPIC.ClearView.SplashWindow</StartupObject>
 	</PropertyGroup>
 
+	<ItemGroup>
+	  <Compile Remove="Controls\**" />
+	  <Compile Remove="Report\**" />
+	  <EmbeddedResource Remove="Controls\**" />
+	  <EmbeddedResource Remove="Report\**" />
+	  <None Remove="Controls\**" />
+	  <None Remove="Report\**" />
+	  <Page Remove="Controls\**" />
+	  <Page Remove="Report\**" />
+	</ItemGroup>
+
 	<!--<Target Name="GeneratePerFile" BeforeTargets="CoreCompile">
 		<ItemGroup>
 			<FilesToProcess Include="@(Page)" Condition="'%(Extension)' == '.xaml'" />

@@ -48,6 +48,7 @@ The original version had so much extra weight of UI controls that panels would f
 * Upgrade backend from IHTTP to Kestrel.
 * Build new data marshaller.
 * Upgrade access controls and recording.
+* Reattempt WPF permission plugin using reflection on app load sequence.
 
 
 ## Old Website

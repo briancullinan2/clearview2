@@ -137,7 +137,8 @@ namespace EPIC.ClearView
 
                     // 1. Initialize the App instance manually
                     _app = new EPIC.ClearView.App();
-                    _app.Activated += SplashWindow.AppOnActivated;
+                    _app.Navigated += AppOnNavigated;
+                    _app.Activated += AppOnActivated;
                     _app.InitializeComponent();
 
                     // 3. Start the app loop

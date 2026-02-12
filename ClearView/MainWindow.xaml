@@ -75,6 +75,7 @@
             Grid.ColumnSpan="2"
             Margin="0,-22,0,0"
             Panel.ZIndex="1"
+            IsCollapsed="False"
             ShowQuickAccessToolBarOnTop="False">
             <Ribbon.ApplicationMenu>
                 <RibbonApplicationMenu Visibility="Collapsed" />

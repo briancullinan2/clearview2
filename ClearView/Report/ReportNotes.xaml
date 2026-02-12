@@ -1,0 +1,158 @@
+<ContentControl
+	x:Class="EPIC.Report.ReportNotes" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:report="clr-namespace:EPIC.Report" xmlns:system="clr-namespace:System;assembly=mscorlib" xmlns:epic="clr-namespace:EPIC" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	FontSize="14"
+	SnapsToDevicePixels="True"
+	UseLayoutRounding="True">
+	<FixedPage
+		Name="Page"
+		Width="1056"
+		Height="816"
+		SnapsToDevicePixels="True"
+		UseLayoutRounding="True"
+		DataContext="{x:Type report:ReportNotes}">
+		<Grid
+			Width="1006"
+			Height="766"
+			Margin="25">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition />
+				<ColumnDefinition />
+				<ColumnDefinition />
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition
+					Height="Auto" />
+				<RowDefinition
+					Height="Auto" />
+				<RowDefinition
+					Height="Auto" />
+				<RowDefinition />
+				<RowDefinition
+					Height="Auto" />
+				<RowDefinition />
+				<RowDefinition
+					Height="Auto" />
+				<RowDefinition
+					Height="Auto" />
+			</Grid.RowDefinitions>
+			<Image
+				Source="/Report/Resources/EPIC_Horizontal Small.jpg"
+				Height="48"
+				HorizontalAlignment="Left"
+				Grid.RowSpan="2" />
+			<TextBlock
+				Grid.Column="1"
+				Text="ClearView Report"
+				HorizontalAlignment="Center"
+				FontSize="20"
+				FontWeight="Bold" />
+			<StackPanel
+				Grid.Row="1"
+				Grid.Column="1"
+				Orientation="Horizontal"
+				HorizontalAlignment="Center">
+				<TextBlock
+					Text="Prepared for: " />
+				<TextBlock
+					Text="{Binding Path=Patient.FirstName}" />
+				<TextBlock
+					Text=" " />
+				<TextBlock
+					Text="{Binding Path=Patient.LastName}" />
+			</StackPanel>
+			<Border
+				Grid.Row="2"
+				Grid.ColumnSpan="3"
+				Margin="0,20,0,0"
+				BorderThickness="2,2,2,0"
+				BorderBrush="#FF808080"
+				Padding="2"
+				Background="#FFD3D3D3">
+				<TextBlock
+					Text="Report Notes"
+					HorizontalAlignment="Center"
+					FontWeight="Bold" />
+			</Border>
+			<Border
+				Grid.Row="3"
+				Grid.ColumnSpan="3"
+				BorderThickness="2,0,2,2"
+				BorderBrush="#FF808080"
+				Padding="10">
+				<StackPanel>
+					<TextBlock
+						TextWrapping="Wrap"
+						Margin="0,20,0,0">Due to wheat being ingested within the last 2 hours, the cardiovascular and gastrointestinal scan results may be slightly elevated. <Hyperlink>[explain]</Hyperlink></TextBlock>
+					<TextBlock
+						TextWrapping="Wrap"
+						Margin="0,20,0,0">Due to alcohol being ingested within the last 24 hours, the Hepatic scan results may be slightly elevated.</TextBlock>
+				</StackPanel>
+			</Border>
+			<Border
+				Grid.Row="4"
+				Grid.ColumnSpan="3"
+				Margin="0,20,0,0"
+				BorderThickness="2,2,2,0"
+				BorderBrush="#FF808080"
+				Padding="2"
+				Background="#FFD3D3D3">
+				<TextBlock
+					Text="Definitions"
+					HorizontalAlignment="Center"
+					FontWeight="Bold" />
+			</Border>
+			<Border
+				Grid.Row="5"
+				Grid.ColumnSpan="3"
+				BorderThickness="2,0,2,2"
+				BorderBrush="#FF808080"
+				Padding="10">
+				<StackPanel>
+					<TextBlock
+						TextWrapping="Wrap">
+						<TextBlock
+							TextWrapping="Wrap"
+							FontWeight="Bold">Autonomic Nervous System</TextBlock> GSR point measurements represent a measure of how the perception of stress by the individual is affecting different body systems.</TextBlock>
+					<TextBlock
+						TextWrapping="Wrap"
+						Margin="0,20,0,0">
+						<TextBlock
+							TextWrapping="Wrap"
+							FontWeight="Bold">Physical System</TextBlock> GSR point measurements represent the functional GSR measures for the body.</TextBlock>
+				</StackPanel>
+			</Border>
+			<StackPanel
+				Grid.Row="6"
+				Orientation="Horizontal">
+				<TextBlock
+					Text="Run by: " />
+				<TextBlock
+					Text="{Binding Path=User.Username, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type epic:MainWindow}}}" />
+			</StackPanel>
+			<StackPanel
+				Grid.Row="7"
+				Orientation="Horizontal">
+				<TextBlock
+					Text="Printed on: " />
+				<TextBlock
+					Text="{Binding ., Source={x:Static system:DateTime.Now}}" />
+			</StackPanel>
+			<StackPanel
+				Grid.Row="6"
+				Grid.RowSpan="2"
+				Grid.Column="2"
+				Orientation="Horizontal"
+				VerticalAlignment="Center"
+				HorizontalAlignment="Right">
+				<TextBlock
+					Text="Page " />
+				<TextBlock
+					Text="{Binding Document.MasterPageNumber}" />
+				<TextBlock
+					Text=" of " />
+				<TextBlock
+					Text="{Binding Document.PageCount}" />
+			</StackPanel>
+		</Grid>
+	</FixedPage>
+</ContentControl>

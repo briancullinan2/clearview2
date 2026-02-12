@@ -44,10 +44,10 @@
                         Unchecked="RibbonToggleButton_Unchecked" />
                 </ribbon:RibbonGroup>
                 <ribbon:RibbonGroup Header="Actions">
-                    <ribbon:RibbonButton Label="Export Data" LargeImageSource="{StaticResource ExportData}" />
-                    <ribbon:RibbonButton Label="New Patient" LargeImageSource="{StaticResource NewPatient}" />
-                    <ribbon:RibbonButton Label="New Capture" LargeImageSource="{StaticResource NewCapture}" />
-                    <ribbon:RibbonButton Label="View Patient" LargeImageSource="{StaticResource ViewPatient}" />
+                    <ribbon:RibbonButton Label="Export Data" Click="Export_Click" LargeImageSource="{StaticResource ExportData}" />
+                    <ribbon:RibbonButton Label="New Patient" Click="NewPatient_Click" LargeImageSource="{StaticResource NewPatient}" />
+                    <ribbon:RibbonButton Label="New Capture" Click="NewCapture_Click" LargeImageSource="{StaticResource NewCapture}" />
+                    <ribbon:RibbonButton Label="View Patient" Click="ViewPatient_Click" LargeImageSource="{StaticResource ViewPatient}" />
                 </ribbon:RibbonGroup>
             </ribbon:RibbonTab>
         </ResourceDictionary>

@@ -5,7 +5,10 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ribbon="clr-namespace:System.Windows.Controls.Ribbon;assembly=System.Windows.Controls.Ribbon"
-    Title="Search Users">
+    Title="Search Users"
+    d:DesignHeight="400"
+    d:DesignWidth="600"
+    mc:Ignorable="d">
     <FrameworkElement.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -15,6 +18,7 @@
             <BitmapImage x:Key="NewUser" UriSource="/Resources/4505-user_add.png" />
             <BitmapImage x:Key="ViewUser" UriSource="/Resources/4504-user_search.png" />
             <BitmapImage x:Key="SearchUser" UriSource="/Resources/4504-user_search.png" />
+            <BitmapImage x:Key="Permissions" UriSource="/Resources/0080-doc_ok.png" />
             <ribbon:RibbonTab x:Key="SearchOptions">
                 <RibbonTab.Header>
                     <TextBlock
@@ -38,8 +42,15 @@
                         LargeImageSource="{StaticResource SearchUser}"
                         Unchecked="RibbonToggleButton_Unchecked" />
                 </ribbon:RibbonGroup>
-                <ribbon:RibbonGroup>
-                    <ribbon:RibbonButton Label="New User" LargeImageSource="{StaticResource NewUser}" />
+                <ribbon:RibbonGroup Header="Actions">
+                    <ribbon:RibbonButton Click="NewUser_Click" Label="New User" LargeImageSource="{StaticResource NewUser}" />
+                </ribbon:RibbonGroup>
+                <ribbon:RibbonGroup Name="UserOptions" Header="User Options">
+                    <ribbon:RibbonButton
+                        Name="UserPermission"
+                        Click="UserPermission_Click"
+                        Label="Permissions"
+                        LargeImageSource="{StaticResource Permissions}" />
                 </ribbon:RibbonGroup>
             </ribbon:RibbonTab>
         </ResourceDictionary>
@@ -54,7 +65,7 @@
         </FrameworkElement.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition />
+            <RowDefinition Height="*" />
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -147,5 +158,6 @@
                 <DataGridCheckBoxColumn Binding="{Binding IsActive}" Header="Active" />
             </DataGrid.Columns>
         </DataGrid>
+
     </Grid>
 </Page>

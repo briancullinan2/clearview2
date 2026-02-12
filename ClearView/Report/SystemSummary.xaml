@@ -1,0 +1,223 @@
+<ContentControl
+	x:Class="EPIC.Report.SystemSummary" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:report="clr-namespace:EPIC.Report" xmlns:epic="clr-namespace:EPIC" xmlns:system="clr-namespace:System;assembly=mscorlib" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	FontSize="14"
+	SnapsToDevicePixels="True"
+	UseLayoutRounding="True">
+	<FixedPage
+		Name="Page"
+		Width="1056"
+		Height="816"
+		SnapsToDevicePixels="True"
+		UseLayoutRounding="True"
+		DataContext="{x:Type report:SystemSummary}">
+		<Grid
+			Width="1006"
+			Height="766"
+			Margin="25">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition />
+				<ColumnDefinition />
+				<ColumnDefinition />
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition
+					Height="Auto" />
+				<RowDefinition
+					Height="Auto" />
+				<RowDefinition
+					Height="Auto" />
+				<RowDefinition />
+				<RowDefinition
+					Height="Auto" />
+				<RowDefinition
+					Height="Auto" />
+			</Grid.RowDefinitions>
+			<Image
+				Source="/Report/Resources/EPIC_Horizontal Small.jpg"
+				Height="48"
+				HorizontalAlignment="Left"
+				Grid.RowSpan="2" />
+			<TextBlock
+				Grid.Column="1"
+				Text="ClearView Report"
+				HorizontalAlignment="Center"
+				FontSize="20"
+				FontWeight="Bold" />
+			<StackPanel
+				Grid.Row="1"
+				Grid.Column="1"
+				Orientation="Horizontal"
+				HorizontalAlignment="Center">
+				<TextBlock
+					Text="Prepared for: " />
+				<TextBlock
+					Text="{Binding Path=Patient.FirstName}" />
+				<TextBlock
+					Text=" " />
+				<TextBlock
+					Text="{Binding Path=Patient.LastName}" />
+			</StackPanel>
+			<Border
+				Grid.Row="2"
+				Grid.ColumnSpan="3"
+				Margin="0,20,0,0"
+				BorderThickness="2,2,2,0"
+				BorderBrush="#FF808080"
+				Padding="2"
+				Background="#FFD3D3D3">
+				<TextBlock
+					Text="Demographics and Summary"
+					HorizontalAlignment="Center"
+					FontWeight="Bold" />
+			</Border>
+			<Border
+				Grid.Row="3"
+				Grid.ColumnSpan="3"
+				BorderThickness="2,0,2,2"
+				BorderBrush="#FF808080"
+				Padding="10">
+				<StackPanel>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition />
+							<ColumnDefinition />
+							<ColumnDefinition />
+						</Grid.ColumnDefinitions>
+						<StackPanel
+							Orientation="Horizontal">
+							<TextBlock
+								Text="Visit Date: "
+								FontWeight="Bold" />
+							<TextBlock
+								Text="{Binding Path=Fingers.TimeScanned}" />
+						</StackPanel>
+						<StackPanel
+							Grid.Column="1"
+							Orientation="Horizontal"
+							HorizontalAlignment="Center">
+							<TextBlock
+								Text="Age: "
+								FontWeight="Bold" />
+							<TextBlock
+								Text="{Binding Path=Patient.BirthDate}" />
+						</StackPanel>
+						<StackPanel
+							Grid.Column="2"
+							Orientation="Horizontal"
+							HorizontalAlignment="Right">
+							<TextBlock
+								Text="Gender: "
+								FontWeight="Bold" />
+							<TextBlock
+								Text="{Binding Path=Patient.Gender}" />
+						</StackPanel>
+					</Grid>
+					<TextBlock
+						TextWrapping="Wrap"
+						Margin="0,20,0,0">The EPIC ClearView is a Galvanic Skin Response (GSR) measurement tool for the evaluation of the human body's primary organ systems (Cardiovascular; Respiratory; Gastrointestinal &amp; Endocrine; Hepatic; Renal &amp; Reproductive) to help direct the physician when choosing further standard of care testing.</TextBlock>
+					<TextBlock
+						TextWrapping="Wrap"
+						Margin="0,20,0,0">The tables below provide the overall ClearView Response Scale results. Table 1 provides ClearView Response Scale ranges from 0-5, with higher values representing increased association which may indicate a need for further testing of a particular primary organ system.</TextBlock>
+					<StackPanel
+						Margin="0,20,0,0"
+						Orientation="Horizontal"
+						HorizontalAlignment="Center">
+						<TextBlock
+							Margin="5">Table 1</TextBlock>
+						<DataGrid
+							IsReadOnly="True">
+							<FrameworkElement.Resources>
+								<ResourceDictionary>
+									<Style
+										TargetType="{x:Type DataGridColumnHeader}"
+										x:Key="SplitColumnHeader">
+										<Setter
+											Property="HorizontalContentAlignment"
+											Value="Stretch" />
+										<Setter
+											Property="ContentTemplate">
+											<Setter.Value>
+												<DataTemplate>
+													<Grid>
+														<Grid.ColumnDefinitions>
+															<ColumnDefinition />
+															<ColumnDefinition />
+														</Grid.ColumnDefinitions>
+														<Grid.RowDefinitions>
+															<RowDefinition />
+															<RowDefinition />
+														</Grid.RowDefinitions>
+														<TextBlock
+															Text="{TemplateBinding Content}"
+															Grid.ColumnSpan="2"
+															HorizontalAlignment="Center" />
+														<TextBlock
+															Grid.Row="1"
+															Text="Score"
+															HorizontalAlignment="Center" />
+														<TextBlock
+															Grid.Row="1"
+															Grid.Column="1"
+															Text="Probability"
+															HorizontalAlignment="Center" />
+													</Grid>
+												</DataTemplate>
+											</Setter.Value>
+										</Setter>
+									</Style>
+								</ResourceDictionary>
+							</FrameworkElement.Resources>
+							<DataGrid.Columns>
+								<DataGridTextColumn
+									Header="Primary Organ Systems" />
+								<DataGridTextColumn
+									Header="Physical"
+									Width="200"
+									HeaderStyle="{StaticResource SplitColumnHeader}" />
+								<DataGridTextColumn
+									Header="Autonomic"
+									Width="200"
+									HeaderStyle="{StaticResource SplitColumnHeader}" />
+							</DataGrid.Columns>
+						</DataGrid>
+					</StackPanel>
+					<TextBlock
+						TextWrapping="Wrap"
+						Margin="0,20,0,0">Table 2 provides the supporting detailed GSR point measurements range from 0-25, and should be interpreted in the context of other signs, symptoms, and test results.</TextBlock>
+				</StackPanel>
+			</Border>
+			<StackPanel
+				Grid.Row="4"
+				Orientation="Horizontal">
+				<TextBlock
+					Text="Run by: " />
+				<TextBlock
+					Text="{Binding Path=User.Username, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type epic:MainWindow}}}" />
+			</StackPanel>
+			<StackPanel
+				Grid.Row="5"
+				Orientation="Horizontal">
+				<TextBlock
+					Text="Printed on: " />
+				<TextBlock
+					Text="{Binding ., Source={x:Static system:DateTime.Now}}" />
+			</StackPanel>
+			<StackPanel
+				Grid.Row="4"
+				Grid.RowSpan="2"
+				Grid.Column="2"
+				Orientation="Horizontal"
+				VerticalAlignment="Center"
+				HorizontalAlignment="Right">
+				<TextBlock
+					Text="Page " />
+				<TextBlock
+					Text="{Binding Document.MasterPageNumber}" />
+				<TextBlock
+					Text=" of " />
+				<TextBlock
+					Text="{Binding Document.PageCount}" />
+			</StackPanel>
+		</Grid>
+	</FixedPage>
+</ContentControl>

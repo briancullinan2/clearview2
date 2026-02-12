@@ -18,16 +18,42 @@ namespace EPIC.ClearView
         public App()
         {
             //Application.ResourceAssembly = typeof(App).Assembly;
-            AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
-            {
-                // If something looks for "Company.Project", return the current assembly
-                if (args.Name.StartsWith("EPIC.ClearView"))
-                {
-                    return typeof(App).Assembly;
-                }
-                return null;
-            };
+            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
         }
+
+
+        private static System.Reflection.Assembly? CurrentDomain_AssemblyResolve(object? sender, ResolveEventArgs args)
+        {
+            // fix assembly naming convention expectation from namespace, cropping up somewhere inside i looked in every xaml
+            if (args.Name.Contains("EPIC.ClearView")) return typeof(App).Assembly;
+
+            string assemblyName = new AssemblyName(args.Name).Name ?? string.Empty;
+
+            var existing = AppDomain.CurrentDomain.GetAssemblies()
+                                                    .FirstOrDefault(a => a.GetName().Name == assemblyName);
+            if (existing != null)
+            {
+                return existing;
+            }
+
+            var location = String.IsNullOrEmpty(typeof(App).Assembly.Location) ? AppDomain.CurrentDomain.BaseDirectory : Path.GetDirectoryName(typeof(App).Assembly.Location);
+
+            string expectedPath = Path.Combine(location, assemblyName + ".dll");
+
+            if (File.Exists(expectedPath))
+            {
+                Log.Debug($"Laoding: {expectedPath}");
+
+                // TODO: try with this to fix searching issues?
+                //byte[] rawAssembly = File.ReadAllBytes(realFile);
+                //_assembly = AppDomain.CurrentDomain.Load(rawAssembly);
+
+                return Assembly.LoadFrom(expectedPath);
+            }
+
+            return null;
+        }
+
 
         // Token: 0x06000346 RID: 838 RVA: 0x0001AF80 File Offset: 0x00019180
         private void Application_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)

@@ -75,7 +75,7 @@ namespace EPIC.ClearView.User
                 this.AddColumn(role);
             }
 
-            this._bamls = PermissionGenerator.Utilities.GetBamlFiles(typeof(App).Assembly);
+            this._bamls = Utilities.Permissions.GetBamlFiles(typeof(App).Assembly);
 
             foreach (string bamlPath in _bamls)
             {
@@ -175,7 +175,8 @@ namespace EPIC.ClearView.User
                 Width = 150.0,
                 Header = role.Name,
                 CanUserResize = canResize,
-                CellTemplate = new DataTemplate
+                CellTemplate = role.Name == "Description"
+                ? (DataTemplate)this.FindResource("PatientLinkTemplate") : new DataTemplate
                 {
                     VisualTree = frameworkElementFactory
                 }
@@ -522,6 +523,16 @@ namespace EPIC.ClearView.User
         private void RibbonToggleButton_Unchecked(object sender, RoutedEventArgs e)
         {
             Navigation.CloseTab(this);
+        }
+
+        private void Search_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
+        private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
+        {
+
         }
     }
 }
