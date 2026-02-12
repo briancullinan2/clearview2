@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "PermissionGenerator": {
-      "commandName": "Project",
-      "commandLineArgs": "\".\\EPICClearView.dll\""
-    }
-  }
-}

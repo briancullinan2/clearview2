@@ -45,5 +45,30 @@ namespace EPIC.ClearView.Utilities
             var type = assembly.GetTypes().FirstOrDefault(t => typeof(IPlugin).IsAssignableFrom(t));
             return (IPlugin)Activator.CreateInstance(type)!;
         }
+
+        public static void MakePermissions(Uri baseUri, FrameworkElement root, Assembly assembly)
+        {
+            var name = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Path.GetFileNameWithoutExtension(baseUri.LocalPath));
+
+            var application = assembly.GetTypes().FirstOrDefault(t => typeof(System.Windows.Application).IsAssignableFrom(t));
+
+            var Permissions = Utilities.IntrospectXaml(assembly, root as FrameworkElement, baseUri.LocalPath);
+            var defaultNamespace = GetNamespaceFromPackUri(baseUri);
+
+            string CODE_TEMPLATE = $@"
+namespace {application.Namespace}.{defaultNamespace} {{
+    public partial class {name} {{
+        public static readonly System.Collections.Generic.List<DataLayer.Entities.Permission> Permissions = 
+            new System.Collections.Generic.List<DataLayer.Entities.Permission> {{
+                {String.Join(",\n    ", Permissions.Select(p => $@"(""{p.Name}"", ""{p.Description}"", {(p.IsActionable ? "true" : "false")})"))}
+            }};
+    }}
+}}";
+            // Generate the .p.cs or .meta.json file name based on the class type
+            string fileName = root.GetType().Name + ".p.cs";
+            File.WriteAllText(Path.Combine(_outputPath, fileName), CODE_TEMPLATE);
+        }
+
     }
+
 }
