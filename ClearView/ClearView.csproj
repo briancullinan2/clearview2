@@ -12,14 +12,14 @@
 		<StartupObject>EPIC.ClearView.SplashWindow</StartupObject>
 	</PropertyGroup>
 
-	<Target Name="GeneratePerFile" BeforeTargets="CoreCompile">
+	<!--<Target Name="GeneratePerFile" BeforeTargets="CoreCompile">
 		<ItemGroup>
 			<FilesToProcess Include="@(Page)" Condition="'%(Extension)' == '.xaml'" />
 		</ItemGroup>
 
 		<Exec Command="..\ClearView\bin\Debug\PermissionGenerator.exe &quot;%(FilesToProcess.FullPath)|$(RootNamespace)|$(IntermediateOutputPath)|$(ProjectDir)"
 			  LogStandardErrorAsError="true" />
-	</Target>
+	</Target>-->
 
 	<ItemGroup>
 		<Compile Remove="Capture\Alerts.xaml.cs" />
@@ -30,6 +30,7 @@
 		<Compile Remove="Utilities\Converters\PermissionBooleanConverter.cs" />
 		<Compile Remove="Utilities\Converters\PermissionHasChildrenFontWeightConverter.cs" />
 		<Compile Remove="Utilities\Converters\PermissionHasChildrenTristateConverter.cs" />
+		<Compile Remove="Utilities\CreatePlugin.cs" />
 		<Compile Remove="Utilities\Extensions\IconExtensions.cs" />
 		<Compile Remove="Utilities\Extensions\InteropExtensions.cs" />
 		<Compile Remove="Utilities\Extensions\OldWindow.cs" />

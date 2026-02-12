@@ -10,7 +10,7 @@
     xmlns:macros="clr-namespace:EPIC.DataLayer.Macros;assembly=DataLayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ribbon="clr-namespace:System.Windows.Controls.Ribbon;assembly=System.Windows.Controls.Ribbon"
-    xmlns:system="clr-namespace:System;assembly=mscorlib"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     Title="Capture Settings"
     SnapsToDevicePixels="True"
@@ -31,7 +31,7 @@
                 MethodName="GetValues"
                 ObjectType="{x:Type system:Enum}">
                 <ObjectDataProvider.MethodParameters>
-                    <x:Type Type="{x:Type customization:Voltage}" />
+                    <x:Type TypeName="customization:Voltage" />
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
             <ObjectDataProvider

@@ -6,7 +6,7 @@
     xmlns:local="clr-namespace:EPIC.ClearView;assembly=EPICClearView"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ribbon="clr-namespace:System.Windows.Controls.Ribbon;assembly=System.Windows.Controls.Ribbon"
-    xmlns:system="clr-namespace:System.Globalization;assembly=mscorlib"
+    xmlns:system="clr-namespace:System.Globalization;assembly=System.Runtime"
     xmlns:utilities="clr-namespace:EPIC.ClearView.Utilities;assembly=EPICClearView"
     Title="EPIC ClearView (tm)"
     d:DesignHeight="800"

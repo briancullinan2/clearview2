@@ -168,7 +168,7 @@ namespace EPIC.PermissionGenerator.Extensions
         public static string GetDescriptor(this DependencyObject obj)
         {
             // Check common WPF properties via reflection
-            var props = new[] { "Header", "Content", "Text", "Label", "Title" };
+            var props = new[] { "Header", "Content", "Text", "Label", "Title", "Name" };
             foreach (var name in props)
             {
                 var prop = obj.GetType().GetProperty(name);

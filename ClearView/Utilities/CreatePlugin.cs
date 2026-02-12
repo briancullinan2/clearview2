@@ -1,10 +1,6 @@
 ﻿using log4net.Plugin;
-using Microsoft.EntityFrameworkCore.Metadata;
-using System;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.Loader;
-using System.Text;
 
 namespace EPIC.ClearView.Utilities
 {
@@ -50,5 +46,4 @@ namespace EPIC.ClearView.Utilities
             return (IPlugin)Activator.CreateInstance(type)!;
         }
     }
-}
 }

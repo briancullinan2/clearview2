@@ -1,4 +1,5 @@
-﻿using ICSharpCode.BamlDecompiler;
+﻿using Castle.DynamicProxy;
+using ICSharpCode.BamlDecompiler;
 using ICSharpCode.Decompiler.Metadata;
 using System.IO;
 using System.Reflection;
@@ -38,8 +39,13 @@ namespace EPIC.PermissionGenerator
             {
                 Console.WriteLine("Starting Permission Generation...");
                 AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
+                //byte[] rawAssembly1 = File.ReadAllBytes(System.IO.Path.Combine(Environment.CurrentDirectory, "DataLayer.dll"));
+                //_assembly = AppDomain.CurrentDomain.Load(rawAssembly1);
+                //byte[] rawAssembly2 = File.ReadAllBytes(System.IO.Path.Combine(Environment.CurrentDirectory, "CameraInterface.dll"));
+                //_assembly = AppDomain.CurrentDomain.Load(rawAssembly2);
                 byte[] rawAssembly = File.ReadAllBytes(realFile);
                 _assembly = AppDomain.CurrentDomain.Load(rawAssembly);
+                //AppDomain.CurrentDomain.
                 //_assembly = System.Reflection.Assembly.LoadFrom(realFile);
                 GenerateFromAssembly(_assembly);
             }
@@ -58,6 +64,13 @@ namespace EPIC.PermissionGenerator
             // 2. Extract the simple name (e.g., "MyLibrary, Version=1.0..." -> "MyLibrary")
             string assemblyName = new AssemblyName(args.Name).Name ?? string.Empty;
 
+            var existing = AppDomain.CurrentDomain.GetAssemblies()
+                                                    .FirstOrDefault(a => a.GetName().Name == assemblyName);
+            if (existing != null)
+            {
+                return existing;
+            }
+
             // 3. Get the directory of your current plugin/extension
             // Assuming _assembly is your entry point to this folder
             var location = String.IsNullOrEmpty(_assembly.Location) ? AppDomain.CurrentDomain.BaseDirectory : Path.GetDirectoryName(_assembly.Location);
@@ -66,6 +79,7 @@ namespace EPIC.PermissionGenerator
 
             if (File.Exists(expectedPath))
             {
+                Console.WriteLine($"Expected {expectedPath}");
                 // Load it into the current context so the BAML reader is happy
                 return Assembly.LoadFrom(expectedPath);
             }
@@ -270,6 +284,93 @@ namespace EPIC.PermissionGenerator
 
         public static string ConvertBamlToXamlString(System.Reflection.Assembly assembly, byte[] byteStream, Uri qualified)
         {
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies()
+                 .Where(a => a.FullName.Contains("EPICClearView") || a.FullName.Contains("CustomEnums"))
+                 .ToList();
+
+            // 2. Create a Schema Context that EXPLICITLY knows about them
+            var schemaContext = new XamlSchemaContext(assemblies);
+            // 1. Setup the BAML Reader
+            // Note: We provide a generic SchemaContext to avoid being picky about local types
+            using (var stream = new MemoryStream(byteStream))
+            using (var reader = new Baml2006Reader(stream, new XamlReaderSettings()
+            {
+                ProvideLineInfo = true,
+                BaseUri = qualified,
+                ValuesMustBeString = true,
+                LocalAssembly = assembly,
+            })
+            /*{
+                SchemaContext = schemaContext
+            }*/)
+            {
+                // 2. Setup the XML Writer for the output string
+                var sw = new StringWriter();
+
+                using (var xmlWriter = XmlWriter.Create(sw, new XmlWriterSettings { Indent = true, OmitXmlDeclaration = true }))
+                {
+                    var writer = new XamlXmlWriter(xmlWriter, reader.SchemaContext);
+
+                    while (reader.Read())
+                    {
+                        try
+                        {
+                            // 1. ALWAYS write Namespaces and Objects
+                            if (reader.NodeType == XamlNodeType.NamespaceDeclaration ||
+                                reader.NodeType == XamlNodeType.StartObject ||
+                                reader.NodeType == XamlNodeType.EndObject)
+                            {
+                                writer.WriteNode(reader);
+                                continue;
+                            }
+
+                            // 2. The Logic for Members (Properties)
+                            if (reader.NodeType == XamlNodeType.StartMember)
+                            {
+                                var m = reader.Member;
+
+                                // Essential for the tree: Key, Items, Initialization, and Directives
+                                if (m.IsDirective || m.Name == "_Items" || m.Name == "_Initialization")
+                                {
+                                    writer.WriteNode(reader);
+                                    continue;
+                                }
+
+                                // Check if the member is a complex type (could contain more UI elements)
+                                // If it's a Collection or a complex Class, we MUST write the StartMember
+                                if (m.Type != null && (m.Type.IsCollection || m.Type.IsDictionary || !m.Type.IsArray))
+                                {
+                                    writer.WriteNode(reader);
+                                    continue;
+                                }
+
+                                // If we got here, it's a simple property (Width, Margin, etc.) -> SKIP
+                                reader.Skip();
+                                continue;
+                            }
+
+                            // 3. Catch-all for EndMember and Value
+                            writer.WriteNode(reader);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"[SKIPPING NODE] {reader.NodeType}: {ex.Message}");
+                            if (reader.NodeType == XamlNodeType.StartObject)
+                            {
+                                reader.Skip();
+                            }
+                        }
+                    }
+                    writer.Close();
+
+
+                    return sw.ToString();
+                }
+            }
+        }
+
+        public static XDocument ConvertBamlToXDocument(System.Reflection.Assembly assembly, byte[] byteStream, Uri qualified)
+        {
             // 1. Setup the BAML Reader
             // Note: We provide a generic SchemaContext to avoid being picky about local types
             using (var stream = new MemoryStream(byteStream))
@@ -282,21 +383,42 @@ namespace EPIC.PermissionGenerator
             }))
             {
                 // 2. Setup the XML Writer for the output string
-                var sw = new StringWriter();
+                var sw = new XDocument();
 
-                using (var xmlWriter = XmlWriter.Create(sw, new XmlWriterSettings { Indent = true, OmitXmlDeclaration = true }))
+                using (var xmlWriter = sw.CreateWriter())
                 {
-                    // 3. The XamlXmlWriter is the bridge that turns nodes back into XAML text
-                    var xamlWriter = new XamlXmlWriter(xmlWriter, reader.SchemaContext);
+                    var writer = new XamlXmlWriter(xmlWriter, reader.SchemaContext);
 
-                    // 4. THE PIPELINE: Just pull from reader and push to writer
-                    // This avoids XamlObjectWriter's "Type Loading" logic
-                    XamlServices.Transform(reader, xamlWriter);
+                    while (reader.Read())
+                    {
+                        try
+                        {
+                            // Attempt to write the current node
+                            writer.WriteNode(reader);
+                        }
+                        catch (Exception ex) when (ex is XamlXmlWriterException || ex is InvalidOperationException || ex is KeyNotFoundException)
+                        {
+                            // A.R.S. § 18-105: Log the failure but maintain system availability
+                            Console.WriteLine($"[SKIPPING NODE] {reader.NodeType}: {ex.Message}");
+
+                            // If the failure happened at the start of an object, we must skip its children
+                            if (reader.NodeType == XamlNodeType.StartObject)
+                            {
+                                reader.Skip();
+                            }
+                            // Note: If a StartMember fails, the writer usually stays in a valid state
+                            // but a StartObject failure requires skipping to the matching EndObject.
+                        }
+                        catch { }
+                    }
+                    writer.Close();
                 }
 
-                return sw.ToString();
+                return sw;
             }
         }
+
+
 
         public static string ConvertXamlObjectToXaml(object obj)
         {
@@ -327,6 +449,73 @@ namespace EPIC.PermissionGenerator
             return System.Text.Encoding.UTF8.GetBytes(xamlBytes);
         }
 
+        private static ProxyGenerator _generator = new ProxyGenerator();
+
+        public class XamlInterceptor : IInterceptor
+        {
+            private readonly Dictionary<string, object> _values = new();
+
+            public void Intercept(IInvocation invocation)
+            {
+                string name = invocation.Method.Name;
+
+                if (name.Contains("Source") && name.Contains("set_") /* invocation.Proxy is ResourceDictionary dict */)
+                {
+                    var uri = invocation.Arguments[0] as Uri;
+                    // Logic: Redirect "themes/clearview.xaml" to a local file path or embedded resource
+                    // invocation.Arguments[0] = new Uri("C:/SaaS/Resources/clearview.xaml");
+                }
+
+                // 1. Property Setters (e.g., Background="Red")
+                if (name.StartsWith("set_"))
+                {
+                    _values[name.Substring(4)] = invocation.Arguments[0];
+                    invocation.Proceed(); // Still call the base for real WPF DPs
+                    return;
+                }
+
+                // 2. Event Wire-ups (e.g., Click="Submit_Click")
+                // We catch 'add_Click' and just return. No MethodNotFoundException.
+                if (name.StartsWith("add_") || name.StartsWith("remove_"))
+                {
+                    return;
+                }
+
+                invocation.Proceed();
+            }
+        }
+
+        public static Type CreateIdentityTheftType(System.Type rootType)
+        {
+
+            // Create an extended object of the root type from XamlAutoMock
+            var scope = new Castle.DynamicProxy.ModuleScope(
+                    false,
+                    true, // We don't want to deal with strong naming
+                    "EPICClearView", // Default/Ignore
+                    "EPICClearView.dll", // Default/Ignore
+                    "EPIC.ClearView", // <--- THIS is your targetNamespace
+                    "EPICClearView.dll"  // <--- THIS is the "fake" DLL name
+                );
+
+
+            // 3. Bridge it to the Generator
+            var builder = new DefaultProxyBuilder(scope);
+            var generator = new ProxyGenerator(builder);
+            var mockInstance = _generator.CreateClassProxy(rootType, new XamlInterceptor());
+
+            // 2. We inherit from UserControl so it has a Template, Content, etc.
+            // Castle generates a type like 'Castle.Proxies.UserControlProxy'
+            // But our NamingStrategy will force it to be 'Target.Namespace.ClassName'
+            var proxyType = builder.CreateClassProxyType(
+                typeof(System.Windows.Controls.UserControl),
+                Type.EmptyTypes,
+                ProxyGenerationOptions.Default
+            );
+
+            return proxyType;
+        }
+
 
         public static void GenerateFromAssembly(System.Reflection.Assembly assembly)
         {
@@ -354,13 +543,29 @@ namespace EPIC.PermissionGenerator
                     continue;
                 }
 
-                // var root = System.Windows.Application.LoadComponent(relative);
                 //var xamlStream = DecompileBamlStream(assembly, byteStream);
                 //TODO: try XamlWriter.Save(myObject)
                 var info = ScanBamlClass(assembly, byteStream.Skip(4).ToArray(), qualified);
                 // TODO: create mock assembly first, so its FullyMocked.QialifiedNamespace.And.Class > CastleMock.Mock.GeneratedClass > Original.Qualified.NamespaceAnd.Class > xClassWPFInheritedControl
+                //var xamlString = ConvertBamlToXamlString(assembly, byteStream.Skip(4).ToArray(), qualified);
+                //var component = LoadSideLoadedComponent(assembly, qualified.LocalPath);
+                //Console.WriteLine(xamlString);
+                //var xdoc = ConvertBamlToXDocument(assembly, byteStream.Skip(4).ToArray(), qualified);
+                //var permissions = Utilities.IntrospectXDocument(xdoc, qualified.LocalPath).ToList();
+
+
+                //var mock = CreateIdentityTheftType(info);
                 //var obj = ConvertBamlToXaml(assembly, byteStream.Skip(4).ToArray(), qualified);
-                var xamlString = ConvertBamlToXamlString(assembly, byteStream.Skip(4).ToArray(), qualified);
+                var root = System.Windows.Application.LoadComponent(relative);
+                //var permissions = Utilities.IntrospectXaml("/" + assembly.GetName().Name + ";component/" + String.Join("", qualified.Segments.Skip(2).ToArray()));
+
+
+                //foreach (var permit in permissions)
+                //{
+                //    Console.WriteLine($@"Permission: {permit.Name} - {permit.Description}");
+                //}
+
+
 
                 if (info != null)
                 {
@@ -382,9 +587,9 @@ namespace EPIC.PermissionGenerator
             {
                 using (var reader = new System.Resources.ResourceReader(stream))
                 {
-                    var byteStream = new MemoryStream(GetAssemblyResource(assembly, resourceName));
+                    reader.GetResourceData(resourceName.ToLower(), out _, out byte[] data);
                     // Use internal WPF Reflection or a Stream to load
-                    return System.Windows.Markup.XamlReader.Load(byteStream) as FrameworkElement;
+                    return System.Windows.Markup.XamlReader.Load(new MemoryStream(data)) as FrameworkElement;
                 }
             }
         }

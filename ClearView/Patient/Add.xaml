@@ -9,7 +9,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:patient="clr-namespace:EPIC.ClearView.Patient;assembly=EPICClearView"
     xmlns:ribbon="clr-namespace:System.Windows.Controls.Ribbon;assembly=System.Windows.Controls.Ribbon"
-    xmlns:system="clr-namespace:System;assembly=mscorlib"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime"
     Title="Add Patient"
     mc:Ignorable="d">
     <FrameworkElement.Resources>
