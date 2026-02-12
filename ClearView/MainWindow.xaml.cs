@@ -165,21 +165,64 @@ namespace EPIC.ClearView
         // Token: 0x0600035E RID: 862 RVA: 0x0001BA40 File Offset: 0x00019C40
         private void NewCapture_Click(object sender, RoutedEventArgs e)
         {
+            Uri uri = new Uri("/Capture/Scan.xaml", UriKind.Relative);
+            Navigation.ShowTab(uri, true);
         }
 
         // Token: 0x0600035F RID: 863 RVA: 0x0001BAB8 File Offset: 0x00019CB8
         private void Alerts_ViewAll(object sender, RoutedEventArgs e)
         {
+            Uri uri = new Uri("/Capture/Alerts.xaml", UriKind.Relative);
+            TabItem tabItem = this.Tabs.Items.OfType<TabItem>().FirstOrDefault((TabItem x) => x.Content is Frame && ((Frame)x.Content).Source.OriginalString.Trim(new char[]
+            {
+                '/'
+            }).StartsWith("Capture/Alerts.xaml"));
+            if (tabItem != null)
+            {
+                ((Frame)tabItem.Content).Source = uri;
+                tabItem.IsSelected = true;
+            }
+            else
+            {
+                Navigation.ShowTab(uri, true);
+            }
         }
 
         // Token: 0x06000360 RID: 864 RVA: 0x0001BB8C File Offset: 0x00019D8C
         private void Alerts_View(object sender, RoutedEventArgs e)
         {
+            Uri uri = new Uri("/Capture/Alerts.xaml?messageId=" + ((DataLayer.Entities.Message)this.AlertsBox.SelectedItem).MessageId, UriKind.Relative);
+            TabItem tabItem = this.Tabs.Items.OfType<TabItem>().FirstOrDefault((TabItem x) => x.Content is Frame && ((Frame)x.Content).Source.OriginalString.Trim(new char[]
+            {
+                '/'
+            }).StartsWith("Capture/Alerts.xaml"));
+            if (tabItem != null)
+            {
+                ((Frame)tabItem.Content).Source = uri;
+                tabItem.IsSelected = true;
+            }
+            else
+            {
+                Navigation.ShowTab(uri, true);
+            }
         }
 
         // Token: 0x06000361 RID: 865 RVA: 0x0001BC58 File Offset: 0x00019E58
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
+            /*
+            ScrollViewer scrollViewer = this.AlertsBox.FindAncestor<ScrollViewer>();
+            double num = scrollViewer.ViewportWidth + ((e != null) ? (e.NewSize.Width - e.PreviousSize.Width - 20.0) : 0.0);
+            RibbonGroupBox ribbonGroupBox = this.AlertsBox.TryFindParent<RibbonGroupBox>();
+            double num2 = ribbonGroupBox.Items.OfType<Button>().Sum((Button x) => x.ActualWidth);
+            double num3 = this.Ribbon.Tabs.First<RibbonTabItem>().Groups.Except(new RibbonGroupBox[]
+            {
+                ribbonGroupBox
+            }).Sum((RibbonGroupBox x) => x.ActualWidth);
+            double num4 = Math.Round(num - num3 - num2);
+            this.AlertsBox.Width = ((num4 > this.AlertsBox.MinWidth) ? num4 : this.AlertsBox.MinWidth);
+            scrollViewer.UpdateLayout();
+            */
         }
 
         // Token: 0x06000362 RID: 866 RVA: 0x0001BD7C File Offset: 0x00019F7C

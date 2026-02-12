@@ -43,7 +43,10 @@
                         Unchecked="RibbonToggleButton_Unchecked" />
                 </ribbon:RibbonGroup>
                 <ribbon:RibbonGroup Header="Actions">
-                    <ribbon:RibbonButton Click="NewUser_Click" Label="New User" LargeImageSource="{StaticResource NewUser}" />
+                    <ribbon:RibbonButton
+                        Click="NewUser_Click"
+                        Label="New User"
+                        LargeImageSource="{StaticResource NewUser}" />
                 </ribbon:RibbonGroup>
                 <ribbon:RibbonGroup Name="UserOptions" Header="User Options">
                     <ribbon:RibbonButton

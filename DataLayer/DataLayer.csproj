@@ -48,7 +48,4 @@
 	</ItemGroup>
 
 	<!-- Preserve custom folders or other metadata if needed -->
-	<ItemGroup>
-		<Folder Include="Utilities\" />
-	</ItemGroup>
 </Project>

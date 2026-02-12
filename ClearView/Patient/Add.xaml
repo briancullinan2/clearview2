@@ -52,7 +52,6 @@
                         LargeImageSource="{StaticResource NewPatient}"
                         Unchecked="RibbonToggleButton_Unchecked" />
                 </ribbon:RibbonGroup>
-
                 <ribbon:RibbonGroup Header="Actions">
                     <ribbon:RibbonButton
                         Click="SaveClose_Click"

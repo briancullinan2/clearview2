@@ -18,6 +18,7 @@ namespace EPIC.DataLayer
         public DbSet<DataLayer.Entities.Permission> Permissions { get; set; }
         public DbSet<DataLayer.Entities.Role> Roles { get; set; }
         public DbSet<DataLayer.Entities.User> Users { get; set; }
+        public DbSet<DataLayer.Entities.FingerSet> FingerSets { get; set; }
         // Add other entities here...
 
         public TranslationContext(string connection) : base()
@@ -76,6 +77,7 @@ namespace EPIC.DataLayer
             TranslationContext ctx;
             return _contexts.TryGetValue(name, out ctx) ? ctx : new TranslationContext(key);
         });
+
         public TranslationContext this[string name]
         {
             get

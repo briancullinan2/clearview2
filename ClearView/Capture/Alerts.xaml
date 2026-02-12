@@ -1,166 +1,149 @@
 <Page
-	x:Class="EPIC.Capture.Alerts" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:entityClasses="clr-namespace:EPICClearViewDL.EntityClasses;assembly=EPICClearViewDL" xmlns:macros="clr-namespace:EPIC.Macros"
-	Title="Alerts" xmlns:capture="clr-namespace:EPIC.Capture"
-	DataContext="{Binding RelativeSource={RelativeSource Self}}">
-	<FrameworkElement.Resources>
-		<ResourceDictionary>
-			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary
-					Source="/Themes/ClearView.xaml" />
-			</ResourceDictionary.MergedDictionaries>
-			<BitmapImage
-				UriSource="/Resources/1000-ok.png"
-				x:Key="Dismiss" />
-			<BitmapImage
-				UriSource="/Resources/1001-cancel.png"
-				x:Key="Cancel" />
-		</ResourceDictionary>
-	</FrameworkElement.Resources>
-	<Grid>
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition />
-			<ColumnDefinition
-				Width="Auto" />
-		</Grid.ColumnDefinitions>
-		<Grid.RowDefinitions>
-			<RowDefinition />
-			<RowDefinition
-				Height="Auto" />
-		</Grid.RowDefinitions>
-		<StackPanel
-			Grid.Row="1">
-			<Label
-				ContentStringFormat="Displaying: {0}"
-				Content="{Binding ElementName=Messages, Path=Items.Count}" />
-			<Label
-				ContentStringFormat="Total Records: {0}"
-				Content="{Binding Total}" />
-		</StackPanel>
-		<StackPanel
-			Orientation="Horizontal"
-			Grid.Row="1"
-			Grid.Column="1">
-			<Button
-				Name="Save"
-				Margin="5"
-				Padding="3"
-				Click="Dismiss_Click">
-				<StackPanel
-					Orientation="Horizontal">
-					<Image
-						Source="{StaticResource Dismiss}"
-						Height="25"
-						Width="25"
-						Margin="3,0" />
-					<TextBlock
-						VerticalAlignment="Center"
-						HorizontalAlignment="Center"
-						Text="Dismiss All" />
-				</StackPanel>
-			</Button>
-			<Button
-				Margin="5"
-				Padding="3"
-				Command="{x:Static macros:Navigation.CloseTabCommand}"
-				CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}}">
-				<StackPanel
-					Orientation="Horizontal">
-					<Image
-						Source="{StaticResource Cancel}"
-						Height="25"
-						Width="25"
-						Margin="3,0" />
-					<TextBlock
-						VerticalAlignment="Center"
-						HorizontalAlignment="Center"
-						Text="Close" />
-				</StackPanel>
-			</Button>
-		</StackPanel>
-		<DataGrid
-			Name="Messages"
-			Grid.ColumnSpan="2"
-			FontFamily="Courier New"
-			IsReadOnly="True"
-			CanUserResizeRows="False"
-			AutoGenerateColumns="False">
-			<FrameworkElement.Resources>
-				<ResourceDictionary />
-			</FrameworkElement.Resources>
-			<DataGrid.RowStyle>
-				<Style
-					TargetType="{x:Type DataGridRow}">
-					<Setter
-						Property="MaxHeight"
-						Value="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ScrollContentPresenter}}}" />
-				</Style>
-			</DataGrid.RowStyle>
-			<DataGrid.CellStyle>
-				<Style
-					TargetType="{x:Type DataGridCell}">
-					<Setter
-						Property="BorderThickness"
-						Value="0" />
-				</Style>
-			</DataGrid.CellStyle>
-			<DataGrid.Columns>
-				<DataGridTemplateColumn
-					Header="Time">
-					<DataGridTemplateColumn.CellTemplate>
-						<DataTemplate>
-							<TextBox
-								BorderThickness="0"
-								VerticalScrollBarVisibility="Auto"
-								HorizontalScrollBarVisibility="Auto"
-								AcceptsReturn="True"
-								IsReadOnly="True"
-								Text="{Binding Path=CreateTime}" />
-						</DataTemplate>
-					</DataGridTemplateColumn.CellTemplate>
-				</DataGridTemplateColumn>
-				<DataGridTemplateColumn
-					Header="Type">
-					<DataGridTemplateColumn.CellTemplate>
-						<DataTemplate>
-							<TextBox
-								BorderThickness="0"
-								VerticalScrollBarVisibility="Auto"
-								HorizontalScrollBarVisibility="Auto"
-								AcceptsReturn="True"
-								IsReadOnly="True"
-								Text="{Binding Path=MessageType}" />
-						</DataTemplate>
-					</DataGridTemplateColumn.CellTemplate>
-				</DataGridTemplateColumn>
-				<DataGridTemplateColumn
-					Header="Title">
-					<DataGridTemplateColumn.CellTemplate>
-						<DataTemplate>
-							<TextBox
-								BorderThickness="0"
-								VerticalScrollBarVisibility="Auto"
-								HorizontalScrollBarVisibility="Auto"
-								AcceptsReturn="True"
-								IsReadOnly="True"
-								Text="{Binding Path=Title}" />
-						</DataTemplate>
-					</DataGridTemplateColumn.CellTemplate>
-				</DataGridTemplateColumn>
-				<DataGridTemplateColumn
-					Header="Message">
-					<DataGridTemplateColumn.CellTemplate>
-						<DataTemplate>
-							<TextBox
-								BorderThickness="0"
-								VerticalScrollBarVisibility="Auto"
-								HorizontalScrollBarVisibility="Auto"
-								AcceptsReturn="True"
-								IsReadOnly="True"
-								Text="{Binding Path=Body}" />
-						</DataTemplate>
-					</DataGridTemplateColumn.CellTemplate>
-				</DataGridTemplateColumn>
-			</DataGrid.Columns>
-		</DataGrid>
-	</Grid>
+    x:Class="EPIC.Capture.Alerts"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:capture="clr-namespace:EPIC.Capture"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:entityClasses="clr-namespace:EPIC.DataLayer.Entities;assembly=DataLayer"
+    xmlns:macros="clr-namespace:EPIC.ClearView.Macros;assembly=EPICClearView"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Alerts"
+    DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Themes/ClearView.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <BitmapImage x:Key="Dismiss" UriSource="/Resources/1000-ok.png" />
+            <BitmapImage x:Key="Cancel" UriSource="/Resources/1001-cancel.png" />
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="1">
+            <Label Content="{Binding ElementName=Messages, Path=Items.Count}" ContentStringFormat="Displaying: {0}" />
+            <Label Content="{Binding Total}" ContentStringFormat="Total Records: {0}" />
+        </StackPanel>
+        <StackPanel
+            Grid.Row="1"
+            Grid.Column="1"
+            Orientation="Horizontal">
+            <Button
+                Name="Save"
+                Margin="5"
+                Padding="3"
+                Click="Dismiss_Click">
+                <StackPanel Orientation="Horizontal">
+                    <Image
+                        Width="25"
+                        Height="25"
+                        Margin="3,0"
+                        Source="{StaticResource Dismiss}" />
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Text="Dismiss All" />
+                </StackPanel>
+            </Button>
+            <Button
+                Margin="5"
+                Padding="3"
+                Command="{x:Static macros:Navigation.CloseTabCommand}"
+                CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}}">
+                <StackPanel Orientation="Horizontal">
+                    <Image
+                        Width="25"
+                        Height="25"
+                        Margin="3,0"
+                        Source="{StaticResource Cancel}" />
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Text="Close" />
+                </StackPanel>
+            </Button>
+        </StackPanel>
+        <DataGrid
+            Name="Messages"
+            Grid.ColumnSpan="2"
+            AutoGenerateColumns="False"
+            CanUserResizeRows="False"
+            FontFamily="Courier New"
+            IsReadOnly="True">
+            <FrameworkElement.Resources>
+                <ResourceDictionary />
+            </FrameworkElement.Resources>
+            <DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Setter Property="MaxHeight" Value="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ScrollContentPresenter}}}" />
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.CellStyle>
+                <Style TargetType="{x:Type DataGridCell}">
+                    <Setter Property="BorderThickness" Value="0" />
+                </Style>
+            </DataGrid.CellStyle>
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Time">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox
+                                AcceptsReturn="True"
+                                BorderThickness="0"
+                                HorizontalScrollBarVisibility="Auto"
+                                IsReadOnly="True"
+                                Text="{Binding Path=CreateTime}"
+                                VerticalScrollBarVisibility="Auto" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Type">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox
+                                AcceptsReturn="True"
+                                BorderThickness="0"
+                                HorizontalScrollBarVisibility="Auto"
+                                IsReadOnly="True"
+                                Text="{Binding Path=MessageType}"
+                                VerticalScrollBarVisibility="Auto" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Title">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox
+                                AcceptsReturn="True"
+                                BorderThickness="0"
+                                HorizontalScrollBarVisibility="Auto"
+                                IsReadOnly="True"
+                                Text="{Binding Path=Title}"
+                                VerticalScrollBarVisibility="Auto" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Message">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox
+                                AcceptsReturn="True"
+                                BorderThickness="0"
+                                HorizontalScrollBarVisibility="Auto"
+                                IsReadOnly="True"
+                                Text="{Binding Path=Body}"
+                                VerticalScrollBarVisibility="Auto" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
 </Page>
