@@ -1,4 +1,5 @@
 using System.Windows;
+using System.Windows.Markup;
 
 [assembly: ThemeInfo(
     ResourceDictionaryLocation.None,            //where theme specific resource dictionaries are located
@@ -12,4 +13,6 @@ using System.Windows;
 
 // Reference to Log4Net configuration file.
 [assembly: log4net.Config.XmlConfigurator(ConfigFile = "log4net.xml", Watch = true)]
+
+[assembly: XmlnsDefinition("EPIC.ClearView;assembly=EPICClearView", "EPICClearView")]
 

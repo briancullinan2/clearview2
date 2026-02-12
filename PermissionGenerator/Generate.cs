@@ -556,7 +556,14 @@ namespace EPIC.PermissionGenerator
 
                 //var mock = CreateIdentityTheftType(info);
                 //var obj = ConvertBamlToXaml(assembly, byteStream.Skip(4).ToArray(), qualified);
-                var root = System.Windows.Application.LoadComponent(relative);
+                //var embeddedApp = assembly.GetTypes().FirstOrDefault(t => typeof(System.Windows.Application).IsAssignableFrom(t) && !t.IsAbstract);
+                //var embedded = Activator.CreateInstance(embeddedApp) as System.Windows.Application;
+                //var loadComponentMethod = embeddedApp.GetMethod("LoadComponent",
+                //                                                        BindingFlags.Static | BindingFlags.Public,
+                //                                                        null,
+                //                                                        new[] { typeof(Uri) },
+                //                                                        null);
+                //var root = loadComponentMethod.Invoke(embeddedApp, new object[] { relative }); ;
                 //var permissions = Utilities.IntrospectXaml("/" + assembly.GetName().Name + ";component/" + String.Join("", qualified.Segments.Skip(2).ToArray()));
 
 
