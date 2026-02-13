@@ -1,4 +1,5 @@
 ﻿using MathWorks.MATLAB.NET.ComponentData;
+using MathWorks.MATLAB.NET.Utility;
 using System.Reflection;
 
 namespace EPIC.DataAnalysis
@@ -9,6 +10,7 @@ namespace EPIC.DataAnalysis
         // Token: 0x06000001 RID: 1 RVA: 0x00002050 File Offset: 0x00001050
         static CalibrationAnalysis()
         {
+            // Ensure the MathWorks MCR class is referenced with its full namespace so the symbol is resolved.
             if (MWMCR.MCRAppInitialized)
             {
                 Assembly executingAssembly = Assembly.GetExecutingAssembly();
@@ -26,7 +28,12 @@ namespace EPIC.DataAnalysis
                         break;
                     }
                 }
-                CalibrationAnalysis.mcr = new MWMCR(MCRComponentState.MCC_CalibrationAnalysis_name_data, MCRComponentState.MCC_CalibrationAnalysis_root_data, MCRComponentState.MCC_CalibrationAnalysis_public_data, MCRComponentState.MCC_CalibrationAnalysis_session_data, MCRComponentState.MCC_CalibrationAnalysis_matlabpath_data, MCRComponentState.MCC_CalibrationAnalysis_classpath_data, MCRComponentState.MCC_CalibrationAnalysis_libpath_data, MCRComponentState.MCC_CalibrationAnalysis_mcr_application_options, MCRComponentState.MCC_CalibrationAnalysis_mcr_runtime_options, MCRComponentState.MCC_CalibrationAnalysis_mcr_pref_dir, MCRComponentState.MCC_CalibrationAnalysis_set_warning_state, text, stream, true);
+                CalibrationAnalysis.mcr = new MWMCR(
+                    "",                // Component Name (often empty or the DLL name)
+                    text,              // Component Root (the path to your extracted folder)
+                    stream,            // The CTF stream you found in the manifest
+                    true               // IsEmbedded (true if using the stream)
+                );
                 return;
             }
             throw new ApplicationException("MWArray assembly could not be initialized");
