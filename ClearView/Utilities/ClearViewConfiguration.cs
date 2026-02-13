@@ -1,4 +1,5 @@
 ﻿using EPIC.DataLayer;
+using EPIC.DataLayer.Entities;
 using System.Configuration;
 using System.Diagnostics;
 using System.IO;
@@ -35,7 +36,7 @@ namespace EPIC.ClearView.Utilities
                 var context = new TranslationContext(settings.ConnectionString);
             }
 
-            EPIC.DataLayer.Log.Debug(_configuration.FilePath);
+            Log.Debug(_configuration.FilePath);
             this.SetupConfigWatcher();
         }
 
@@ -57,7 +58,7 @@ namespace EPIC.ClearView.Utilities
         {
             ClearViewConfiguration._watcher = new FileSystemWatcher
             {
-                Path = Path.GetDirectoryName(ClearViewConfiguration._configuration.FilePath),
+                Path = Path.GetDirectoryName(ClearViewConfiguration._configuration.FilePath) ?? "",
                 Filter = Path.GetFileName(ClearViewConfiguration._configuration.FilePath),
                 NotifyFilter = NotifyFilters.LastWrite,
                 EnableRaisingEvents = true
@@ -99,7 +100,7 @@ namespace EPIC.ClearView.Utilities
 
         // Token: 0x1700008C RID: 140
         // (get) Token: 0x060002AC RID: 684 RVA: 0x0001691C File Offset: 0x00014B1C
-        public string Version
+        public string? Version
         {
             get
             {
@@ -108,7 +109,7 @@ namespace EPIC.ClearView.Utilities
             }
         }
 
-        public DataLayer.Entities.Device Device { get; internal set; }
+        public DataLayer.Entities.Device? Device { get; internal set; }
 
         public ConnectionStringSettingsCollection ConnectionStrings
         {
@@ -117,6 +118,8 @@ namespace EPIC.ClearView.Utilities
                 return _configuration.ConnectionStrings.ConnectionStrings;
             }
         }
+
+        public Calibration Calibration { get; internal set; }
 
         // Token: 0x060002AD RID: 685 RVA: 0x00016944 File Offset: 0x00014B44
         public static string NewGuid()
@@ -142,7 +145,7 @@ namespace EPIC.ClearView.Utilities
 
 
         // Token: 0x04000160 RID: 352
-        private static ClearViewConfiguration _instance;
+        private static ClearViewConfiguration _instance = new ClearViewConfiguration();
 
         // Token: 0x04000161 RID: 353
         private static Configuration _configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);

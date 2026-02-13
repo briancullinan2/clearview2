@@ -1,11 +1,10 @@
-﻿using EPIC.ClearView;
-using EPIC.ClearView.Macros;
+﻿using EPIC.ClearView.Macros;
 using EPIC.DataLayer;
 using System.Web;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace EPIC.Capture
+namespace EPIC.ClearView.Capture
 {
     // Token: 0x02000002 RID: 2
     public partial class Alerts : Page

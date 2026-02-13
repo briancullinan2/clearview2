@@ -10,15 +10,23 @@ namespace EPIC.DataLayer
     // This context never connects to a DB; it just holds your Entity mappings
     public class TranslationContext : DbContext
     {
+        public DbSet<DataLayer.Entities.Calibration> Calibration { get; set; }
+        public DbSet<DataLayer.Entities.Capture> Capture { get; set; }
+
         public DbSet<DataLayer.Entities.Device> Devices { get; set; }
         public DbSet<DataLayer.Entities.DeviceCalibrationSetting> DeviceCalibrationSettings { get; set; }
         public DbSet<DataLayer.Entities.DeviceSetting> DeviceSettings { get; set; }
+        public DbSet<DataLayer.Entities.FingerSet> FingerSets { get; set; }
+        public DbSet<DataLayer.Entities.Image> Images { get; set; }
+        public DbSet<DataLayer.Entities.ImageAlignment> ImageAlignments { get; set; }
+        public DbSet<DataLayer.Entities.ImageCalibration> ImageCalibrations { get; set; }
+        public DbSet<DataLayer.Entities.ImageCapture> ImageCaptures { get; set; }
+        public DbSet<DataLayer.Entities.ImageSector> ImageSectors { get; set; }
         public DbSet<DataLayer.Entities.Message> Messages { get; set; }
         public DbSet<DataLayer.Entities.Patient> Patients { get; set; }
         public DbSet<DataLayer.Entities.Permission> Permissions { get; set; }
         public DbSet<DataLayer.Entities.Role> Roles { get; set; }
         public DbSet<DataLayer.Entities.User> Users { get; set; }
-        public DbSet<DataLayer.Entities.FingerSet> FingerSets { get; set; }
         // Add other entities here...
 
         public TranslationContext(string connection) : base()
@@ -99,14 +107,22 @@ namespace EPIC.DataLayer
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Explicitly map the Message entity to the "Message" table
+            modelBuilder.Entity<Calibration>().ToTable("Calibration");
+            modelBuilder.Entity<Capture>().ToTable("Capture");
             modelBuilder.Entity<Device>().ToTable("Device");
             modelBuilder.Entity<DeviceCalibrationSetting>().ToTable("DeviceCalibrationSetting");
             modelBuilder.Entity<DeviceSetting>().ToTable("DeviceSetting");
+            modelBuilder.Entity<FingerSet>().ToTable("FingerSet");
+            modelBuilder.Entity<Image>().ToTable("Image");
+            modelBuilder.Entity<ImageAlignment>().ToTable("ImageAlignment");
+            modelBuilder.Entity<ImageCalibration>().ToTable("ImageCalibration");
+            modelBuilder.Entity<ImageCapture>().ToTable("ImageCapture");
+            modelBuilder.Entity<ImageSector>().ToTable("ImageSector");
+            modelBuilder.Entity<Message>().ToTable("Message");
             modelBuilder.Entity<Patient>().ToTable("Patient");
             modelBuilder.Entity<Permission>().ToTable("Permission");
             modelBuilder.Entity<Role>().ToTable("Role");
             modelBuilder.Entity<User>().ToTable("User");
-            modelBuilder.Entity<Message>().ToTable("Message");
         }
 
         public static TranslationContext Current => Get(_currentString);

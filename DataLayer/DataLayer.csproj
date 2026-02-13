@@ -42,6 +42,7 @@
        If you'd like, we can convert packages.config / explicit hint-paths to PackageReference entries. -->
 	<ItemGroup>
 		<PackageReference Include="EntityFramework" Version="6.5.1" />
+		<PackageReference Include="Extended.Wpf.Toolkit" Version="5.0.0" />
 		<PackageReference Include="log4net" Version="3.2.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.2" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.2" />

@@ -37,7 +37,7 @@ namespace EPIC.DataLayer.Macros
 				MessageBoxResult messageBoxResult = MessageBoxResult.Yes;
 				//if (FormChecker.Events.Keys.Any((FrameworkElement x) => x.GetAncestors().Any((DependencyObject y) => y.Equals(o)) && FormChecker.Events[x].IsChanged))
 				//{
-				//	messageBoxResult = MessageBox.Show("Some items have not been saved, are you sure you want to close?", null, MessageBoxButton.YesNo);
+				//	messageBoxResult = Xceed.Wpf.Toolkit.MessageBox.Show("Some items have not been saved, are you sure you want to close?", null, MessageBoxButton.YesNo);
 				//}
 				if (messageBoxResult == MessageBoxResult.Yes)
 				{

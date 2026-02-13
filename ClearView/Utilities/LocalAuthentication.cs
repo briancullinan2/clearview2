@@ -1,4 +1,5 @@
 
+using EPIC.ClearView.Native;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -9,7 +10,7 @@ using System.Windows;
 
 namespace EPIC.ClearView.Utilities
 {
-    public static class LocalAuthentication
+    public static partial class LocalAuthentication
     {
 
 
@@ -19,7 +20,7 @@ namespace EPIC.ClearView.Utilities
             try
             {
                 // 1. Authenticate the specific contractor/doctor
-                bool success = LogonUser(username, domain, password, 2, 0, ref token);
+                bool success = AdvApi32.LogonUser(username, domain, password, 2, 0, ref token);
                 if (!success) throw new Win32Exception(Marshal.GetLastWin32Error());
 
                 using (WindowsIdentity identity = new WindowsIdentity(token))
@@ -34,15 +35,9 @@ namespace EPIC.ClearView.Utilities
             }
             finally
             {
-                if (token != IntPtr.Zero) CloseHandle(token);
+                if (token != IntPtr.Zero) Kernel32.CloseHandle(token);
             }
         }
-
-        [DllImport("advapi32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        static extern bool LogonUser(string lpszUsername, string lpszDomain, string lpszPassword, int dwLogonType, int dwLogonProvider, ref IntPtr phToken);
-        [DllImport("kernel32.dll", SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool CloseHandle(IntPtr hObject);
 
         public static void RelaunchAsDoctor(string username, string domain, string password)
         {

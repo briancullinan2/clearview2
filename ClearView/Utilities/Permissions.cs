@@ -147,7 +147,7 @@ namespace EPIC.ClearView.Utilities
             {
                 Console.WriteLine("Starting Permission Generation...");
                 AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
-                //byte[] rawAssembly1 = File.ReadAllBytes(System.IO.Path.Combine(Environment.CurrentDirectory, "DataLayer.dll"));
+                //byte[] rawAssembly1 = File.ReadAllBytes(System.IO.Path.Combine(Environment.CurrentDirectory, ".dll"));
                 //_assembly = AppDomain.CurrentDomain.Load(rawAssembly1);
                 //byte[] rawAssembly2 = File.ReadAllBytes(System.IO.Path.Combine(Environment.CurrentDirectory, "CameraInterface.dll"));
                 //_assembly = AppDomain.CurrentDomain.Load(rawAssembly2);

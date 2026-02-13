@@ -49,11 +49,13 @@ namespace EPIC.ClearView
                     return;
                 }
 
-                SplashWindow._splash.Close();
-                _splash = null;
-                AppDomain.CurrentDomain.AssemblyLoad -= SplashWindow.CurrentDomainOnAssemblyLoad;
                 SplashWindow._app.MainWindow.Activate();
                 SplashWindow._app.Load_Plugins();
+                AppDomain.CurrentDomain.AssemblyLoad -= SplashWindow.CurrentDomainOnAssemblyLoad;
+
+                // hide this last
+                SplashWindow._splash.Close();
+                _splash = null;
             }), DispatcherPriority.SystemIdle, new object[0]);
         }
 

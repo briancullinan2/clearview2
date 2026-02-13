@@ -191,7 +191,16 @@ namespace EPIC.ClearView
         // Token: 0x06000360 RID: 864 RVA: 0x0001BB8C File Offset: 0x00019D8C
         private void Alerts_View(object sender, RoutedEventArgs e)
         {
-            Uri uri = new Uri("/Capture/Alerts.xaml?messageId=" + ((DataLayer.Entities.Message)this.AlertsBox.SelectedItem).MessageId, UriKind.Relative);
+            Uri uri;
+            if (AlertsBox.SelectedItem != null)
+            {
+                uri = new Uri("/Capture/Alerts.xaml?messageId=" + ((DataLayer.Entities.Message)this.AlertsBox.SelectedItem).MessageId, UriKind.Relative);
+            }
+            else
+            {
+                uri = new Uri("/Capture/Alerts.xaml", UriKind.Relative);
+
+            }
             TabItem tabItem = this.Tabs.Items.OfType<TabItem>().FirstOrDefault((TabItem x) => x.Content is Frame && ((Frame)x.Content).Source.OriginalString.Trim(new char[]
             {
                 '/'
@@ -241,17 +250,21 @@ namespace EPIC.ClearView
                     return;
                 }
                 this.AlertsBox.ItemsSource = null;
-                this.AlertsBox.ItemsSource = (from x in context.Messages
-                                              where x.IsActive
-                                              orderby x.CreateTime descending
-                                              select x).ToList();
-                this.AlertsBox.SelectedItem = this.AlertsBox.Items.OfType<DataLayer.Entities.Message>().FirstOrDefault<DataLayer.Entities.Message>();
+                Alerts = (from x in context.Messages
+                          where x.IsActive
+                          orderby x.CreateTime descending
+                          select x).ToList();
+                this.AlertsBox.ItemsSource = Alerts;
+                this.AlertsBox.SelectedItem = Alerts.FirstOrDefault<DataLayer.Entities.Message>();
+                AlertsFace.Text = Alerts.FirstOrDefault<DataLayer.Entities.Message>()?.Body;
             }
             catch (Exception ex)
             {
                 Utilities.Logging.Log.Error("There was an error retrieving the alerts.", ex);
             }
         }
+
+        private IEnumerable<DataLayer.Entities.Message> Alerts { get; set; } = null;
 
         // Token: 0x06000363 RID: 867 RVA: 0x0001BE84 File Offset: 0x0001A084
         private void ApplicationChangeLogin_Click(object sender, RoutedEventArgs e)

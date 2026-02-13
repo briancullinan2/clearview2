@@ -1,5 +1,4 @@
 ﻿using EPIC.DataLayer.Entities;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Data;
 using System.Linq;
@@ -8,7 +7,7 @@ namespace EPIC.DataLayer.Extensions
 {
     public static class IEntityExtensions
     {
-        public static void Save<T>(this T ent) where T : class, IEntity
+        public static void Save<T>(this T ent, bool? recurse = false) where T : class, IEntity
         {
             // Start the Transaction
             using (var transaction = TranslationContext.Current.Database.BeginTransaction())

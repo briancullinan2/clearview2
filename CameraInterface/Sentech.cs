@@ -1,9 +1,8 @@
-﻿using SensorTechnology;
+﻿using EPIC.CameraInterface.Native;
+using SensorTechnology;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -20,22 +19,6 @@ namespace EPIC.CameraInterface
         {
             this._waiter = new Semaphore(1, 1);
         }
-
-        // Token: 0x06000063 RID: 99
-        [DllImport("gdi32")]
-        private static extern int DeleteObject(IntPtr o);
-
-        // Token: 0x06000064 RID: 100
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
-        private static extern int FormatMessage(int dwFlags, IntPtr lpSource, int dwMessageId, int dwLanguageId, StringBuilder lpBuffer, int nSize, IntPtr arguments);
-
-        // Token: 0x06000065 RID: 101
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
-        private static extern IntPtr LoadLibraryEx(string lpszLibFile, IntPtr hFile, int dwFlags);
-
-        // Token: 0x06000066 RID: 102
-        [DllImport("kernel32.dll")]
-        private static extern int FreeLibrary(IntPtr hModule);
 
         // Token: 0x1700001A RID: 26
         // (get) Token: 0x06000067 RID: 103 RVA: 0x000035D4 File Offset: 0x000017D4
@@ -298,7 +281,7 @@ namespace EPIC.CameraInterface
                     ICapturable orig = CameraManager.Current.Cameras.FirstOrDefault((ICapturable x) => x.UniqueIdentifier == this.UniqueIdentifier);
                     int index = CameraManager.Current.Cameras.IndexOf(orig);
                     this._cameraCapture = StCam.Open((uint)index);
-                    if (!StCam.CreatePreviewWindow(this._cameraCapture, "Preview", 0U, 0, 0, 0U, 0U, IntPtr.Zero, IntPtr.Zero, true))
+                    if (!StCam.CreatePreviewWindow(this._cameraCapture, "Preview", 0U, 0, 0, 0U, 0U, IntPtr.Zero, IntPtr.Zero, 1))
                     {
                         this.LogError(StCam.GetLastError(this._cameraCapture));
                     }
@@ -435,7 +418,7 @@ namespace EPIC.CameraInterface
                         {
                             this._captured(hBitmap);
                         }
-                        Sentech.DeleteObject(hBitmap);
+                        Gdi32.DeleteObject(hBitmap);
                     }
                     catch (Exception ex)
                     {
@@ -486,17 +469,17 @@ namespace EPIC.CameraInterface
         // Token: 0x06000081 RID: 129 RVA: 0x00003E88 File Offset: 0x00002088
         private void LogError(uint dwErrorCode)
         {
-            StringBuilder strErrorMsg = new StringBuilder(255);
+            string strErrorMsg;
             int dwFlags = 4096;
             IntPtr ptrlpSource = IntPtr.Zero;
-            if (Sentech.FormatMessage(dwFlags, ptrlpSource, (int)dwErrorCode, 0, strErrorMsg, strErrorMsg.Capacity, IntPtr.Zero) == 0)
+            if (Kernel32.FormatMessage(dwFlags, ptrlpSource, (int)dwErrorCode, 0, out strErrorMsg, 1024, IntPtr.Zero) == 0)
             {
-                ptrlpSource = Sentech.LoadLibraryEx("StCamMsg.dll", IntPtr.Zero, 1);
+                ptrlpSource = Kernel32.LoadLibraryEx("StCamMsg.dll", IntPtr.Zero, 1);
                 dwFlags |= 2048;
                 if (!ptrlpSource.Equals(IntPtr.Zero))
                 {
-                    Sentech.FormatMessage(dwFlags, ptrlpSource, (int)dwErrorCode, 0, strErrorMsg, strErrorMsg.Capacity, IntPtr.Zero);
-                    Sentech.FreeLibrary(ptrlpSource);
+                    Kernel32.FormatMessage(dwFlags, ptrlpSource, (int)dwErrorCode, 0, out strErrorMsg, 1024, IntPtr.Zero);
+                    Kernel32.FreeLibrary(ptrlpSource);
                 }
             }
             Log.Error(strErrorMsg.ToString());

@@ -8,9 +8,12 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Themes/ClearView.xaml" />
+                <ResourceDictionary Source="/Themes/Application/RibbonGallery.xaml" />
+                <ResourceDictionary Source="/Themes/Application/RibbonGroup.xaml" />
                 <ResourceDictionary Source="/Themes/Textboxes/PasswordBox.xaml" />
                 <ResourceDictionary Source="/Themes/Textboxes/RichTextBox.xaml" />
                 <ResourceDictionary Source="/Themes/Textboxes/TextBox.xaml" />
+                <ResourceDictionary Source="/Themes/Textboxes/RibbonComboBox.xaml" />
                 <ResourceDictionary Source="/Themes/Buttons/Button.xaml" />
                 <ResourceDictionary Source="/Themes/Buttons/CheckBox.xaml" />
                 <ResourceDictionary Source="/Themes/Buttons/RadioButton.xaml" />

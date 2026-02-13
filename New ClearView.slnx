@@ -9,5 +9,7 @@
     <BuildDependency Project="CameraInterface/CameraInterface.csproj" />
     <BuildDependency Project="DataLayer/DataLayer.csproj" />
   </Project>
+  <Project Path="DataAnalysis/DataAnalysis.csproj" Id="c95ed1b1-8291-4d62-8073-44dcfabd1da4" />
   <Project Path="DataLayer/DataLayer.csproj" Id="c842e7fc-bef2-4431-81b5-716abbbbd032" />
+  <Project Path="MedicalControls/MedicalControls.csproj" Id="c97dbcdf-56cd-48ad-917a-aa535dc70051" />
 </Solution>

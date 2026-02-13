@@ -1,50 +1,51 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net10.0-windows</TargetFramework>
-	<TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-	<UseWPF>true</UseWPF>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <AssemblyName>CameraInterface</AssemblyName>
-    <AssemblyTitle>CameraInterface</AssemblyTitle>
-    <RootNamespace>EPIC.CameraInterface</RootNamespace>
-    <BaseOutputPath>..\ClearView\bin\</BaseOutputPath>
-	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-	<Version />
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net10.0-windows</TargetFramework>
+		<TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<UseWPF>true</UseWPF>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<AssemblyName>CameraInterface</AssemblyName>
+		<AssemblyTitle>CameraInterface</AssemblyTitle>
+		<RootNamespace>EPIC.CameraInterface</RootNamespace>
+		<BaseOutputPath>..\ClearView\bin\</BaseOutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<Version />
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DebugType>portable</DebugType>
-	<OutputPath>..\ClearView\bin\Debug\</OutputPath>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<DebugType>portable</DebugType>
+		<OutputPath>..\ClearView\bin\Debug\</OutputPath>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DebugType>portable</DebugType>
-	<OutputPath>..\ClearView\bin\Release\</OutputPath>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<DebugType>portable</DebugType>
+		<OutputPath>..\ClearView\bin\Release\</OutputPath>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Stubs\**" />
-    <EmbeddedResource Remove="Stubs\**" />
-    <None Remove="Stubs\**" />
-    <Page Remove="Stubs\**" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="Stubs\**" />
+		<EmbeddedResource Remove="Stubs\**" />
+		<None Remove="Stubs\**" />
+		<Page Remove="Stubs\**" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <!-- Provide minimal runtime packages used by the camera code -->
-    <PackageReference Include="DirectShowLib" Version="1.0.0" />
-    <PackageReference Include="Emgu.CV" Version="4.12.0.5764" />
-    <PackageReference Include="Emgu.CV.Bitmap" Version="4.12.0.5764" />
-    <PackageReference Include="Emgu.CV.runtime.windows" Version="4.12.0.5764" />
-    <PackageReference Include="log4net" Version="3.2.0" />
-    <PackageReference Include="System.Management" Version="10.0.2" />
-  </ItemGroup>
+	<ItemGroup>
+		<!-- Provide minimal runtime packages used by the camera code -->
+		<PackageReference Include="DirectShowLib" Version="1.0.0" />
+		<PackageReference Include="Emgu.CV" Version="4.12.0.5764" />
+		<PackageReference Include="Emgu.CV.Bitmap" Version="4.12.0.5764" />
+		<PackageReference Include="Emgu.CV.runtime.windows" Version="4.12.0.5764" />
+		<PackageReference Include="log4net" Version="3.2.0" />
+		<PackageReference Include="System.Management" Version="10.0.2" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="DataLayer">
-      <HintPath>..\ClearView\bin\Debug\DataLayer.dll</HintPath>
-    </Reference>
-  </ItemGroup>
+	<ItemGroup>
+		<Reference Include="DataLayer">
+			<HintPath>..\ClearView\bin\Debug\DataLayer.dll</HintPath>
+		</Reference>
+	</ItemGroup>
 
 </Project>
