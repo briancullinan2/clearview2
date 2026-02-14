@@ -12,6 +12,8 @@
 		<RootNamespace>EPIC.ClearView</RootNamespace>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<StartupObject>EPIC.ClearView.SplashWindow</StartupObject>
+		<IncrementalBuild>false</IncrementalBuild>
+		<EmbedAllSources>true</EmbedAllSources>
 	</PropertyGroup>
 
 	<ItemGroup>

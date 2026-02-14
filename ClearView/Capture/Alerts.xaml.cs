@@ -13,10 +13,10 @@ namespace EPIC.ClearView.Capture
         public Alerts()
         {
             this.InitializeComponent();
-            var messages = TranslationContext.Current["Data Source=:memory:"].Messages;
-
             base.Loaded += delegate (object sender, RoutedEventArgs args)
             {
+                var messages = TranslationContext.Current["Data Source=:memory:"].Messages;
+
                 if (base.NavigationService != null)
                 {
                     int num = base.NavigationService.CurrentSource.OriginalString.IndexOf("?", StringComparison.InvariantCultureIgnoreCase);

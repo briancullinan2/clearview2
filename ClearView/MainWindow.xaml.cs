@@ -21,7 +21,31 @@ namespace EPIC.ClearView
             //Task.Run(new Action(this.ClockThread));
 
             InitializeComponent();
+
             Task.Run(new Action(ClockThread));
+            /*
+            // apply invert
+            
+            using Microsoft.Graphics.Canvas.Effects;
+            using Microsoft.UI.Composition;
+            using Microsoft.UI.Xaml.Hosting;
+
+            var compositor = ElementCompositionPreview.GetElementVisual(this).Compositor;
+
+            // Create the Invert Effect
+            var invertEffect = new InvertEffect
+            {
+                Source = new CompositionEffectSourceParameter("Input")
+            };
+
+            var factory = compositor.CreateEffectFactory(invertEffect);
+            var effectBrush = factory.CreateBrush();
+
+            // This "grabs" the pixels behind the element to invert them
+            effectBrush.SetSourceParameter("Input", compositor.CreateBackdropBrush());
+
+            targetVisual.Brush = effectBrush;
+            */
         }
 
         private void MainWindow_OnContentRendered(object? sender, EventArgs e)

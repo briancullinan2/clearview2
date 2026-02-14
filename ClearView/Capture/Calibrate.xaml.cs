@@ -87,6 +87,10 @@ namespace EPIC.ClearView.Capture
         // Token: 0x0600000E RID: 14 RVA: 0x00002638 File Offset: 0x00000838
         private void AutoCalibrate_Checked(object sender, RoutedEventArgs e)
         {
+            if (this.Configurations.SelectedItem == null)
+            {
+                return;
+            }
             if (this.AutoCalibrate.IsChecked != null && this.AutoCalibrate.IsChecked.Value)
             {
                 this.Reset_Click(sender, e);

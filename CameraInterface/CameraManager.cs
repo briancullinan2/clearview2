@@ -5,6 +5,8 @@ using System.Management;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows;
+//using Windows.Devices.Enumeration;
+//using Windows.Media.Capture;
 
 namespace EPIC.CameraInterface
 {
@@ -139,6 +141,7 @@ namespace EPIC.CameraInterface
         // Token: 0x06000016 RID: 22 RVA: 0x000029BC File Offset: 0x00000BBC
         private void GetCameras()
         {
+            //var devices = await DeviceInformation.FindAllAsync(DeviceClass.VideoCapture);
             List<ICapturable> result = this.GetValidCameras(DirectShowLib.DsDevice.GetDevicesOfCat(DirectShowLib.FilterCategory.VideoInputDevice)).ToList<ICapturable>();
             List<ICapturable> oldCameras = this._currentCameras;
             this._currentCameras = result;

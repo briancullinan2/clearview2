@@ -14,6 +14,8 @@
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<Version />
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<IncrementalBuild>false</IncrementalBuild>
+		<EmbedAllSources>true</EmbedAllSources>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

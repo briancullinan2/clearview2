@@ -68,7 +68,8 @@
             AutoGenerateColumns="False"
             CanUserResizeRows="False"
             FontFamily="Courier New"
-            IsReadOnly="True">
+            IsReadOnly="True"
+            VirtualizingStackPanel.ScrollUnit="Pixel">
             <FrameworkElement.Resources>
                 <ResourceDictionary />
             </FrameworkElement.Resources>

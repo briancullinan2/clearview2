@@ -36,6 +36,30 @@ I was planning on using the driver and native code to queue the image transfer i
 The installer program made some GPO changes to turn off indexing and virus protection while scanning, I was planning on running it on a specific schedule based on feedback from the app usage.
 The original version had so much extra weight of UI controls that panels would flash as they load. The whole pluggable extensions that do a ton and very little at the same time was a huge burden on the whole system.
 
+### Log
+
+#### 2/14/2026
+
+Realizing I lost some parts after dragging a bunch in from the old project. The basic timeline was, I developed the replacement app over Christmas break for a week, and then a month back in the office. This is when
+I apparently copied this version back to my home computer over remote desktop and accidently pressed ctrl+c on something else before the copy finished. After this, I continued work in the office for about another 4 months.
+So I've lost between 2 and 3 months worth of work on the WPF version.
+
+I had consistent menus across the whole app. I think i continued with this contextual highlighted group panel concept for every tab. You could open multiple records at a time for patients, the names and titles were all consistent
+the add user panels switched titles to Edit: User name with the name filled in, but it was basically the same page navigation. There was a back and next navigation. I think I already had a lot of the permission system worked out
+but not to the degree I was planning now, it was basic tab and entry button list just for EPIC.
+
+There was another calibration page for listing tons of calibration images vertically with their colorized and status information listed. I used this page to help calibrate the next version of the device. There was a mlformCNative.dll
+that I created from within the MATLAB subscription to speed up processing I figured all the machined with Intel processors could run it, and I also built a general version too.
+I added MATLAB functionality I'll probably never see again from comprehending their previous PhD code, I added the colorization functions back into the app and I added some parameter efficiency fixes.
+
+I started to enterain the idea of using open CV to do the exact same work as MATLAB but all comprehendable from C#, I had this level of understanding of the MATLAB code and it wasn't very complicated for a seasoned mathemetician.
+When I was planning the 3D organ system mapping feature I needed some extra gaming virtual worlds polymath that I have now from working on the engine, so I could probably tack this next after permissions/i18n.
+All the i18n stuff in my old worked on version was loading from the database. There we're open file dialogs for loading old records off the hard drive, it was really turning in to a medical information
+development tool, and that's what I'll make this one do. Maybe someday, I'll turn the app part into the life tracker or home security system I was dreaming of with a bunch of plugins and hard functionality sorted out.
+Never too late for a pivot.
+
+
+
 ## TODO
 
 * Add relevant article comments in code.

@@ -10,7 +10,13 @@
 		<RootNamespace>EPIC.MedicalControls</RootNamespace>
 		<BaseOutputPath>..\ClearView\bin</BaseOutputPath>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<IncrementalBuild>false</IncrementalBuild>
+		<EmbedAllSources>true</EmbedAllSources>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="Shaders\InvertColor.ps" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<AssemblyAttribute Include="EPIC.MedicalControls.RootNamespaceAttribute">
@@ -31,6 +37,7 @@
 		<Resource Include="Resources\1001-cancel.png" />
 		<Resource Include="Resources\calibration_sentech.bmp" />
 		<Resource Include="Resources\clearview.png" />
+		<Resource Include="Shaders\InvertColor.ps" />
 	</ItemGroup>
 
 </Project>

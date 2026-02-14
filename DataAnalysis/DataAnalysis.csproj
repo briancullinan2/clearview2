@@ -8,6 +8,8 @@
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<BaseOutputPath>..\ClearView\bin\</BaseOutputPath>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<IncrementalBuild>false</IncrementalBuild>
+		<EmbedAllSources>true</EmbedAllSources>
 	</PropertyGroup>
 
 	<ItemGroup>
