@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EPIC.DataLayer.Entities
 {
+    [Table("ImageAlignment")]
     public class ImageAlignment : Entity<ImageAlignment>
     {
         [Key]

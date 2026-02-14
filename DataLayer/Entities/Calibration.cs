@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EPIC.DataLayer.Entities
 {
+    [Table("Calibration")]
     public class Calibration : Entity<Calibration>
     {
         [Key]

@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace EPIC.DataLayer.Entities
 {
     [PrimaryKey(nameof(ImageId), nameof(SectorNumber))]
+    [Table("ImageSector")]
     public class ImageSector : Entity<ImageSector>
     {
         public int ImageId { get; set; }

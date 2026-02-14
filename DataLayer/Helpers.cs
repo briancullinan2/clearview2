@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EPIC.DataLayer.Helpers
+﻿namespace EPIC.DataLayer.Helpers
 {
     public static class PatientFields
     {
-        public static class FirstName 
+        public static class FirstName
         {
             public const int MaxLength = 256;
         }
@@ -18,7 +12,7 @@ namespace EPIC.DataLayer.Helpers
     {
         public static class Title
         {
-            public const int MaxLength = 256;
+            public const int MaxLength = 1024;
 
         }
 

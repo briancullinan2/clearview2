@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EPIC.DataLayer.Entities
 {
+    [Table("Image")]
     public class Image : Entity<Image>
     {
         public DataLayer.Entities.ImageCapture Capture { get; set; }

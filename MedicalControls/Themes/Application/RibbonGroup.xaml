@@ -6,7 +6,6 @@
     xmlns:entities="clr-namespace:EPIC.DataLayer.Entities;assembly=DataLayer"
     xmlns:ribbon="clr-namespace:System.Windows.Controls.Ribbon;assembly=System.Windows.Controls.Ribbon">
     <SolidColorBrush x:Key="RibbonDisabledForegroundBrushKey" Color="#FF9E9E9E" />
-    <BitmapImage x:Key="ClearViewBackground" UriSource="Resources/ClearViewBackground.png" />
     <SolidColorBrush x:Key="RibbonDropDownBackgroundBrushKey" Color="#F0FFFFFF" />
     <SolidColorBrush x:Key="ResizeGripperBackgroundBrush" Color="#FFE5EFF9" />
     <SolidColorBrush x:Key="ResizeThumbPathBrush" Color="#FF6C747D" />

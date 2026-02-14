@@ -1,4 +1,5 @@
-﻿using EPIC.DataLayer;
+﻿using EPIC.ClearView.Utilities.Extensions;
+using EPIC.DataLayer;
 using EPIC.DataLayer.Extensions;
 using EPIC.DataLayer.Helpers;
 using log4net.Appender;
@@ -58,8 +59,9 @@ namespace EPIC.ClearView.Utilities.Logging
                 {
                     new DataLayer.Entities.Message
                     {
-                        Title = loggingEvent.ExceptionObject.Message.Substring(0, Math.Min(MessageFields.Title.MaxLength, loggingEvent.ExceptionObject.Message.Length)),
-                        Body = loggingEvent.ExceptionObject.ToString().Substring(0, Math.Min(MessageFields.Body.MaxLength, loggingEvent.ExceptionObject.ToString().Length)),
+                        Source = loggingEvent.LoggerName,
+                        Title = loggingEvent.ExceptionObject.Message.Limit(MessageFields.Title.MaxLength),
+                        Body = loggingEvent.ExceptionObject.StackTrace?.Limit(MessageFields.Title.MaxLength),
                         CreateTime = DateTime.UtcNow,
                         IsActive = true,
                         MessageType = 4
@@ -69,8 +71,9 @@ namespace EPIC.ClearView.Utilities.Logging
                 {
                     new DataLayer.Entities.Message
                     {
-                        Title = loggingEvent.RenderedMessage.Substring(0, Math.Min(MessageFields.Title.MaxLength, loggingEvent.RenderedMessage.Length)),
-                        Body = loggingEvent.MessageObject.ToString().Substring(0, Math.Min(MessageFields.Body.MaxLength, loggingEvent.MessageObject.ToString().Length)),
+                        Source = loggingEvent.LoggerName,
+                        Title = (loggingEvent.MessageObject?.ToString() ?? loggingEvent.RenderedMessage)?.Limit(MessageFields.Title.MaxLength),
+                        Body = new System.Diagnostics.StackTrace(true).ToString().Limit(MessageFields.Body.MaxLength),
                         CreateTime = DateTime.UtcNow,
                         IsActive = true,
                         MessageType = 4
@@ -80,7 +83,7 @@ namespace EPIC.ClearView.Utilities.Logging
                 {
                     Application.Current.Dispatcher.Invoke(delegate ()
                     {
-                        MainWindow mainWindow = Application.Current.MainWindow as MainWindow;
+                        MainWindow? mainWindow = Application.Current.MainWindow as MainWindow;
                         if (mainWindow == null)
                         {
                             return;
@@ -89,8 +92,9 @@ namespace EPIC.ClearView.Utilities.Logging
                     });
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine(ex);
             }
         }
 

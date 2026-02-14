@@ -5,54 +5,69 @@
     xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Ribbon"
     xmlns:entities="clr-namespace:EPIC.DataLayer.Entities;assembly=DataLayer"
     xmlns:ribbon="clr-namespace:System.Windows.Controls.Ribbon;assembly=System.Windows.Controls.Ribbon">
-    <DataTemplate x:Key="MessageAlertTemplate" DataType="{x:Type entities:Message}">
-        <Grid Margin="4" Background="Transparent">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="4" />
-                <ColumnDefinition Width="*" SharedSizeGroup="TitleCol" />
-                <ColumnDefinition Width="Auto" SharedSizeGroup="TimeCol" />
-            </Grid.ColumnDefinitions>
+    <Style x:Key="MessageAlertTemplate" TargetType="{x:Type RibbonGallery}">
+        <Setter Property="GalleryItemTemplate">
+            <Setter.Value>
+                <DataTemplate DataType="{x:Type entities:Message}">
+                    <Grid Margin="4" Background="Transparent">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="4" />
+                            <ColumnDefinition Width="*" SharedSizeGroup="TitleCol" />
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="TimeCol" />
+                        </Grid.ColumnDefinitions>
 
-            <Rectangle
-                Grid.Column="0"
-                Margin="0,2,8,2"
-                VerticalAlignment="Stretch">
-                <Rectangle.Style>
-                    <Style TargetType="Rectangle">
-                        <Setter Property="Fill" Value="#CCC" />
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding MessageType}" Value="1">
-                                <Setter Property="Fill" Value="Red" />
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding MessageType}" Value="2">
-                                <Setter Property="Fill" Value="Orange" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Rectangle.Style>
-            </Rectangle>
+                        <Rectangle
+                            Grid.Column="0"
+                            Margin="0,2,8,2"
+                            VerticalAlignment="Stretch">
+                            <Rectangle.Style>
+                                <Style TargetType="Rectangle">
+                                    <Setter Property="Fill" Value="#CCC" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding MessageType}" Value="1">
+                                            <Setter Property="Fill" Value="Red" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding MessageType}" Value="2">
+                                            <Setter Property="Fill" Value="Orange" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Rectangle.Style>
+                        </Rectangle>
 
-            <StackPanel
-                Grid.Column="1"
-                Margin="0,0,15,0"
-                VerticalAlignment="Center">
-                <TextBlock
-                    FontSize="12"
-                    FontWeight="Bold"
-                    Text="{Binding Title}" />
-                <TextBlock
-                    FontSize="11"
-                    Foreground="#666"
-                    Text="{Binding Body}"
-                    TextWrapping="Wrap" />
-            </StackPanel>
+                        <StackPanel
+                            Grid.Column="1"
+                            Margin="0,0,15,0"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Center">
+                            <TextBlock
+                                HorizontalAlignment="Stretch"
+                                FontSize="13"
+                                FontWeight="Bold"
+                                Text="{Binding Source}" />
+                            <TextBlock
+                                HorizontalAlignment="Stretch"
+                                FontSize="12"
+                                FontWeight="Bold"
+                                Text="{Binding Title}" />
+                            <TextBlock
+                                HorizontalAlignment="Stretch"
+                                FontSize="11"
+                                Foreground="#666"
+                                Text="{Binding Body}"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
 
-            <TextBlock
-                Grid.Column="2"
-                VerticalAlignment="Top"
-                FontSize="10"
-                Foreground="#888"
-                Text="{Binding CreateTime, StringFormat=\{0:HH:mm\}}" />
-        </Grid>
-    </DataTemplate>
+                        <TextBlock
+                            Grid.Column="2"
+                            VerticalAlignment="Top"
+                            FontSize="10"
+                            Foreground="#888"
+                            Text="{Binding CreateTime, StringFormat=\{0:HH:mm\}}" />
+                    </Grid>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>

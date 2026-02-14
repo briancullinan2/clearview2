@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EPIC.DataLayer.Entities
 {
+    [Table("FingerSet")]
     public class FingerSet : Entity<FingerSet>
     {
         public int FingerSetId { get; set; }

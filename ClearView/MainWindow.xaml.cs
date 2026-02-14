@@ -192,11 +192,11 @@ namespace EPIC.ClearView
         private void Alerts_View(object sender, RoutedEventArgs e)
         {
             Uri uri;
-            if (AlertsBox.SelectedItem != null)
-            {
-                uri = new Uri("/Capture/Alerts.xaml?messageId=" + ((DataLayer.Entities.Message)this.AlertsBox.SelectedItem).MessageId, UriKind.Relative);
-            }
-            else
+            //if (AlertsBox.SelectedItem != null)
+            //{
+            //    uri = new Uri("/Capture/Alerts.xaml?messageId=" + ((DataLayer.Entities.Message)this.AlertsBox.SelectedItem).MessageId, UriKind.Relative);
+            //}
+            //else
             {
                 uri = new Uri("/Capture/Alerts.xaml", UriKind.Relative);
 
@@ -245,18 +245,20 @@ namespace EPIC.ClearView
                     return;
                 }
 
-                if (this.AlertsBox == null /* || this.AlertsBox.Visibility != Visibility.Visible */)
-                {
-                    return;
-                }
-                this.AlertsBox.ItemsSource = null;
+                //if (this.AlertsBox == null /* || this.AlertsBox.Visibility != Visibility.Visible */)
+                //{
+                //    return;
+                //}
+                //this.AlertsBox.ItemsSource = null;
+                AlertsFace.ItemsSource = null;
                 Alerts = (from x in context.Messages
                           where x.IsActive
                           orderby x.CreateTime descending
                           select x).ToList();
-                this.AlertsBox.ItemsSource = Alerts;
-                this.AlertsBox.SelectedItem = Alerts.FirstOrDefault<DataLayer.Entities.Message>();
-                AlertsFace.Text = Alerts.FirstOrDefault<DataLayer.Entities.Message>()?.Body;
+                //this.AlertsBox.ItemsSource = Alerts;
+                AlertsFace.ItemsSource = Alerts;
+                //this.AlertsBox.SelectedItem = Alerts.FirstOrDefault<DataLayer.Entities.Message>();
+                //AlertsFace.Text = Alerts.FirstOrDefault<DataLayer.Entities.Message>()?.Body;
             }
             catch (Exception ex)
             {
@@ -264,7 +266,19 @@ namespace EPIC.ClearView
             }
         }
 
-        private IEnumerable<DataLayer.Entities.Message> Alerts { get; set; } = null;
+        public IEnumerable<DataLayer.Entities.Message>? Alerts
+        {
+            get
+            {
+                return (IEnumerable<DataLayer.Entities.Message>?)base.GetValue(MainWindow.AlertsProperty);
+            }
+            private set
+            {
+                base.SetValue(MainWindow.AlertsProperty, value);
+            }
+        }
+        public static readonly DependencyProperty AlertsProperty = DependencyProperty.Register("Alerts", typeof(IEnumerable<DataLayer.Entities.Message>), typeof(MainWindow), new PropertyMetadata(null));
+
 
         // Token: 0x06000363 RID: 867 RVA: 0x0001BE84 File Offset: 0x0001A084
         private void ApplicationChangeLogin_Click(object sender, RoutedEventArgs e)

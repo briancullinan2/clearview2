@@ -7,6 +7,7 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/MedicalControls;component/Themes/ClearView.xaml" />
         <ResourceDictionary Source="/MedicalControls;component/Themes/Buttons/ToggleButton.xaml" />
+        <ResourceDictionary Source="/MedicalControls;component/Themes/Application/RibbonGallery.xaml" />
     </ResourceDictionary.MergedDictionaries>
     <SolidColorBrush x:Key="RibbonDisabledForegroundBrushKey" Color="#FF9E9E9E" />
     <SolidColorBrush x:Key="RibbonDropDownBackgroundBrushKey" Color="#F0FFFFFF" />
@@ -73,7 +74,7 @@
                                 <ColumnDefinition />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <TextBox
+                            <!--<TextBox
                                 Margin="2,1,2,1"
                                 HorizontalContentAlignment="Left"
                                 VerticalContentAlignment="Top"
@@ -84,22 +85,40 @@
                                 Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType={x:Type ribbon:RibbonComboBox}}}"
                                 IsReadOnly="{Binding Path=IsReadOnly, RelativeSource={RelativeSource AncestorType={x:Type ribbon:RibbonComboBox}}}"
                                 Text="{Binding Path=Text, RelativeSource={RelativeSource AncestorType={x:Type ribbon:RibbonComboBox}}}" />
+                            -->
+                            <StackPanel
+                                Margin="2,1,2,1"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Center">
+                                <TextBlock
+                                    HorizontalAlignment="Stretch"
+                                    FontSize="13"
+                                    FontWeight="Bold"
+                                    Text="{Binding ItemsSource[0].Source, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ribbon:RibbonComboBox}}}" />
+                                <TextBlock
+                                    HorizontalAlignment="Stretch"
+                                    FontSize="12"
+                                    FontWeight="Bold"
+                                    Text="{Binding ItemsSource[0].Title, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ribbon:RibbonComboBox}}}" />
+
+                            </StackPanel>
                             <ribbon:RibbonToggleButton
                                 Name="PART_ToggleButton"
                                 Grid.Column="1"
                                 Background="Transparent"
                                 BorderBrush="Transparent"
                                 BorderThickness="{TemplateBinding BorderThickness}"
-                                IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource AncestorType={x:Type ribbon:RibbonComboBox}}}"
+                                IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ribbon:RibbonComboBox}}}"
                                 IsTabStop="false"
                                 Label="fuckity"
                                 Style="{StaticResource RibbonComboBoxToggleButtonStyle}" />
                             <Popup
                                 Name="PART_Popup"
+                                MaxWidth="{Binding RenderSize.Width, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ribbon:RibbonComboBox}}}"
                                 AllowsTransparency="True"
                                 Focusable="False"
                                 HorizontalOffset="1"
-                                IsOpen="{Binding Path=IsDropDownOpen, RelativeSource={RelativeSource AncestorType={x:Type ribbon:RibbonComboBox}}}"
+                                IsOpen="{Binding Path=IsDropDownOpen, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ribbon:RibbonComboBox}}}"
                                 Placement="Bottom"
                                 PlacementTarget="{Binding ElementName=MainBorder}"
                                 PopupAnimation="{DynamicResource {x:Static SystemParameters.MenuPopupAnimationKey}}"
@@ -126,14 +145,24 @@
                                                     <RowDefinition />
                                                     <RowDefinition Height="Auto" />
                                                 </Grid.RowDefinitions>
-                                                <ItemsPresenter
+                                                <ribbon:RibbonGallery
+                                                    Name="PART_AlertsBox"
+                                                    MaxHeight="400"
+                                                    FrameworkElement.MinHeight="60"
+                                                    FrameworkElement.MinWidth="100"
+                                                    MaxColumnCount="1"
+                                                    Style="{StaticResource MessageAlertTemplate}">
+                                                    <RibbonGalleryCategory ItemsSource="{Binding ItemsSource, RelativeSource={RelativeSource AncestorType={x:Type ribbon:RibbonComboBox}}}" />
+                                                </ribbon:RibbonGallery>
+
+                                                <!--<ItemsPresenter
                                                     x:Name="ItemsPresenter"
                                                     Grid.Row="1"
                                                     Margin="1"
                                                     Grid.IsSharedSizeScope="True"
                                                     KeyboardNavigation.DirectionalNavigation="Cycle"
                                                     KeyboardNavigation.TabNavigation="Cycle"
-                                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />-->
                                                 <Border
                                                     Name="ResizeControl"
                                                     Grid.Row="2"

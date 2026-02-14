@@ -174,18 +174,7 @@
                         IsEditable="False"
                         IsReadOnly="True"
                         SelectionBoxWidth="62"
-                        Style="{StaticResource AlertsRibbonComboBox}">
-                        <ribbon:RibbonGallery
-                            Name="AlertsBox"
-                            MaxHeight="400"
-                            FrameworkElement.MinHeight="60"
-                            FrameworkElement.MinWidth="100"
-                            IsVisibleChanged="AlertsBox_IsVisibleChanged"
-                            ItemTemplate="{StaticResource MessageAlertTemplate}"
-                            MaxColumnCount="1"
-                            SelectedItem="{Binding XPath=Alerts[0], RelativeSource={RelativeSource AncestorType={x:Type Window}}, Mode=OneWay}"
-                            SelectedValuePath="Content" />
-                    </ribbon:RibbonComboBox>
+                        Style="{StaticResource AlertsRibbonComboBox}" />
                     <ribbon:RibbonButton
                         Name="AlertView"
                         Grid.Column="1"
@@ -246,7 +235,7 @@
             Grid.Column="0"
             Grid.ColumnSpan="2"
             Panel.ZIndex="0"
-			Style="{StaticResource StandardTabControl}">
+            Style="{StaticResource StandardTabControl}">
             <TabItem Header="Welcome" IsSelected="True">
                 <Frame NavigationUIVisibility="Hidden" Source="/Welcome.xaml" />
             </TabItem>

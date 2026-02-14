@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace EPIC.DataLayer.Entities
 {
     [PrimaryKey(nameof(ImageId), nameof(CalibrationId))]
+    [Table("IameCalibration")]
     public class ImageCalibration : Entity<ImageCalibration>
     {
         public bool CoronaFailed { get; set; }

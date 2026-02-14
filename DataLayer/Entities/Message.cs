@@ -12,5 +12,6 @@ namespace EPIC.DataLayer.Entities
         public bool IsActive { get; set; }
         public int MessageType { get; set; }
         public int MessageId { get; set; }
+        public string Source { get; set; }
     }
 }
