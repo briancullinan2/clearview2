@@ -92,7 +92,7 @@ namespace EPIC.ClearView.User
         public void AddXamlPermissions()
         {
 
-            this._bamls = Utilities.Permissions.GetBamlFiles(typeof(App).Assembly);
+            var _bamls = Utilities.Permissions.GetBamlFiles(typeof(App).Assembly);
 
             foreach (string bamlPath in _bamls)
             {
@@ -169,9 +169,25 @@ namespace EPIC.ClearView.User
                 return;
             }
             FrameworkElementFactory frameworkElementFactory;
-            if (role.Name == "Name" || role.Name == "Description")
+            DataTemplate template;
+            if (role.Name == "Description")
             {
                 frameworkElementFactory = new FrameworkElementFactory(typeof(Label));
+                template = (DataTemplate)this.FindResource("PatientLinkTemplate");
+            }
+            else if (role.Name == "Name")
+            {
+                frameworkElementFactory = new FrameworkElementFactory(typeof(Label));
+                template = new DataTemplate { VisualTree = frameworkElementFactory };
+            }
+            else
+            {
+                frameworkElementFactory = new FrameworkElementFactory(typeof(CheckBox));
+                template = new DataTemplate { VisualTree = frameworkElementFactory };
+            }
+
+            if (role.Name == "Name")
+            {
                 frameworkElementFactory.SetValue(Label.ContentProperty, new Binding(role.Name)
                 {
                     Mode = BindingMode.TwoWay,
@@ -179,14 +195,11 @@ namespace EPIC.ClearView.User
                 });
                 frameworkElementFactory.SetValue(FrameworkElement.HorizontalAlignmentProperty, HorizontalAlignment.Left);
                 frameworkElementFactory.SetValue(FrameworkElement.VerticalAlignmentProperty, VerticalAlignment.Top);
-                frameworkElementFactory.SetValue(FrameworkElement.WidthProperty, 300);
             }
-            else
+            else if (role.Name != "Description")
             {
-                frameworkElementFactory = new FrameworkElementFactory(typeof(CheckBox));
                 frameworkElementFactory.SetValue(FrameworkElement.HorizontalAlignmentProperty, HorizontalAlignment.Center);
                 frameworkElementFactory.SetValue(FrameworkElement.VerticalAlignmentProperty, VerticalAlignment.Center);
-                frameworkElementFactory.SetValue(FrameworkElement.WidthProperty, 150);
             }
             //frameworkElementFactory.SetValue(ToggleButton.IsCheckedProperty, new Binding("Name")
             //{
@@ -198,13 +211,10 @@ namespace EPIC.ClearView.User
             frameworkElementFactory.AddHandler(ToggleButton.UncheckedEvent, new RoutedEventHandler(this.PermissionChecked));
             this.PermissionsGrid.Columns.Add(new DataGridTemplateColumn
             {
+                Width = role.Name == "Name" || role.Name == "Description" ? 300.0 : 150.0,
                 Header = role.Name,
                 CanUserResize = canResize,
-                CellTemplate = role.Name == "Description"
-                ? (DataTemplate)this.FindResource("PatientLinkTemplate") : new DataTemplate
-                {
-                    VisualTree = frameworkElementFactory
-                }
+                CellTemplate = template
             });
         }
 
@@ -534,8 +544,6 @@ namespace EPIC.ClearView.User
         //private readonly PermissionBooleanConverter _permissionConverter;
 
         public ObservableCollection<DataLayer.Entities.Permission> PermissionData { get; private set; }
-
-        private IEnumerable<string> _bamls;
 
         // Token: 0x04000157 RID: 343
         private bool _collectionChanged;
