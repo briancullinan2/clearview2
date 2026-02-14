@@ -330,7 +330,7 @@ namespace EPIC.ClearView.Capture
 
         private CancellationTokenSource _cts = new();
 
-        private ICapturable _capturable;
+        private ICapturable? _capturable;
 
         private void FrameCallback(IntPtr hBitmap)
         {
@@ -341,15 +341,20 @@ namespace EPIC.ClearView.Capture
                     IntPtr.Zero,
                     Int32Rect.Empty,
                     BitmapSizeOptions.FromEmptyOptions());
+                Gdi32.DeleteObject(hBitmap);
             });
-            Gdi32.DeleteObject(hBitmap);
         }
 
         private DateTime _start;
 
         private void CapturePreview_Click(object sender, RoutedEventArgs e)
         {
-            _capturable = CameraManager.Current.Cameras.FirstOrDefault((ICapturable x) => x.DisplayName.Equals(CameraSelect.SelectedValue));
+            _capturable = CameraManager.Current?.Cameras?.FirstOrDefault((ICapturable x) => x.DisplayName.Equals(CameraSelect.SelectedValue));
+            if (_capturable == null)
+            {
+                // TODO: FormChecker: select a camera first message
+                return;
+            }
             _capturable.Captured += FrameCallback;
             _capturable.Open();
             StartWebcamLoop();

@@ -12,3 +12,4 @@ CameraInterface/obj
 *.id1
 *.nam
 *.til
+Docs/**/~*.docx

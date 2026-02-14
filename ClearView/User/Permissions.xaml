@@ -5,7 +5,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ribbon="clr-namespace:System.Windows.Controls.Ribbon;assembly=System.Windows.Controls.Ribbon"
-    Title="Permissions">
+    Title="Permissions"
+    mc:Ignorable="d">
     <FrameworkElement.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -68,7 +69,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition />
+            <RowDefinition Height="*" />
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
         <Grid Row="0">
@@ -113,11 +114,13 @@
             <TabItem Name="RolesTab" Header="Roles">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition />
+                        <RowDefinition Height="*" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <DataGrid
                         Name="Roles"
+                        d:MinHeight="200"
+                        d:MinWidth="300"
                         AlternatingRowBackground="#FFF0F8FF"
                         AutoGenerateColumns="False"
                         Background="#00FFFFFF"
@@ -211,6 +214,8 @@
             <TabItem Header="Permissions" IsSelected="True">
                 <DataGrid
                     Name="PermissionsGrid"
+                    d:MinHeight="200"
+                    d:MinWidth="300"
                     AlternatingRowBackground="#FFF0F8FF"
                     AutoGenerateColumns="False"
                     Background="#00FFFFFF"
@@ -229,7 +234,7 @@
                     Template="{StaticResource BlankGridTemplate}">
                     <DataGrid.Columns>
                         <DataGridTemplateColumn
-                            Width="100"
+                            Width="300"
                             CanUserResize="True"
                             Header="Name">
                             <DataGridTemplateColumn.CellTemplate>
@@ -240,7 +245,7 @@
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <DataGridTemplateColumn
-                            Width="200"
+                            Width="300"
                             CanUserResize="True"
                             CellTemplate="{StaticResource PatientLinkTemplate}"
                             Header="Description" />

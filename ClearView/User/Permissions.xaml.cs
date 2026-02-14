@@ -1,7 +1,6 @@
 ﻿using EPIC.ClearView.Macros;
 using EPIC.ClearView.Utilities.Extensions;
 using EPIC.DataLayer;
-using EPIC.DataLayer.Entities;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -34,6 +33,25 @@ namespace EPIC.ClearView.User
             var view = CollectionViewSource.GetDefaultView(RolesData);
             view.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
 
+            AddMissingRoles();
+
+            // start with xaml level permissions
+            PermissionData = new ObservableCollection<DataLayer.Entities.Permission>(TranslationContext.Current["Data Source=:memory:"].Permissions.ToList());
+            // Do this after setting your ItemsSource
+            var view2 = CollectionViewSource.GetDefaultView(PermissionData);
+            view2.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
+
+            AddInitialRoleColumns();
+
+            AddXamlPermissions();
+        }
+
+
+
+        // TODO: make this a permission for admins to turn off
+        public void AddMissingRoles()
+        {
+
             if (RolesData.Count == 0)
             {
                 RolesData.Add(new DataLayer.Entities.Role
@@ -58,29 +76,28 @@ namespace EPIC.ClearView.User
                 });
             }
 
-            // TODO: add fancy as fuck assembly level introspection with reflection to automatically generate permissions sets for:
-            //    * every actionable control, buttons, texts, headers, closes, ribbons, etc
-            //    * tab ownership and sharing, login switching, hiding panels but leaving data open
-            //    * automatically collapsing or hiding elements based on permissions
-            //    * database row level permissions, tech can add scans but not mailing address, this group can access these patients
-            //    * content sharing permissions, reporting, syncronizing, data sharing signatures
-            PermissionData = new ObservableCollection<DataLayer.Entities.Permission>(TranslationContext.Current["Data Source=:memory:"].Permissions.ToList());
-            // Do this after setting your ItemsSource
-            var view2 = CollectionViewSource.GetDefaultView(PermissionData);
-            view2.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
+        }
 
+
+        public void AddInitialRoleColumns()
+        {
             foreach (object obj in this.RolesData)
             {
                 DataLayer.Entities.Role role = (DataLayer.Entities.Role)obj;
                 this.AddColumn(role);
             }
+        }
+
+
+        public void AddXamlPermissions()
+        {
 
             this._bamls = Utilities.Permissions.GetBamlFiles(typeof(App).Assembly);
 
             foreach (string bamlPath in _bamls)
             {
                 var name = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Path.GetFileNameWithoutExtension(bamlPath));
-                string defaultNamespace = string.Join(".", Path.GetDirectoryName(bamlPath).Replace('\\', '/')
+                string defaultNamespace = string.Join(".", (Path.GetDirectoryName(bamlPath) ?? "").Replace('\\', '/')
                                                 .Split('/')
                                                 .Select(s => System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(s)));
 
@@ -92,49 +109,56 @@ namespace EPIC.ClearView.User
                             ? "top" : defaultNamespace) + " file layer"
                 });
             }
-
-            /*
-            
-                var Permissions = IntrospectXaml(bamlPath);
-                foreach (var permission in Permissions)
-                {
-                    PermissionData.Add(permission);
-                }
-            }
-            */
-
-            /*
-			((ObservableCollection<DataLayer.Entities.Role>)this.Roles.ItemsSource).CollectionChanged += this.OnRoleCollectionChanged;
-			this._permissionConverter = new PermissionBooleanConverter();
-			FrameworkElementFactory frameworkElementFactory = new FrameworkElementFactory(typeof(Label));
-			frameworkElementFactory.SetValue(ContentControl.ContentProperty, new Binding("Description")
-			{
-				Mode = BindingMode.TwoWay,
-				UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
-			});
-			frameworkElementFactory.SetValue(Control.FontWeightProperty, new Binding
-			{
-				Converter = new PermissionHasChildrenFontWeightConverter()
-			});
-			frameworkElementFactory.SetValue(ToggleButton.IsThreeStateProperty, new Binding
-			{
-				Converter = new PermissionHasChildrenTristateConverter()
-			});
-			this.PermissionsGrid.Columns.Add(new DataGridTemplateColumn
-			{
-				Header = "Description",
-				CellTemplate = new DataTemplate
-				{
-					VisualTree = frameworkElementFactory
-				}
-			});
-			this.PermissionsGrid.ItemsSource = from x in new LinqMetaData().Permission
-			where x.Description != ""
-			orderby x.ParentId, x.ParentId == (decimal?)x.PermissionId descending, x.Description
-			select x;
-			*/
         }
 
+
+        // TODO: add fancy as fuck assembly level introspection with reflection to automatically generate permissions sets for:
+        //    * every actionable control, buttons, texts, headers, closes, ribbons, etc
+        //    * tab ownership and sharing, login switching, hiding panels but leaving data open
+        //    * automatically collapsing or hiding elements based on permissions
+        //    * database row level permissions, tech can add scans but not mailing address, this group can access these patients
+        //    * content sharing permissions, reporting, syncronizing, data sharing signatures
+
+        /*
+
+            var Permissions = IntrospectXaml(bamlPath);
+            foreach (var permission in Permissions)
+            {
+                PermissionData.Add(permission);
+            }
+        }
+        */
+
+        /*
+        ((ObservableCollection<DataLayer.Entities.Role>)this.Roles.ItemsSource).CollectionChanged += this.OnRoleCollectionChanged;
+        this._permissionConverter = new PermissionBooleanConverter();
+        FrameworkElementFactory frameworkElementFactory = new FrameworkElementFactory(typeof(Label));
+        frameworkElementFactory.SetValue(ContentControl.ContentProperty, new Binding("Description")
+        {
+            Mode = BindingMode.TwoWay,
+            UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+        });
+        frameworkElementFactory.SetValue(Control.FontWeightProperty, new Binding
+        {
+            Converter = new PermissionHasChildrenFontWeightConverter()
+        });
+        frameworkElementFactory.SetValue(ToggleButton.IsThreeStateProperty, new Binding
+        {
+            Converter = new PermissionHasChildrenTristateConverter()
+        });
+        this.PermissionsGrid.Columns.Add(new DataGridTemplateColumn
+        {
+            Header = "Description",
+            CellTemplate = new DataTemplate
+            {
+                VisualTree = frameworkElementFactory
+            }
+        });
+        this.PermissionsGrid.ItemsSource = from x in new LinqMetaData().Permission
+        where x.Description != ""
+        orderby x.ParentId, x.ParentId == (decimal?)x.PermissionId descending, x.Description
+        select x;
+        */
 
         // Token: 0x0600028E RID: 654 RVA: 0x000154DC File Offset: 0x000136DC
         private void AddColumn(DataLayer.Entities.Role role, bool canResize = false)
@@ -155,12 +179,14 @@ namespace EPIC.ClearView.User
                 });
                 frameworkElementFactory.SetValue(FrameworkElement.HorizontalAlignmentProperty, HorizontalAlignment.Left);
                 frameworkElementFactory.SetValue(FrameworkElement.VerticalAlignmentProperty, VerticalAlignment.Top);
+                frameworkElementFactory.SetValue(FrameworkElement.WidthProperty, 300);
             }
             else
             {
                 frameworkElementFactory = new FrameworkElementFactory(typeof(CheckBox));
                 frameworkElementFactory.SetValue(FrameworkElement.HorizontalAlignmentProperty, HorizontalAlignment.Center);
                 frameworkElementFactory.SetValue(FrameworkElement.VerticalAlignmentProperty, VerticalAlignment.Center);
+                frameworkElementFactory.SetValue(FrameworkElement.WidthProperty, 150);
             }
             //frameworkElementFactory.SetValue(ToggleButton.IsCheckedProperty, new Binding("Name")
             //{
@@ -172,7 +198,6 @@ namespace EPIC.ClearView.User
             frameworkElementFactory.AddHandler(ToggleButton.UncheckedEvent, new RoutedEventHandler(this.PermissionChecked));
             this.PermissionsGrid.Columns.Add(new DataGridTemplateColumn
             {
-                Width = 150.0,
                 Header = role.Name,
                 CanUserResize = canResize,
                 CellTemplate = role.Name == "Description"
@@ -283,8 +308,8 @@ namespace EPIC.ClearView.User
             PermissionsGrid.ItemsSource = null;
             Dispatcher.BeginInvoke(new Action(() =>
             {
-                this.AddColumn(new Role { Name = "Name" }, canResize: true);
-                this.AddColumn(new Role { Name = "Description" }, canResize: true);
+                this.AddColumn(new DataLayer.Entities.Role { Name = "Name" }, canResize: true);
+                this.AddColumn(new DataLayer.Entities.Role { Name = "Description" }, canResize: true);
                 foreach (object obj in this.RolesData)
                 {
                     DataLayer.Entities.Role role = (DataLayer.Entities.Role)obj;
@@ -297,7 +322,7 @@ namespace EPIC.ClearView.User
         }
 
         // Token: 0x06000292 RID: 658 RVA: 0x00015B68 File Offset: 0x00013D68
-        private void OnRoleCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
+        private void OnRoleCollectionChanged(object? sender, NotifyCollectionChangedEventArgs args)
         {
             if (args.NewItems != null)
             {
@@ -344,11 +369,11 @@ namespace EPIC.ClearView.User
         // Token: 0x06000296 RID: 662 RVA: 0x00015CC0 File Offset: 0x00013EC0
         private void RemoveRole_Click(object sender, RoutedEventArgs e)
         {
-            Button button = sender as Button;
+            Button? button = sender as Button;
             if (button != null)
             {
                 DataGridCell dataGridCell = button.FindAncestor<DataGridCell>();
-                DataLayer.Entities.Role Role = dataGridCell.DataContext as DataLayer.Entities.Role;
+                DataLayer.Entities.Role? Role = dataGridCell.DataContext as DataLayer.Entities.Role;
                 if (Role != null)
                 {
                     ((ObservableCollection<DataLayer.Entities.Role>)this.Roles.ItemsSource).Remove(Role);
@@ -470,7 +495,7 @@ namespace EPIC.ClearView.User
         // Token: 0x06000298 RID: 664 RVA: 0x000161E8 File Offset: 0x000143E8
         private void Name_TextChanged(object sender, TextChangedEventArgs e)
         {
-            TextBox textBox = sender as TextBox;
+            TextBox? textBox = sender as TextBox;
             if (textBox != null)
             {
                 DataGridCell dataGridCell = textBox.FindAncestor<DataGridCell>();
@@ -508,7 +533,7 @@ namespace EPIC.ClearView.User
         // Token: 0x04000155 RID: 341
         //private readonly PermissionBooleanConverter _permissionConverter;
 
-        public ObservableCollection<Permission> PermissionData { get; private set; }
+        public ObservableCollection<DataLayer.Entities.Permission> PermissionData { get; private set; }
 
         private IEnumerable<string> _bamls;
 

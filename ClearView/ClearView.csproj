@@ -52,6 +52,9 @@
 
 	<ItemGroup>
 		<None Remove="clearview.png" />
+		<None Remove="Resources\Art.png" />
+		<None Remove="Resources\Select-Language-small.png" />
+		<None Remove="Resources\Select-Language.png" />
 	</ItemGroup>
 
 	<!-- ApplicationDefinition is implicitly included by the SDK when UseWPF is true;
@@ -124,6 +127,7 @@
 		<Resource Include="Resources\4505-user_add.png" />
 		<Resource Include="Resources\5001-web_search.png" />
 		<Resource Include="Resources\9012-surgeon.png" />
+		<Resource Include="Resources\Art.png" />
 		<Resource Include="Resources\billing_update.gif" />
 		<Resource Include="Resources\calibration_sentech.bmp" />
 		<Resource Include="Resources\clearview.ico" />
@@ -132,6 +136,7 @@
 		<Resource Include="Resources\dbs.ico" />
 		<Resource Include="Resources\member-search-icon.gif" />
 		<Resource Include="Resources\person-add.jpg" />
+		<Resource Include="Resources\Select-Language-small.png" />
 	</ItemGroup>
 
 	<ItemGroup>

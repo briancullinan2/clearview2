@@ -41,7 +41,8 @@
             <BitmapImage x:Key="ClearView" UriSource="Resources/Clearview.png" />
             <BitmapImage x:Key="Permissions" UriSource="Resources/0080-doc_ok.png" />
             <BitmapImage x:Key="Calibrate" UriSource="Resources/0175-camera.png" />
-            <BitmapImage x:Key="Languages" UriSource="Resources/language-skill.jpg" />
+            <BitmapImage x:Key="Themes" UriSource="Resources/Art.png" />
+            <BitmapImage x:Key="Languages" UriSource="Resources/Select-Language-small.png" />
             <BitmapImage x:Key="ClearViewBackground" UriSource="Resources/ClearViewBackground.png" />
 
         </ResourceDictionary>
@@ -217,15 +218,20 @@
                         LargeImageSource="{StaticResource UpdateLogin}"
                         SmallImageSource="{StaticResource UpdateLogin}" />
                     <ribbon:RibbonButton
-                        Name="Exit"
-                        Label="Exit"
-                        LargeImageSource="{StaticResource Exit}"
-                        SmallImageSource="{StaticResource Exit}" />
-                    <ribbon:RibbonButton
                         Name="Languages"
                         Label="Languages"
                         LargeImageSource="{StaticResource Languages}"
                         SmallImageSource="{StaticResource Languages}" />
+                    <ribbon:RibbonButton
+                        Name="Themes"
+                        Label="Themes"
+                        LargeImageSource="{StaticResource Themes}"
+                        SmallImageSource="{StaticResource Themes}" />
+                    <ribbon:RibbonButton
+                        Name="Exit"
+                        Label="Exit"
+                        LargeImageSource="{StaticResource Exit}"
+                        SmallImageSource="{StaticResource Exit}" />
                 </ribbon:RibbonGroup>
             </ribbon:RibbonTab>
         </ribbon:Ribbon>
