@@ -25,12 +25,17 @@ namespace EPIC.ClearView
         private static System.Reflection.Assembly? CurrentDomain_AssemblyResolve(object? sender, ResolveEventArgs args)
         {
             // fix assembly naming convention expectation from namespace, cropping up somewhere inside i looked in every xaml
-            if (args.Name.Contains("EPIC.ClearView")) return typeof(App).Assembly;
+            var namespaces = AppDomain.CurrentDomain.GetAssemblies().Select(a => (
+                //all: a.GetCustomAttributes().FirstOrDefault(attr => attr.GetType().Name.Contains("Namespace")),
+                attr: a.GetCustomAttributes().FirstOrDefault(attr => attr.GetType().Name.Contains("Namespace") && !String.IsNullOrEmpty(attr.GetType().GetProperty("Namespace")?.GetValue(attr) as string)),
+                assembly: a
+            )).Where(obj => obj.attr != null).Select(obj => (
+                attr: obj.attr,
+                assembly: obj.assembly,
+                root: obj.attr.GetType().GetProperty("Namespace")?.GetValue(obj.attr) as string
+            ));
 
-            string assemblyName = new AssemblyName(args.Name).Name ?? string.Empty;
-
-            var existing = AppDomain.CurrentDomain.GetAssemblies()
-                                                    .FirstOrDefault(a => a.GetName().Name == assemblyName);
+            var existing = namespaces.FirstOrDefault(a => a.root == args.Name.Split(',')[0]).assembly;
             if (existing != null)
             {
                 return existing;
@@ -38,7 +43,7 @@ namespace EPIC.ClearView
 
             var location = String.IsNullOrEmpty(typeof(App).Assembly.Location) ? AppDomain.CurrentDomain.BaseDirectory : Path.GetDirectoryName(typeof(App).Assembly.Location);
 
-            string expectedPath = Path.Combine(location, assemblyName + ".dll");
+            string expectedPath = Path.Combine(location, args.Name + ".dll");
 
             if (File.Exists(expectedPath))
             {

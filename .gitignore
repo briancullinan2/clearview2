@@ -8,3 +8,7 @@ LegacyResources/obj
 CameraInterface/obj
 */bin
 */obj
+*.id0
+*.id1
+*.nam
+*.til

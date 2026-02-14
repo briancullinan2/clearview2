@@ -1,8 +1,9 @@
 ﻿using EPIC.CameraInterface;
 using EPIC.ClearView.Utilities;
 using EPIC.DataLayer.Customization;
+using EPIC.DataLayer.Extensions;
+using EPIC.MedicalControls.Controls;
 using Microsoft.VisualBasic.FileIO;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -16,11 +17,11 @@ namespace EPIC.ClearView.Macros
         // Token: 0x06000146 RID: 326 RVA: 0x0000BFEC File Offset: 0x0000A1EC
         public static void Capture(EPIC.DataLayer.Entities.DeviceSetting settings, EPIC.ClearView.Macros.General.CaptureCallback callback, bool onlyClosest)
         {
-            EPIC.ClearView.Macros.General.Capture(settings.Frequency, settings.PulseDuration, settings.PulseWidth, settings.ExposureDelay, settings.Voltage, settings.Brightness, settings.Gain, settings.Exposure, callback, settings.Device, onlyClosest);
+            EPIC.ClearView.Macros.General.Capture(settings.Frequency, settings.PulseDuration, settings.PulseWidth, settings.ExposureDelay, settings.Voltage, settings.Brightness, settings.Gain, settings.ExposureDelay, callback, settings.Device, onlyClosest);
         }
 
         // Token: 0x06000147 RID: 327 RVA: 0x0000C04C File Offset: 0x0000A24C
-        public static void Capture(PWM0Frequency frequency, PulseDuration duration, PulseWidth width, int exposureDelay, Voltage voltage, int brightness, int gain, int exposure, EPIC.ClearView.Macros.General.CaptureCallback callback, DeviceEntity deviceEntity, bool onlyClosest)
+        public static void Capture(PWM0Frequency frequency, PulseDuration duration, PulseWidth width, int exposureDelay, Voltage voltage, int brightness, int gain, int exposure, EPIC.ClearView.Macros.General.CaptureCallback callback, DataLayer.Entities.Device deviceEntity, bool onlyClosest)
         {
             if (deviceEntity == null)
             {
@@ -29,7 +30,8 @@ namespace EPIC.ClearView.Macros
             General.StartExposureParams startExposureParams = new General.StartExposureParams
             {
                 Camera = CameraManager.Current.Cameras.FirstOrDefault<ICapturable>(),
-                Device = DeviceManager.Current.Devices.FirstOrDefault<IControllable>(),
+                // TODO: finish device
+                //Device = DeviceManager.Current.Devices.FirstOrDefault<IControllable>(),
                 Callback = callback,
                 DeviceEntity = deviceEntity,
                 Duration = duration,
@@ -42,10 +44,9 @@ namespace EPIC.ClearView.Macros
                 Exposure = exposure,
                 OnlyClosest = onlyClosest
             };
-            ParallelWork.StartNow<General.StartExposureParams>(new Action<General.StartExposureParams>(General.StartExposure), new Action<General.StartExposureParams>(General.EndExposure), delegate (General.StartExposureParams @params, Exception ex)
-            {
-                Log.Error("There was an error capturing.", ex);
-            }, startExposureParams, ThreadPriority.Highest);
+            Task.Run(() => General.StartExposure(startExposureParams))
+                .ContinueWith(t => General.EndExposure(startExposureParams), TaskContinuationOptions.NotOnFaulted)
+                .ContinueWith(t => Log.Error("There was an error capturing.", t.Exception?.InnerException ?? t.Exception), TaskContinuationOptions.OnlyOnFaulted);
         }
 
         // Token: 0x06000148 RID: 328 RVA: 0x0000C19C File Offset: 0x0000A39C
@@ -78,14 +79,14 @@ namespace EPIC.ClearView.Macros
                 ;
                 foreach (KeyValuePair<long, Bitmap> keyValuePair in list2)
                 {
-                    byte[] array = Utilities.Compression.CompressImage(keyValuePair.Value);
+                    byte[] array = Compression.CompressImage(keyValuePair.Value);
                     if (array != null)
                     {
                         DataLayer.Entities.Image imageEntity = new DataLayer.Entities.Image
                         {
                             ImageData = array
                         };
-                        captureEntity.Images.Add(new DataLayer.Entities.Capture
+                        captureEntity.Images.Add(new DataLayer.Entities.ImageCapture
                         {
                             Image = imageEntity
                         });
@@ -95,7 +96,7 @@ namespace EPIC.ClearView.Macros
                 captureEntity.Save(true);
                 int closestIndex = (from x in list
                                     select x.Item1).ToList<long>().IndexOf(closest);
-                EPIC.ClearView.Controls.CaptureResults results = new EPIC.ClearView.Controls.CaptureResults(list, closestIndex, captureEntity);
+                CaptureResults results = new CaptureResults(list, closestIndex, captureEntity);
                 if (sep.Callback != null)
                 {
                     sep.Callback.BeginInvoke(results, null, null);
@@ -126,18 +127,20 @@ namespace EPIC.ClearView.Macros
         {
             uint num;
             IntPtr intPtr;
-            if ((intPtr = Avrt.AvSetMmThreadCharacteristics("Capture", ref num)) == IntPtr.Zero)
-            {
-                throw new Win32Exception();
-            }
+            // TODO: finish device
+            //if ((intPtr = Avrt.AvSetMmThreadCharacteristics("Capture", ref num)) == IntPtr.Zero)
+            //{
+            //    throw new Win32Exception();
+            //}
             Stopwatch sw = sep.Stopwatch;
             Dictionary<long, Bitmap> captures = sep.Captures;
             sep.Camera.Brightness = sep.Brightness;
             sep.Camera.Gain = sep.Gain;
             sep.Camera.Exposure = sep.Exposure;
-            sep.Device.SetFrequency(sep.Frequency);
-            sep.Device.SetExposureVoltage(sep.Voltage);
-            sep.Device.SetPulseDuration(sep.Duration);
+            // TODO: finish device
+            //sep.Device.SetFrequency(sep.Frequency);
+            //sep.Device.SetExposureVoltage(sep.Voltage);
+            //sep.Device.SetPulseDuration(sep.Duration);
             FrameCallback value = delegate (IntPtr bitmap)
             {
                 Bitmap value2 = Image.FromHbitmap(bitmap);
@@ -146,18 +149,20 @@ namespace EPIC.ClearView.Macros
             };
             sep.Camera.Captured += value;
             sw.Start();
-            sep.Device.StartExposure();
+            // TODO: finish device
+            //sep.Device.StartExposure();
             long elapsedTicks = sw.ElapsedTicks;
-            while (sw.ElapsedTicks <= sep.Duration * 10000 + elapsedTicks)
+            while (sw.ElapsedTicks <= (int)sep.Duration * 10000 + elapsedTicks)
             {
                 Thread.Sleep(1);
             }
             sep.Camera.Captured -= value;
             sw.Stop();
-            if (!Avrt.AvRevertMmThreadCharacteristics(intPtr))
-            {
-                throw new Win32Exception();
-            }
+            // TODO: finish device
+            //if (!Avrt.AvRevertMmThreadCharacteristics(intPtr))
+            //{
+            //    throw new Win32Exception();
+            //}
         }
 
         // Token: 0x0600014B RID: 331 RVA: 0x0000C6E4 File Offset: 0x0000A8E4
@@ -171,13 +176,8 @@ namespace EPIC.ClearView.Macros
                 ReconnectMessage = reconnectMessage,
                 CameraName = cameraName
             };
-            Start.Work(delegate ()
-            {
-                General.ConnectThread(connectedInfo);
-            }, ThreadPriority.Normal).OnException(delegate (Exception ex)
-            {
-                Log.Error("There was an error connecting to the camera.", ex);
-            }).RunNow();
+            Task.Run(() => General.ConnectThread(connectedInfo))
+                .ContinueWith(t => Log.Error("There was an error connecting to the camera.", t.Exception?.InnerException ?? t.Exception), TaskContinuationOptions.OnlyOnFaulted);
         }
 
         // Token: 0x0600014C RID: 332 RVA: 0x0000C808 File Offset: 0x0000AA08
@@ -203,26 +203,29 @@ namespace EPIC.ClearView.Macros
                 }
                 CameraManager.Current.Changed -= value;
             }
-            if (DeviceManager.Current.Devices == null)
-            {
-                DeviceManager.DevicesChanged value2 = delegate (DeviceManager.DevicesChangedEventArgs args)
-                {
-                    General.CloseWindows(connectedInfo);
-                };
-                DeviceManager.Current.Changed += value2;
-                Application.Current.Dispatcher.BeginInvoke(new Action<string>(delegate (string message)
-                {
-                    Xceed.Wpf.Toolkit.MessageBox.Show(Application.Current.MainWindow, message);
-                }), new object[]
-                {
-                    connectedInfo.DeviceMessage
-                });
-                while (DeviceManager.Current.Devices == null)
-                {
-                    Thread.Sleep(100);
-                }
-                DeviceManager.Current.Changed -= value2;
-            }
+            // TODO: finish device
+            /*
+             if (DeviceManager.Current.Devices == null)
+             {
+                 DeviceManager.DevicesChanged value2 = delegate (DeviceManager.DevicesChangedEventArgs args)
+                 {
+                     General.CloseWindows(connectedInfo);
+                 };
+                 DeviceManager.Current.Changed += value2;
+                 Application.Current.Dispatcher.BeginInvoke(new Action<string>(delegate (string message)
+                 {
+                     Xceed.Wpf.Toolkit.MessageBox.Show(Application.Current.MainWindow, message);
+                 }), new object[]
+                 {
+                     connectedInfo.DeviceMessage
+                 });
+                 while (DeviceManager.Current.Devices == null)
+                 {
+                     Thread.Sleep(100);
+                 }
+                 DeviceManager.Current.Changed -= value2;
+             }
+             */
             ICapturable capturable = CameraManager.Current.Cameras.FirstOrDefault((ICapturable x) => x.DisplayName.Equals(connectedInfo.CameraName));
             if (capturable != null)
             {
@@ -258,6 +261,8 @@ namespace EPIC.ClearView.Macros
                     }
                 }
             }
+            // TODO: finish device
+            /*
             IControllable controllable = DeviceManager.Current.Devices.FirstOrDefault<IControllable>();
             if (controllable != null)
             {
@@ -293,6 +298,7 @@ namespace EPIC.ClearView.Macros
                     }
                 }
             }
+            */
             return connectedInfo;
         }
 
@@ -303,7 +309,7 @@ namespace EPIC.ClearView.Macros
             {
                 foreach (Window window in Application.Current.Windows.OfType<Window>())
                 {
-                    if (window.Content is MessageBox && (((MessageBox)window.Content).Text == cameraMessage || ((MessageBox)window.Content).Text == deviceMessage || ((MessageBox)window.Content).Text == reconnectMessage))
+                    if (window.Content is Xceed.Wpf.Toolkit.MessageBox && (((Xceed.Wpf.Toolkit.MessageBox)window.Content).Text == cameraMessage || ((Xceed.Wpf.Toolkit.MessageBox)window.Content).Text == deviceMessage || ((Xceed.Wpf.Toolkit.MessageBox)window.Content).Text == reconnectMessage))
                     {
                         window.Close();
                     }
@@ -324,11 +330,14 @@ namespace EPIC.ClearView.Macros
             {
                 capturable.Captured -= frameCallback;
             }
+            // TODO: finish device
+            /*
             IControllable controllable = DeviceManager.Current.Devices.FirstOrDefault<IControllable>();
             if (controllable != null)
             {
                 controllable.Close();
             }
+            */
         }
 
         // Token: 0x0600014F RID: 335 RVA: 0x0000CDC8 File Offset: 0x0000AFC8
@@ -346,7 +355,7 @@ namespace EPIC.ClearView.Macros
 
         // Token: 0x02000018 RID: 24
         // (Invoke) Token: 0x0600015B RID: 347
-        public delegate void CaptureCallback(EPIC.ClearView.Controls.CaptureResults results);
+        public delegate void CaptureCallback(CaptureResults results);
 
         // Token: 0x02000019 RID: 25
         private class StartExposureParams
@@ -402,7 +411,8 @@ namespace EPIC.ClearView.Macros
             // Token: 0x1700004F RID: 79
             // (get) Token: 0x06000166 RID: 358 RVA: 0x0000CEDC File Offset: 0x0000B0DC
             // (set) Token: 0x06000167 RID: 359 RVA: 0x0000CEF3 File Offset: 0x0000B0F3
-            public IControllable Device { get; set; }
+            // TODO: finish device
+            //public IControllable Device { get; set; }
 
             // Token: 0x17000050 RID: 80
             // (get) Token: 0x06000168 RID: 360 RVA: 0x0000CEFC File Offset: 0x0000B0FC
@@ -427,7 +437,7 @@ namespace EPIC.ClearView.Macros
             // Token: 0x17000054 RID: 84
             // (get) Token: 0x06000170 RID: 368 RVA: 0x0000CF7C File Offset: 0x0000B17C
             // (set) Token: 0x06000171 RID: 369 RVA: 0x0000CF93 File Offset: 0x0000B193
-            public DeviceEntity DeviceEntity { get; set; }
+            public DataLayer.Entities.Device? DeviceEntity { get; set; }
 
             // Token: 0x17000055 RID: 85
             // (get) Token: 0x06000172 RID: 370 RVA: 0x0000CF9C File Offset: 0x0000B19C
@@ -463,7 +473,7 @@ namespace EPIC.ClearView.Macros
 
         // Token: 0x0200001A RID: 26
         // (Invoke) Token: 0x0600017E RID: 382
-        public delegate void ConnectedHandler(IControllable device, ICapturable camera);
+        //public delegate void ConnectedHandler(IControllable device, ICapturable camera);
 
         // Token: 0x0200001B RID: 27
         private class ConnectedInfo
@@ -497,7 +507,8 @@ namespace EPIC.ClearView.Macros
             public ICapturable Camera;
 
             // Token: 0x040000CE RID: 206
-            public IControllable Device;
+            // TODO: finish device
+            //public IControllable Device;
         }
     }
 }

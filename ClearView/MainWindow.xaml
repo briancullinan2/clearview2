@@ -23,7 +23,8 @@
     <FrameworkElement.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Themes/ClearView.xaml" />
+                <ResourceDictionary Source="/MedicalControls;component/Themes/ClearView.xaml" />
+                <ResourceDictionary Source="/MedicalControls;component/Themes/Application/TabControlStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <BitmapImage x:Key="Globe" UriSource="Resources/5001-web_search.png" />
             <BitmapImage x:Key="Patients" UriSource="Resources/4502-users.png" />
@@ -102,7 +103,6 @@
                     <ribbon:RibbonToggleButton
                         Name="AccountWelcome"
                         Checked="AccountWelcome_Checked"
-                        IsChecked="{Binding ElementName=Tabs, Path=Items, Mode=OneWay, Converter={StaticResource UriTabExistsConverter}, ConverterParameter='Welcome.xaml', ConverterCulture={x:Static glob:CultureInfo.InvariantCulture}}"
                         Label="Welcome"
                         LargeImageSource="{StaticResource ClearView}"
                         Unchecked="AccountWelcome_Unchecked" />
@@ -245,11 +245,9 @@
             Grid.Row="1"
             Grid.Column="0"
             Grid.ColumnSpan="2"
-            Panel.ZIndex="0">
-            <TabItem
-                Header="Welcome"
-                HeaderTemplate="{StaticResource TabClosable}"
-                IsSelected="True">
+            Panel.ZIndex="0"
+			Style="{StaticResource StandardTabControl}">
+            <TabItem Header="Welcome" IsSelected="True">
                 <Frame NavigationUIVisibility="Hidden" Source="/Welcome.xaml" />
             </TabItem>
         </TabControl>

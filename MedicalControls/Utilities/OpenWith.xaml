@@ -1,161 +1,107 @@
 <Window
-	x:Class="EPIC.Controls.OpenWith" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:controls="clr-namespace:EPIC.Controls"
-	Height="300"
-	Width="250"
-	WindowStartupLocation="CenterOwner"
-	Title="Open with..."
-	SnapsToDevicePixels="True"
-	UseLayoutRounding="True"
-	Icon="{Binding MainWindow.Icon, Source={x:Static Application.Current}}">
-	<FrameworkElement.Resources>
-		<ResourceDictionary>
-			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary
-					Source="/Themes/ClearView.xaml" />
-				<ResourceDictionary
-					Source="/Resources/WindowsStyles.xaml" />
-			</ResourceDictionary.MergedDictionaries>
-		</ResourceDictionary>
-	</FrameworkElement.Resources>
-	<Grid
-		Background="{x:Static SystemColors.ControlBrush}">
-		<Grid.RowDefinitions>
-			<RowDefinition
-				Height="Auto" />
-			<RowDefinition />
-			<RowDefinition
-				Height="Auto" />
-		</Grid.RowDefinitions>
-		<Label
-			Content="Select a program to open the file:" />
-		<ListBox
-			Name="Programs"
-			Grid.Row="1"
-			Margin="5">
-			<FrameworkElement.Resources>
-				<ResourceDictionary>
-					<Style
-						TargetType="{x:Type ListBoxItem}"
-						BasedOn="{StaticResource {x:Type ListBoxItem}}"
-						x:Key="{x:Type ListBoxItem}">
-						<Setter
-							Property="BorderThickness"
-							Value="1" />
-						<Setter
-							Property="Padding"
-							Value="2,0" />
-						<Setter
-							Property="Template">
-							<Setter.Value>
-								<ControlTemplate
-									TargetType="{x:Type ListBoxItem}">
-									<!--Unknown connection ID: 2-->
-									<Grid>
-										<Border
-											Name="outerBorder"
-											BorderBrush="{TemplateBinding BorderBrush}"
-											BorderThickness="{TemplateBinding BorderThickness}"
-											CornerRadius="2"
-											SnapsToDevicePixels="True">
-											<Border
-												Name="innerBorder"
-												Background="{TemplateBinding Background}"
-												BorderThickness="1"
-												CornerRadius="1"
-												Padding="{TemplateBinding Padding}"
-												SnapsToDevicePixels="True"
-												UseLayoutRounding="True">
-												<StackPanel
-													Orientation="Horizontal">
-													<Image
-														Source="{Binding Icon}" />
-													<Label
-														VerticalAlignment="Center"
-														Content="{Binding DisplayName}" />
-												</StackPanel>
-											</Border>
-										</Border>
-									</Grid>
-									<ControlTemplate.Triggers>
-										<Trigger
-											Property="UIElement.IsMouseOver"
-											Value="True">
-											<Setter
-												TargetName="outerBorder"
-												Property="BorderBrush"
-												Value="{StaticResource HoverOuterBorderBrushKey}" />
-											<Setter
-												TargetName="innerBorder"
-												Property="Background"
-												Value="{StaticResource HoverBackgroundBrushKey}" />
-											<Setter
-												TargetName="innerBorder"
-												Property="BorderBrush"
-												Value="{StaticResource HoverInnerBorderBrushKey}" />
-										</Trigger>
-										<Trigger
-											Property="ListBoxItem.IsSelected"
-											Value="True">
-											<Setter
-												TargetName="outerBorder"
-												Property="BorderBrush"
-												Value="{StaticResource SelectedActiveOuterBorderBrushKey}" />
-											<Setter
-												TargetName="innerBorder"
-												Property="Background"
-												Value="{StaticResource SelectedActiveBackgroundBrushKey}" />
-											<Setter
-												TargetName="innerBorder"
-												Property="BorderBrush"
-												Value="{StaticResource SelectedActiveInnerBorderBrushKey}" />
-										</Trigger>
-										<MultiTrigger>
-											<MultiTrigger.Conditions>
-												<Condition
-													Property="ListBoxItem.IsSelected"
-													Value="True" />
-												<Condition
-													Property="Selector.IsSelectionActive"
-													Value="False" />
-											</MultiTrigger.Conditions>
-											<Setter
-												TargetName="outerBorder"
-												Property="BorderBrush"
-												Value="{StaticResource SelectedInactiveOuterBorderBrushKey}" />
-											<Setter
-												TargetName="innerBorder"
-												Property="Background"
-												Value="{StaticResource SelectedInactiveBackgroundBrushKey}" />
-											<Setter
-												TargetName="innerBorder"
-												Property="BorderBrush"
-												Value="{StaticResource SelectedInactiveInnerBorderBrushKey}" />
-										</MultiTrigger>
-										<Trigger
-											Property="IsEnabled"
-											Value="False">
-											<Setter
-												Value="{DynamicResource SystemColors.GrayTextBrushKey}"
-												Property="Foreground" />
-										</Trigger>
-									</ControlTemplate.Triggers>
-								</ControlTemplate>
-							</Setter.Value>
-						</Setter>
-					</Style>
-				</ResourceDictionary>
-			</FrameworkElement.Resources>
-		</ListBox>
-		<StackPanel
-			Grid.Row="2"
-			Orientation="Horizontal"
-			HorizontalAlignment="Right">
-			<Button
-				Content="Open"
-				Click="Open_Click" />
-			<Button
-				Content="Cancel"
-				Click="Close_Click" />
-		</StackPanel>
-	</Grid>
+    x:Class="EPIC.MedicalControls.Controls.OpenWith"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:EPIC.MedicalControls.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Open with..."
+    Width="250"
+    Height="300"
+    Icon="/Resources/clearview.png"
+    SnapsToDevicePixels="True"
+    UseLayoutRounding="True"
+    WindowStartupLocation="CenterOwner">
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/MedicalControls;component/Themes/ClearView.xaml" />
+                <ResourceDictionary Source="/MedicalControls;component/Themes/Application/WindowsStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+    <Grid Background="{x:Static SystemColors.ControlBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Label Content="Select a program to open the file:" />
+        <ListBox
+            Name="Programs"
+            Grid.Row="1"
+            Margin="5">
+            <FrameworkElement.Resources>
+                <ResourceDictionary>
+                    <Style
+                        x:Key="{x:Type ListBoxItem}"
+                        BasedOn="{StaticResource {x:Type ListBoxItem}}"
+                        TargetType="{x:Type ListBoxItem}">
+                        <Setter Property="BorderThickness" Value="1" />
+                        <Setter Property="Padding" Value="2,0" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                    <!--  Unknown connection ID: 2  -->
+                                    <Grid>
+                                        <Border
+                                            Name="outerBorder"
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                            CornerRadius="2"
+                                            SnapsToDevicePixels="True">
+                                            <Border
+                                                Name="innerBorder"
+                                                Padding="{TemplateBinding Padding}"
+                                                Background="{TemplateBinding Background}"
+                                                BorderThickness="1"
+                                                CornerRadius="1"
+                                                SnapsToDevicePixels="True"
+                                                UseLayoutRounding="True">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Image Source="{Binding Icon}" />
+                                                    <Label VerticalAlignment="Center" Content="{Binding DisplayName}" />
+                                                </StackPanel>
+                                            </Border>
+                                        </Border>
+                                    </Grid>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="UIElement.IsMouseOver" Value="True">
+                                            <Setter TargetName="outerBorder" Property="BorderBrush" Value="{StaticResource HoverOuterBorderBrushKey}" />
+                                            <Setter TargetName="innerBorder" Property="Background" Value="{StaticResource HoverBackgroundBrushKey}" />
+                                            <Setter TargetName="innerBorder" Property="BorderBrush" Value="{StaticResource HoverInnerBorderBrushKey}" />
+                                        </Trigger>
+                                        <Trigger Property="ListBoxItem.IsSelected" Value="True">
+                                            <Setter TargetName="outerBorder" Property="BorderBrush" Value="{StaticResource SelectedActiveOuterBorderBrushKey}" />
+                                            <Setter TargetName="innerBorder" Property="Background" Value="{StaticResource SelectedActiveBackgroundBrushKey}" />
+                                            <Setter TargetName="innerBorder" Property="BorderBrush" Value="{StaticResource SelectedActiveInnerBorderBrushKey}" />
+                                        </Trigger>
+                                        <MultiTrigger>
+                                            <MultiTrigger.Conditions>
+                                                <Condition Property="ListBoxItem.IsSelected" Value="True" />
+                                                <Condition Property="Selector.IsSelectionActive" Value="False" />
+                                            </MultiTrigger.Conditions>
+                                            <Setter TargetName="outerBorder" Property="BorderBrush" Value="{StaticResource SelectedInactiveOuterBorderBrushKey}" />
+                                            <Setter TargetName="innerBorder" Property="Background" Value="{StaticResource SelectedInactiveBackgroundBrushKey}" />
+                                            <Setter TargetName="innerBorder" Property="BorderBrush" Value="{StaticResource SelectedInactiveInnerBorderBrushKey}" />
+                                        </MultiTrigger>
+                                        <Trigger Property="IsEnabled" Value="False">
+                                            <Setter Property="Foreground" Value="{DynamicResource SystemColors.GrayTextBrushKey}" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ResourceDictionary>
+            </FrameworkElement.Resources>
+        </ListBox>
+        <StackPanel
+            Grid.Row="2"
+            HorizontalAlignment="Right"
+            Orientation="Horizontal">
+            <Button Click="Open_Click" Content="Open" />
+            <Button Click="Close_Click" Content="Cancel" />
+        </StackPanel>
+    </Grid>
 </Window>

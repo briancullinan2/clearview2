@@ -11,7 +11,7 @@
     <FrameworkElement.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Themes/ClearView.xaml" />
+                <ResourceDictionary Source="/MedicalControls;component/Themes/ClearView.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <BitmapImage x:Key="Find" UriSource="/Resources/0025-search.png" />
             <BitmapImage x:Key="NewPatient" UriSource="/Resources/Person-add.jpg" />
@@ -201,7 +201,7 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding FirstName}" Header="First Name" />
                 <DataGridTextColumn Binding="{Binding LastName}" Header="Last Name" />
-                <DataGridTextColumn Binding="{Binding Gender, Converter={StaticResource EnumDisplayNameConverter}}" Header="Gender" />
+                <DataGridTextColumn Binding="{Binding Gender}" Header="Gender" />
                 <DataGridTextColumn Binding="{Binding PatientId}" Header="Patient Id" />
                 <DataGridTextColumn Binding="{Binding BirthDate, StringFormat={}{0:ddMMMyyyy}}" Header="Birth Date" />
                 <DataGridCheckBoxColumn Binding="{x:Null}" Header="Archived" />

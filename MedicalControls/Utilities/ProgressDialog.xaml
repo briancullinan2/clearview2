@@ -1,49 +1,45 @@
 <Window
-	x:Class="EPIC.Controls.ProgressDialog" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	Title="ProgressDialog"
-	Height="160"
-	Width="380"
-	SizeToContent="WidthAndHeight"
-	ResizeMode="NoResize"
-	WindowStartupLocation="CenterOwner"
-	MinHeight="150"
-	MinWidth="350"
-	ShowInTaskbar="False"
-	SnapsToDevicePixels="True"
-	UseLayoutRounding="True" xmlns:controls="clr-namespace:EPIC.Controls"
-	Icon="{Binding Path=MainWindow.Icon, Source={x:Static Application.Current}}">
-	<FrameworkElement.Resources>
-		<ResourceDictionary>
-			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary
-					Source="/Themes/ClearView.xaml" />
-			</ResourceDictionary.MergedDictionaries>
-		</ResourceDictionary>
-	</FrameworkElement.Resources>
-	<Grid
-		Background="{x:Static SystemColors.ControlBrush}">
-		<Grid.RowDefinitions>
-			<RowDefinition />
-			<RowDefinition
-				Height="Auto" />
-		</Grid.RowDefinitions>
-		<Border
-			BorderThickness="1"
-			BorderBrush="{x:Static SystemColors.ActiveBorderBrush}"
-			Margin="5"
-			Background="{x:Static SystemColors.WindowBrush}"
-			Padding="5">
-			<StackPanel
-				Name="Stati"
-				Grid.Row="1" />
-		</Border>
-		<StackPanel
-			Grid.Row="1"
-			Orientation="Horizontal"
-			HorizontalAlignment="Right">
-			<Button
-				Content="Cancel"
-				Click="Close_Click" />
-		</StackPanel>
-	</Grid>
+    x:Class="EPIC.MedicalControls.Controls.ProgressDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:EPIC.MedicalControls.Controls"
+    Title="ProgressDialog"
+    Width="380"
+    Height="160"
+    MinWidth="350"
+    MinHeight="150"
+    Icon="{Binding Path=MainWindow.Icon, Source={x:Static Application.Current}}"
+    ResizeMode="NoResize"
+    ShowInTaskbar="False"
+    SizeToContent="WidthAndHeight"
+    SnapsToDevicePixels="True"
+    UseLayoutRounding="True"
+    WindowStartupLocation="CenterOwner">
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/MedicalControls;component/Themes/ClearView.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+    <Grid Background="{x:Static SystemColors.ControlBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Border
+            Margin="5"
+            Padding="5"
+            Background="{x:Static SystemColors.WindowBrush}"
+            BorderBrush="{x:Static SystemColors.ActiveBorderBrush}"
+            BorderThickness="1">
+            <StackPanel Name="Stati" Grid.Row="1" />
+        </Border>
+        <StackPanel
+            Grid.Row="1"
+            HorizontalAlignment="Right"
+            Orientation="Horizontal">
+            <Button Click="Close_Click" Content="Cancel" />
+        </StackPanel>
+    </Grid>
 </Window>

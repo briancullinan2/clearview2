@@ -3,8 +3,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ribbon="clr-namespace:System.Windows.Controls.Ribbon;assembly=System.Windows.Controls.Ribbon">
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/Themes/ClearView.xaml" />
-        <ResourceDictionary Source="/Themes/Buttons/ButtonBase.xaml" />
+        <ResourceDictionary Source="/MedicalControls;component/Themes/ClearView.xaml" />
+        <ResourceDictionary Source="/MedicalControls;component/Themes/Buttons/ButtonBase.xaml" />
     </ResourceDictionary.MergedDictionaries>
     <Style
         x:Key="{x:Type ToggleButton}"

@@ -1,7 +1,13 @@
-﻿namespace EPIC.DataLayer.Entities
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace EPIC.DataLayer.Entities
 {
-    public class ImageSector : IEntity
+    [PrimaryKey(nameof(ImageId), nameof(SectorNumber))]
+    public class ImageSector : Entity<ImageSector>
     {
+        public int ImageId { get; set; }
+        [ForeignKey(nameof(ImageId))]
         public Image Image { get; set; }
         public short SectorNumber { get; set; }
         public double StartAngle { get; set; }

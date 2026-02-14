@@ -5,8 +5,8 @@
     xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Ribbon"
     xmlns:ribbon="clr-namespace:System.Windows.Controls.Ribbon;assembly=System.Windows.Controls.Ribbon">
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/EPICCLearView;component/Themes/ClearView.xaml" />
-        <ResourceDictionary Source="/EPICCLearView;component/Themes/Buttons/ToggleButton.xaml" />
+        <ResourceDictionary Source="/MedicalControls;component/Themes/ClearView.xaml" />
+        <ResourceDictionary Source="/MedicalControls;component/Themes/Buttons/ToggleButton.xaml" />
     </ResourceDictionary.MergedDictionaries>
     <SolidColorBrush x:Key="RibbonDisabledForegroundBrushKey" Color="#FF9E9E9E" />
     <SolidColorBrush x:Key="RibbonDropDownBackgroundBrushKey" Color="#F0FFFFFF" />

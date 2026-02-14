@@ -13,7 +13,7 @@
     <FrameworkElement.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/EPICClearView;component/Themes/ClearView.xaml" />
+                <ResourceDictionary Source="/MedicalControls;component/Themes/ClearView.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <BitmapImage x:Key="Globe" UriSource="/Resources/5001-web_search.png" />
             <ribbon:RibbonTab x:Key="ManageOptions">

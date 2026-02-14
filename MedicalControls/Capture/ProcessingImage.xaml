@@ -2,7 +2,7 @@
     x:Class="EPIC.MedicalControls.Controls.ProcessingImage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="clr-namespace:EPIC.Controls"
+    xmlns:controls="clr-namespace:EPIC.MedicalControls.Controls;assembly=MedicalControls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:shaders="clr-namespace:EPIC.MedicalControls.Shaders;assembly=MedicalControls"
@@ -14,9 +14,10 @@
     DataContext="{Binding RelativeSource={RelativeSource Self}}"
     IsHitTestVisible="True"
     SnapsToDevicePixels="True"
-    UseLayoutRounding="True">
+    UseLayoutRounding="True"
+    mc:Ignorable="d controls shaders">
     <UserControl.Resources>
-        <BitmapImage x:Key="CalibrationImage" UriSource="/Resources/calibration_sentech.bmp" />
+        <BitmapImage x:Key="CalibrationImage" UriSource="/MedicalControls;component/Resources/calibration_sentech.bmp" />
     </UserControl.Resources>
     <UserControl.Style>
         <Style TargetType="{x:Type UserControl}">
@@ -265,13 +266,13 @@
                 SnapsToDevicePixels="True"
                 UseLayoutRounding="True"
                 ZIndex="0">
-                <UIElement.Effect>
+                <!--<UIElement.Effect>
                     <shaders:InvertColorEffect>
                         <shaders:InvertColorEffect.Input>
                             <VisualBrush Stretch="None" Visual="{Binding ElementName=Progress}" />
                         </shaders:InvertColorEffect.Input>
                     </shaders:InvertColorEffect>
-                </UIElement.Effect>
+                </UIElement.Effect>-->
             </StackPanel>
             <TextBlock
                 Name="Status"

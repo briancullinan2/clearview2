@@ -9,8 +9,8 @@
     <FrameworkElement.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Themes/ClearView.xaml" />
-                <ResourceDictionary Source="/Resources/DataGridStyles.xaml" />
+                <ResourceDictionary Source="/MedicalControls;component/Themes/ClearView.xaml" />
+                <ResourceDictionary Source="/MedicalControls;component/Themes/Application/DataGridStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <BitmapImage x:Key="Find" UriSource="/Resources/0025-search.png" />
             <BitmapImage x:Key="Remove" UriSource="/Resources/1003-delete.png" />

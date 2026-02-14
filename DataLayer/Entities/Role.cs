@@ -3,7 +3,7 @@
 namespace EPIC.DataLayer.Entities
 {
     [Table("Role")]
-    public class Role : IEntity
+    public class Role : Entity<Role>
     {
         public int Id { get; set; }
         public string Name { get; set; }

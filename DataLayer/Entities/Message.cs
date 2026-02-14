@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace EPIC.DataLayer.Entities
 {
     [Table("Message")]
-    public class Message : IEntity
+    public class Message : Entity<Message>
     {
         public string Title { get; set; }
         public string Body { get; set; }

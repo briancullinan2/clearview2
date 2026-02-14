@@ -1,5 +1,8 @@
-﻿using EPIC.ClearView.Controls;
+﻿using EPIC.ClearView.Macros;
 using EPIC.ClearView.Utilities;
+using EPIC.ClearView.Utilities.Logging;
+using EPIC.DataLayer.Extensions;
+using EPIC.MedicalControls.Controls;
 using Microsoft.Win32;
 using System.Drawing;
 using System.Drawing.Text;
@@ -11,7 +14,6 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using Xceed.Wpf.Toolkit;
 
 namespace EPIC.ClearView.Capture
 {
@@ -79,7 +81,7 @@ namespace EPIC.ClearView.Capture
             this.InitializeComponent();
             base.Unloaded += delegate (object sender, RoutedEventArgs args)
             {
-                EPIC.ClearView.Macros.General.Connect(new FrameCallback(this.FrameCallback), ClearViewConfiguration.Current.Device.Camera, "Loading cameras...", "Loading devices...", "Reconnecting...");
+                EPIC.ClearView.Macros.General.Connect(new CameraInterface.FrameCallback(this.FrameCallback), ClearViewConfiguration.Current?.Device?.Camera, "Loading cameras...", "Loading devices...", "Reconnecting...");
             };
         }
 
@@ -91,11 +93,11 @@ namespace EPIC.ClearView.Capture
         }
 
         // Token: 0x06000054 RID: 84 RVA: 0x00003E4C File Offset: 0x0000204C
-        private void CaptureCallback(EPIC.ClearView.Controls.CaptureResults results)
+        private void CaptureCallback(CaptureResults results)
         {
             if (!base.Dispatcher.CheckAccess())
             {
-                base.Dispatcher.Invoke(new Action<EPIC.ClearView.Controls.CaptureResults>(this.CaptureCallback), new object[]
+                base.Dispatcher.Invoke(new Action<CaptureResults>(this.CaptureCallback), new object[]
                 {
                     results
                 });
@@ -134,19 +136,19 @@ namespace EPIC.ClearView.Capture
         // Token: 0x06000056 RID: 86 RVA: 0x00003F6C File Offset: 0x0000216C
         private void Scan_Loaded(object sender, RoutedEventArgs e)
         {
-            General.Connect(new FrameCallback(this.FrameCallback), ClearViewConfiguration.Current.Device.Camera, "Loading cameras...", "Loading devices...", "Reconnecting...");
+            General.Connect(new CameraInterface.FrameCallback(this.FrameCallback), ClearViewConfiguration.Current.Device?.Camera, "Loading cameras...", "Loading devices...", "Reconnecting...");
             if (base.NavigationService != null)
             {
                 int num = base.NavigationService.CurrentSource.OriginalString.IndexOf("?", StringComparison.InvariantCultureIgnoreCase);
                 int patientId;
                 if (num >= 0 && int.TryParse(HttpUtility.ParseQueryString(base.NavigationService.CurrentSource.OriginalString.Substring(num))["patientId"], out patientId))
                 {
-                    this.Patient = new LinqMetaData().Patient.FirstOrDefault((PatientEntity x) => x.PatientId == patientId);
+                    this.Patient = DataLayer.TranslationContext.Current.Patients.FirstOrDefault((DataLayer.Entities.Patient x) => x.PatientId == patientId).AsSmart();
                 }
                 int fingerSetId;
                 if (num >= 0 && int.TryParse(HttpUtility.ParseQueryString(base.NavigationService.CurrentSource.OriginalString.Substring(num))["fingerSetId"], out fingerSetId))
                 {
-                    this.FingerSet = new LinqMetaData().FingerSet.FirstOrDefault((DataLayer.Entities.FingerSet x) => x.FingerSetId == (long)fingerSetId);
+                    this.FingerSet = DataLayer.TranslationContext.Current.FingerSets.FirstOrDefault((DataLayer.Entities.FingerSet x) => x.FingerSetId == (long)fingerSetId).AsSmart();
                     base.Title = "View Scan";
                 }
             }
@@ -164,7 +166,7 @@ namespace EPIC.ClearView.Capture
                 List<FingerImage> list2 = this.ImagesWBarrier.Children.OfType<FingerImage>().ToList<FingerImage>();
                 for (int i = 0; i < 10; i++)
                 {
-                    DataLayer.Entities.Calibration calibration = ClearViewConfiguration.Current.Calibration.Calibrations.Skip(i).First<DataLayer.Entities.Calibration>();
+                    DataLayer.Entities.ImageCalibration? calibration = ClearViewConfiguration.Current.Calibration?.Calibrations.Skip(i).FirstOrDefault<DataLayer.Entities.ImageCalibration>();
                     list[i].Calibration = calibration;
                     list2[i].Calibration = calibration;
                 }
@@ -207,8 +209,8 @@ namespace EPIC.ClearView.Capture
                     this.RightHand.Source = (BitmapImage)obj;
                     this.LeftHand.Source = (BitmapImage)base.Resources["Hand0L"];
                 }
-                DataLayer.Entities.ImageAlignmentDataLayer.Entities.ImageAlignment = this.FingerSet.Images.FirstOrDefault((DataLayer.Entities.ImageAlignment x) => x.Finger == finger && x.Filtered == this.Selected.Filtered);
-                if (DataLayer.Entities.ImageAlignment != null)
+                DataLayer.Entities.ImageAlignment imageEntity = this.FingerSet?.Images?.FirstOrDefault((DataLayer.Entities.ImageAlignment x) => x.Finger == finger && x.Filtered == this.Selected.Filtered);
+                if (imageEntity != null)
                 {
                     this._isFrozen = true;
                     if (this.Selected.FingerBitmap == null)
@@ -271,14 +273,12 @@ namespace EPIC.ClearView.Capture
                 };
                 if (!(dialog.ShowDialog(Application.Current.MainWindow) != true))
                 {
-                    Start.Work(delegate ()
-                    {
-                        this.StoreAndProcessImages(dialog.FileNames, clicked, clickedImages, unfilteredImages, filteredImages);
-                    }, ThreadPriority.Normal).OnException(delegate (Exception ex)
-                    {
-                        Scan.Log.Error("There was an error loading the finger images.", ex);
-                        base.Dispatcher.Invoke<MessageBoxResult>(() => Xceed.Wpf.Toolkit.MessageBox.Show("There was an error loading the finger images."));
-                    }).RunNow();
+                    Task.Run(() => this.StoreAndProcessImages(dialog.FileNames, clicked, clickedImages, unfilteredImages, filteredImages))
+                           .ContinueWith(t =>
+                           {
+                               Log.Error("There was an error loading the finger images.", t.Exception?.InnerException ?? t.Exception);
+                               base.Dispatcher.Invoke<MessageBoxResult>(() => Xceed.Wpf.Toolkit.MessageBox.Show("There was an error loading the finger images."));
+                           }, TaskContinuationOptions.OnlyOnFaulted);
                 }
             }
         }
@@ -336,7 +336,7 @@ namespace EPIC.ClearView.Capture
                 byte[] image2 = Compression.CompressImage(bitmap);
                 DataLayer.Entities.Image imageEntity = new DataLayer.Entities.Image
                 {
-                    Image = image2
+                    ImageData = image2
                 };
                 imageEntity.Save();
                 CaptureResults results = new CaptureResults(new List<Tuple<long, Bitmap, DataLayer.Entities.Image>>
@@ -369,7 +369,7 @@ namespace EPIC.ClearView.Capture
                     }
                     catch (Exception ex)
                     {
-                        Scan.Log.Error("There was an error saving the finger image.", ex);
+                        Log.Error("There was an error saving the finger image.", ex);
                         base.Dispatcher.Invoke<MessageBoxResult>(() => Xceed.Wpf.Toolkit.MessageBox.Show("There was an error saving the finger image.", "Scan Results", MessageBoxButton.OK));
                     }
                 }

@@ -1,5 +1,7 @@
-﻿using ClosedXML.Excel;
-using EPIC.Utilities;
+﻿using Emgu.CV;
+using Emgu.CV.Structure;
+using EPIC.ClearView.Utilities;
+using EPIC.DataAnalysis;
 using Microsoft.CSharp.RuntimeBinder;
 using Microsoft.Office.Interop.Excel;
 using System.Drawing;
@@ -9,6 +11,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
+using Range = Microsoft.Office.Interop.Excel.Range;
 
 namespace EPIC.ClearView.Macros
 {
@@ -48,7 +51,7 @@ namespace EPIC.ClearView.Macros
                 int num = 1;
                 List<IGrouping<string, DataLayer.Entities.ImageCalibration>> list = (from x in results.GroupBy(delegate (DataLayer.Entities.ImageCalibration x)
                 {
-                    DataLayer.Entities.Capture capture = x.Image.Capture;
+                    DataLayer.Entities.ImageCapture capture = x.Image.Capture;
                     if (capture == null)
                     {
                         throw new NullReferenceException("DataLayer.Entities.Capture is null for one of the images in the set.");
@@ -115,7 +118,7 @@ namespace EPIC.ClearView.Macros
                             }
                             Range range4 = Excel.o__SiteContainer1.p__Site6.Target(Excel.o__SiteContainer1.p__Site6, worksheet.Cells[num, num3 - 1]);
                             range4.set_Value(Missing.Value, "ave");
-                            range4.Borders[XlBordersIndex.xlEdgeTop].LineStyle = XLLineStyle.xlContinuous;
+                            range4.Borders[XlBordersIndex.xlEdgeTop].LineStyle = XlLineStyle.xlContinuous;
                             Marshal.FinalReleaseComObject(range4);
                         }
                         if (Excel.o__SiteContainer1.p__Site7 == null)
@@ -151,7 +154,7 @@ namespace EPIC.ClearView.Macros
                                 }));
                             }
                             Func<CallSite, object, object, object, object> target = Excel.o__SiteContainer1.p__Site9.Target;
-                            CallSitep__Site = Excel.o__SiteContainer1.p__Site9;
+                            CallSite p__Site = Excel.o__SiteContainer1.p__Site9;
                             if (Excel.o__SiteContainer1.p__Sitea == null)
                             {
                                 Excel.o__SiteContainer1.p__Sitea = CallSite<Func<CallSite, object, object>>.Create(Microsoft.CSharp.RuntimeBinder.Binder.GetMember(CSharpBinderFlags.ResultIndexed, "Range", typeof(Excel), new CSharpArgumentInfo[]
@@ -169,7 +172,7 @@ namespace EPIC.ClearView.Macros
                                 }));
                             }
                             Func<CallSite, object, int, object> target2 = Excel.o__SiteContainer1.p__Siteb.Target;
-                            CallSitep__Siteb = Excel.o__SiteContainer1.p__Siteb;
+                            CallSite p__Siteb = Excel.o__SiteContainer1.p__Siteb;
                             if (Excel.o__SiteContainer1.p__Sitec == null)
                             {
                                 Excel.o__SiteContainer1.p__Sitec = CallSite<Func<CallSite, object, object>>.Create(Microsoft.CSharp.RuntimeBinder.Binder.GetMember(CSharpBinderFlags.None, "Interior", typeof(Excel), new CSharpArgumentInfo[]
@@ -243,18 +246,18 @@ namespace EPIC.ClearView.Macros
                 Marshal.FinalReleaseComObject(worksheet);
                 List<DataLayer.Entities.ImageCalibration> list2 = (from x in list
                                                                    select x.First<DataLayer.Entities.ImageCalibration>()).ToList<DataLayer.Entities.ImageCalibration>();
-                foreach (DataLayer.Entities.ImageCalibrationDataLayer.Entities.ImageCalibration2 in list2)
+                foreach (DataLayer.Entities.ImageCalibration calibration2 in list2)
                 {
-                    Excel.CreateWorksheetHistogramFromCalibration(DataLayer.Entities.ImageCalibration2, workbook);
+                    Excel.CreateWorksheetHistogramFromCalibration(calibration2, workbook);
                     if (reportProgress != null)
                     {
-                        reportProgress(string.Format("Generating Histogram {0} of {1}", list2.IndexOf(DataLayer.Entities.ImageCalibration2), list2.Count), (int)((double)list2.IndexOf(DataLayer.Entities.ImageCalibration2) / (double)list2.Count * 100.0));
+                        reportProgress(string.Format("Generating Histogram {0} of {1}", list2.IndexOf(calibration2), list2.Count), (int)((double)list2.IndexOf(calibration2) / (double)list2.Count * 100.0));
                     }
                 }
             }
             catch (Exception ex)
             {
-                Excel.Log.Error("There was an error generating the spreadsheet.", ex);
+                Log.Error("There was an error generating the spreadsheet.", ex);
             }
             finally
             {
@@ -308,12 +311,12 @@ namespace EPIC.ClearView.Macros
             int[,] array;
             int j;
             object obj2;
-            using (Bitmap bitmap = Compression.DecompressImage(result.Image.Image))
+            using (Bitmap bitmap = Compression.DecompressImage(result.Image.ImageData))
             {
                 array = new int[bitmap.Width * bitmap.Height, 3];
-                using (Image<Bgr, byte> image = new Image<Bgr, byte>(bitmap))
+                using (Image<Bgr, byte> image = bitmap.ToImage<Bgr, byte>())
                 {
-                    using (Image<Bgr, byte> image2 = new Image<Bgr, byte>(Compression.DecompressImage(result.Colorized.Image)))
+                    using (Image<Bgr, byte> image2 = Compression.DecompressImage(result.Colorized.ImageData).ToImage<Bgr, byte>())
                     {
                         for (int i = 0; i < image.Height; i++)
                         {
@@ -338,7 +341,7 @@ namespace EPIC.ClearView.Macros
                                         }));
                                     }
                                     Func<CallSite, object, object, object, object> target = Excel.o__SiteContainer1e.p__Site24.Target;
-                                    CallSitep__Site = Excel.o__SiteContainer1e.p__Site24;
+                                    CallSite p__Site = Excel.o__SiteContainer1e.p__Site24;
                                     if (Excel.o__SiteContainer1e.p__Site25 == null)
                                     {
                                         Excel.o__SiteContainer1e.p__Site25 = CallSite<Func<CallSite, object, object>>.Create(Microsoft.CSharp.RuntimeBinder.Binder.GetMember(CSharpBinderFlags.ResultIndexed, "Range", typeof(Excel), new CSharpArgumentInfo[]
@@ -357,7 +360,7 @@ namespace EPIC.ClearView.Macros
                                         }));
                                     }
                                     Func<CallSite, object, int, object> target2 = Excel.o__SiteContainer1e.p__Site26.Target;
-                                    CallSitep__Site2 = Excel.o__SiteContainer1e.p__Site26;
+                                    CallSite p__Site2 = Excel.o__SiteContainer1e.p__Site26;
                                     if (Excel.o__SiteContainer1e.p__Site27 == null)
                                     {
                                         Excel.o__SiteContainer1e.p__Site27 = CallSite<Func<CallSite, object, object>>.Create(Microsoft.CSharp.RuntimeBinder.Binder.GetMember(CSharpBinderFlags.None, "Interior", typeof(Excel), new CSharpArgumentInfo[]
@@ -376,7 +379,7 @@ namespace EPIC.ClearView.Macros
                                         }));
                                     }
                                     Func<CallSite, object, int, object> target3 = Excel.o__SiteContainer1e.p__Site28.Target;
-                                    CallSitep__Site3 = Excel.o__SiteContainer1e.p__Site28;
+                                    CallSite p__Site3 = Excel.o__SiteContainer1e.p__Site28;
                                     if (Excel.o__SiteContainer1e.p__Site29 == null)
                                     {
                                         Excel.o__SiteContainer1e.p__Site29 = CallSite<Func<CallSite, object, object>>.Create(Microsoft.CSharp.RuntimeBinder.Binder.GetMember(CSharpBinderFlags.None, "Font", typeof(Excel), new CSharpArgumentInfo[]
@@ -407,7 +410,7 @@ namespace EPIC.ClearView.Macros
                             }));
                         }
                         Func<CallSite, object, object, object, object> target4 = Excel.o__SiteContainer1e.p__Site2b.Target;
-                        CallSitep__Site2b = Excel.o__SiteContainer1e.p__Site2b;
+                        CallSite p__Site2b = Excel.o__SiteContainer1e.p__Site2b;
                         if (Excel.o__SiteContainer1e.p__Site2c == null)
                         {
                             Excel.o__SiteContainer1e.p__Site2c = CallSite<Func<CallSite, object, object>>.Create(Microsoft.CSharp.RuntimeBinder.Binder.GetMember(CSharpBinderFlags.ResultIndexed, "Range", typeof(Excel), new CSharpArgumentInfo[]
@@ -571,7 +574,7 @@ namespace EPIC.ClearView.Macros
                 }));
             }
             Func<CallSite, object, object, object, object> target5 = Excel.o__SiteContainer1e.p__Site3a.Target;
-            CallSitep__Site3a = Excel.o__SiteContainer1e.p__Site3a;
+            CallSite p__Site3a = Excel.o__SiteContainer1e.p__Site3a;
             if (Excel.o__SiteContainer1e.p__Site3b == null)
             {
                 Excel.o__SiteContainer1e.p__Site3b = CallSite<Func<CallSite, object, object>>.Create(Microsoft.CSharp.RuntimeBinder.Binder.GetMember(CSharpBinderFlags.ResultIndexed, "Range", typeof(Excel), new CSharpArgumentInfo[]
@@ -873,12 +876,12 @@ namespace EPIC.ClearView.Macros
                 double num2 = double.NaN;
                 double num3 = double.NaN;
                 double num4 = double.NaN;
-                DataLayer.Entities.ImageCapture capture = DataLayer.Entities.ImageCalibration.Image.Capture;
+                DataLayer.Entities.ImageCapture capture = imageCalibration.Image.Capture;
                 if (capture != null)
                 {
                     num2 = (double)capture.Capture.Brightness;
                     num3 = (double)capture.Capture.Gain;
-                    num4 = capture.Capture.Voltage;
+                    num4 = (double)capture.Capture.Voltage;
                     text = string.Format("B={1}G={2}_CalibrationImage#{0}.bmp", results.IndexOf(imageCalibration), num2, num3);
                 }
                 stringBuilder.AppendLine(string.Concat(new object[]
@@ -891,81 +894,81 @@ namespace EPIC.ClearView.Macros
                     ",",
                     num4,
                     ",",
-                    DataLayer.Entities.ImageCalibration.NoiseLevel,
+                    imageCalibration.NoiseLevel,
                     ",",
-                    DataLayer.Entities.ImageCalibration.OuterFailures,
+                    imageCalibration.OuterFailures,
                     ",",
-                    DataLayer.Entities.ImageCalibration.OuterTotalPixels,
+                    imageCalibration.OuterTotalPixels,
                     ",",
-                    DataLayer.Entities.ImageCalibration.OuterFailurePercent,
+                    imageCalibration.OuterFailurePercent,
                     ",",
-                    DataLayer.Entities.ImageCalibration.OuterFailed ? "Failed" : "Passed",
+                    imageCalibration.OuterFailed ? "Failed" : "Passed",
                     ",",
-                    DataLayer.Entities.ImageCalibration.InnerFailures,
+                    imageCalibration.InnerFailures,
                     ",",
-                    DataLayer.Entities.ImageCalibration.InnerTotalPixels,
+                    imageCalibration.InnerTotalPixels,
                     ",",
-                    DataLayer.Entities.ImageCalibration.InnerFailurePercent,
+                    imageCalibration.InnerFailurePercent,
                     ",",
-                    DataLayer.Entities.ImageCalibration.InnerFailed ? "Failed" : "Passed",
+                    imageCalibration.InnerFailed ? "Failed" : "Passed",
                     ",",
-                    DataLayer.Entities.ImageCalibration.CoronaFailures,
+                    imageCalibration.CoronaFailures,
                     ",",
-                    DataLayer.Entities.ImageCalibration.CoronaTotalPixels,
+                    imageCalibration.CoronaTotalPixels,
                     ",",
-                    DataLayer.Entities.ImageCalibration.CoronaFailurePercent,
+                    imageCalibration.CoronaFailurePercent,
                     ",",
-                    DataLayer.Entities.ImageCalibration.CoronaFailed ? "Failed" : "Passed",
+                    imageCalibration.CoronaFailed ? "Failed" : "Passed",
                     ",",
-                    DataLayer.Entities.ImageCalibration.HighPFailures,
+                    imageCalibration.HighPFailures,
                     ",",
-                    DataLayer.Entities.ImageCalibration.HighPTotalPixels,
+                    imageCalibration.HighPTotalPixels,
                     ",",
-                    DataLayer.Entities.ImageCalibration.HighPFailurePercent,
+                    imageCalibration.HighPFailurePercent,
                     ",",
-                    DataLayer.Entities.ImageCalibration.HighPFailed ? "Failed" : "Passed",
+                    imageCalibration.HighPFailed ? "Failed" : "Passed",
                     ",",
-                    DataLayer.Entities.ImageCalibration.TotalFailures,
+                    imageCalibration.TotalFailures,
                     ",",
-                    DataLayer.Entities.ImageCalibration.TotalTotalPixels,
+                    imageCalibration.TotalTotalPixels,
                     ",",
-                    DataLayer.Entities.ImageCalibration.TotalFailurePercent,
+                    imageCalibration.TotalFailurePercent,
                     ",",
-                    DataLayer.Entities.ImageCalibration.TotalFailed ? "Failed" : "Passed",
+                    imageCalibration.TotalFailed ? "Failed" : "Passed",
                     ",",
-                    DataLayer.Entities.ImageCalibration.ClumpsFailures,
+                    imageCalibration.ClumpsFailures,
                     ",",
-                    DataLayer.Entities.ImageCalibration.ClumpsTotalPixels,
+                    imageCalibration.ClumpsTotalPixels,
                     ",",
-                    DataLayer.Entities.ImageCalibration.ClumpsFailurePercent,
+                    imageCalibration.ClumpsFailurePercent,
                     ",",
-                    DataLayer.Entities.ImageCalibration.ClumpsFailed ? "Failed" : "Passed",
+                    imageCalibration.ClumpsFailed ? "Failed" : "Passed",
                     ",,",
-                    DataLayer.Entities.ImageCalibration.OuterMeanDiff,
+                    imageCalibration.OuterMeanDiff,
                     ",",
-                    DataLayer.Entities.ImageCalibration.OuterMeanFailed ? "Failed" : "Passed",
+                    imageCalibration.OuterMeanFailed ? "Failed" : "Passed",
                     ",",
-                    DataLayer.Entities.ImageCalibration.InnerMeanDiff,
+                    imageCalibration.InnerMeanDiff,
                     ",",
-                    DataLayer.Entities.ImageCalibration.InnerMeanFailed ? "Failed" : "Passed",
+                    imageCalibration.InnerMeanFailed ? "Failed" : "Passed",
                     ",",
-                    DataLayer.Entities.ImageCalibration.CoronaMeanDiff,
+                    imageCalibration.CoronaMeanDiff,
                     ",",
-                    DataLayer.Entities.ImageCalibration.CoronaMeanFailed ? "Failed" : "Passed",
+                    imageCalibration.CoronaMeanFailed ? "Failed" : "Passed",
                     ",",
-                    DataLayer.Entities.ImageCalibration.HighPMeanDiff,
+                    imageCalibration.HighPMeanDiff,
                     ",",
-                    DataLayer.Entities.ImageCalibration.HighPMeanFailed ? "Failed" : "Passed",
+                    imageCalibration.HighPMeanFailed ? "Failed" : "Passed",
                     ",,",
-                    DataLayer.Entities.ImageCalibration.IntensityInner,
+                    imageCalibration.IntensityInner,
                     ",",
-                    DataLayer.Entities.ImageCalibration.IntensityOuter,
+                    imageCalibration.IntensityOuter,
                     ",",
-                    DataLayer.Entities.ImageCalibration.IntensityCorona,
+                    imageCalibration.IntensityCorona,
                     ",",
-                    DataLayer.Entities.ImageCalibration.IntensityHighP,
+                    imageCalibration.IntensityHighP,
                     ",",
-                    DataLayer.Entities.ImageCalibration.IntensityTotal
+                    imageCalibration.IntensityTotal
                 }));
                 num++;
                 if (reportProgress != null)

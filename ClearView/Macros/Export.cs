@@ -32,7 +32,7 @@ namespace EPIC.ClearView.Macros
                     path = string.Format("B={1}G={2}_CalibrationImage#{0}.bmp", calibrations.IndexOf(calibration), brightness, gain);
                 }
                 string path2 = Path.Combine(calibrationDir, path);
-                using (MemoryStream memoryStream = new MemoryStream(DataLayer.Entities.ImageCalibration.Image.Image))
+                using (MemoryStream memoryStream = new MemoryStream(calibration.Image.ImageData))
                 {
                     using (FileStream fileStream = new FileStream(path2, FileMode.CreateNew, FileAccess.ReadWrite))
                     {
@@ -62,18 +62,18 @@ namespace EPIC.ClearView.Macros
                 FileSystem.CreateDirectory(calibrationDir);
             }
             int num = 0;
-            foreach (DataLayer.Entities.ImageCalibration DataLayer.Entities.ImageCalibration in calibrations)
-			{
-                string path = string.Format("CalibrationImage#{0}.bmp", calibrations.IndexOf(DataLayer.Entities.ImageCalibration));
-                DataLayer.Entities.Capture capture = DataLayer.Entities.ImageCalibration.Image.Capture;
+            foreach (DataLayer.Entities.ImageCalibration calibrationEntity in calibrations)
+            {
+                string path = string.Format("CalibrationImage#{0}.bmp", calibrations.IndexOf(calibrationEntity));
+                DataLayer.Entities.ImageCapture capture = calibrationEntity.Image.Capture;
                 if (capture != null)
                 {
                     int brightness = capture.Capture.Brightness;
                     int gain = capture.Capture.Gain;
-                    path = string.Format("B={1}G={2}_CalibrationImage#{0}.bmp", calibrations.IndexOf(DataLayer.Entities.ImageCalibration), brightness, gain);
+                    path = string.Format("B={1}G={2}_CalibrationImage#{0}.bmp", calibrations.IndexOf(calibrationEntity), brightness, gain);
                 }
                 string path2 = Path.Combine(calibrationDir, path);
-                using (MemoryStream memoryStream = new MemoryStream(DataLayer.Entities.ImageCalibration.Colorized.Image))
+                using (MemoryStream memoryStream = new MemoryStream(calibrationEntity.Colorized.ImageData))
                 {
                     using (FileStream fileStream = new FileStream(path2, FileMode.CreateNew, FileAccess.ReadWrite))
                     {
@@ -92,13 +92,13 @@ namespace EPIC.ClearView.Macros
         }
 
         // Token: 0x060001AE RID: 430 RVA: 0x000110D0 File Offset: 0x0000F2D0
-        public static void Patient(List<PatientEntity> patients, string patientsPath, string append = null)
+        public static void Patient(List<DataLayer.Entities.Patient> patients, string patientsPath, string append = null)
         {
             if (append == null)
             {
                 append = DateTime.Now.ToString("yyMMddfff");
             }
-            foreach (PatientEntity patientEntity in patients)
+            foreach (DataLayer.Entities.Patient patientEntity in patients)
             {
                 string path = Path.Combine(patientsPath, string.Concat(new string[]
                 {
@@ -115,7 +115,7 @@ namespace EPIC.ClearView.Macros
                     patientEntity.LastName,
                     (patientEntity.MiddleInitial.Trim() != "") ? (" " + patientEntity.MiddleInitial + " ") : " ",
                     DateTime.UtcNow.ToString("yyyyMMddTHHmmssZ"),
-                    (patientEntity.Gender == 2) ? "M" : "F",
+                    patientEntity.Gender.ToString(),
                     patientEntity.BirthDate.ToString("yyyyMMdd")
                 });
                 byte[] bytes = Encoding.ASCII.GetBytes(s);

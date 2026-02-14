@@ -12,7 +12,7 @@
     <FrameworkElement.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Themes/ClearView.xaml" />
+                <ResourceDictionary Source="/MedicalControls;component/Themes/ClearView.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <BitmapImage x:Key="Save" UriSource="/Resources/0040-save.png" />
             <BitmapImage x:Key="Cancel" UriSource="/Resources/1001-cancel.png" />
@@ -53,7 +53,7 @@
         <FrameworkElement.Resources>
             <ResourceDictionary>
                 <ResourceDictionary.MergedDictionaries>
-                    <ResourceDictionary Source="/Themes/ClearView.xaml" />
+                    <ResourceDictionary Source="/MedicalControls;component/Themes/ClearView.xaml" />
                 </ResourceDictionary.MergedDictionaries>
             </ResourceDictionary>
         </FrameworkElement.Resources>
@@ -118,7 +118,7 @@
                 <FrameworkElement.Resources>
                     <ResourceDictionary>
                         <ResourceDictionary.MergedDictionaries>
-                            <ResourceDictionary Source="/Themes/ClearView.xaml" />
+                            <ResourceDictionary Source="/MedicalControls;component/Themes/ClearView.xaml" />
                         </ResourceDictionary.MergedDictionaries>
                     </ResourceDictionary>
                 </FrameworkElement.Resources>
@@ -162,7 +162,7 @@
                 <FrameworkElement.Resources>
                     <ResourceDictionary>
                         <ResourceDictionary.MergedDictionaries>
-                            <ResourceDictionary Source="/Themes/ClearView.xaml" />
+                            <ResourceDictionary Source="/MedicalControls;component/Themes/ClearView.xaml" />
                         </ResourceDictionary.MergedDictionaries>
                     </ResourceDictionary>
                 </FrameworkElement.Resources>
@@ -207,7 +207,7 @@
                 <FrameworkElement.Resources>
                     <ResourceDictionary>
                         <ResourceDictionary.MergedDictionaries>
-                            <ResourceDictionary Source="/Themes/ClearView.xaml" />
+                            <ResourceDictionary Source="/MedicalControls;component/Themes/ClearView.xaml" />
                         </ResourceDictionary.MergedDictionaries>
                     </ResourceDictionary>
                 </FrameworkElement.Resources>

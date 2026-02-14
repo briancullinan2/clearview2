@@ -104,6 +104,19 @@ namespace EPIC.DataLayer
             }
         }
 
+        protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+        {
+            // This makes the conversion "implicit" for the database layer globally.
+            configurationBuilder.Properties<Customization.Voltage>().HaveConversion<int>();
+            configurationBuilder.Properties<Customization.Gender>().HaveConversion<int>();
+            configurationBuilder.Properties<Customization.OrganComponent>().HaveConversion<int>();
+            configurationBuilder.Properties<Customization.OrganSystem>().HaveConversion<int>();
+            configurationBuilder.Properties<Customization.PulseDuration>().HaveConversion<int>();
+            configurationBuilder.Properties<Customization.PulseWidth>().HaveConversion<int>();
+            configurationBuilder.Properties<Customization.PWM0Frequency>().HaveConversion<int>();
+            configurationBuilder.Properties<Customization.Voltage>().HaveConversion<int>();
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Explicitly map the Message entity to the "Message" table

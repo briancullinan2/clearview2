@@ -5,7 +5,7 @@ namespace EPIC.DataLayer.Entities
 {
     [Table("DeviceCalibrationSetting")]
     [PrimaryKey(nameof(Id))]
-    public class DeviceCalibrationSetting : IEntity
+    public class DeviceCalibrationSetting : Entity<DeviceCalibrationSetting>
     {
         public double SigmaRegionOuter { get; set; }
         public double SigmaRegionInner { get; set; }

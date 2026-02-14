@@ -9,7 +9,7 @@
     <FrameworkElement.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Themes/ClearView.xaml" />
+                <ResourceDictionary Source="/MedicalControls;component/Themes/ClearView.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <BitmapImage x:Key="Lock" UriSource="/Resources/0132-lock.png" />
             <BitmapImage x:Key="Edit" UriSource="/Resources/0145-task_edit.png" />

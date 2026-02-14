@@ -1,10 +1,9 @@
 ﻿using EPIC.CameraInterface;
-using EPIC.ClearView.Controls;
 using EPIC.ClearView.Macros;
 using EPIC.ClearView.Native;
 using EPIC.ClearView.Utilities;
-using EPIC.Controls;
 using EPIC.DataLayer.Extensions;
+using EPIC.MedicalControls.Controls;
 using Microsoft.VisualBasic.FileIO;
 using Microsoft.Win32;
 using System.Diagnostics;
@@ -45,11 +44,11 @@ namespace EPIC.ClearView.Capture
             this.InitializeComponent();
             base.Loaded += delegate (object sender, RoutedEventArgs args)
             {
-                General.Connect(new FrameCallback(this.FrameCallback), ClearViewConfiguration.Current.Device.Camera, "Loading cameras...", "Loading devices...", "Reconnecting...");
+                General.Connect(new FrameCallback(this.FrameCallback), ClearViewConfiguration.Current?.Device?.Camera, "Loading cameras...", "Loading devices...", "Reconnecting...");
             };
             base.Unloaded += delegate (object sender, RoutedEventArgs args)
             {
-                General.Disconnect(new FrameCallback(this.FrameCallback), ClearViewConfiguration.Current.Device.Camera);
+                General.Disconnect(new FrameCallback(this.FrameCallback), ClearViewConfiguration.Current?.Device?.Camera);
             };
             base.Dispatcher.ShutdownStarted += delegate (object sender, EventArgs args)
             {
@@ -115,11 +114,11 @@ namespace EPIC.ClearView.Capture
         }
 
         // Token: 0x06000010 RID: 16 RVA: 0x0000274C File Offset: 0x0000094C
-        private void CaptureCallback(EPIC.ClearView.Controls.CaptureResults results)
+        private void CaptureCallback(CaptureResults results)
         {
             if (!base.Dispatcher.CheckAccess())
             {
-                base.Dispatcher.Invoke(new Action<EPIC.ClearView.Controls.CaptureResults>(this.CaptureCallback), new object[]
+                base.Dispatcher.Invoke(new Action<CaptureResults>(this.CaptureCallback), new object[]
                 {
                     results
                 });
@@ -378,7 +377,7 @@ namespace EPIC.ClearView.Capture
         }
 
         // Token: 0x06000017 RID: 23 RVA: 0x0000355C File Offset: 0x0000175C
-        private void Calibration_Finished(CalibrationImage sender, DataLayer.Entities.Calibration result)
+        private void Calibration_Finished(CalibrationImage sender, DataLayer.Entities.ImageCalibration result)
         {
             if (this._calibration != null)
             {
@@ -479,7 +478,8 @@ namespace EPIC.ClearView.Capture
         private ICapturable _camera;
 
         // Token: 0x04000008 RID: 8
-        private IControllable _device;
+        // TODO: finish device
+        //private IControllable _device;
 
         // Token: 0x04000009 RID: 9
         private DataLayer.Entities.Calibration _calibration;

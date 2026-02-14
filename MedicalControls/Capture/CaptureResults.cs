@@ -11,9 +11,8 @@ namespace EPIC.MedicalControls.Controls
     public class CaptureResults : IDisposable
     {
         // Token: 0x060000CD RID: 205 RVA: 0x00007BC8 File Offset: 0x00005DC8
-        public CaptureResults(DataLayer.Entities.DeviceCalibrationSetting settings, List<Tuple<long, Bitmap, DataLayer.Entities.Image>> images, int closestIndex, DataLayer.Entities.Capture capture)
+        public CaptureResults(List<Tuple<long, Bitmap, DataLayer.Entities.Image>> images, int closestIndex, DataLayer.Entities.Capture capture)
         {
-            this._settings = settings;
             this._images = images;
             this._closest = closestIndex;
             this._capture = capture;
@@ -56,13 +55,6 @@ namespace EPIC.MedicalControls.Controls
             }
         }
 
-        public DataLayer.Entities.DeviceCalibrationSetting DeviceSettings
-        {
-            get
-            {
-                return this._settings;
-            }
-        }
 
         // Token: 0x17000038 RID: 56
         // (get) Token: 0x060000D1 RID: 209 RVA: 0x00007CC8 File Offset: 0x00005EC8

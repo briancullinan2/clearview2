@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Editor version="1.0">
+   <File absPath="C:\Matlab_Projects\Epic\ColorMaps" lastWrittenTime="1246999871515" name="testenhanceimage.m">
+      <CodeFolds version="1.0"/>
+   </File>
+   <File absPath="C:\Matlab_Projects\Epic\MLFormCFinal" lastWrittenTime="1247105250343" name="junktest.m">
+      <CodeFolds version="1.0"/>
+   </File>
+   <File absPath="C:\Matlab_Projects\Epic\MLFormCFinal\coeff_files\coeff_files" lastWrittenTime="1247760813687" name="test_call_calib.m">
+      <CodeFolds version="1.0"/>
+   </File>
+   <File absPath="C:\Matlab_Projects\Epic\MLFormCFinal" lastWrittenTime="1248291825093" name="gosintenistyplot.m">
+      <CodeFolds version="1.0"/>
+   </File>
+   <File absPath="C:\Matlab_Projects\Epic\MLFormCFinal" lastWrittenTime="1252559605472" name="testImagetocolor.m">
+      <CodeFolds version="1.0"/>
+   </File>
+   <File absPath="C:\Matlab_Projects\Epic\MLFormCFinal" lastWrittenTime="1252559605488" name="LoadbmptoMAT.m">
+      <CodeFolds version="1.0"/>
+   </File>
+   <File absPath="C:\Matlab_Projects\Epic\MLFormCFinal" lastWrittenTime="1252559605519" name="FCCreateMat.m">
+      <CodeFolds version="1.0"/>
+   </File>
+   <File absPath="C:\Matlab_Projects\Epic\MLFormCFinal" lastWrittenTime="1252559605535" name="testshowimhistmem.m">
+      <CodeFolds version="1.0"/>
+   </File>
+   <File absPath="C:\Matlab_Projects\Epic\MLFormCFinal" lastWrittenTime="1255148983812" name="QFEOne.m">
+      <CodeFolds version="1.0">
+         <FoldType name="function">
+            <Fold endOffset="1748" startOffset="1554" state="collapsed"/>
+            <Fold endOffset="8170" startOffset="1837" state="collapsed"/>
+            <Fold endOffset="11687" startOffset="10753" state="collapsed"/>
+            <Fold endOffset="12257" startOffset="11729" state="collapsed"/>
+         </FoldType>
+      </CodeFolds>
+   </File>
+   <File absPath="C:\Matlab_Projects\Epic\MLFormCFinal" lastWrittenTime="1255989483861" name="testFEOne.m">
+      <CodeFolds version="1.0"/>
+   </File>
+   <File absPath="C:\Matlab_Projects\Epic\MLFormCFinal" lastWrittenTime="1261501471314" name="testcalccoeff.m">
+      <CodeFolds version="1.0"/>
+   </File>
+   <File absPath="C:\Matlab_Projects\Epic\ColorMaps" lastWrittenTime="1268265122420" name="enhanceImage.m">
+      <CodeFolds version="1.0"/>
+   </File>
+   <File absPath="C:\Matlab_Projects\Epic\MLFormCFinal" lastWrittenTime="1269636721109" name="3DIntensityPlot.m">
+      <CodeFolds version="1.0"/>
+   </File>
+   <File absPath="C:\Matlab_Projects\Epic\MLFormCFinal" lastWrittenTime="1269636725187" name="coeff_sectors.m">
+      <CodeFolds version="1.0"/>
+   </File>
+   <File absPath="C:\Matlab_Projects\Epic\MLFormCFinal" lastWrittenTime="1269637850218" name="fit_ell_sub.m">
+      <CodeFolds version="1.0"/>
+   </File>
+   <File absPath="C:\Matlab_Projects\Epic\MLFormCFinal" lastWrittenTime="1269639583265" name="showImhistMem.m">
+      <CodeFolds version="1.0"/>
+   </File>
+   <File absPath="C:\Matlab_Projects\Epic\MLFormCFinal" lastWrittenTime="1273852487286" name="coeff_sectorsMem.m">
+      <CodeFolds version="1.0"/>
+   </File>
+   <File absPath="C:\Matlab_Projects\Epic\MLFormCFinal" lastWrittenTime="1274827651151" name="FEOne.m">
+      <CodeFolds version="1.0"/>
+   </File>
+   <File absPath="C:\Matlab_Projects\Epic\MLFormCFinal" lastWrittenTime="1274972500979" name="ImagetoColorMap.m">
+      <CodeFolds version="1.0"/>
+   </File>
+   <File absPath="C:\Matlab_Projects\Epic\MLFormCFinal" lastWrittenTime="1274976965417" name="FCProcOneMem.m">
+      <CodeFolds version="1.0"/>
+   </File>
+   <File absPath="C:\EPICSource\Arizona7\Matlab_Projects\EPICCalculationInterface" lastWrittenTime="1276635686265" name="formjs_ns.m">
+      <CodeFolds version="1.0"/>
+   </File>
+</Editor>

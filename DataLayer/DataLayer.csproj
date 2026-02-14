@@ -12,6 +12,12 @@
 		<SupportedOSPlatformVersion>8.0</SupportedOSPlatformVersion>
 	</PropertyGroup>
 
+	<ItemGroup>
+		<AssemblyAttribute Include="EPIC.DataLayer.RootNamespaceAttribute">
+			<_Parameter1>$(RootNamespace)</_Parameter1>
+		</AssemblyAttribute>
+	</ItemGroup>
+
 	<!-- Source files are included implicitly in SDK-style projects -->
 	<ItemGroup>
 		<None Include="packages.config" />

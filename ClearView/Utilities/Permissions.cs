@@ -573,7 +573,7 @@ namespace EPIC.ClearView.Utilities
                 if (name.Contains("Source") && name.Contains("set_") /* invocation.Proxy is ResourceDictionary dict *//*)
                 {
                     var uri = invocation.Arguments[0] as Uri;
-                    // Logic: Redirect "themes/clearview.xaml" to a local file path or embedded resource
+                    // Logic: Redirect "/MedicalControls;component/Themes/ClearView.xaml" to a local file path or embedded resource
                     // invocation.Arguments[0] = new Uri("C:/SaaS/Resources/clearview.xaml");
                 }
 
@@ -821,7 +821,7 @@ namespace {application.Namespace}.{defaultNamespace} {{
         {
             // Placeholder: Implement logic to render the UIElement to a bitmap and save it
             // This would involve using RenderTargetBitmap and encoding it to PNG or JPEG
-            // CRITICAL: This allows relative paths like "themes/clearview.xaml" to resolve
+            // CRITICAL: This allows relative paths like "/MedicalControls;component/Themes/ClearView.xaml" to resolve
             var rtb = RenderBitmap(element);
 
             // 4. Save to a file so you can open it

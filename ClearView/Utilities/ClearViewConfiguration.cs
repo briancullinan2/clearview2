@@ -1,6 +1,4 @@
-﻿using EPIC.DataLayer;
-using EPIC.DataLayer.Entities;
-using System.Configuration;
+﻿using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
@@ -18,6 +16,7 @@ namespace EPIC.ClearView.Utilities
         // Token: 0x060002A1 RID: 673 RVA: 0x00016452 File Offset: 0x00014652
         private ClearViewConfiguration()
         {
+            _configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             // Automatically loop through all connection strings in App.config on startup
             foreach (ConnectionStringSettings settings in _configuration.ConnectionStrings.ConnectionStrings)
             {
@@ -27,28 +26,28 @@ namespace EPIC.ClearView.Utilities
                     continue;
                 }
 
-                if (TranslationContext.Get(settings.ConnectionString) != null)
+                if (DataLayer.TranslationContext.Get(settings.ConnectionString) != null)
                 {
                     continue;
                 }
 
                 // Initialize a dedicated context for this specific dialect/connection
-                var context = new TranslationContext(settings.ConnectionString);
+                var context = new DataLayer.TranslationContext(settings.ConnectionString);
             }
 
-            Log.Debug(_configuration.FilePath);
+            Logging.Log.Debug(_configuration.FilePath);
             this.SetupConfigWatcher();
         }
 
         // Make a list of name contexts that lead to the TranslationContext
-        public static Dictionary<string, TranslationContext> Contexts
+        public static Dictionary<string, DataLayer.TranslationContext> Contexts
         {
             get
             {
                 return _configuration.ConnectionStrings.ConnectionStrings
                 .Cast<ConnectionStringSettings>()
                 .Where(s => !string.IsNullOrEmpty(s.ConnectionString))
-                .Select(s => new KeyValuePair<string, TranslationContext>(s.Name, TranslationContext.Current[s.ConnectionString]))
+                .Select(s => new KeyValuePair<string, DataLayer.TranslationContext>(s.Name, DataLayer.TranslationContext.Current[s.ConnectionString]))
                 .ToDictionary();
             }
         }
@@ -119,7 +118,7 @@ namespace EPIC.ClearView.Utilities
             }
         }
 
-        public Calibration Calibration { get; internal set; }
+        public DataLayer.Entities.Calibration? Calibration { get; internal set; }
 
         // Token: 0x060002AD RID: 685 RVA: 0x00016944 File Offset: 0x00014B44
         public static string NewGuid()

@@ -1,16 +1,25 @@
-﻿namespace EPIC.DataLayer.Entities
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace EPIC.DataLayer.Entities
 {
-    public class ImageAlignment : IEntity
+    public class ImageAlignment : Entity<ImageAlignment>
     {
-        public int CenterX { get; set; }
-        public float Angle { get; set; }
+        [Key]
+        public int AlignmentId { get; set; }
+        public double CenterX { get; set; }
+        public double Angle { get; set; }
         public double RadiusX { get; set; }
         public double RadiusY { get; set; }
-        public int CenterY { get; set; }
+        public double CenterY { get; set; }
+        public int FingerId { get; set; }
+        [ForeignKey(nameof(FingerId))]
         public Image FingerImage { get; set; }
         public bool? Filtered { get; set; }
         public string Finger { get; set; }
-        public object ImageId { get; set; }
-        public DataLayer.Entities.Image Image { get; set; }
+        public int FingerSetId { get; set; }
+        public int ImageId { get; set; }
+        [ForeignKey(nameof(ImageId))]
+        public Image Image { get; set; }
     }
 }

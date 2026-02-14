@@ -12,7 +12,7 @@
     <FrameworkElement.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Themes/ClearView.xaml" />
+                <ResourceDictionary Source="/MedicalControls;component/Themes/ClearView.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <BitmapImage x:Key="Find" UriSource="/Resources/0025-search.png" />
             <BitmapImage x:Key="NewUser" UriSource="/Resources/4505-user_add.png" />
@@ -62,7 +62,7 @@
         <FrameworkElement.Resources>
             <ResourceDictionary>
                 <ResourceDictionary.MergedDictionaries>
-                    <ResourceDictionary Source="/Themes/ClearView.xaml" />
+                    <ResourceDictionary Source="/MedicalControls;component/Themes/ClearView.xaml" />
                 </ResourceDictionary.MergedDictionaries>
             </ResourceDictionary>
         </FrameworkElement.Resources>

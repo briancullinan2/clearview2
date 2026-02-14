@@ -152,9 +152,8 @@ namespace EPIC.MedicalControls.Controls
         }
 
         // Token: 0x060000A6 RID: 166 RVA: 0x0000682F File Offset: 0x00004A2F
-        public CalibrationImage()
+        public CalibrationImage() : base()
         {
-            base.InitializeComponent();
             ToolTipService.SetShowDuration(this, 60000);
         }
 
@@ -170,6 +169,7 @@ namespace EPIC.MedicalControls.Controls
                 this.Voltage = new Voltage?(capture.Voltage);
             }
             base.Image = Compression.GetImageSource(img.Image);
+            this.Result = img;
             if (img.Colorized == null)
             {
                 Task.Run(() => ProcessOne(img))
@@ -181,7 +181,6 @@ namespace EPIC.MedicalControls.Controls
                 this.Colorized = Compression.GetImageSource(img.Colorized);
                 base.Dispatcher.Invoke<States>(() => State = ((!img.Failed) ? States.Complete : States.Failed));
             }
-            this.Result = img;
             base.MouseEnter += this.Completed_ShowToolTip;
             base.MouseLeave += this.Completed_HideToolTip;
         }
@@ -255,7 +254,6 @@ namespace EPIC.MedicalControls.Controls
         {
             try
             {
-                DataLayer.Entities.DeviceCalibrationSetting settings = results.DeviceSettings;
                 CalibrationImage.MathsOptions options = (CalibrationImage.MathsOptions)0;
                 base.Dispatcher.Invoke(delegate ()
                 {
@@ -270,7 +268,7 @@ namespace EPIC.MedicalControls.Controls
                     // TODO: wait for other threads because it could break MATLAB?
                     Dispatcher.BeginInvoke(() => base.State = States.Processing);
 
-
+                    var settings = DeviceSetting.Device.Calibrations.FirstOrDefault();
                     DataLayer.Entities.Image colorized;
                     DataLayer.Entities.ImageCalibration result = Maths.CheckCalibration(bitmap, settings, out colorized) as DataLayer.Entities.ImageCalibration;
                     if ((options & CalibrationImage.MathsOptions.OldCalibration) == CalibrationImage.MathsOptions.OldCalibration)

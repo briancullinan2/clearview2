@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace EPIC.DataLayer.Entities
 {
     [Table("Device")]
-    public class Device : IEntity
+    public class Device : Entity<Device>
     {
         public bool IsDefault { get; set; }
         public int DeviceId { get; set; }
@@ -23,6 +23,6 @@ namespace EPIC.DataLayer.Entities
         public int Height { get; set; }
         public int Width { get; set; }
         public IEnumerable<DeviceSetting> Settings { get; set; }
-        public IEnumerable<DeviceCalibrationSetting> CalibrationSettings { get; set; }
+        public IEnumerable<DeviceCalibrationSetting> Calibrations { get; set; }
     }
 }

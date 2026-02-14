@@ -4,10 +4,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:converters="clr-namespace:EPIC.DataLayer.Converters;assembly=DataLayer"
     xmlns:system="clr-namespace:System;assembly=System.Runtime">
-    <converters:EnumDisplayNameConverter x:Key="EnumDisplayNameConverter" />
-    <converters:UriTabExistsConverter x:Key="UriTabExistsConverter" />
     <BitmapImage x:Key="Cancel" UriSource="/Resources/1001-cancel.png" />
-    <DataTemplate x:Key="TabClosable">
+    <!--<DataTemplate x:Key="TabClosable">
         <StackPanel Orientation="Horizontal">
             <TextBlock VerticalAlignment="Center" Text="{Binding}" />
             <Image
@@ -16,7 +14,7 @@
                 MouseDown="Image_MouseDown"
                 Source="{StaticResource Cancel}" />
         </StackPanel>
-    </DataTemplate>
+    </DataTemplate>-->
     <SolidColorBrush x:Key="RibbonDisabledForegroundBrushKey" Color="#FF9E9E9E" />
     <SolidColorBrush x:Key="RibbonDropDownBackgroundBrushKey" Color="#F0FFFFFF" />
     <SolidColorBrush x:Key="ResizeGripperBackgroundBrush" Color="#FFE5EFF9" />
@@ -95,5 +93,4 @@
         Drawing="{StaticResource Logo}"
         Stretch="Uniform" />
     <DrawingImage x:Key="LogoDrawing" Drawing="{StaticResource Logo}" />
-    <Style x:Key="HorizontalScroller" TargetType="{x:Type ScrollViewer}" />
 </ResourceDictionary>

@@ -52,6 +52,19 @@ namespace EPIC.MedicalControls.Controls
             }
         }
 
+        public DataLayer.Entities.DeviceSetting DeviceSetting
+        {
+            get
+            {
+                return (DataLayer.Entities.DeviceSetting)base.GetValue(ProcessingImage.DeviceSettingProperty);
+            }
+            set
+            {
+                base.SetValue(ProcessingImage.ValueProperty, value);
+            }
+        }
+
+
         // Token: 0x0600008F RID: 143 RVA: 0x0000647F File Offset: 0x0000467F
         public ProcessingImage()
         {
@@ -65,10 +78,13 @@ namespace EPIC.MedicalControls.Controls
         public static readonly DependencyProperty StateProperty = DependencyProperty.Register("State", typeof(States), typeof(ProcessingImage), new PropertyMetadata(States.Queued));
 
         // Token: 0x04000062 RID: 98
-        public static readonly DependencyProperty ImageProperty = DependencyProperty.Register("Image", typeof(BitmapSource), typeof(ProcessingImage), new PropertyMetadata(new BitmapImage(new Uri("pack://application:,,,/EPIC.MedicalControls;component/Resources/calibration_sentech.bmp"))));
+        public static readonly DependencyProperty ImageProperty = DependencyProperty.Register("Image", typeof(BitmapSource), typeof(ProcessingImage), new PropertyMetadata(new BitmapImage(new Uri("pack://application:,,,/MedicalControls;component/Resources/calibration_sentech.bmp"))));
 
         // Token: 0x04000063 RID: 99
         public static readonly DependencyProperty ValueProperty = DependencyProperty.Register("Value", typeof(double), typeof(ProcessingImage), new PropertyMetadata(0.0));
+
+        // Token: 0x04000063 RID: 99
+        public static readonly DependencyProperty DeviceSettingProperty = DependencyProperty.Register("DeviceSetting", typeof(DataLayer.Entities.DeviceSetting), typeof(ProcessingImage), new PropertyMetadata(new DataLayer.Entities.DeviceSetting()));
 
         // Token: 0x04000064 RID: 100
         public static readonly DependencyProperty StatusProperty = DependencyProperty.Register("Status", typeof(string), typeof(ProcessingImage), new PropertyMetadata(null));

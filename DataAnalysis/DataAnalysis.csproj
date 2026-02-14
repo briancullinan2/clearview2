@@ -7,11 +7,19 @@
 		<RootNamespace>EPIC.DataAnalysis</RootNamespace>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<BaseOutputPath>..\ClearView\bin\</BaseOutputPath>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Emgu.CV" Version="4.12.0.5764" />
-	  <PackageReference Include="Emgu.CV.Bitmap" Version="4.12.0.5764" />
+		<AssemblyAttribute Include="EPIC.DataAnalysis.RootNamespaceAttribute">
+			<_Parameter1>$(RootNamespace)</_Parameter1>
+		</AssemblyAttribute>
+	</ItemGroup>
+
+
+	<ItemGroup>
+		<PackageReference Include="Emgu.CV" Version="4.12.0.5764" />
+		<PackageReference Include="Emgu.CV.Bitmap" Version="4.12.0.5764" />
 	</ItemGroup>
 
 	<ItemGroup>

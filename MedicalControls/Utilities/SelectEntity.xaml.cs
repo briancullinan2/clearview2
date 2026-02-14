@@ -1,4 +1,4 @@
-﻿using EPIC.MedicalControls.Utilities.Extensions;
+﻿using EPIC.MedicalControls.Extensions;
 using System.Linq.Expressions;
 using System.Windows;
 using System.Windows.Controls;

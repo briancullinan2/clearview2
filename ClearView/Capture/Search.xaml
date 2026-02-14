@@ -2,7 +2,6 @@
     x:Class="EPIC.ClearView.Capture.Search"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:capture="clr-namespace:EPIC.Capture"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ribbon="clr-namespace:System.Windows.Controls.Ribbon;assembly=System.Windows.Controls.Ribbon"
@@ -10,9 +9,6 @@
     Title="Search Captures">
     <FrameworkElement.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Themes/ClearView.xaml" />
-            </ResourceDictionary.MergedDictionaries>
             <BitmapImage x:Key="Find" UriSource="/Resources/0025-search.png" />
             <BitmapImage x:Key="ExportData" UriSource="/Resources/0002-folder_doc.png" />
             <BitmapImage x:Key="ViewReport" UriSource="/Resources/0009-doc_search.png" />

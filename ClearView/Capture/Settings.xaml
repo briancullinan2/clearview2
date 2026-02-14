@@ -13,51 +13,20 @@
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     Title="Capture Settings"
+    d:DesignHeight="600"
+    d:DesignWidth="800"
     SnapsToDevicePixels="True"
-    UseLayoutRounding="True">
-    <FrameworkElement.Resources>
+    UseLayoutRounding="True"
+    mc:Ignorable="d customization">
+    <Page.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Themes/ClearView.xaml" />
-                <ResourceDictionary Source="/Utilities/FormChecker.xaml" />
-                <ResourceDictionary Source="/Resources/DataGridStyles.xaml" />
+                <ResourceDictionary Source="/MedicalControls;component/Themes/Application/DataGridStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <BitmapImage x:Key="NewDevice" UriSource="/Resources/0176-scaner.png" />
             <BitmapImage x:Key="Save" UriSource="/Resources/0040-save.png" />
             <BitmapImage x:Key="Cancel" UriSource="/Resources/1001-cancel.png" />
             <BitmapImage x:Key="Captures" UriSource="/Resources/0176-scaner.png" />
-            <ObjectDataProvider
-                x:Key="Voltages"
-                MethodName="GetValues"
-                ObjectType="{x:Type system:Enum}">
-                <ObjectDataProvider.MethodParameters>
-                    <x:Type TypeName="customization:Voltage" />
-                </ObjectDataProvider.MethodParameters>
-            </ObjectDataProvider>
-            <ObjectDataProvider
-                x:Key="Frequencies"
-                MethodName="GetValues"
-                ObjectType="{x:Type system:Enum}">
-                <ObjectDataProvider.MethodParameters>
-                    <x:Type TypeName="customization:PWM0Frequency" />
-                </ObjectDataProvider.MethodParameters>
-            </ObjectDataProvider>
-            <ObjectDataProvider
-                x:Key="Widths"
-                MethodName="GetValues"
-                ObjectType="{x:Type system:Enum}">
-                <ObjectDataProvider.MethodParameters>
-                    <x:Type TypeName="customization:PulseWidth" />
-                </ObjectDataProvider.MethodParameters>
-            </ObjectDataProvider>
-            <ObjectDataProvider
-                x:Key="Durations"
-                MethodName="GetValues"
-                ObjectType="{x:Type system:Enum}">
-                <ObjectDataProvider.MethodParameters>
-                    <x:Type TypeName="customization:PulseDuration" />
-                </ObjectDataProvider.MethodParameters>
-            </ObjectDataProvider>
             <BitmapImage x:Key="Settings" UriSource="/Resources/0020-options_edit.png" />
             <ribbon:RibbonTab x:Key="SettingsOptions" Name="SettingsOptions">
                 <RibbonTab.Header>
@@ -90,7 +59,7 @@
                 </ribbon:RibbonGroup>
             </ribbon:RibbonTab>
         </ResourceDictionary>
-    </FrameworkElement.Resources>
+    </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -139,7 +108,6 @@
             <Button
                 Margin="5"
                 Padding="3"
-                Command="{x:Static macros:Navigation.CloseTabCommand}"
                 CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}}">
                 <StackPanel Orientation="Horizontal">
                     <Image
@@ -160,13 +128,6 @@
             HorizontalAlignment="Right"
             Header="Device Preview">
             <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
-                <FrameworkElement.Resources>
-                    <ResourceDictionary>
-                        <ResourceDictionary.MergedDictionaries>
-                            <ResourceDictionary Source="/Themes/ClearView.xaml" />
-                        </ResourceDictionary.MergedDictionaries>
-                    </ResourceDictionary>
-                </FrameworkElement.Resources>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
@@ -348,13 +309,6 @@
                         Orientation="Vertical">
                         <GroupBox Header="Device Settings">
                             <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
-                                <FrameworkElement.Resources>
-                                    <ResourceDictionary>
-                                        <ResourceDictionary.MergedDictionaries>
-                                            <ResourceDictionary Source="/Themes/ClearView.xaml" />
-                                        </ResourceDictionary.MergedDictionaries>
-                                    </ResourceDictionary>
-                                </FrameworkElement.Resources>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition />
                                     <ColumnDefinition />
@@ -441,13 +395,7 @@
                                 SelectionMode="Single"
                                 SelectionUnit="Cell"
                                 Template="{StaticResource BlankGridTemplate}">
-                                <FrameworkElement.Resources>
-                                    <ResourceDictionary>
-                                        <ResourceDictionary.MergedDictionaries>
-                                            <ResourceDictionary Source="/Themes/ClearView.xaml" />
-                                        </ResourceDictionary.MergedDictionaries>
-                                    </ResourceDictionary>
-                                </FrameworkElement.Resources>
+                                \
                                 <DataGrid.RowHeaderTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Header, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGridRow}}}" />
@@ -485,64 +433,28 @@
                                     <DataGridTemplateColumn Width="100" Header="Boost Voltage">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
-                                                <ComboBox
-                                                    Margin="5"
-                                                    ItemsSource="{Binding Source={StaticResource Voltages}}"
-                                                    SelectedItem="{Binding Voltage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                                                    <ItemsControl.ItemTemplate>
-                                                        <DataTemplate>
-                                                            <TextBlock Text="{Binding Converter={StaticResource EnumDisplayNameConverter}}" />
-                                                        </DataTemplate>
-                                                    </ItemsControl.ItemTemplate>
-                                                </ComboBox>
+                                                <ComboBox Margin="5" SelectedItem="{Binding Voltage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
                                     <DataGridTemplateColumn Width="100" Header="Frequency">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
-                                                <ComboBox
-                                                    Margin="5"
-                                                    ItemsSource="{Binding Source={StaticResource Frequencies}}"
-                                                    SelectedItem="{Binding Frequency, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                                                    <ItemsControl.ItemTemplate>
-                                                        <DataTemplate>
-                                                            <TextBlock Text="{Binding Converter={StaticResource EnumDisplayNameConverter}}" />
-                                                        </DataTemplate>
-                                                    </ItemsControl.ItemTemplate>
-                                                </ComboBox>
+                                                <ComboBox Margin="5" SelectedItem="{Binding Frequency, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
                                     <DataGridTemplateColumn Width="100" Header="Pulse Width">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
-                                                <ComboBox
-                                                    Margin="5"
-                                                    ItemsSource="{Binding Source={StaticResource Widths}}"
-                                                    SelectedItem="{Binding PulseWidth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                                                    <ItemsControl.ItemTemplate>
-                                                        <DataTemplate>
-                                                            <TextBlock Text="{Binding Converter={StaticResource EnumDisplayNameConverter}}" />
-                                                        </DataTemplate>
-                                                    </ItemsControl.ItemTemplate>
-                                                </ComboBox>
+                                                <ComboBox Margin="5" SelectedItem="{Binding PulseWidth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
                                     <DataGridTemplateColumn Width="100" Header="Pulse Duration">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
-                                                <ComboBox
-                                                    Margin="5"
-                                                    ItemsSource="{Binding Source={StaticResource Durations}}"
-                                                    SelectedItem="{Binding PulseDuration, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                                                    <ItemsControl.ItemTemplate>
-                                                        <DataTemplate>
-                                                            <TextBlock Text="{Binding Converter={StaticResource EnumDisplayNameConverter}}" />
-                                                        </DataTemplate>
-                                                    </ItemsControl.ItemTemplate>
-                                                </ComboBox>
+                                                <ComboBox Margin="5" SelectedItem="{Binding PulseDuration, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
@@ -579,13 +491,6 @@
                                     <RowDefinition />
                                     <RowDefinition />
                                 </Grid.RowDefinitions>
-                                <FrameworkElement.Resources>
-                                    <ResourceDictionary>
-                                        <ResourceDictionary.MergedDictionaries>
-                                            <ResourceDictionary Source="/Themes/ClearView.xaml" />
-                                        </ResourceDictionary.MergedDictionaries>
-                                    </ResourceDictionary>
-                                </FrameworkElement.Resources>
                                 <Label Grid.Row="1" Content="Signma Regions" />
                                 <Label Grid.Row="2" Content="Threshold Regions" />
                                 <Label Grid.Row="3" Content="Means Threshold" />

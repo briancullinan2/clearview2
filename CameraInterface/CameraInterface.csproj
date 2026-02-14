@@ -13,6 +13,7 @@
 		<BaseOutputPath>..\ClearView\bin\</BaseOutputPath>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<Version />
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -24,6 +25,12 @@
 		<DebugType>portable</DebugType>
 		<OutputPath>..\ClearView\bin\Release\</OutputPath>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<AssemblyAttribute Include="EPIC.CameraInterface.RootNamespaceAttribute">
+			<_Parameter1>$(RootNamespace)</_Parameter1>
+		</AssemblyAttribute>
+	</ItemGroup>
 
 	<ItemGroup>
 		<Compile Remove="Stubs\**" />

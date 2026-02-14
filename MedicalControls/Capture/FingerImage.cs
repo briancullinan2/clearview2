@@ -1,4 +1,5 @@
-﻿using EPIC.DataLayer.Extensions;
+﻿using EPIC.DataAnalysis;
+using EPIC.DataLayer.Extensions;
 using EPIC.MedicalControls.Native;
 using EPIC.MedicalControls.Utilities;
 using System.ComponentModel;
@@ -7,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
+using Log = EPIC.MedicalControls.Utilities.Log;
 
 namespace EPIC.MedicalControls.Controls
 {
@@ -65,7 +67,7 @@ namespace EPIC.MedicalControls.Controls
         // Token: 0x17000041 RID: 65
         // (get) Token: 0x060000DF RID: 223 RVA: 0x00007FAC File Offset: 0x000061AC
         // (set) Token: 0x060000E0 RID: 224 RVA: 0x00007FC3 File Offset: 0x000061C3
-        public DataLayer.Entities.Calibration Calibration { get; set; }
+        public DataLayer.Entities.ImageCalibration Calibration { get; set; }
 
         // Token: 0x17000042 RID: 66
         // (get) Token: 0x060000E1 RID: 225 RVA: 0x00007FCC File Offset: 0x000061CC
@@ -79,7 +81,7 @@ namespace EPIC.MedicalControls.Controls
             private set
             {
                 base.SetValue(FingerImage.ResultProperty, value);
-                this.Result.PropertyChanged += delegate (object sender, PropertyChangedEventArgs args)
+                this.Result.PropertyChanged += delegate (object? sender, PropertyChangedEventArgs args)
                 {
                     if (args.PropertyName == "CenterX" || args.PropertyName == "CenterY" || args.PropertyName == "Angle")
                     {
@@ -130,9 +132,8 @@ namespace EPIC.MedicalControls.Controls
         }
 
         // Token: 0x060000E9 RID: 233 RVA: 0x00008171 File Offset: 0x00006371
-        public FingerImage()
+        public FingerImage() : base()
         {
-            base.InitializeComponent();
             ToolTipService.SetShowDuration(this, 60000);
         }
 
@@ -202,7 +203,7 @@ namespace EPIC.MedicalControls.Controls
                     base.Dispatcher.Invoke<States>(() => base.State = States.Paused);
                     base.Dispatcher.Invoke<States>(() => base.State = States.Processing);
                     DataLayer.Entities.ImageAlignment alignment;
-                    if (tuple.Item3.ImageAlignment == null)
+                    if (tuple.Item3.FingerAlignment == null)
                     {
                         alignment = Maths.GetAlignment(tuple.Item2, this._fingerImage);
                         if (this._fingerImage != null)
@@ -210,8 +211,7 @@ namespace EPIC.MedicalControls.Controls
                             alignment.FingerImage = new DataLayer.Entities.Image
                             {
                                 ImageData = Compression.CompressImage(this._fingerImage)
-                            }
-                            ;
+                            };
                         }
                         alignment.Filtered = new bool?(filtered);
                         alignment.Finger = finger;
@@ -220,7 +220,7 @@ namespace EPIC.MedicalControls.Controls
                     }
                     else
                     {
-                        alignment = tuple.Item3.ImageAlignment;
+                        alignment = tuple.Item3.FingerAlignment as DataLayer.Entities.ImageAlignment;
                     }
                     double percent = Math.Round((double)num / (double)results.Images.Count * 100.0);
                     base.Dispatcher.Invoke(new Action<bool>(delegate (bool b)

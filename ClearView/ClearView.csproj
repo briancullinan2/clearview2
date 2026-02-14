@@ -5,6 +5,7 @@
 		<TargetFramework>net10.0-windows8.0</TargetFramework>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<Nullable>enable</Nullable>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<UseWPF>true</UseWPF>
 		<AssemblyName>EPICClearView</AssemblyName>
@@ -14,14 +15,16 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Compile Remove="Controls\**" />
 		<Compile Remove="Report\**" />
-		<EmbeddedResource Remove="Controls\**" />
 		<EmbeddedResource Remove="Report\**" />
-		<None Remove="Controls\**" />
 		<None Remove="Report\**" />
-		<Page Remove="Controls\**" />
 		<Page Remove="Report\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<AssemblyAttribute Include="EPIC.ClearView.RootNamespaceAttribute">
+			<_Parameter1>$(RootNamespace)</_Parameter1>
+		</AssemblyAttribute>
 	</ItemGroup>
 
 	<!--<Target Name="GeneratePerFile" BeforeTargets="CoreCompile">
@@ -51,15 +54,6 @@
 		<None Remove="clearview.png" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<Compile Include="Controls\CalibrationImage.cs" />
-		<Compile Include="Controls\CaptureResults.cs" />
-		<Compile Include="Controls\FingerImage.cs" />
-		<Compile Include="Controls\ProcessingImage.xaml.cs" />
-		<Compile Include="Controls\SelectEntity.xaml.cs" />
-		<Compile Include="Controls\States.cs" />
-	</ItemGroup>
-
 	<!-- ApplicationDefinition is implicitly included by the SDK when UseWPF is true;
        remove explicit declaration to avoid duplicate ApplicationDefinition error. -->
 
@@ -75,11 +69,6 @@
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.2" />
 		<PackageReference Include="Microsoft.Office.Interop.Excel" Version="16.0.18925.20022" />
 		<PackageReference Include="System.Management" Version="10.0.2" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Page Include="Controls\ProcessingImage.xaml" />
-		<Page Include="Controls\SelectEntity.xaml" />
 	</ItemGroup>
 
 	<ItemGroup>

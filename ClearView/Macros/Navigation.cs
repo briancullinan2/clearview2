@@ -1,5 +1,6 @@
 ﻿using EPIC.ClearView.Utilities.Commands;
 using EPIC.ClearView.Utilities.Extensions;
+using System.Collections.Specialized;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Ribbon;
@@ -24,7 +25,28 @@ namespace EPIC.ClearView.Macros
         // Token: 0x06000140 RID: 320 RVA: 0x0000B74C File Offset: 0x0000994C
         public static void Add(RibbonGroup group, string tab)
         {
-
+            Application.Current.Dispatcher.BeginInvoke(new Action(delegate ()
+            {
+                if (Application.Current.MainWindow != null)
+                {
+                    RibbonTab tabItem = ((MainWindow)Application.Current.MainWindow).Ribbon.FindChild<RibbonTab>(tab);
+                    if (tabItem != null)
+                    {
+                        tabItem.Items.Add(group);
+                    }
+                    ((INotifyCollectionChanged)((MainWindow)Application.Current.MainWindow).Ribbon.Items).CollectionChanged += delegate (object? sender, NotifyCollectionChangedEventArgs args)
+                    {
+                        if (args.NewItems != null && (tabItem = args.NewItems.OfType<RibbonTab>().FirstOrDefault((RibbonTab x) => x.Name == tab)) != null)
+                        {
+                            tabItem.Items.Add(group);
+                        }
+                        else if (args.OldItems != null && (tabItem = args.OldItems.OfType<RibbonTab>().FirstOrDefault((RibbonTab x) => x.Name == tab)) != null)
+                        {
+                            tabItem.Items.Remove(group);
+                        }
+                    };
+                }
+            }), new object[0]);
         }
 
         // Token: 0x06000141 RID: 321 RVA: 0x0000B978 File Offset: 0x00009B78
@@ -177,7 +199,7 @@ namespace EPIC.ClearView.Macros
                     {
                         Content = frame,
                         Header = new Grid(),
-                        HeaderTemplate = mainWindow.TryFindResource("TabClosable") as DataTemplate
+                        //HeaderTemplate = mainWindow.TryFindResource("TabClosable") as DataTemplate
                     };
                     frame.LoadCompleted += delegate (object sender, NavigationEventArgs args)
                     {

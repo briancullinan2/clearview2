@@ -9,7 +9,14 @@
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<RootNamespace>EPIC.MedicalControls</RootNamespace>
 		<BaseOutputPath>..\ClearView\bin</BaseOutputPath>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<AssemblyAttribute Include="EPIC.MedicalControls.RootNamespaceAttribute">
+			<_Parameter1>$(RootNamespace)</_Parameter1>
+		</AssemblyAttribute>
+	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\DataAnalysis\DataAnalysis.csproj" />
@@ -18,6 +25,12 @@
 
 	<ItemGroup>
 		<Folder Include="Annotations\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Resource Include="Resources\1001-cancel.png" />
+		<Resource Include="Resources\calibration_sentech.bmp" />
+		<Resource Include="Resources\clearview.png" />
 	</ItemGroup>
 
 </Project>

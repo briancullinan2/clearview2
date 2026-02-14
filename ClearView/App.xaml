@@ -7,21 +7,21 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Themes/ClearView.xaml" />
-                <ResourceDictionary Source="/Themes/Application/RibbonGallery.xaml" />
-                <ResourceDictionary Source="/Themes/Application/RibbonGroup.xaml" />
-                <ResourceDictionary Source="/Themes/Textboxes/PasswordBox.xaml" />
-                <ResourceDictionary Source="/Themes/Textboxes/RichTextBox.xaml" />
-                <ResourceDictionary Source="/Themes/Textboxes/TextBox.xaml" />
-                <ResourceDictionary Source="/Themes/Textboxes/RibbonComboBox.xaml" />
-                <ResourceDictionary Source="/Themes/Buttons/Button.xaml" />
-                <ResourceDictionary Source="/Themes/Buttons/CheckBox.xaml" />
-                <ResourceDictionary Source="/Themes/Buttons/RadioButton.xaml" />
-                <ResourceDictionary Source="/Themes/Buttons/RepeatButton.xaml" />
-                <ResourceDictionary Source="/Themes/Buttons/ToggleButton.xaml" />
-                <ResourceDictionary Source="/Themes/Scrolls/ScrollViewer.xaml" />
-                <ResourceDictionary Source="/Themes/Scrolls/ScrollBar.xaml" />
-                <ResourceDictionary Source="/Themes/Application/Window.xaml" />
+                <ResourceDictionary Source="/MedicalControls;component/Themes/ClearView.xaml" />
+                <ResourceDictionary Source="/MedicalControls;component/Themes/Application/RibbonGallery.xaml" />
+                <ResourceDictionary Source="/MedicalControls;component/Themes/Application/RibbonGroup.xaml" />
+                <ResourceDictionary Source="/MedicalControls;component/Themes/Textboxes/PasswordBox.xaml" />
+                <ResourceDictionary Source="/MedicalControls;component/Themes/Textboxes/RichTextBox.xaml" />
+                <ResourceDictionary Source="/MedicalControls;component/Themes/Textboxes/TextBox.xaml" />
+                <ResourceDictionary Source="/MedicalControls;component/Themes/Textboxes/RibbonComboBox.xaml" />
+                <ResourceDictionary Source="/MedicalControls;component/Themes/Buttons/Button.xaml" />
+                <ResourceDictionary Source="/MedicalControls;component/Themes/Buttons/CheckBox.xaml" />
+                <ResourceDictionary Source="/MedicalControls;component/Themes/Buttons/RadioButton.xaml" />
+                <ResourceDictionary Source="/MedicalControls;component/Themes/Buttons/RepeatButton.xaml" />
+                <ResourceDictionary Source="/MedicalControls;component/Themes/Buttons/ToggleButton.xaml" />
+                <ResourceDictionary Source="/MedicalControls;component/Themes/Scrolls/ScrollViewer.xaml" />
+                <ResourceDictionary Source="/MedicalControls;component/Themes/Scrolls/ScrollBar.xaml" />
+                <ResourceDictionary Source="/MedicalControls;component/Themes/Application/Window.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

@@ -135,7 +135,7 @@ namespace EPIC.DataAnalysis
                     HighPFailed = pixelCompareStatus[0, 3],
                     TotalFailed = pixelCompareStatus[0, 4],
                     ClumpsFailed = pixelCompareStatus[0, 5],
-                    OuterMeanDiff = meanStatusDiff[0, 0],
+                    OuterMeanDiff = (float)meanStatusDiff[0, 0],
                     InnerMeanDiff = meanStatusDiff[0, 1],
                     CoronaMeanDiff = meanStatusDiff[0, 2],
                     HighPMeanDiff = meanStatusDiff[0, 3],
@@ -729,7 +729,7 @@ namespace EPIC.DataAnalysis
                 {
                     Failed = failed,
                     TotalFailed = failed,
-                    TotalFailures = (double)errors
+                    TotalFailures = errors
                 };
             }
             catch (Exception ex)
@@ -783,17 +783,18 @@ namespace EPIC.DataAnalysis
                     }
                 }
             }
-            object[] argsOut = Maths.FormCalc.compute_factors(16, new MWNumericArray(energizedImage), "", "full", new MWNumericArray(calibrationImage), new double[]
-            {
+
+            object[] argsOut = Maths.FormCalc.compute_factors(16, new MWNumericArray(energizedImage), "", "full", new MWNumericArray(calibrationImage), new MWNumericArray(new double[]
+                {
                 angle
-            }, new double[]
-            {
+                }), new MWNumericArray(new double[]
+                {
                 centerX,
                 centerY
-            }, new double[]
-            {
+                }), new MWNumericArray(new double[]
+                {
                 noiseLevel
-            }, finger);
+                }) /*, finger missing, must be old version before i made type improvements */);
             List<DataLayer.Entities.ImageSector> sectors = new List<DataLayer.Entities.ImageSector>();
             double[,] formHolder = (double[,])argsOut[1];
             double[,] form2Holder = (double[,])argsOut[2];
@@ -877,6 +878,7 @@ namespace EPIC.DataAnalysis
                     }
                 }
             }
+            // TODO: this is supposed to be below to copy image to new center
             byte[,,] fingerImage = null;
             if (finger != null)
             {

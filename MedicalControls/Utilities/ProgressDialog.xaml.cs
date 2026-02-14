@@ -4,7 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shell;
 
-namespace EPIC.Controls
+namespace EPIC.MedicalControls.Controls
 {
     // Token: 0x02000014 RID: 20
     public partial class ProgressDialog : Window

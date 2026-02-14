@@ -143,7 +143,7 @@ namespace EPIC.ClearView.Capture
                     IEnumerable<DeviceSetting> itemsSource = from x in Enumerable.Range(0, Math.Max(4, device.Settings.Count()))
                                                              select device.Settings.Skip(x).FirstOrDefault<DeviceSetting>() ?? Settings.DefaultSettings.Skip(x).First<DeviceSetting>();
                     this.Configurations.ItemsSource = itemsSource;
-                    this.CalibrationSetting = (device.CalibrationSettings.FirstOrDefault<DeviceCalibrationSetting>() ?? Settings.DefaultCalibration);
+                    this.CalibrationSetting = (device.Calibrations.FirstOrDefault<DeviceCalibrationSetting>() ?? Settings.DefaultCalibration);
                 }
                 else
                 {
@@ -229,41 +229,41 @@ namespace EPIC.ClearView.Capture
         {
             new DeviceSetting
             {
-                Frequency = 1100,
-                PulseDuration = 500,
-                PulseWidth = 14,
+                Frequency = (DataLayer.Customization.PWM0Frequency)1100,
+                PulseDuration = (DataLayer.Customization.PulseDuration)500,
+                PulseWidth = (DataLayer.Customization.PulseWidth)14,
                 ExposureDelay = 320,
-                Voltage = 110,
+                Voltage =(DataLayer.Customization.Voltage)110,
                 Brightness = 80,
                 Gain = 56
             },
             new DeviceSetting
             {
-                Frequency = 1100,
-                PulseDuration = 500,
-                PulseWidth = 14,
+                Frequency = (DataLayer.Customization.PWM0Frequency)1100,
+                PulseDuration = (DataLayer.Customization.PulseDuration)500,
+                PulseWidth = (DataLayer.Customization.PulseWidth)14,
                 ExposureDelay = 320,
-                Voltage = 110,
+                Voltage = (DataLayer.Customization.Voltage)110,
                 Brightness = 85,
                 Gain = 59
             },
             new DeviceSetting
             {
-                Frequency = 1100,
-                PulseDuration = 500,
-                PulseWidth = 14,
+                Frequency = (DataLayer.Customization.PWM0Frequency)1100,
+                PulseDuration = (DataLayer.Customization.PulseDuration)500,
+                PulseWidth =  (DataLayer.Customization.PulseWidth)14,
                 ExposureDelay = 320,
-                Voltage = 110,
+                Voltage = (DataLayer.Customization.Voltage)110,
                 Brightness = 95,
                 Gain = 55
             },
             new DeviceSetting
             {
-                Frequency = 1100,
-                PulseDuration = 500,
-                PulseWidth = 14,
+                Frequency = (DataLayer.Customization.PWM0Frequency)1100,
+                PulseDuration = (DataLayer.Customization.PulseDuration)500,
+                PulseWidth = (DataLayer.Customization.PulseWidth)14,
                 ExposureDelay = 320,
-                Voltage = 110,
+                Voltage = (DataLayer.Customization.Voltage)110,
                 Brightness = 90,
                 Gain = 60
             }

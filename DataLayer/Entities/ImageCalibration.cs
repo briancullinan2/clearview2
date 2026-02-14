@@ -1,37 +1,43 @@
-﻿namespace EPIC.DataLayer.Entities
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace EPIC.DataLayer.Entities
 {
-    public class ImageCalibration : IEntity
+    [PrimaryKey(nameof(ImageId), nameof(CalibrationId))]
+    public class ImageCalibration : Entity<ImageCalibration>
     {
         public bool CoronaFailed { get; set; }
-        public DataLayer.Entities.Image Image { get; set; }
-        public float IntensityTotal { get; set; }
-        public float NoiseLevel { get; set; }
-        public float IntensityInner { get; set; }
-        public float IntensityCorona { get; set; }
-        public float IntensityHighP { get; set; }
-        public float IntensityOuter { get; set; }
-        public float HighPMeanDiff { get; set; }
-        public float CoronaMeanDiff { get; set; }
-        public float InnerMeanDiff { get; set; }
-        public float OuterMeanDiff { get; set; }
-        public float TotalFailures { get; set; }
-        public float HighPFailures { get; set; }
-        public float CoronaFailures { get; set; }
-        public float InnerFailures { get; set; }
-        public float OuterFailures { get; set; }
-        public float ClumpsFailures { get; set; }
-        public float OuterTotalPixels { get; set; }
-        public float InnerTotalPixels { get; set; }
-        public float CoronaTotalPixels { get; set; }
-        public float HighPTotalPixels { get; set; }
-        public float TotalTotalPixels { get; set; }
-        public float ClumpsTotalPixels { get; set; }
-        public float OuterFailurePercent { get; set; }
-        public float InnerFailurePercent { get; set; }
-        public float CoronaFailurePercent { get; set; }
-        public float HighPFailurePercent { get; set; }
-        public float TotalFailurePercent { get; set; }
-        public float ClumpsFailurePercent { get; set; }
+        public int ImageId { get; set; }
+        [ForeignKey(nameof(ImageId))]
+        public Image Image { get; set; }
+        public double IntensityTotal { get; set; }
+        public double NoiseLevel { get; set; }
+        public double IntensityInner { get; set; }
+        public double IntensityCorona { get; set; }
+        public double IntensityHighP { get; set; }
+        public double IntensityOuter { get; set; }
+        public double HighPMeanDiff { get; set; }
+        public double CoronaMeanDiff { get; set; }
+        public double InnerMeanDiff { get; set; }
+        public double OuterMeanDiff { get; set; }
+        public double TotalFailures { get; set; }
+        public double HighPFailures { get; set; }
+        public double CoronaFailures { get; set; }
+        public double InnerFailures { get; set; }
+        public double OuterFailures { get; set; }
+        public double ClumpsFailures { get; set; }
+        public double OuterTotalPixels { get; set; }
+        public double InnerTotalPixels { get; set; }
+        public double CoronaTotalPixels { get; set; }
+        public double HighPTotalPixels { get; set; }
+        public double TotalTotalPixels { get; set; }
+        public double ClumpsTotalPixels { get; set; }
+        public double OuterFailurePercent { get; set; }
+        public double InnerFailurePercent { get; set; }
+        public double CoronaFailurePercent { get; set; }
+        public double HighPFailurePercent { get; set; }
+        public double TotalFailurePercent { get; set; }
+        public double ClumpsFailurePercent { get; set; }
         public bool OuterFailed { get; set; }
         public bool InnerFailed { get; set; }
         public bool HighPFailed { get; set; }
@@ -42,7 +48,15 @@
         public bool CoronaMeanFailed { get; set; }
         public bool HighPMeanFailed { get; set; }
         public bool Failed { get; set; }
-        public DataLayer.Entities.Image Colorized { get; set; }
+        public int ColorizedId { get; set; }
+        [ForeignKey(nameof(ColorizedId))]
+        public Image Colorized { get; set; }
+        public int CalibrationId { get; set; }
+        [ForeignKey(nameof(CalibrationId))]
+        [InverseProperty(nameof(Calibration.Calibrations))]
+        public Calibration Calibration { get; set; }
+        public int SettingId { get; set; }
+        [ForeignKey(nameof(SettingId))]
         public DeviceCalibrationSetting CalibrationSetting { get; set; }
         public double SigmaRegionOuter { get; set; }
         public double SigmaRegionInner { get; set; }

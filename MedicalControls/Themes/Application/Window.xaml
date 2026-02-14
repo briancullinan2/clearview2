@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:permissions="clr-namespace:EPIC.PermissionGenerator;assembly=PermissionGenerator">
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/Themes/ClearView.xaml" />
+        <ResourceDictionary Source="/MedicalControls;component/Themes/ClearView.xaml" />
     </ResourceDictionary.MergedDictionaries>
     <Style x:Key="{x:Type Window}" TargetType="{x:Type Window}">
         <Setter Property="Background" Value="{StaticResource WindowBrush}" />

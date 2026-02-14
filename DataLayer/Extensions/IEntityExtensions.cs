@@ -1,5 +1,7 @@
 ﻿using EPIC.DataLayer.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 
@@ -7,7 +9,29 @@ namespace EPIC.DataLayer.Extensions
 {
     public static class IEntityExtensions
     {
-        public static void Save<T>(this T ent, bool? recurse = false) where T : class, IEntity
+        /// <summary>
+        /// Rehydrates the entity by discarding local changes and fetching 
+        /// the latest data from the database.
+        /// </summary>
+        public static void Refetch<T>(this IEntity<T> entity)
+        {
+            if (entity == null) throw new ArgumentNullException(nameof(entity));
+
+            var context = TranslationContext.Current;
+
+            var entry = context.Entry(entity);
+
+            // If the entity isn't being tracked, we need to attach it first
+            if (entry.State == EntityState.Detached)
+            {
+                context.Attach(entity);
+            }
+
+            // This executes the SQL SELECT and updates the object's properties
+            entry.Reload();
+        }
+
+        public static void Save<T>(this T ent, bool? recurse = false) where T : class, IEntity<T>
         {
             // Start the Transaction
             using (var transaction = TranslationContext.Current.Database.BeginTransaction())
@@ -37,7 +61,7 @@ namespace EPIC.DataLayer.Extensions
             }
         }
 
-        public static int Update<T>(this T entity, IDbConnection conn, string keyName = "Id") where T : IEntity
+        public static int Update<T>(this T entity, IDbConnection conn, string keyName = "Id") where T : IEntity<T>
         {
             var type = typeof(T);
             var props = type.GetProperties();
@@ -65,6 +89,37 @@ namespace EPIC.DataLayer.Extensions
             if (conn.State != ConnectionState.Open) conn.Open();
             return cmd.ExecuteNonQuery();
         }
+
+        public static T AsSmart<T>(this T? x) where T : class, IEntity<T>, new()
+        {
+            // Logic to ensure returned entities are wrapped in your Proxy logic
+            return Entities.Entity<T>.Wrap(x) ?? Entities.Entity<T>.Create(new T());
+        }
+
+        public static IQueryable<T> AsSmart<T>(this DbSet<T> set) where T : class, IEntity<T>
+        {
+            // Logic to ensure returned entities are wrapped in your Proxy logic
+            return set.Select(x => Entities.Entity<T>.Wrap(x));
+        }
+
+        public static IEnumerable<T> AsSmart<T>(this IEnumerable<T> set) where T : class, IEntity<T>
+        {
+            // Logic to ensure returned entities are wrapped in your Proxy logic
+            return set.Select(x => Entities.Entity<T>.Wrap(x));
+        }
+
+        public static IQueryable<T> AsSmart<T>(this IQueryable<T> set) where T : class, IEntity<T>
+        {
+            // Logic to ensure returned entities are wrapped in your Proxy logic
+            return set.Select(x => Entities.Entity<T>.Wrap(x));
+        }
+
+
+        public static T Wrap<T>(this T target) where T : class, IEntity<T>
+        {
+            return T.Wrap(target);
+        }
+
 
         /*
         public static List<T> ToList<T>(this IQueryable<T> query) where T : IEntity, new()

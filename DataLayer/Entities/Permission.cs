@@ -3,7 +3,7 @@
 namespace EPIC.DataLayer.Entities
 {
     [Table("Permission")]
-    public class Permission : IEntity
+    public class Permission : Entity<Permission>
     {
         public int Id { get; set; }
         public string Name { get; set; }
