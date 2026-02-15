@@ -19,12 +19,15 @@
             <BitmapImage x:Key="Save" UriSource="/Resources/0040-save.png" />
             <BitmapImage x:Key="Cancel" UriSource="/Resources/1001-cancel.png" />
             <BitmapImage x:Key="Permissions" UriSource="/Resources/0080-doc_ok.png" />
-            <DataTemplate x:Key="PatientLinkTemplate">
-                <TextBlock TextWrapping="Wrap">
-                    <Run Foreground="Gray" Text="{Binding Path=Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    <Hyperlink NavigateUri="{Binding Path=Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" RequestNavigate="Hyperlink_RequestNavigate">
-                        <Run FontWeight="Bold" Text="Load permissions from " />
-                        <Run FontWeight="Bold" Text="{Binding Path=Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <DataTemplate x:Key="PatientLinkTemplate" DataType="VirtualPermission">
+                <TextBlock
+                    Focusable="False"
+                    Foreground="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}}"
+                    TextWrapping="Wrap">
+                    <Run Focusable="False" Text="{Binding Path=Description, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <Hyperlink Click="Hyperlink_Click">
+                        <Run FontWeight="Normal" Text="Load permissions from " />
+                        <Run FontWeight="Bold" Text="{Binding Path=Simplified, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
                     </Hyperlink>
                 </TextBlock>
             </DataTemplate>
@@ -220,6 +223,7 @@
                     AutoGenerateColumns="False"
                     Background="#00FFFFFF"
                     BorderThickness="0"
+                    CanUserAddRows="False"
                     CanUserResizeColumns="True"
                     CanUserResizeRows="False"
                     CellStyle="{StaticResource BlankCellStyle}"

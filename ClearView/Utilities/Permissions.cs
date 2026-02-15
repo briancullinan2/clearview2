@@ -109,10 +109,17 @@ namespace EPIC.ClearView.Utilities
         }
         */
 
-        public static IEnumerable<DataLayer.Entities.Permission> IntrospectXaml(string bamlPath)
+        public static IEnumerable<DataLayer.Entities.Permission> IntrospectXaml(System.Reflection.Assembly assembly, string bamlPath)
         {
             // Load the object graph without rendering it
-            var assembly = Assembly.GetExecutingAssembly();
+            var qualified = new Uri("pack://application:,,,/" + assembly.GetName().Name + ";component/" + bamlPath, UriKind.Absolute);
+            var relative = new Uri(qualified.LocalPath, UriKind.Relative);
+            var byteStream = GetAssemblyResource(assembly, bamlPath);
+            var info = ScanBamlClass(assembly, byteStream.Skip(4).ToArray(), qualified);
+            if (typeof(Application).IsAssignableFrom(info))
+            {
+                return [];
+            }
             var root = Application.LoadComponent(new Uri(bamlPath.Replace(".baml", ".xaml"), UriKind.Relative)) as FrameworkElement;
             //var name = Path.GetFileNameWithoutExtension();
 

@@ -4,11 +4,14 @@ using EPIC.DataLayer;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
+using System.Windows.Documents;
 
 namespace EPIC.ClearView.User
 {
@@ -89,6 +92,27 @@ namespace EPIC.ClearView.User
         }
 
 
+        public class VirtualPermission : DataLayer.Entities.Permission
+        {
+            [NotMapped]
+            public bool IsPageAccess { get; set; } = false;
+            [NotMapped]
+            public string? Simplified
+            {
+                get
+                {
+                    return IsPageAccess ? simplifiedSet : Name;
+                }
+                set
+                {
+                    simplifiedSet = value;
+                }
+            }
+            [NotMapped]
+            private string? simplifiedSet = null;
+            public string? Baml { get; set; }
+        }
+
         public void AddXamlPermissions()
         {
 
@@ -101,10 +125,14 @@ namespace EPIC.ClearView.User
                                                 .Split('/')
                                                 .Select(s => System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(s)));
 
-                PermissionData.Add(new DataLayer.Entities.Permission
+                PermissionData.Add(new VirtualPermission
                 {
+                    IsPageAccess = true,
+                    Simplified = (!String.IsNullOrWhiteSpace(defaultNamespace)
+                            ? (defaultNamespace + ".") : "") + name,
+                    Baml = bamlPath,
                     Name = "Pages." + typeof(App).Namespace + (!String.IsNullOrWhiteSpace(defaultNamespace)
-                            ? "." + defaultNamespace : "") + "." + name + ".Access",
+                            ? ("." + defaultNamespace) : "") + "." + name + ".Access",
                     Description = "Page access to " + name + ".baml in the " + (String.IsNullOrWhiteSpace(defaultNamespace)
                             ? "top" : defaultNamespace) + " file layer"
                 });
@@ -121,11 +149,6 @@ namespace EPIC.ClearView.User
 
         /*
 
-            var Permissions = IntrospectXaml(bamlPath);
-            foreach (var permission in Permissions)
-            {
-                PermissionData.Add(permission);
-            }
         }
         */
 
@@ -565,6 +588,22 @@ namespace EPIC.ClearView.User
 
         private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
         {
+
+        }
+
+        private void Hyperlink_Click(object sender, RoutedEventArgs e)
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            var frameworkElement = sender as Hyperlink;
+            if (frameworkElement == null) return;
+
+            // 2. The DataContext IS your row's Model/ViewModel
+            var selectedEntity = frameworkElement.DataContext as VirtualPermission;
+            var Permissions = Utilities.Permissions.IntrospectXaml(assembly, selectedEntity.Baml);
+            foreach (var permission in Permissions)
+            {
+                PermissionData.Add(permission);
+            }
 
         }
     }

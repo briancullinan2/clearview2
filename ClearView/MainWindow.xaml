@@ -269,6 +269,7 @@
             Grid.ColumnSpan="2"
             Panel.ZIndex="0"
             Background="{StaticResource ClearViewBackground}"
+            BorderBrush="Transparent"
             ClipToBounds="True"
             Style="{StaticResource StandardTabControl}">
             <TabItem Header="Welcome" IsSelected="True">
