@@ -93,4 +93,44 @@
         Drawing="{StaticResource Logo}"
         Stretch="Uniform" />
     <DrawingImage x:Key="LogoDrawing" Drawing="{StaticResource Logo}" />
+    <Style x:Key="GlassPanelStyle" TargetType="ContentControl">
+        <EventSetter Event="Loaded" Handler="ContentControl_Loaded" />
+        <Setter Property="ClipToBounds" Value="true" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ContentControl">
+                    <Grid>
+                        <Border
+                            x:Name="BackgroundLayer"
+                            Margin="-80"
+                            Padding="80"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            Panel.ZIndex="-4"
+                            ClipToBounds="False"
+                            IsHitTestVisible="False">
+                            <Border.Effect>
+                                <BlurEffect
+                                    x:Name="MainBlur"
+                                    KernelType="Box"
+                                    Radius="20"
+                                    RenderingBias="Quality" />
+                            </Border.Effect>
+                        </Border>
+                        <Border
+                            Grid.Row="1"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            Panel.ZIndex="-3"
+                            Background="#80FFFFFF"
+                            IsHitTestVisible="False" />
+                        <ContentPresenter
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            Panel.ZIndex="10" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

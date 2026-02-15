@@ -15,7 +15,7 @@
     d:DesignHeight="800"
     d:DesignWidth="1200"
     AllowsTransparency="False"
-    Icon="/clearview.png"
+    Icon="/Resources/clearview.ico"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <Window.TaskbarItemInfo>
@@ -44,7 +44,12 @@
             <BitmapImage x:Key="Calibrate" UriSource="Resources/0175-camera.png" />
             <BitmapImage x:Key="Themes" UriSource="Resources/Art.png" />
             <BitmapImage x:Key="Languages" UriSource="Resources/Select-Language-small.png" />
-            <BitmapImage x:Key="ClearViewBackground" UriSource="Resources/ClearViewBackground.png" />
+            <ImageBrush
+                x:Key="ClearViewBackground"
+                AlignmentX="Center"
+                AlignmentY="Center"
+                ImageSource="Resources/ClearViewBackground.png"
+                Stretch="Uniform" />
 
         </ResourceDictionary>
     </FrameworkElement.Resources>
@@ -236,12 +241,35 @@
                 </ribbon:RibbonGroup>
             </ribbon:RibbonTab>
         </ribbon:Ribbon>
+        <Border
+            x:Name="BackgroundLayer"
+            Grid.Row="1"
+            Margin="-80"
+            Padding="80"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            ClipToBounds="False">
+            <Border.Effect>
+                <BlurEffect
+                    x:Name="MainBlur"
+                    KernelType="Box"
+                    Radius="20"
+                    RenderingBias="Quality" />
+            </Border.Effect>
+        </Border>
+        <Border
+            Grid.Row="1"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Background="#80FFFFFF" />
         <TabControl
             Name="Tabs"
             Grid.Row="1"
             Grid.Column="0"
             Grid.ColumnSpan="2"
             Panel.ZIndex="0"
+            Background="{StaticResource ClearViewBackground}"
+            ClipToBounds="True"
             Style="{StaticResource StandardTabControl}">
             <TabItem Header="Welcome" IsSelected="True">
                 <Frame NavigationUIVisibility="Hidden" Source="/Welcome.xaml" />

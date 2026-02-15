@@ -6,7 +6,7 @@
     Title="{Binding Path=Version, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Page}}}"
     Width="414"
     Height="236"
-    Icon="{Binding Path=Icon, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Page}}}"
+    Icon="/Resources/clearview.ico"
     ResizeMode="NoResize"
     ShowInTaskbar="False"
     SnapsToDevicePixels="True"

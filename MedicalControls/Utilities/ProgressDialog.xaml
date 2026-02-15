@@ -8,7 +8,7 @@
     Height="160"
     MinWidth="350"
     MinHeight="150"
-    Icon="{Binding Path=MainWindow.Icon, Source={x:Static Application.Current}}"
+    Icon="/Resources/clearview.ico"
     ResizeMode="NoResize"
     ShowInTaskbar="False"
     SizeToContent="WidthAndHeight"

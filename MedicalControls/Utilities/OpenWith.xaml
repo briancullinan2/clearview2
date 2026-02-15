@@ -8,7 +8,7 @@
     Title="Open with..."
     Width="250"
     Height="300"
-    Icon="/Resources/clearview.png"
+    Icon="/Resources/clearview.ico"
     SnapsToDevicePixels="True"
     UseLayoutRounding="True"
     WindowStartupLocation="CenterOwner">

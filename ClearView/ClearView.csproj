@@ -134,7 +134,7 @@
 		<Resource Include="Resources\calibration_sentech.bmp" />
 		<Resource Include="Resources\clearview.ico" />
 		<Resource Include="Resources\clearview.png" />
-		<Resource Include="Resources\clearviewbackground.png" />
+		<Resource Include="Resources\ClearViewBackground.png" />
 		<Resource Include="Resources\dbs.ico" />
 		<Resource Include="Resources\member-search-icon.gif" />
 		<Resource Include="Resources\person-add.jpg" />

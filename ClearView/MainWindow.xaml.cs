@@ -46,6 +46,8 @@ namespace EPIC.ClearView
 
             targetVisual.Brush = effectBrush;
             */
+
+            MedicalControls.Macros.Mica.SubscribeFuzz(this, Tabs, BackgroundLayer);
         }
 
         private void MainWindow_OnContentRendered(object? sender, EventArgs e)

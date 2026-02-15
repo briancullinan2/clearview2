@@ -19,22 +19,10 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <Grid Name="WelcomeLeft" Background="Transparent" ClipToBounds="True">
-            <Border
-                x:Name="BackgroundLayer"
-                ClipToBounds="False"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch"
-                Margin="-80"
-                Padding="80">
-                <Border.Effect>
-                    <BlurEffect
-                        x:Name="MainBlur"
-                        KernelType="Box"
-                        Radius="20"
-                        RenderingBias="Quality" />
-                </Border.Effect>
-            </Border>
+        <Grid
+            Name="WelcomeLeft"
+            Background="Transparent"
+            ClipToBounds="True">
             <StackPanel Margin="2,0,10,0">
                 <StackPanel Margin="0,20" Orientation="Horizontal">
                     <Image
