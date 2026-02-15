@@ -10,12 +10,19 @@
     d:MinHeight="200"
     d:MinWidth="300"
     mc:Ignorable="d">
+    <d:Page.DataContext>
+        <d:DesignInstance IsDesignTimeCreatable="True" Type="controls:DesignTimePermissionsViewModel" />
+    </d:Page.DataContext>
+    <controls:DesignTimePermissionsViewModel.PassPageToViewModel>
+        True
+    </controls:DesignTimePermissionsViewModel.PassPageToViewModel>
     <FrameworkElement.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/MedicalControls;component/Themes/ClearView.xaml" />
                 <ResourceDictionary Source="/MedicalControls;component/Themes/Application/DataGridStyles.xaml" />
                 <ResourceDictionary Source="/MedicalControls;component/Utilities/GeneralTemplate.xaml" />
+                <ResourceDictionary Source="/MedicalControls;component/Themes/Application/RibbonMenu.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <BitmapImage x:Key="Find" UriSource="/Resources/0025-search.png" />
             <BitmapImage x:Key="Remove" UriSource="/Resources/1003-delete.png" />
@@ -23,42 +30,39 @@
             <BitmapImage x:Key="Save" UriSource="/Resources/0040-save.png" />
             <BitmapImage x:Key="Cancel" UriSource="/Resources/1001-cancel.png" />
             <BitmapImage x:Key="Permissions" UriSource="/Resources/0080-doc_ok.png" />
-            <ribbon:RibbonContextualTabGroup
-                x:Key="SearchGroup"
-                Control.Background="#FFFFFF00"
-                Control.BorderBrush="#FFFFFF00"
-                RibbonContextualTabGroup.Header="Options"
-                UIElement.Visibility="Visible" />
-            <ribbon:RibbonTab x:Key="SearchOptions">
-                <RibbonTab.Header>
-                    <TextBlock
+            <x:Array x:Key="PermissionOptions" Type="{x:Type ribbon:RibbonTab}">
+                <ribbon:RibbonTab>
+                    <RibbonTab.Header>
+                        <TextBlock
                         Margin="-10,-10,-10,0"
                         Padding="10,10,10,0"
-                        Text="Options">
-                        <TextBlock.Background>
-                            <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
-                                <LinearGradientBrush.GradientStops>
-                                    <GradientStop Offset="0" Color="#AAFFFF00" />
-                                    <GradientStop Offset="1" Color="#00FFFF00" />
-                                </LinearGradientBrush.GradientStops>
-                            </LinearGradientBrush>
-                        </TextBlock.Background>
-                    </TextBlock>
-                </RibbonTab.Header>
-                <ribbon:RibbonGroup Header="User Options">
-                    <ribbon:RibbonToggleButton
+                        Text="Permissions">
+                            <TextBlock.Background>
+                                <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                    <LinearGradientBrush.GradientStops>
+                                        <GradientStop Offset="0" Color="#AAFFFF00" />
+                                        <GradientStop Offset="1" Color="#00FFFF00" />
+                                    </LinearGradientBrush.GradientStops>
+                                </LinearGradientBrush>
+                            </TextBlock.Background>
+                        </TextBlock>
+                    </RibbonTab.Header>
+                    <ribbon:RibbonGroup Header="User Options">
+                        <ribbon:RibbonToggleButton
                         IsChecked="True"
                         Label="Permissions"
                         LargeImageSource="{StaticResource Permissions}"
                         Unchecked="RibbonToggleButton_Unchecked" />
-                </ribbon:RibbonGroup>
-                <ribbon:RibbonGroup>
-                    <ribbon:RibbonButton
+                    </ribbon:RibbonGroup>
+                    <ribbon:RibbonGroup>
+                        <ribbon:RibbonButton
                         Click="AddRole_Click"
                         Label="Add Role"
                         LargeImageSource="{StaticResource Add}" />
-                </ribbon:RibbonGroup>
-            </ribbon:RibbonTab>
+                    </ribbon:RibbonGroup>
+                </ribbon:RibbonTab>
+            </x:Array>
+
         </ResourceDictionary>
     </FrameworkElement.Resources>
     <Grid>
@@ -67,6 +71,11 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
+        <d:ContentControl Margin="0,-120,0,0">
+            <d:ContentControl.Content>
+                <ribbon:Ribbon Style="{StaticResource PlainRibbonStyle}" ItemsSource="{StaticResource PermissionOptions}" />
+            </d:ContentControl.Content>
+        </d:ContentControl>
         <Grid Row="0">
             <Grid.RowDefinitions>
                 <RowDefinition />
@@ -121,14 +130,11 @@
                         CanUserResizeColumns="True"
                         CanUserResizeRows="False"
                         CellStyle="{StaticResource BlankCellStyle}"
-                        ColumnHeaderStyle="{StaticResource BlankColumnHeader}"
                         GridLinesVisibility="None"
                         IsReadOnly="True"
-                        ItemsSource="{Binding RolesData, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
-                        RowHeaderStyle="{StaticResource BlankRowHeader}"
+                        ItemsSource="{Binding RolesData}"
                         SelectionMode="Single"
-                        SelectionUnit="Cell"
-                        Template="{StaticResource BlankGridTemplate}">
+                        SelectionUnit="Cell">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn
                                 Width="100"
@@ -214,21 +220,22 @@
                     CanUserAddRows="False"
                     CanUserResizeColumns="True"
                     CanUserResizeRows="False"
+                    CanUserSortColumns="True"
                     CellStyle="{StaticResource BlankCellStyle}"
-                    ColumnHeaderStyle="{StaticResource BlankColumnHeader}"
-                    EnableColumnVirtualization="False"
-                    EnableRowVirtualization="False"
+                    EnableColumnVirtualization="True"
+                    EnableRowVirtualization="True"
                     GridLinesVisibility="None"
-                    ItemsSource="{Binding PermissionData, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
-                    RowHeaderStyle="{StaticResource BlankRowHeader}"
+                    HeadersVisibility="Column"
+                    ItemsSource="{Binding PermissionData}"
                     SelectionMode="Single"
-                    SelectionUnit="Cell"
-                    Template="{StaticResource BlankGridTemplate}">
+                    SelectionUnit="Cell">
                     <DataGrid.Columns>
                         <DataGridTemplateColumn
                             Width="300"
                             CanUserResize="True"
-                            Header="Name">
+                            CanUserSort="True"
+                            Header="Name"
+                            SortMemberPath="Name">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <!--  Unknown connection ID: 4  -->
@@ -239,8 +246,10 @@
                         <DataGridTemplateColumn
                             Width="300"
                             CanUserResize="True"
+                            CanUserSort="True"
                             CellStyle="{StaticResource AnyTypeCellTemplate}"
-                            Header="Description" />
+                            Header="Description"
+                            SortMemberPath="Description" />
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>

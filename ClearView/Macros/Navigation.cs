@@ -1,5 +1,6 @@
 ﻿using EPIC.ClearView.Utilities.Commands;
 using EPIC.ClearView.Utilities.Extensions;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Windows;
 using System.Windows.Controls;
@@ -130,45 +131,113 @@ namespace EPIC.ClearView.Macros
         // Token: 0x06000144 RID: 324 RVA: 0x0000BDA4 File Offset: 0x00009FA4
         public static void InsertRibbon(FrameworkElement frameworkElement)
         {
-            MainWindow main = Application.Current.MainWindow as MainWindow;
-            if (main != null)
+            MainWindow? main = Application.Current.MainWindow as MainWindow;
+            if (main == null)
             {
-                frameworkElement.Loaded += delegate (object sender, RoutedEventArgs args)
-                {
-                    if (frameworkElement.Resources.Values.OfType<RibbonContextualTabGroup>().Any<RibbonContextualTabGroup>())
-                    {
-                        foreach (RibbonContextualTabGroup item in frameworkElement.Resources.Values.OfType<RibbonContextualTabGroup>())
-                        {
-                            main.Ribbon.ContextualTabGroups.Add(item);
-                        }
-                    }
-                    if (frameworkElement.Resources.Values.OfType<RibbonTab>().Any<RibbonTab>())
-                    {
-                        foreach (RibbonTab item2 in frameworkElement.Resources.Values.OfType<RibbonTab>())
-                        {
-                            main.Ribbon.Items.Add(item2);
-                        }
-                        frameworkElement.Resources.Values.OfType<RibbonTab>().First<RibbonTab>().IsSelected = true;
-                    }
-                };
-                frameworkElement.Unloaded += delegate (object sender, RoutedEventArgs e)
-                {
-                    if (frameworkElement.Resources.Values.OfType<RibbonContextualTabGroup>().Any<RibbonContextualTabGroup>())
-                    {
-                        foreach (RibbonContextualTabGroup item in frameworkElement.Resources.Values.OfType<RibbonContextualTabGroup>())
-                        {
-                            main.Ribbon.ContextualTabGroups.Remove(item);
-                        }
-                    }
-                    if (frameworkElement.Resources.Values.OfType<RibbonTab>().Any<RibbonTab>())
-                    {
-                        foreach (RibbonTab item2 in frameworkElement.Resources.Values.OfType<RibbonTab>())
-                        {
-                            main.Ribbon.Items.Remove(item2);
-                        }
-                    }
-                };
+                return;
             }
+            frameworkElement.Loaded += delegate (object sender, RoutedEventArgs args)
+            {
+                if (frameworkElement.Resources.Values.OfType<Ribbon>().Any<Ribbon>())
+                {
+                    foreach (Ribbon ribbon in frameworkElement.Resources.Values.OfType<Ribbon>())
+                    {
+                        var temporary = new Collection<Control>();
+                        frameworkElement.Resources.Values.OfType<Ribbon>().FirstOrDefault()?.Items.OfType<RibbonTab>()?.FirstOrDefault()?.IsSelected = true;
+                        foreach (Control item in ribbon.Items)
+                        {
+                            temporary.Add(item);
+                            item.Tag = ribbon;
+                        }
+
+                        foreach (Control item in temporary)
+                        {
+                            ribbon.Items.Remove(item);
+                            main.Ribbon.Items.Add(item);
+                            if (typeof(RibbonTab).IsAssignableFrom(item.GetType()))
+                            {
+                                (item as RibbonTab)?.IsSelected = true;
+                            }
+                        }
+                    }
+
+                }
+                if (frameworkElement.Resources.Values.OfType<IEnumerable<RibbonTab>>().Any())
+                {
+                    foreach (IEnumerable<RibbonTab> ribbon in frameworkElement.Resources.Values.OfType<IEnumerable<RibbonTab>>())
+                    {
+                        foreach (Control item in ribbon)
+                        {
+                            main.Ribbon.Items.Add(item);
+                        }
+                    }
+                    frameworkElement.Resources.Values.OfType<IEnumerable<RibbonTab>>().FirstOrDefault()?.FirstOrDefault()?.IsSelected = true;
+                }
+
+                if (frameworkElement.Resources.Values.OfType<RibbonContextualTabGroup>().Any<RibbonContextualTabGroup>())
+                {
+                    foreach (RibbonContextualTabGroup item in frameworkElement.Resources.Values.OfType<RibbonContextualTabGroup>())
+                    {
+                        main.Ribbon.ContextualTabGroups.Add(item);
+                    }
+                }
+                if (frameworkElement.Resources.Values.OfType<RibbonTab>().Any<RibbonTab>())
+                {
+                    foreach (RibbonTab item2 in frameworkElement.Resources.Values.OfType<RibbonTab>())
+                    {
+                        main.Ribbon.Items.Add(item2);
+                    }
+                    frameworkElement.Resources.Values.OfType<RibbonTab>().First<RibbonTab>().IsSelected = true;
+                }
+            };
+            frameworkElement.Unloaded += delegate (object sender, RoutedEventArgs e)
+            {
+                if (frameworkElement.Resources.Values.OfType<Ribbon>().Any<Ribbon>())
+                {
+                    foreach (Ribbon ribbon in frameworkElement.Resources.Values.OfType<Ribbon>())
+                    {
+                        var temporary = new Collection<Control>();
+                        foreach (Control item in main.Ribbon.Items)
+                        {
+                            if (item.Tag == ribbon)
+                            {
+                                temporary.Add(item);
+                            }
+                        }
+
+                        foreach (Control item in temporary)
+                        {
+                            main.Ribbon.Items.Remove(item);
+                            ribbon.Items.Add(item);
+                        }
+                    }
+                }
+                if (frameworkElement.Resources.Values.OfType<IEnumerable<RibbonTab>>().Any())
+                {
+                    foreach (IEnumerable<RibbonTab> ribbon in frameworkElement.Resources.Values.OfType<IEnumerable<RibbonTab>>())
+                    {
+                        foreach (Control item in ribbon)
+                        {
+                            main.Ribbon.Items.Remove(item);
+                        }
+
+                    }
+                }
+                if (frameworkElement.Resources.Values.OfType<RibbonContextualTabGroup>().Any<RibbonContextualTabGroup>())
+                {
+                    foreach (RibbonContextualTabGroup item in frameworkElement.Resources.Values.OfType<RibbonContextualTabGroup>())
+                    {
+                        main.Ribbon.ContextualTabGroups.Remove(item);
+                    }
+                }
+                if (frameworkElement.Resources.Values.OfType<RibbonTab>().Any<RibbonTab>())
+                {
+                    foreach (RibbonTab item2 in frameworkElement.Resources.Values.OfType<RibbonTab>())
+                    {
+                        main.Ribbon.Items.Remove(item2);
+                    }
+                }
+            };
         }
 
         // Token: 0x06000145 RID: 325 RVA: 0x0000BEC8 File Offset: 0x0000A0C8

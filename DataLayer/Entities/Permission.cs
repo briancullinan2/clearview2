@@ -28,5 +28,7 @@ namespace EPIC.DataLayer.Entities
         private string? simplifiedSet = null;
         [NotMapped]
         public string? Baml { get; set; }
+        [NotMapped]
+        public System.Reflection.Assembly Assembly { get; set; }
     }
 }

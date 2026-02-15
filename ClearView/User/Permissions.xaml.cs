@@ -1,6 +1,5 @@
 ﻿using EPIC.ClearView.Macros;
 using EPIC.ClearView.Utilities.Extensions;
-using EPIC.DataLayer;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -18,7 +17,14 @@ namespace EPIC.ClearView.User
         // Token: 0x0600028D RID: 653 RVA: 0x0001519C File Offset: 0x0001339C
         public Permissions()
         {
+            ViewModel = new MedicalControls.Utilities.DesignTimePermissionsViewModel()
+            {
+                Page = this
+            };
+            DataContext = ViewModel;
+
             this.InitializeComponent();
+
             Navigation.InsertRibbon(this);
             base.Loaded += delegate (object sender2, RoutedEventArgs args2)
             {
@@ -26,19 +32,18 @@ namespace EPIC.ClearView.User
                 //FormChecker.Events[this].Unchanged += this.OnUnchanged;
             };
 
+
             // we specify the memory data context here because we know the information will be synchronized before close.
             //   this will be a standard formchecker.xaml function
-            RolesData = new ObservableCollection<DataLayer.Entities.Role>(TranslationContext.Current["Data Source=:memory:"].Roles.ToList());
-            RolesData.CollectionChanged += this.OnRoleCollectionChanged;
-            var view = CollectionViewSource.GetDefaultView(RolesData);
+            ViewModel.RolesData.CollectionChanged += this.OnRoleCollectionChanged;
+            var view = CollectionViewSource.GetDefaultView(ViewModel.RolesData);
             view.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
 
             AddMissingRoles();
 
             // start with xaml level permissions
-            PermissionData = new ObservableCollection<DataLayer.Entities.Permission>(TranslationContext.Current["Data Source=:memory:"].Permissions.ToList());
             // Do this after setting your ItemsSource
-            var view2 = CollectionViewSource.GetDefaultView(PermissionData);
+            var view2 = CollectionViewSource.GetDefaultView(ViewModel.PermissionData);
             view2.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
 
             AddInitialRoleColumns();
@@ -52,24 +57,24 @@ namespace EPIC.ClearView.User
         public void AddMissingRoles()
         {
 
-            if (RolesData.Count == 0)
+            if (ViewModel.RolesData.Count == 0)
             {
-                RolesData.Add(new DataLayer.Entities.Role
+                ViewModel.RolesData.Add(new DataLayer.Entities.Role
                 {
                     Name = "Admin",
                     Description = "General administrator, full control"
                 });
-                RolesData.Add(new DataLayer.Entities.Role
+                ViewModel.RolesData.Add(new DataLayer.Entities.Role
                 {
                     Name = "Client",
                     Description = "General client, like a doctor or nurse"
                 });
-                RolesData.Add(new DataLayer.Entities.Role
+                ViewModel.RolesData.Add(new DataLayer.Entities.Role
                 {
                     Name = "Tech",
                     Description = "General technician, device certified"
                 });
-                RolesData.Add(new DataLayer.Entities.Role
+                ViewModel.RolesData.Add(new DataLayer.Entities.Role
                 {
                     Name = "Guest",
                     Description = "General guest, for emergent use"
@@ -81,7 +86,7 @@ namespace EPIC.ClearView.User
 
         public void AddInitialRoleColumns()
         {
-            foreach (object obj in this.RolesData)
+            foreach (object obj in this.ViewModel.RolesData)
             {
                 DataLayer.Entities.Role role = (DataLayer.Entities.Role)obj;
                 this.AddColumn(role);
@@ -91,8 +96,8 @@ namespace EPIC.ClearView.User
 
         public void AddXamlPermissions()
         {
-
-            var _bamls = MedicalControls.Utilities.Permissions.GetBamlFiles(typeof(App).Assembly);
+            var assembly = typeof(App).Assembly;
+            var _bamls = MedicalControls.Utilities.Permissions.GetBamlFiles(assembly);
 
             foreach (string bamlPath in _bamls)
             {
@@ -101,8 +106,9 @@ namespace EPIC.ClearView.User
                                                 .Split('/')
                                                 .Select(s => System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(s)));
 
-                PermissionData.Add(new DataLayer.Entities.Permission
+                ViewModel.PermissionData.Add(new DataLayer.Entities.Permission
                 {
+                    Assembly = assembly,
                     IsPageAccess = true,
                     Simplified = (!String.IsNullOrWhiteSpace(defaultNamespace)
                             ? (defaultNamespace + ".") : "") + name,
@@ -172,7 +178,7 @@ namespace EPIC.ClearView.User
             if (role.Name == "Description")
             {
                 frameworkElementFactory = new FrameworkElementFactory(typeof(Label));
-                template = (DataTemplate)this.FindResource("PatientLinkTemplate");
+                template = new DataTemplate { VisualTree = frameworkElementFactory };
             }
             else if (role.Name == "Name")
             {
@@ -212,6 +218,7 @@ namespace EPIC.ClearView.User
             {
                 Width = role.Name == "Name" || role.Name == "Description" ? 300.0 : 150.0,
                 Header = role.Name,
+                CanUserSort = canResize,
                 CanUserResize = canResize,
                 CellTemplate = template
             });
@@ -319,12 +326,12 @@ namespace EPIC.ClearView.User
             {
                 this.AddColumn(new DataLayer.Entities.Role { Name = "Name" }, canResize: true);
                 this.AddColumn(new DataLayer.Entities.Role { Name = "Description" }, canResize: true);
-                foreach (object obj in this.RolesData)
+                foreach (object obj in this.ViewModel.RolesData)
                 {
                     DataLayer.Entities.Role role = (DataLayer.Entities.Role)obj;
                     this.AddColumn(role);
                 }
-                PermissionsGrid.ItemsSource = PermissionData;
+                PermissionsGrid.ItemsSource = ViewModel.PermissionData;
                 PermissionsGrid.UpdateLayout();
 
             }), System.Windows.Threading.DispatcherPriority.Loaded);
@@ -513,7 +520,7 @@ namespace EPIC.ClearView.User
                     DataLayer.Entities.Role Role = dataGridCell.DataContext as DataLayer.Entities.Role;
                     if (Role != null)
                     {
-                        int index = RolesData.IndexOf(Role);
+                        int index = ViewModel.RolesData.IndexOf(Role);
                         this.PermissionsGrid.Columns[index + 2].Header = textBox.Text;
                     }
                 }
@@ -542,15 +549,13 @@ namespace EPIC.ClearView.User
         // Token: 0x04000155 RID: 341
         //private readonly PermissionBooleanConverter _permissionConverter;
 
-        public ObservableCollection<DataLayer.Entities.Permission> PermissionData { get; private set; }
-
         // Token: 0x04000157 RID: 343
         private bool _collectionChanged;
 
         // Token: 0x04000158 RID: 344
         private bool _suppressChecking;
 
-        public ObservableCollection<DataLayer.Entities.Role> RolesData { get; private set; }
+        public MedicalControls.Utilities.DesignTimePermissionsViewModel ViewModel { get; private set; }
 
         private void RibbonToggleButton_Unchecked(object sender, RoutedEventArgs e)
         {
@@ -585,4 +590,5 @@ namespace EPIC.ClearView.User
         }
         */
     }
+
 }

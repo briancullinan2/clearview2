@@ -1,10 +1,15 @@
-﻿using EPIC.MedicalControls.Extensions;
+﻿using EPIC.DataLayer;
+using EPIC.MedicalControls.Extensions;
 using System.Collections;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Baml2006;
+using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Controls.Ribbon;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -14,6 +19,78 @@ using System.Xml.Linq;
 
 namespace EPIC.MedicalControls.Utilities
 {
+    public class DesignTimePermissionsViewModel : DependencyObject, INotifyPropertyChanged
+    {
+        public Page? Page { get; set; }
+
+        public ObservableCollection<DataLayer.Entities.Role>? RolesData { get; set; }
+
+        public ObservableCollection<DataLayer.Entities.Permission>? PermissionData { get; set; }
+
+        public IEnumerable<RibbonTab> RibbonTabs
+        {
+            /*  get;
+            {
+                if (DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+                {
+                }
+
+                if (Page == null)
+                {
+                    return [];
+                }
+                return Page.Resources.Values.OfType<RibbonTab>();
+            }
+            */
+            get
+            {
+                return (IEnumerable<RibbonTab>)base.GetValue(RibbonTabsProperty);
+            }
+            private set
+            {
+                base.SetValue(RibbonTabsProperty, value);
+            }
+
+        }
+
+        public static readonly DependencyProperty RibbonTabsProperty =
+        DependencyProperty.RegisterAttached("RibbonTabs", typeof(IEnumerable<RibbonTab>), typeof(DesignTimePermissionsViewModel),
+        new PropertyMetadata(new Collection<RibbonTab>()));
+
+        public static readonly DependencyProperty PassPageToViewModelProperty =
+        DependencyProperty.RegisterAttached("PassPageToViewModel", typeof(bool), typeof(DesignTimePermissionsViewModel),
+        new PropertyMetadata(false, (d, e) =>
+        {
+            if (d is Page p && p.DataContext is DesignTimePermissionsViewModel vm)
+                vm.RibbonTabs = p.Resources.Values.OfType<RibbonTab>(); // ViewModel property set at design time
+        }));
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        public static void SetPassPageToViewModel(UIElement element, bool value) => element.SetValue(PassPageToViewModelProperty, value);
+        public static bool GetPassPageToViewModel(UIElement element) => (bool)element.GetValue(PassPageToViewModelProperty);
+
+        public DesignTimePermissionsViewModel()
+        {
+
+
+            if (DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+            {
+                RolesData = new ObservableCollection<DataLayer.Entities.Role>
+                {
+                    new DataLayer.Entities.Role { Name = "Administrator", Description = "Full system access" },
+                    new DataLayer.Entities.Role { Name = "Read Only", Description = "View only permissions" },
+                    new DataLayer.Entities.Role { Name = "Patient Data", Description = "Access to medical records" }
+                };
+            }
+            else
+            {
+                RolesData = new ObservableCollection<DataLayer.Entities.Role>(TranslationContext.Current["Data Source=:memory:"].Roles.ToList());
+                PermissionData = new ObservableCollection<DataLayer.Entities.Permission>(TranslationContext.Current["Data Source=:memory:"].Permissions.ToList());
+
+            }
+        }
+    }
     public static class Permissions
     {
 
@@ -59,18 +136,20 @@ namespace EPIC.MedicalControls.Utilities
             if (root == null)
                 return [];
 
-            string defaultNamespace = string.Join(".", Path.GetDirectoryName(name).Replace('\\', '/').Split('/').Select(s => System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(s)));
+            var titleNamespace = Path.GetDirectoryName(name)?.Replace('\\', '/').Split('/')
+                                     .Select(s => System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(s));
+            string defaultNamespace = string.Join(".", titleNamespace ?? []);
             var allChildren = root.GetAllLogicalChildren().Concat(root.GetAllChildren()).Distinct();
-            var allElements = allChildren
+            var controlChildren = allChildren
                                   .OfType<FrameworkElement>()
-                                  .Where(e => e is ICommandSource || e is ButtonBase || !String.IsNullOrWhiteSpace(e.Name) || !String.IsNullOrWhiteSpace(e.GetDescriptor()))
-                                  .Select(e => new DataLayer.Entities.Permission
-                                  {
-                                      Name = e.BuildAncestralAddress(root) + "." + e.GetType().Name, // Using your JS-style logic
-                                      Description = "Interaction access to " + e.GetType().Name + " labeled " + e.GetDescriptor() + " in the " + name + " baml",
-                                      IsActionable = e is ICommandSource || e is ButtonBase
-                                  });
-            return allElements;
+                                  .Where(e => e is ICommandSource || e is ButtonBase || !String.IsNullOrWhiteSpace(e.Name) || !String.IsNullOrWhiteSpace(e.GetDescriptor()));
+            var permissions = controlChildren.Select(e => new DataLayer.Entities.Permission
+            {
+                Name = e.BuildAncestralAddress(root), // Using your JS-style logic
+                Description = "Interaction access to " + e.GetType().Name + " labeled " + e.GetDescriptor() + " in " + name.Replace(".baml", ".xaml"),
+                IsActionable = e is ICommandSource || e is ButtonBase
+            });
+            return permissions;
         }
 
         /*

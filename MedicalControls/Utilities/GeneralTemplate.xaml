@@ -7,26 +7,36 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     mc:Ignorable="local">
-	<!--  Unknown connection ID: 1  -->
-	<ControlTemplate x:Key="PatientLinkTemplate">
-		<TextBlock
+    <!--  Unknown connection ID: 1  -->
+    <ControlTemplate x:Key="PatientLinkTemplate">
+        <TextBlock
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
             Focusable="False"
-            Foreground="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}}"
+            Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
             TextWrapping="Wrap">
-			<Run Focusable="False" Text="{Binding Path=Description, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
-			<Hyperlink Click="Hyperlink_Click">
-				<Run FontWeight="Normal" Text="Load permissions from " />
-				<Run FontWeight="Bold" Text="{Binding Path=Simplified, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
-			</Hyperlink>
-		</TextBlock>
-	</ControlTemplate>
-	<local:GeneralTemplateSelector
+            <Run Focusable="False" Text="{Binding Path=Description, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+            <Hyperlink Click="Hyperlink_Click">
+                <Run FontWeight="Normal" Text="Load permissions from " />
+                <Run FontWeight="Bold" Text="{Binding Path=Simplified, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+            </Hyperlink>
+        </TextBlock>
+    </ControlTemplate>
+    <ControlTemplate x:Key="PlainPermissionTemplate">
+        <Label Content="{Binding Path=Description, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+    </ControlTemplate>
+    <!--<local:GeneralTemplateSelector
         x:Key="AnyTypeEditor"
         CheckboxTemplate="{StaticResource MetroCheckboxTemplate}"
         DefaultTemplate="{StaticResource BasicTextTemplate}"
-        LinkTemplate="{StaticResource PatientLinkTemplate}" />
-	<Style x:Key="AnyTypeCellTemplate" TargetType="DataGridCell">
-		<!--<Setter Property="CellTemplateSelector" Value="{StaticResource AnyTypeEditor}" />-->
-		<Setter Property="Template" Value="{StaticResource PatientLinkTemplate}" />
-	</Style>
+        LinkTemplate="{StaticResource PatientLinkTemplate}" />-->
+    <Style x:Key="AnyTypeCellTemplate" TargetType="DataGridCell">
+        <Setter Property="Template" Value="{StaticResource PlainPermissionTemplate}" />
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsPageAccess}" Value="True">
+                <Setter Property="Template" Value="{StaticResource PatientLinkTemplate}" />
+            </DataTrigger>
+        </Style.Triggers>
+        <!--<Setter Property="CellTemplateSelector" Value="{StaticResource AnyTypeEditor}" />-->
+    </Style>
 </ResourceDictionary>

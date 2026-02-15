@@ -26,6 +26,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/MedicalControls;component/Themes/ClearView.xaml" />
                 <ResourceDictionary Source="/MedicalControls;component/Themes/Application/TabControlStyles.xaml" />
+                <ResourceDictionary Source="/MedicalControls;component/Themes/Application/RibbonMenu.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <BitmapImage x:Key="Globe" UriSource="Resources/5001-web_search.png" />
             <BitmapImage x:Key="Patients" UriSource="Resources/4502-users.png" />
@@ -85,13 +86,11 @@
         <ribbon:Ribbon
             x:Name="Ribbon"
             Grid.ColumnSpan="2"
-            Margin="0,-22,0,0"
             Panel.ZIndex="1"
             IsCollapsed="False"
-            ShowQuickAccessToolBarOnTop="False">
-            <Ribbon.ApplicationMenu>
-                <RibbonApplicationMenu Visibility="Collapsed" />
-            </Ribbon.ApplicationMenu>
+            ShowQuickAccessToolBarOnTop="False"
+            Style="{StaticResource PlainRibbonStyle}">
+
             <ribbon:RibbonTab x:Name="Services" Header="Services">
                 <RibbonTab.ItemsPanel>
                     <ItemsPanelTemplate>

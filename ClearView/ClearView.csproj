@@ -94,6 +94,9 @@
 			<EmbedInteropTypes>False</EmbedInteropTypes>
 			<Private>True</Private>
 		</Reference>
+		<Reference Include="MedicalControls">
+		  <HintPath>bin\Debug\MedicalControls.dll</HintPath>
+		</Reference>
 	</ItemGroup>
 
 	<ItemGroup>

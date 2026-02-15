@@ -32,16 +32,116 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+    <Style x:Key="ColumnHeaderGripperStyle" TargetType="{x:Type Thumb}">
+        <Setter Property="Width" Value="8" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Cursor" Value="SizeWE" />
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Thumb}">
+                    <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <ControlTemplate x:Key="BlankColumnTemplate" TargetType="{x:Type DataGridColumnHeader}">
+        <Grid x:Name="RootGrid">
+            <Border
+                x:Name="SeparatorBorder"
+                Grid.ColumnSpan="2"
+                BorderBrush="{TemplateBinding SeparatorBrush}"
+                BorderThickness="0,0,1,0"
+                Visibility="{TemplateBinding SeparatorVisibility}" />
+            <Border
+                x:Name="HeaderBorder"
+                Padding="{TemplateBinding Padding}"
+                Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <ContentPresenter
+                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                    <TextBlock
+                        x:Name="SortIndicator"
+                        Grid.Column="1"
+                        Margin="{DynamicResource DataGridSortIndicatorIconMargin}"
+                        VerticalAlignment="Top"
+                        FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                        FontSize="{DynamicResource DataGridSortIndicatorIconFontSize}"
+                        Text=""
+                        Visibility="Hidden" />
+                    <Thumb
+                        x:Name="PART_LeftHeaderGripper"
+                        Grid.ColumnSpan="2"
+                        HorizontalAlignment="Left"
+                        Style="{StaticResource ColumnHeaderGripperStyle}" />
+                    <Thumb
+                        x:Name="PART_RightHeaderGripper"
+                        Grid.ColumnSpan="2"
+                        HorizontalAlignment="Right"
+                        Style="{StaticResource ColumnHeaderGripperStyle}" />
+                </Grid>
+            </Border>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{DynamicResource DataGridHeaderBackgroundPointerOver}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource DataGridHeaderBorderBrushPointerOver}" />
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{DynamicResource DataGridHeaderBackgroundPressed}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource DataGridHeaderBorderBrushPressed}" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Background" Value="{DynamicResource DataGridHeaderBackgroundDisabled}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource DataGridHeaderBorderBrushDisabled}" />
+            </Trigger>
+            <Trigger Property="SortDirection" Value="Ascending">
+                <Setter TargetName="SortIndicator" Property="Visibility" Value="Visible" />
+                <Setter TargetName="SortIndicator" Property="Text" Value="" />
+            </Trigger>
+            <Trigger Property="SortDirection" Value="Descending">
+                <Setter TargetName="SortIndicator" Property="Visibility" Value="Visible" />
+                <Setter TargetName="SortIndicator" Property="Text" Value="" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
     <Style x:Key="BlankColumnHeader" TargetType="{x:Type DataGridColumnHeader}">
-        <Setter Property="Background" Value="#00FFFFFF" />
-        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="Template" Value="{StaticResource BlankColumnTemplate}" />
         <Style.Triggers>
-            <Trigger Property="UIElement.IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#00FFFFFF" />
+            <DataTrigger Binding="{Binding IsPageAccess}" Value="False">
+                <Setter Property="HorizontalContentAlignment" Value="Center" />
+            </DataTrigger>
+        </Style.Triggers>
+
+        <!--<Setter Property="Background" Value="Transparent" />
+        <Setter Property="SeparatorBrush" Value="White" />
+        <Setter Property="SeparatorVisibility" Value="Visible" />
+
+        <Setter Property="BorderBrush" Value="#22FFFFFF" />
+        <Setter Property="BorderThickness" Value="0,0,0,1" />
+        <Style.Triggers>
+            <Trigger Property="CanUserResize" Value="True">
+                <Setter Property="SeparatorBrush" Value="#AAFFFFFF" />
             </Trigger>
         </Style.Triggers>
+
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="SeparatorBrush" Value="#AAFFFFFF" />
+            </Trigger>
+        </Style.Triggers>-->
     </Style>
+
     <ControlTemplate x:Key="BlankGridTemplate" TargetType="{x:Type DataGrid}">
+
         <Border
             Padding="{TemplateBinding Padding}"
             Background="{TemplateBinding Background}"
@@ -111,4 +211,8 @@
             </ScrollViewer>
         </Border>
     </ControlTemplate>
+    <Style x:Key="BlankGridStyle" TargetType="{x:Type DataGrid}">
+        <Setter Property="Template" Value="{StaticResource BlankGridTemplate}" />
+    </Style>
+
 </ResourceDictionary>
