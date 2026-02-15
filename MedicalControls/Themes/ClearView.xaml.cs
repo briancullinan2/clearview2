@@ -1,8 +1,10 @@
 ﻿using EPIC.MedicalControls.Macros;
+using System.Windows;
+using System.Windows.Markup;
 
 namespace EPIC.MedicalControls.Themes
 {
-    public partial class ClearView
+    public partial class ClearView : ResourceDictionary, IStyleConnector
     {
 
         private void ContentControl_Loaded(object sender, System.Windows.RoutedEventArgs e)

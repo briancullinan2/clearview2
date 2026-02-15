@@ -4,10 +4,11 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Markup;
 
 namespace EPIC.MedicalControls.Utilities
 {
-    public partial class GeneralTemplate
+    public partial class GeneralTemplate : ResourceDictionary, IStyleConnector
     {
 
         private void Hyperlink_Click(object sender, RoutedEventArgs e)

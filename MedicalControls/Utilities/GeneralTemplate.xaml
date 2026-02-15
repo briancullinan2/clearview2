@@ -8,7 +8,7 @@
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     mc:Ignorable="local">
 	<!--  Unknown connection ID: 1  -->
-	<DataTemplate x:Key="PatientLinkTemplate" DataType="entity:Permission">
+	<ControlTemplate x:Key="PatientLinkTemplate">
 		<TextBlock
             Focusable="False"
             Foreground="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}}"
@@ -19,10 +19,14 @@
 				<Run FontWeight="Bold" Text="{Binding Path=Simplified, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
 			</Hyperlink>
 		</TextBlock>
-	</DataTemplate>
+	</ControlTemplate>
 	<local:GeneralTemplateSelector
         x:Key="AnyTypeEditor"
         CheckboxTemplate="{StaticResource MetroCheckboxTemplate}"
         DefaultTemplate="{StaticResource BasicTextTemplate}"
         LinkTemplate="{StaticResource PatientLinkTemplate}" />
+	<Style x:Key="AnyTypeCellTemplate" TargetType="DataGridCell">
+		<!--<Setter Property="CellTemplateSelector" Value="{StaticResource AnyTypeEditor}" />-->
+		<Setter Property="Template" Value="{StaticResource PatientLinkTemplate}" />
+	</Style>
 </ResourceDictionary>
