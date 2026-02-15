@@ -1,5 +1,4 @@
-﻿using EPIC.ClearView.Native;
-using EPIC.MedicalControls.Native;
+﻿using EPIC.MedicalControls.Native;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;

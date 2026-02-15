@@ -10,5 +10,23 @@ namespace EPIC.DataLayer.Entities
         public string Name { get; set; }
         public string Description { get; set; }
         public bool IsActionable { get; set; }
+        [NotMapped]
+        public bool IsPageAccess { get; set; } = false;
+        [NotMapped]
+        public string? Simplified
+        {
+            get
+            {
+                return IsPageAccess ? simplifiedSet : Name;
+            }
+            set
+            {
+                simplifiedSet = value;
+            }
+        }
+        [NotMapped]
+        private string? simplifiedSet = null;
+        [NotMapped]
+        public string? Baml { get; set; }
     }
 }

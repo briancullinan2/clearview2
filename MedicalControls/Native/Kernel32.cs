@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace EPIC.ClearView.Native
+namespace EPIC.MedicalControls.Native
 {
     public partial class Kernel32
     {

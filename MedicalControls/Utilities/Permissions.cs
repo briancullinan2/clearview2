@@ -1,4 +1,4 @@
-﻿using EPIC.ClearView.Utilities.Extensions;
+﻿using EPIC.MedicalControls.Extensions;
 using System.Collections;
 using System.IO;
 using System.Reflection;
@@ -12,7 +12,7 @@ using System.Xaml;
 using System.Xml;
 using System.Xml.Linq;
 
-namespace EPIC.ClearView.Utilities
+namespace EPIC.MedicalControls.Utilities
 {
     public static class Permissions
     {

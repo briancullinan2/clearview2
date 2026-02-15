@@ -6,6 +6,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ribbon="clr-namespace:System.Windows.Controls.Ribbon;assembly=System.Windows.Controls.Ribbon"
     Title="Permissions"
+    d:MinHeight="200"
+    d:MinWidth="300"
     mc:Ignorable="d">
     <FrameworkElement.Resources>
         <ResourceDictionary>
@@ -25,7 +27,7 @@
                     Foreground="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}}"
                     TextWrapping="Wrap">
                     <Run Focusable="False" Text="{Binding Path=Description, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
-                    <Hyperlink Click="Hyperlink_Click">
+                    <Hyperlink>
                         <Run FontWeight="Normal" Text="Load permissions from " />
                         <Run FontWeight="Bold" Text="{Binding Path=Simplified, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
                     </Hyperlink>
@@ -122,8 +124,6 @@
                     </Grid.RowDefinitions>
                     <DataGrid
                         Name="Roles"
-                        d:MinHeight="200"
-                        d:MinWidth="300"
                         AlternatingRowBackground="#FFF0F8FF"
                         AutoGenerateColumns="False"
                         Background="#00FFFFFF"
@@ -217,8 +217,6 @@
             <TabItem Header="Permissions" IsSelected="True">
                 <DataGrid
                     Name="PermissionsGrid"
-                    d:MinHeight="200"
-                    d:MinWidth="300"
                     AlternatingRowBackground="#FFF0F8FF"
                     AutoGenerateColumns="False"
                     Background="#00FFFFFF"

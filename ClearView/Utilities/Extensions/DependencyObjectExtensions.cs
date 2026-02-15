@@ -165,14 +165,21 @@ namespace EPIC.ClearView.Utilities.Extensions
             }
         }
 
-        public static string GetDescriptor(this DependencyObject obj)
+        public static string? GetDescriptor(this DependencyObject obj)
         {
             // Check common WPF properties via reflection
-            var props = new[] { "Header", "Content", "Text", "Label", "Title" };
+            var props = new[] { "Name", "Title", "Header", "Text", "Label", "Content" };
             foreach (var name in props)
             {
                 var prop = obj.GetType().GetProperty(name);
-                if (prop != null) return prop.GetValue(obj)?.ToString();
+                if (prop == null) continue;
+                var value = prop.GetValue(obj);
+
+                // skip content because lots has this
+                if (name == "Content" && typeof(string).IsAssignableFrom(value?.GetType()))
+                    continue;
+
+                if (!string.IsNullOrEmpty(value?.ToString())) return value.ToString();
             }
             return null;
         }
