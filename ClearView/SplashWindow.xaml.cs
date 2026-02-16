@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using System.Security.Permissions;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Navigation;
@@ -10,14 +9,27 @@ namespace EPIC.ClearView
     // Token: 0x02000047 RID: 71
     public partial class SplashWindow : Window
     {
+        private static IDictionary<Assembly, int> _loaded = new Dictionary<Assembly, int>();
         // Token: 0x06000256 RID: 598 RVA: 0x00013D64 File Offset: 0x00011F64
-        private static void CurrentDomainOnAssemblyLoad(object sender, AssemblyLoadEventArgs args)
+        private static void CurrentDomainOnAssemblyLoad(object? sender, AssemblyLoadEventArgs args)
         {
+            //SplashWindow._total += args.LoadedAssembly.GetReferencedAssemblies().Except(_loaded.Keys.Select(ass => ass.GetName())).Count();
+            SplashWindow._completed++;
+            if (SplashWindow._splash == null)
+            {
+                return;
+            }
             SplashWindow._splash.Dispatcher.Invoke(delegate ()
             {
+                SplashWindow._splash.Version.Content = System.Reflection.Assembly.GetExecutingAssembly()
+                                          .GetCustomAttribute<System.Reflection.AssemblyInformationalVersionAttribute>()?
+                                          .InformationalVersion; ;
                 SplashWindow._splash.Message.Content = string.Format("Loaded: {0}", args.LoadedAssembly.FullName);
                 SplashWindow._splash.Progress.Value = (double)((int)((double)SplashWindow._completed / (double)SplashWindow._total * 100.0));
+
             });
+            //SplashWindow._splash.Dispatcher.Invoke(() => { }, System.Windows.Threading.DispatcherPriority.Render);
+            //Dispatcher.PushFrame(new DispatcherFrame());
             SplashWindow.DoEvents();
         }
 
@@ -59,6 +71,7 @@ namespace EPIC.ClearView
             }), DispatcherPriority.SystemIdle, new object[0]);
         }
 
+        /*
         public string Version
         {
             get
@@ -69,6 +82,7 @@ namespace EPIC.ClearView
                 return infoVersion;
             }
         }
+        */
 
         public object Icon
         {
@@ -82,15 +96,17 @@ namespace EPIC.ClearView
         // Token: 0x06000259 RID: 601 RVA: 0x00013EBE File Offset: 0x000120BE
         private SplashWindow()
         {
+            // MAKE IT EARLIER!
+            //AppDomain.CurrentDomain.AssemblyLoad += SplashWindow.CurrentDomainOnAssemblyLoad;
             this.InitializeComponent();
         }
 
         // Token: 0x0600025A RID: 602 RVA: 0x00013ED0 File Offset: 0x000120D0
-        [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
+        //[SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         private static void DoEvents()
         {
             DispatcherFrame dispatcherFrame = new DispatcherFrame();
-            Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.Render, new DispatcherOperationCallback(SplashWindow.ExitFrames), dispatcherFrame);
+            Dispatcher.CurrentDispatcher?.BeginInvoke(DispatcherPriority.Render, new DispatcherOperationCallback(SplashWindow.ExitFrames), dispatcherFrame);
             try
             {
                 Dispatcher.PushFrame(dispatcherFrame);
@@ -99,6 +115,7 @@ namespace EPIC.ClearView
             {
             }
         }
+
 
         // Token: 0x0600025B RID: 603 RVA: 0x00013F20 File Offset: 0x00012120
         private static object ExitFrames(object frame)
@@ -110,13 +127,25 @@ namespace EPIC.ClearView
         [STAThread] // Required for WPF UI threads
         public static void Main()
         {
-            // 2. Launch Splash immediately on the UI thread
+            log4net.Config.XmlConfigurator.Configure(new System.IO.FileInfo("log4net.xml"));
+            SplashWindow._total += Assembly.GetEntryAssembly().GetReferencedAssemblies().Count();
+            AppDomain.CurrentDomain.AssemblyLoad += SplashWindow.CurrentDomainOnAssemblyLoad;
+            AppDomain.CurrentDomain.AssemblyResolve += App.CurrentDomain_AssemblyResolve;
+            AppDomain.CurrentDomain.AssemblyLoad += App.CurrentDomain_AssemblyLoad;
+            AppDomain.CurrentDomain.DomainUnload += delegate (object? o, EventArgs args)
+            {
+                AppDomain.CurrentDomain.AssemblyLoad -= SplashWindow.CurrentDomainOnAssemblyLoad;
+                AppDomain.CurrentDomain.AssemblyResolve -= App.CurrentDomain_AssemblyResolve;
+                AppDomain.CurrentDomain.AssemblyLoad -= App.CurrentDomain_AssemblyLoad;
+            };
+
             _splash = new SplashWindow();
 
             _splash.Dispatcher.Invoke(new Action(_splash.StartApp));
 
             _splash.ShowDialog();
         }
+
 
         private CancellationTokenSource _cts = new();
 
@@ -148,7 +177,9 @@ namespace EPIC.ClearView
                     _app.Run();
                 }
             }
-            catch (OperationCanceledException) { /* Handle shutdown */ }
+            catch (OperationCanceledException)
+            { /* Handle shutdown */
+            }
         }
 
         // Token: 0x04000136 RID: 310

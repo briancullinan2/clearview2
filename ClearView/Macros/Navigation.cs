@@ -1,5 +1,5 @@
 ﻿using EPIC.ClearView.Utilities.Commands;
-using EPIC.ClearView.Utilities.Extensions;
+using EPIC.MedicalControls.Extensions;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Windows;
@@ -18,7 +18,7 @@ namespace EPIC.ClearView.Macros
         {
             Application.Current.Dispatcher.BeginInvoke(new Action(delegate ()
             {
-                RibbonGroup ribbonGroupBox = ((MainWindow)Application.Current.MainWindow).Ribbon.FindChild<RibbonGroup>(group);
+                RibbonGroup ribbonGroupBox = ((MainWindow)Application.Current.MainWindow).MainRibbon.FindChild<RibbonGroup>(group);
                 ribbonGroupBox.Items.Add(button);
             }), new object[0]);
         }
@@ -30,12 +30,12 @@ namespace EPIC.ClearView.Macros
             {
                 if (Application.Current.MainWindow != null)
                 {
-                    RibbonTab tabItem = ((MainWindow)Application.Current.MainWindow).Ribbon.FindChild<RibbonTab>(tab);
+                    RibbonTab tabItem = ((MainWindow)Application.Current.MainWindow).MainRibbon.FindChild<RibbonTab>(tab);
                     if (tabItem != null)
                     {
                         tabItem.Items.Add(group);
                     }
-                    ((INotifyCollectionChanged)((MainWindow)Application.Current.MainWindow).Ribbon.Items).CollectionChanged += delegate (object? sender, NotifyCollectionChangedEventArgs args)
+                    ((INotifyCollectionChanged)((MainWindow)Application.Current.MainWindow).MainRibbon.Items).CollectionChanged += delegate (object? sender, NotifyCollectionChangedEventArgs args)
                     {
                         if (args.NewItems != null && (tabItem = args.NewItems.OfType<RibbonTab>().FirstOrDefault((RibbonTab x) => x.Name == tab)) != null)
                         {
@@ -138,9 +138,18 @@ namespace EPIC.ClearView.Macros
             }
             frameworkElement.Loaded += delegate (object sender, RoutedEventArgs args)
             {
-                if (frameworkElement.Resources.Values.OfType<Ribbon>().Any<Ribbon>())
                 {
-                    foreach (Ribbon ribbon in frameworkElement.Resources.Values.OfType<Ribbon>())
+
+                    IEnumerable<Ribbon> ribbons = [];
+                    if (frameworkElement.Resources.Values.OfType<Ribbon>().Any<Ribbon>())
+                    {
+                        ribbons = ribbons.Concat(frameworkElement.Resources.Values.OfType<Ribbon>());
+                    }
+                    if (frameworkElement.FindChild<Ribbon>() is Ribbon pageRibbon)
+                    {
+                        ribbons = ribbons.Concat([pageRibbon]);
+                    }
+                    foreach (Ribbon ribbon in ribbons)
                     {
                         var temporary = new Collection<Control>();
                         frameworkElement.Resources.Values.OfType<Ribbon>().FirstOrDefault()?.Items.OfType<RibbonTab>()?.FirstOrDefault()?.IsSelected = true;
@@ -153,7 +162,7 @@ namespace EPIC.ClearView.Macros
                         foreach (Control item in temporary)
                         {
                             ribbon.Items.Remove(item);
-                            main.Ribbon.Items.Add(item);
+                            main.MainRibbon.Items.Add(item);
                             if (typeof(RibbonTab).IsAssignableFrom(item.GetType()))
                             {
                                 (item as RibbonTab)?.IsSelected = true;
@@ -168,7 +177,7 @@ namespace EPIC.ClearView.Macros
                     {
                         foreach (Control item in ribbon)
                         {
-                            main.Ribbon.Items.Add(item);
+                            main.MainRibbon.Items.Add(item);
                         }
                     }
                     frameworkElement.Resources.Values.OfType<IEnumerable<RibbonTab>>().FirstOrDefault()?.FirstOrDefault()?.IsSelected = true;
@@ -178,26 +187,35 @@ namespace EPIC.ClearView.Macros
                 {
                     foreach (RibbonContextualTabGroup item in frameworkElement.Resources.Values.OfType<RibbonContextualTabGroup>())
                     {
-                        main.Ribbon.ContextualTabGroups.Add(item);
+                        main.MainRibbon.ContextualTabGroups.Add(item);
                     }
                 }
                 if (frameworkElement.Resources.Values.OfType<RibbonTab>().Any<RibbonTab>())
                 {
                     foreach (RibbonTab item2 in frameworkElement.Resources.Values.OfType<RibbonTab>())
                     {
-                        main.Ribbon.Items.Add(item2);
+                        main.MainRibbon.Items.Add(item2);
                     }
                     frameworkElement.Resources.Values.OfType<RibbonTab>().First<RibbonTab>().IsSelected = true;
                 }
             };
             frameworkElement.Unloaded += delegate (object sender, RoutedEventArgs e)
             {
-                if (frameworkElement.Resources.Values.OfType<Ribbon>().Any<Ribbon>())
                 {
-                    foreach (Ribbon ribbon in frameworkElement.Resources.Values.OfType<Ribbon>())
+                    IEnumerable<Ribbon> ribbons = [];
+                    if (frameworkElement.Resources.Values.OfType<Ribbon>().Any<Ribbon>())
+                    {
+                        ribbons = ribbons.Concat(frameworkElement.Resources.Values.OfType<Ribbon>());
+                    }
+                    if (frameworkElement.FindChild<Ribbon>() is Ribbon pageRibbon)
+                    {
+                        ribbons = ribbons.Concat([pageRibbon]);
+                    }
+
+                    foreach (Ribbon ribbon in ribbons)
                     {
                         var temporary = new Collection<Control>();
-                        foreach (Control item in main.Ribbon.Items)
+                        foreach (Control item in main.MainRibbon.Items)
                         {
                             if (item.Tag == ribbon)
                             {
@@ -207,7 +225,7 @@ namespace EPIC.ClearView.Macros
 
                         foreach (Control item in temporary)
                         {
-                            main.Ribbon.Items.Remove(item);
+                            main.MainRibbon.Items.Remove(item);
                             ribbon.Items.Add(item);
                         }
                     }
@@ -218,7 +236,7 @@ namespace EPIC.ClearView.Macros
                     {
                         foreach (Control item in ribbon)
                         {
-                            main.Ribbon.Items.Remove(item);
+                            main.MainRibbon.Items.Remove(item);
                         }
 
                     }
@@ -227,14 +245,14 @@ namespace EPIC.ClearView.Macros
                 {
                     foreach (RibbonContextualTabGroup item in frameworkElement.Resources.Values.OfType<RibbonContextualTabGroup>())
                     {
-                        main.Ribbon.ContextualTabGroups.Remove(item);
+                        main.MainRibbon.ContextualTabGroups.Remove(item);
                     }
                 }
                 if (frameworkElement.Resources.Values.OfType<RibbonTab>().Any<RibbonTab>())
                 {
                     foreach (RibbonTab item2 in frameworkElement.Resources.Values.OfType<RibbonTab>())
                     {
-                        main.Ribbon.Items.Remove(item2);
+                        main.MainRibbon.Items.Remove(item2);
                     }
                 }
             };

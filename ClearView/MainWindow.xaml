@@ -16,6 +16,7 @@
     d:DesignWidth="1200"
     AllowsTransparency="False"
     Icon="/Resources/clearview.ico"
+    SizeChanged="Window_SizeChanged"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <Window.TaskbarItemInfo>
@@ -84,7 +85,7 @@
             </FrameworkElement.Style>
         </Frame>
         <ribbon:Ribbon
-            x:Name="Ribbon"
+            x:Name="MainRibbon"
             Grid.ColumnSpan="2"
             Panel.ZIndex="1"
             IsCollapsed="False"
@@ -100,6 +101,7 @@
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                         </Grid>
@@ -171,8 +173,7 @@
                     <ribbon:RibbonComboBox
                         Name="AlertsFace"
                         Grid.Column="0"
-                        MinWidth="200"
-                        MaxHeight="Infinity"
+                        MinWidth="100"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
                         CanAddToQuickAccessToolBarDirectly="False"
@@ -205,6 +206,7 @@
                 <ribbon:RibbonGroup
                     Name="Application"
                     Grid.Column="4"
+                    HorizontalAlignment="Right"
                     Header="Application">
                     <ribbon:RibbonButton
                         Name="ApplicationSettings"

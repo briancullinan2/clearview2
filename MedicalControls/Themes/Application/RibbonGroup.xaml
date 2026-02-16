@@ -4,11 +4,14 @@
     xmlns:classic="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
     xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Ribbon"
     xmlns:entities="clr-namespace:EPIC.DataLayer.Entities;assembly=DataLayer"
+    xmlns:primitives="clr-namespace:System.Windows.Controls.Ribbon.Primitives;assembly=System.Windows.Controls.Ribbon"
     xmlns:ribbon="clr-namespace:System.Windows.Controls.Ribbon;assembly=System.Windows.Controls.Ribbon">
     <SolidColorBrush x:Key="RibbonDisabledForegroundBrushKey" Color="#FF9E9E9E" />
     <SolidColorBrush x:Key="RibbonDropDownBackgroundBrushKey" Color="#F0FFFFFF" />
     <SolidColorBrush x:Key="ResizeGripperBackgroundBrush" Color="#FFE5EFF9" />
     <SolidColorBrush x:Key="ResizeThumbPathBrush" Color="#FF6C747D" />
+    <primitives:RibbonScrollButtonVisibilityConverter x:Key="RibbonScrollButtonVisibilityConverter" />
+
     <Style x:Key="AlertsRibbonGroupStyle" TargetType="{x:Type RibbonGroup}">
         <Setter Property="Template">
             <Setter.Value>

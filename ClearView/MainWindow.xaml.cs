@@ -1,9 +1,11 @@
 ﻿using EPIC.CameraInterface;
 using EPIC.ClearView.Macros;
 using EPIC.ClearView.Utilities;
+using EPIC.MedicalControls.Extensions;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Ribbon;
 using System.Windows.Navigation;
 
 namespace EPIC.ClearView
@@ -54,6 +56,7 @@ namespace EPIC.ClearView
         {
             SplashWindow.MainWindowOnContentRendered();
             ContentRendered -= MainWindow_OnContentRendered;
+            UpdateSize();
         }
 
         // Token: 0x06000353 RID: 851 RVA: 0x0001B508 File Offset: 0x00019708
@@ -245,19 +248,26 @@ namespace EPIC.ClearView
         // Token: 0x06000361 RID: 865 RVA: 0x0001BC58 File Offset: 0x00019E58
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            /*
-            ScrollViewer scrollViewer = this.AlertsBox.FindAncestor<ScrollViewer>();
-            double num = scrollViewer.ViewportWidth + ((e != null) ? (e.NewSize.Width - e.PreviousSize.Width - 20.0) : 0.0);
-            RibbonGroupBox ribbonGroupBox = this.AlertsBox.TryFindParent<RibbonGroupBox>();
-            double num2 = ribbonGroupBox.Items.OfType<Button>().Sum((Button x) => x.ActualWidth);
-            double num3 = this.Ribbon.Tabs.First<RibbonTabItem>().Groups.Except(new RibbonGroupBox[]
+            UpdateSize();
+        }
+
+        public void UpdateSize()
+        {
+            RibbonTab ribbonTab = AlertsFace.TryFindParent<RibbonTab>();
+            if (ribbonTab == null)
             {
-                ribbonGroupBox
-            }).Sum((RibbonGroupBox x) => x.ActualWidth);
+                return;
+            }
+            RibbonGroup ribbonGroupBox = AlertsFace.TryFindParent<RibbonGroup>();
+            double num2 = ribbonGroupBox.Items.OfType<Button>().Sum((Button x) => x.ActualWidth);
+
+            double num3 = ribbonTab.Items.OfType<RibbonGroup>().Except([ribbonGroupBox])
+                                         .Sum((RibbonGroup x) => x.ActualWidth);
+
+            double num = ribbonTab.ActualWidth - ribbonTab.Items.OfType<RibbonGroup>().Count() * 10; // + ((e != null) ? (e.NewSize.Width - e.PreviousSize.Width - 20.0) : 0.0);
             double num4 = Math.Round(num - num3 - num2);
-            this.AlertsBox.Width = ((num4 > this.AlertsBox.MinWidth) ? num4 : this.AlertsBox.MinWidth);
-            scrollViewer.UpdateLayout();
-            */
+            AlertsFace.MaxWidth = ((num4 > AlertsFace.MinWidth) ? num4 : AlertsFace.MinWidth);
+            ribbonTab.UpdateLayout();
         }
 
         // Token: 0x06000362 RID: 866 RVA: 0x0001BD7C File Offset: 0x00019F7C

@@ -105,7 +105,7 @@ namespace EPIC.MedicalControls.Extensions
                     }
                     else
                     {
-                        if ((frameworkElement = frameworkElement.FindChild<FrameworkElement>(elementName)) == null)
+                        if ((frameworkElement = frameworkElement.FindChild<T>(elementName)) == null)
                         {
                             goto IL_B4;
                         }

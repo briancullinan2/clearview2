@@ -15,7 +15,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Remove="Shaders\InvertColor.ps" />
+		<None Remove="Shaders\InvertColor.ps" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -34,10 +34,51 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Extended.Wpf.Toolkit" Version="5.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Resource Include="Resources\0002-folder_doc.png" />
+		<Resource Include="Resources\0005-time_edit.png" />
+		<Resource Include="Resources\0009-doc_search.png" />
+		<Resource Include="Resources\0016-cd_search.png" />
+		<Resource Include="Resources\0020-options_edit.png" />
+		<Resource Include="Resources\0021-options_search.png" />
+		<Resource Include="Resources\0025-search.png" />
+		<Resource Include="Resources\0040-save.png" />
+		<Resource Include="Resources\0063-undo.png" />
+		<Resource Include="Resources\0080-doc_ok.png" />
+		<Resource Include="Resources\0132-lock.png" />
+		<Resource Include="Resources\0135-picture_preview.png" />
+		<Resource Include="Resources\0145-task_edit.png" />
+		<Resource Include="Resources\0155-keys.png" />
+		<Resource Include="Resources\0175-camera.png" />
+		<Resource Include="Resources\0176-scaner.png" />
+		<Resource Include="Resources\0180-address_book.png" />
+		<Resource Include="Resources\0186-refresh.png" />
+		<Resource Include="Resources\0197-report.png" />
+		<Resource Include="Resources\0204-scroll_search.png" />
+		<Resource Include="Resources\1000-ok.png" />
 		<Resource Include="Resources\1001-cancel.png" />
+		<Resource Include="Resources\1002-add.png" />
+		<Resource Include="Resources\1003-delete.png" />
+		<Resource Include="Resources\1004-warning.png" />
+		<Resource Include="Resources\1005-exit.png" />
+		<Resource Include="Resources\2004-arrow_right2.png" />
+		<Resource Include="Resources\4502-users.png" />
+		<Resource Include="Resources\4504-user_search.png" />
+		<Resource Include="Resources\4505-user_add.png" />
+		<Resource Include="Resources\5001-web_search.png" />
+		<Resource Include="Resources\9012-surgeon.png" />
+		<Resource Include="Resources\Art.png" />
+		<Resource Include="Resources\billing_update.gif" />
 		<Resource Include="Resources\calibration_sentech.bmp" />
 		<Resource Include="Resources\clearview.ico" />
 		<Resource Include="Resources\clearview.png" />
+		<Resource Include="Resources\dbs.ico" />
+		<Resource Include="Resources\member-search-icon.gif" />
+		<Resource Include="Resources\person-add.jpg" />
+		<Resource Include="Resources\Select-Language-small.png" />
 		<Resource Include="Shaders\InvertColor.ps" />
 	</ItemGroup>
 

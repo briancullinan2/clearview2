@@ -1,7 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>net10.0-windows8.0</TargetFramework>
-		<UseWPF>true</UseWPF>
+		<UseWPF>false</UseWPF>
 		<OutputType>Library</OutputType>
 		<RootNamespace>EPIC.DataLayer</RootNamespace>
 		<AssemblyName>DataLayer</AssemblyName>
@@ -38,8 +38,6 @@
 			<HintPath>..\packages\EntityFramework.6.5.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
 		</Reference>
 		<!-- Add any other References you need from original project here -->
-		<Reference Include="PresentationCore" />
-		<Reference Include="PresentationFramework" />
 		<Reference Include="System.Core" />
 		<Reference Include="System.Drawing" />
 		<Reference Include="System.Numerics" />
@@ -50,10 +48,14 @@
        If you'd like, we can convert packages.config / explicit hint-paths to PackageReference entries. -->
 	<ItemGroup>
 		<PackageReference Include="EntityFramework" Version="6.5.1" />
-		<PackageReference Include="Extended.Wpf.Toolkit" Version="5.0.0" />
 		<PackageReference Include="log4net" Version="3.2.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.2" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.2" />
+	</ItemGroup>
+	<ItemGroup>
+		<Folder Include="Commands\" />
+		<Folder Include="Converters\" />
+		<Folder Include="Macros\" />
 	</ItemGroup>
 
 	<!-- Preserve custom folders or other metadata if needed -->

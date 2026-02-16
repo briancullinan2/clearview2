@@ -30,38 +30,6 @@
             <BitmapImage x:Key="Save" UriSource="/Resources/0040-save.png" />
             <BitmapImage x:Key="Cancel" UriSource="/Resources/1001-cancel.png" />
             <BitmapImage x:Key="Permissions" UriSource="/Resources/0080-doc_ok.png" />
-            <x:Array x:Key="PermissionOptions" Type="{x:Type ribbon:RibbonTab}">
-                <ribbon:RibbonTab>
-                    <RibbonTab.Header>
-                        <TextBlock
-                        Margin="-10,-10,-10,0"
-                        Padding="10,10,10,0"
-                        Text="Permissions">
-                            <TextBlock.Background>
-                                <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
-                                    <LinearGradientBrush.GradientStops>
-                                        <GradientStop Offset="0" Color="#AAFFFF00" />
-                                        <GradientStop Offset="1" Color="#00FFFF00" />
-                                    </LinearGradientBrush.GradientStops>
-                                </LinearGradientBrush>
-                            </TextBlock.Background>
-                        </TextBlock>
-                    </RibbonTab.Header>
-                    <ribbon:RibbonGroup Header="User Options">
-                        <ribbon:RibbonToggleButton
-                        IsChecked="True"
-                        Label="Permissions"
-                        LargeImageSource="{StaticResource Permissions}"
-                        Unchecked="RibbonToggleButton_Unchecked" />
-                    </ribbon:RibbonGroup>
-                    <ribbon:RibbonGroup>
-                        <ribbon:RibbonButton
-                        Click="AddRole_Click"
-                        Label="Add Role"
-                        LargeImageSource="{StaticResource Add}" />
-                    </ribbon:RibbonGroup>
-                </ribbon:RibbonTab>
-            </x:Array>
 
         </ResourceDictionary>
     </FrameworkElement.Resources>
@@ -71,11 +39,38 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
-        <d:ContentControl Margin="0,-120,0,0">
-            <d:ContentControl.Content>
-                <ribbon:Ribbon Style="{StaticResource PlainRibbonStyle}" ItemsSource="{StaticResource PermissionOptions}" />
-            </d:ContentControl.Content>
-        </d:ContentControl>
+        <ribbon:Ribbon Margin="0,-120,0,0" Style="{StaticResource PlainRibbonStyle}">
+            <ribbon:RibbonTab IsSelected="True">
+                <RibbonTab.Header>
+                    <TextBlock
+                        Margin="-10,-10,-10,0"
+                        Padding="10,10,10,0"
+                        Text="Permissions">
+                        <TextBlock.Background>
+                            <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                <LinearGradientBrush.GradientStops>
+                                    <GradientStop Offset="0" Color="#AAFFFF00" />
+                                    <GradientStop Offset="1" Color="#00FFFF00" />
+                                </LinearGradientBrush.GradientStops>
+                            </LinearGradientBrush>
+                        </TextBlock.Background>
+                    </TextBlock>
+                </RibbonTab.Header>
+                <ribbon:RibbonGroup Header="User Options">
+                    <ribbon:RibbonToggleButton
+                        IsChecked="True"
+                        Label="Permissions"
+                        LargeImageSource="{StaticResource Permissions}"
+                        Unchecked="RibbonToggleButton_Unchecked" />
+                </ribbon:RibbonGroup>
+                <ribbon:RibbonGroup>
+                    <ribbon:RibbonButton
+                        Click="AddRole_Click"
+                        Label="Add Role"
+                        LargeImageSource="{StaticResource Add}" />
+                </ribbon:RibbonGroup>
+            </ribbon:RibbonTab>
+        </ribbon:Ribbon>
         <Grid Row="0">
             <Grid.RowDefinitions>
                 <RowDefinition />

@@ -18,46 +18,8 @@ namespace EPIC.ClearView
         public App()
         {
             //Application.ResourceAssembly = typeof(App).Assembly;
-            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
         }
 
-
-        private static System.Reflection.Assembly? CurrentDomain_AssemblyResolve(object? sender, ResolveEventArgs args)
-        {
-            // fix assembly naming convention expectation from namespace, cropping up somewhere inside i looked in every xaml
-            var namespaces = AppDomain.CurrentDomain.GetAssemblies().Select(a => (
-                //all: a.GetCustomAttributes().FirstOrDefault(attr => attr.GetType().Name.Contains("Namespace")),
-                attr: a.GetCustomAttributes().FirstOrDefault(attr => attr.GetType().Name.Contains("Namespace") && !String.IsNullOrEmpty(attr.GetType().GetProperty("Namespace")?.GetValue(attr) as string)),
-                assembly: a
-            )).Where(obj => obj.attr != null).Select(obj => (
-                attr: obj.attr,
-                assembly: obj.assembly,
-                root: obj.attr.GetType().GetProperty("Namespace")?.GetValue(obj.attr) as string
-            ));
-
-            var existing = namespaces.FirstOrDefault(a => a.root == args.Name.Split(',')[0]).assembly;
-            if (existing != null)
-            {
-                return existing;
-            }
-
-            var location = String.IsNullOrEmpty(typeof(App).Assembly.Location) ? AppDomain.CurrentDomain.BaseDirectory : Path.GetDirectoryName(typeof(App).Assembly.Location);
-
-            string expectedPath = Path.Combine(location, args.Name + ".dll");
-
-            if (File.Exists(expectedPath))
-            {
-                Log.Debug($"Laoding: {expectedPath}");
-
-                // TODO: try with this to fix searching issues?
-                //byte[] rawAssembly = File.ReadAllBytes(realFile);
-                //_assembly = AppDomain.CurrentDomain.Load(rawAssembly);
-
-                return Assembly.LoadFrom(expectedPath);
-            }
-
-            return null;
-        }
 
 
         // Token: 0x06000346 RID: 838 RVA: 0x0001AF80 File Offset: 0x00019180
@@ -76,18 +38,51 @@ namespace EPIC.ClearView
         // Token: 0x06000347 RID: 839 RVA: 0x0001AFF0 File Offset: 0x000191F0
         protected override void OnStartup(StartupEventArgs e)
         {
-            log4net.Config.XmlConfigurator.Configure(new System.IO.FileInfo("log4net.xml"));
             base.OnStartup(e);
-            AppDomain.CurrentDomain.AssemblyLoad += delegate (object? o, AssemblyLoadEventArgs args)
-            {
-                Log.Debug(string.Format("Loaded: {0}", args.LoadedAssembly.FullName));
-            };
-            AppDomain.CurrentDomain.DomainUnload += delegate (object? o, EventArgs args)
-            {
-            };
 
         }
 
+        internal static void CurrentDomain_AssemblyLoad(object? sender, AssemblyLoadEventArgs args)
+        {
+            Log.Debug(string.Format("Loaded: {0}", args.LoadedAssembly.FullName));
+        }
+
+        internal static System.Reflection.Assembly? CurrentDomain_AssemblyResolve(object? sender, ResolveEventArgs args)
+        {
+            // fix assembly naming convention expectation from namespace, cropping up somewhere inside i looked in every xaml
+            var namespaces = AppDomain.CurrentDomain.GetAssemblies().Select(a => (
+                //all: a.GetCustomAttributes().FirstOrDefault(attr => attr.GetType().Name.Contains("Namespace")),
+                attr: a.GetCustomAttributes().FirstOrDefault(attr => attr.GetType().Name.Contains("Namespace") && !String.IsNullOrEmpty(attr.GetType().GetProperty("Namespace")?.GetValue(attr) as string)),
+                assembly: a
+            )).Where(obj => obj.attr != null).Select(obj => (
+                attr: obj.attr,
+                assembly: obj.assembly,
+                root: obj.attr.GetType().GetProperty("Namespace")?.GetValue(obj.attr) as string
+            ));
+
+            var existing = namespaces.FirstOrDefault(a => a.root == args.Name.Split(',')[0]).assembly;
+            if (existing != null)
+            {
+                return existing;
+            }
+
+            var location = String.IsNullOrEmpty(typeof(App).Assembly.Location) ? AppDomain.CurrentDomain.BaseDirectory : System.IO.Path.GetDirectoryName(typeof(App).Assembly.Location);
+
+            string expectedPath = System.IO.Path.Combine(location, args.Name + ".dll");
+
+            if (System.IO.File.Exists(expectedPath))
+            {
+                Log.Debug($"Fallback: {expectedPath}");
+
+                // TODO: try with this to fix searching issues?
+                //byte[] rawAssembly = File.ReadAllBytes(realFile);
+                //_assembly = AppDomain.CurrentDomain.Load(rawAssembly);
+
+                return Assembly.LoadFrom(expectedPath);
+            }
+
+            return null;
+        }
         // Token: 0x06000348 RID: 840 RVA: 0x0001B078 File Offset: 0x00019278
         internal void Load_Plugins()
         {
