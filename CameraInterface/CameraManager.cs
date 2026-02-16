@@ -1,5 +1,7 @@
 ﻿// System.Management is available on Windows; add conditional using if package is present
 using DirectShowLib;
+using EPIC.CameraInterface.Interfaces;
+using EPIC.CameraInterface.Utilities;
 using Microsoft.Win32; // Registry
 using System.Management;
 using System.Reflection;

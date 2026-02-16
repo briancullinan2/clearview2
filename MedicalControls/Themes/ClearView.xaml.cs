@@ -1,4 +1,4 @@
-﻿using EPIC.MedicalControls.Macros;
+﻿using EPIC.MedicalControls.Utilities.Macros;
 using System.Windows;
 using System.Windows.Markup;
 

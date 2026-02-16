@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Navigation;
@@ -84,7 +85,7 @@ namespace EPIC.ClearView
         }
         */
 
-        public object Icon
+        public new object Icon
         {
             get
             {
@@ -103,6 +104,7 @@ namespace EPIC.ClearView
 
         // Token: 0x0600025A RID: 602 RVA: 0x00013ED0 File Offset: 0x000120D0
         //[SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
+        [DebuggerStepThrough]
         private static void DoEvents()
         {
             DispatcherFrame dispatcherFrame = new DispatcherFrame();
@@ -111,7 +113,7 @@ namespace EPIC.ClearView
             {
                 Dispatcher.PushFrame(dispatcherFrame);
             }
-            catch (InvalidOperationException)
+            catch (Exception ex) when (ex is InvalidOperationException or NullReferenceException)
             {
             }
         }
@@ -161,8 +163,9 @@ namespace EPIC.ClearView
                 {
 
                     // Check for 'Shift' or 'F12' during splash
-                    if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.F12))
+                    if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.F12) || Keyboard.IsKeyDown(Key.F8) || Keyboard.IsKeyDown(Key.Pause))
                     {
+                        // TODO ConfigurationCombo.Visibility = Visible
                         return;
                     }
 

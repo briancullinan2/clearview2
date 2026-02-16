@@ -1,7 +1,6 @@
-﻿using EPIC.CameraInterface;
-using EPIC.ClearView.Macros;
-using EPIC.ClearView.Utilities;
-using EPIC.MedicalControls.Extensions;
+﻿using EPIC.ClearView.Utilities;
+using EPIC.ClearView.Utilities.Macros;
+using EPIC.MedicalControls.Utilities.Extensions;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -49,7 +48,7 @@ namespace EPIC.ClearView
             targetVisual.Brush = effectBrush;
             */
 
-            MedicalControls.Macros.Mica.SubscribeFuzz(this, Tabs, BackgroundLayer);
+            MedicalControls.Utilities.Macros.Mica.SubscribeFuzz(this, Tabs, BackgroundLayer);
         }
 
         private void MainWindow_OnContentRendered(object? sender, EventArgs e)
@@ -105,9 +104,9 @@ namespace EPIC.ClearView
                                 Scanner.Content = string.Format("Scanner: {0}", "Unavailable");
                             }
                             bool flag;
-                            if (CameraManager.Current.Cameras != null)
+                            if (CameraInterface.CameraManager.Current.Cameras != null)
                             {
-                                flag = !CameraManager.Current.Cameras.Any((ICapturable x) => x.DisplayName == ClearViewConfiguration.Current.Device?.Camera);
+                                flag = !CameraInterface.CameraManager.Current.Cameras.Any((CameraInterface.Interfaces.ICapturable x) => x.DisplayName == ClearViewConfiguration.Current.Device?.Camera);
                             }
                             else
                             {
@@ -344,13 +343,13 @@ namespace EPIC.ClearView
 
         private void AccountWelcome_Checked(object sender, RoutedEventArgs e)
         {
-            Uri uri = new Uri("/Welcome.xaml", UriKind.Relative);
+            Uri uri = new Uri("/Pages/Application/Welcome.xaml", UriKind.Relative);
             Navigation.ShowTab(uri, true);
         }
 
         private void AccountWelcome_Unchecked(object sender, RoutedEventArgs e)
         {
-            var tab = this.Tabs.Items.OfType<TabItem>().FirstOrDefault(x => (x.Content as Frame).Source.OriginalString.Trim('/').Contains("Welcome.xaml"));
+            var tab = this.Tabs.Items.OfType<TabItem>().FirstOrDefault(x => (x.Content as Frame).Source.OriginalString.Trim('/').Contains("Pages/Application/Welcome.xaml"));
             Navigation.CloseTab(tab);
         }
 

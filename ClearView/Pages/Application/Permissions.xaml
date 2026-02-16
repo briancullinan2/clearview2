@@ -1,0 +1,299 @@
+<Page
+    x:Class="EPIC.ClearView.User.Permissions"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:EPIC.MedicalControls.Utilities;assembly=MedicalControls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ribbon="clr-namespace:System.Windows.Controls.Ribbon;assembly=System.Windows.Controls.Ribbon"
+    Title="Permissions"
+    d:Height="400"
+    d:Width="800"
+    mc:Ignorable="d">
+    <d:Page.DataContext>
+        <d:DesignInstance IsDesignTimeCreatable="True" Type="controls:DesignTimePermissionsViewModel" />
+    </d:Page.DataContext>
+    <controls:DesignTimePermissionsViewModel.PassPageToViewModel>
+        True
+    </controls:DesignTimePermissionsViewModel.PassPageToViewModel>
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/MedicalControls;component/Themes/ClearView.xaml" />
+                <ResourceDictionary Source="/MedicalControls;component/Themes/Application/DataGridStyles.xaml" />
+                <ResourceDictionary Source="/MedicalControls;component/Themes/GeneralTemplate.xaml" />
+                <ResourceDictionary Source="/MedicalControls;component/Themes/Application/RibbonMenu.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <BitmapImage x:Key="Find" UriSource="/Resources/0025-search.png" />
+            <BitmapImage x:Key="Remove" UriSource="/Resources/1003-delete.png" />
+            <BitmapImage x:Key="Add" UriSource="/Resources/1002-add.png" />
+            <BitmapImage x:Key="Save" UriSource="/Resources/0040-save.png" />
+            <BitmapImage x:Key="Cancel" UriSource="/Resources/1001-cancel.png" />
+            <BitmapImage x:Key="Permissions" UriSource="/Resources/0080-doc_ok.png" />
+
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="50" />
+        </Grid.RowDefinitions>
+        <ribbon:Ribbon Margin="0,-120,0,0" Style="{StaticResource PlainRibbonStyle}">
+            <ribbon:RibbonTab IsSelected="True">
+                <RibbonTab.Header>
+                    <TextBlock
+                        Margin="-10,-10,-10,0"
+                        Padding="10,10,10,0"
+                        Text="Permissions">
+                        <TextBlock.Background>
+                            <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                <LinearGradientBrush.GradientStops>
+                                    <GradientStop Offset="0" Color="#AAFFFF00" />
+                                    <GradientStop Offset="1" Color="#00FFFF00" />
+                                </LinearGradientBrush.GradientStops>
+                            </LinearGradientBrush>
+                        </TextBlock.Background>
+                    </TextBlock>
+                </RibbonTab.Header>
+                <ribbon:RibbonGroup Header="User Options">
+                    <ribbon:RibbonToggleButton
+                        IsChecked="True"
+                        Label="Permissions"
+                        LargeImageSource="{StaticResource Permissions}"
+                        Unchecked="RibbonToggleButton_Unchecked" />
+                </ribbon:RibbonGroup>
+                <ribbon:RibbonGroup>
+                    <ribbon:RibbonButton
+                        Click="AddRole_Click"
+                        Label="Add Role"
+                        LargeImageSource="{StaticResource Add}" />
+                </ribbon:RibbonGroup>
+            </ribbon:RibbonTab>
+        </ribbon:Ribbon>
+        <Grid Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Label
+                Grid.Column="0"
+                VerticalAlignment="Center"
+                Content="Search:" />
+            <TextBox
+                Name="SearchText"
+                Grid.Row="1"
+                Grid.Column="1"
+                MinWidth="100"
+                Margin="5"
+                VerticalAlignment="Center"
+                TextChanged="Search_TextChanged" />
+            <Button
+                Grid.RowSpan="2"
+                Grid.Column="2"
+                Margin="5"
+                Padding="3"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal">
+                    <Image
+                        Width="20"
+                        Height="20"
+                        Margin="3,0"
+                        Source="{StaticResource Find}" />
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Find</TextBlock>
+                </StackPanel>
+            </Button>
+        </Grid>
+        <TabControl Grid.Row="1" TabStripPlacement="Left">
+            <TabItem Name="RolesTab" Header="Roles">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <DataGrid
+                        Name="Roles"
+                        AlternatingRowBackground="#FFF0F8FF"
+                        AutoGenerateColumns="False"
+                        Background="#00FFFFFF"
+                        BorderThickness="0"
+                        CanUserResizeColumns="True"
+                        CanUserResizeRows="False"
+                        CellStyle="{StaticResource BlankCellStyle}"
+                        GridLinesVisibility="None"
+                        IsReadOnly="True"
+                        ItemsSource="{Binding RolesData}"
+                        SelectionMode="Single"
+                        SelectionUnit="Cell">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn
+                                Width="100"
+                                CanUserResize="True"
+                                Header="Name">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <!--  Unknown connection ID: 4  -->
+                                        <TextBox
+                                            VerticalAlignment="Top"
+                                            Text="{Binding Path=Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                            TextChanged="Name_TextChanged" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn
+                                Width="200"
+                                CanUserResize="True"
+                                Header="Description">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox
+                                            VerticalContentAlignment="Top"
+                                            AcceptsReturn="True"
+                                            Text="{Binding Path=Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                            TextWrapping="Wrap" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Width="200" CanUserResize="False">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <!--  Unknown connection ID: 5  -->
+                                        <Button
+                                            Margin="5"
+                                            Padding="3"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Click="RemoveRole_Click">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image
+                                                    Width="25"
+                                                    Height="25"
+                                                    Margin="3,0"
+                                                    Source="{StaticResource Remove}" />
+                                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Remove</TextBlock>
+                                            </StackPanel>
+                                        </Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <StackPanel
+                        Grid.Row="1"
+                        HorizontalAlignment="Right"
+                        Orientation="Horizontal">
+                        <Button
+                            Margin="5"
+                            Padding="3"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Click="AddRole_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <Image
+                                    Width="25"
+                                    Height="25"
+                                    Margin="3,0"
+                                    Source="{StaticResource Add}" />
+                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Add Role</TextBlock>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Permissions" IsSelected="True">
+                <DataGrid
+                    Name="PermissionsGrid"
+                    AlternatingRowBackground="#FFF0F8FF"
+                    AutoGenerateColumns="False"
+                    Background="#00FFFFFF"
+                    BorderThickness="0"
+                    CanUserAddRows="False"
+                    CanUserResizeColumns="True"
+                    CanUserResizeRows="False"
+                    CanUserSortColumns="True"
+                    CellStyle="{StaticResource BlankCellStyle}"
+                    EnableColumnVirtualization="True"
+                    EnableRowVirtualization="True"
+                    GridLinesVisibility="None"
+                    HeadersVisibility="Column"
+                    ItemsSource="{Binding PermissionData}"
+                    SelectionMode="Single"
+                    SelectionUnit="Cell">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn
+                            Width="300"
+                            CanUserResize="True"
+                            CanUserSort="True"
+                            Header="Name"
+                            SortMemberPath="Name">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <!--  Unknown connection ID: 4  -->
+                                    <Label VerticalAlignment="Center" Content="{Binding Path=Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn
+                            Width="300"
+                            CanUserResize="True"
+                            CanUserSort="True"
+                            CellStyle="{StaticResource AnyTypeCellTemplate}"
+                            Header="Description"
+                            SortMemberPath="Description" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+        </TabControl>
+        <StackPanel
+            Grid.Row="2"
+            HorizontalAlignment="Right"
+            Orientation="Horizontal">
+            <Button
+                Name="Save"
+                Margin="5"
+                Padding="3"
+                Click="Save_Click"
+                IsEnabled="False">
+                <StackPanel Orientation="Horizontal">
+                    <Image
+                        Width="25"
+                        Height="25"
+                        Margin="3,0"
+                        Source="{StaticResource Save}">
+                        <FrameworkElement.Style>
+                            <Style TargetType="{x:Type Image}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsEnabled, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}}" Value="False">
+                                        <Setter Property="UIElement.Opacity" Value=".5" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </FrameworkElement.Style>
+                    </Image>
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Text="Save Changes" />
+                </StackPanel>
+            </Button>
+            <Button Margin="5" Padding="3">
+                <StackPanel Orientation="Horizontal">
+                    <Image
+                        Width="25"
+                        Height="25"
+                        Margin="3,0"
+                        Source="{StaticResource Cancel}" />
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Text="Close" />
+                </StackPanel>
+            </Button>
+        </StackPanel>
+    </Grid>
+</Page>

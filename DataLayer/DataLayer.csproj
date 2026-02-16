@@ -52,11 +52,6 @@
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.2" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.2" />
 	</ItemGroup>
-	<ItemGroup>
-		<Folder Include="Commands\" />
-		<Folder Include="Converters\" />
-		<Folder Include="Macros\" />
-	</ItemGroup>
 
 	<!-- Preserve custom folders or other metadata if needed -->
 </Project>

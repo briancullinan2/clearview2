@@ -1,5 +1,5 @@
 ﻿using EPIC.DataLayer;
-using EPIC.MedicalControls.Extensions;
+using EPIC.MedicalControls.Utilities.Extensions;
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.ComponentModel;

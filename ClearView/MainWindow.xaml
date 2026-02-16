@@ -28,6 +28,8 @@
                 <ResourceDictionary Source="/MedicalControls;component/Themes/ClearView.xaml" />
                 <ResourceDictionary Source="/MedicalControls;component/Themes/Application/TabControlStyles.xaml" />
                 <ResourceDictionary Source="/MedicalControls;component/Themes/Application/RibbonMenu.xaml" />
+                <ResourceDictionary Source="/MedicalControls;component/Themes/Application/RibbonGroup.xaml" />
+                <ResourceDictionary Source="/MedicalControls;component/Themes/Textboxes/RibbonComboBox.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <BitmapImage x:Key="Globe" UriSource="Resources/5001-web_search.png" />
             <BitmapImage x:Key="Patients" UriSource="Resources/4502-users.png" />
@@ -274,7 +276,7 @@
             ClipToBounds="True"
             Style="{StaticResource StandardTabControl}">
             <TabItem Header="Welcome" IsSelected="True">
-                <Frame NavigationUIVisibility="Hidden" Source="/Welcome.xaml" />
+                <Frame NavigationUIVisibility="Hidden" Source="/Pages/Application/Welcome.xaml" />
             </TabItem>
         </TabControl>
         <StatusBar Grid.Row="2" VerticalAlignment="Bottom">

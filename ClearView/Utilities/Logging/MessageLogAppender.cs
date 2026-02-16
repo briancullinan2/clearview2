@@ -1,7 +1,7 @@
 ﻿using EPIC.ClearView.Utilities.Extensions;
 using EPIC.DataLayer;
-using EPIC.DataLayer.Extensions;
 using EPIC.DataLayer.Helpers;
+using EPIC.DataLayer.Utilities.Extensions;
 using log4net.Appender;
 using log4net.Core;
 using log4net.Util;

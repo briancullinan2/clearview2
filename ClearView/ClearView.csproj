@@ -165,4 +165,11 @@
 		</None>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Themes\Application\" />
+	  <Folder Include="Themes\Capture\" />
+	  <Folder Include="Themes\User\" />
+	  <Folder Include="Themes\Patient\" />
+	</ItemGroup>
+
 </Project>
