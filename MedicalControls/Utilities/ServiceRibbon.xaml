@@ -1,4 +1,5 @@
 <ribbon:Ribbon
+    x:Class="EPIC.MedicalControls.Utilities.ServiceRibbon"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ribbon="clr-namespace:System.Windows.Controls.Ribbon;assembly=System.Windows.Controls.Ribbon"
@@ -6,8 +7,7 @@
     Grid.ColumnSpan="2"
     Panel.ZIndex="1"
     IsCollapsed="False"
-    ShowQuickAccessToolBarOnTop="False"
-    Style="{StaticResource PlainRibbonStyle}">
+    ShowQuickAccessToolBarOnTop="False">
     <FrameworkElement.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -40,7 +40,9 @@
 
         </ResourceDictionary>
     </FrameworkElement.Resources>
-
+    <Ribbon.Style>
+        <StaticResource ResourceKey="PlainRibbonStyle" />
+    </Ribbon.Style>
     <ribbon:RibbonTab x:Name="Services" Header="Services">
         <RibbonTab.ItemsPanel>
             <ItemsPanelTemplate>

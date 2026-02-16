@@ -86,12 +86,6 @@
         x:Key="CheckMark"
         Brush="{StaticResource ForegroundBrush}"
         Geometry="F1 M251.7,220.392 L156.336,141.18 L249.816,339.504 L444.9,0 L251.7,220.392" />
-    <DrawingGroup x:Key="Logo" />
-    <DrawingBrush
-        x:Key="LogoBrush"
-        Drawing="{StaticResource Logo}"
-        Stretch="Uniform" />
-    <DrawingImage x:Key="LogoDrawing" Drawing="{StaticResource Logo}" />
     <Style x:Key="GlassPanelStyle" TargetType="ContentControl">
         <EventSetter Event="Loaded" Handler="ContentControl_Loaded" />
         <Setter Property="ClipToBounds" Value="true" />
