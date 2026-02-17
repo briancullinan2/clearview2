@@ -24,7 +24,7 @@ namespace EPIC.MedicalControls.Themes
         }
 
         public static ObservableCollection<System.Reflection.PropertyInfo> User = InitializeModels();
-        public static ObservableCollection<System.Reflection.PropertyInfo> InitializeModels()
+        private static ObservableCollection<System.Reflection.PropertyInfo> InitializeModels()
         {
             var props = typeof(DataLayer.Entities.User).GetProperties();
             var orders = props.Select(x => (prop: x, attr: x.GetCustomAttribute<DisplayAttribute>()))
