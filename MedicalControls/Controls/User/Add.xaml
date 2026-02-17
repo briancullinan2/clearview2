@@ -59,26 +59,31 @@
 	</DataTemplate>
 
 
+	<Style x:Key="UserItemsGridStyle" TargetType="ContentPresenter">
+		<Setter Property="Grid.Column" Value="0" />
+
+		<Style.Triggers>
+			<DataTrigger Binding="{Binding Name}" Value="MiddleInitial">
+				<Setter Property="Grid.Column" Value="1" />
+			</DataTrigger>
+			<DataTrigger Binding="{Binding Name}" Value="LastName">
+				<Setter Property="Grid.Column" Value="2" />
+			</DataTrigger>
+		</Style.Triggers>
+	</Style>
+
 	<Style x:Key="UserEntityStyle" TargetType="{x:Type ItemsControl}">
 		<Setter Property="ItemsSource" Value="{Binding DataContext}" />
 		<Setter Property="ItemsPanel" Value="{StaticResource UserEntityPanelTemplate}" />
 
-		<Setter Property="ItemContainerStyle">
-			<Setter.Value>
-				<Style TargetType="ContentPresenter">
-					<Setter Property="Grid.Column" Value="0" />
+		<Setter Property="ItemContainerStyle" Value="{StaticResource UserItemsGridStyle}" />
+		<Setter Property="ItemTemplate" Value="{StaticResource UserEntityItemTemplate}" />
+	</Style>
 
-					<Style.Triggers>
-						<DataTrigger Binding="{Binding Name}" Value="MiddleInitial">
-							<Setter Property="Grid.Column" Value="1" />
-						</DataTrigger>
-						<DataTrigger Binding="{Binding Name}" Value="LastName">
-							<Setter Property="Grid.Column" Value="2" />
-						</DataTrigger>
-					</Style.Triggers>
-				</Style>
-			</Setter.Value>
-		</Setter>
+
+	<Style x:Key="UserLoginEntityStyle" TargetType="{x:Type ItemsControl}">
+		<Setter Property="ItemsSource" Value="{Binding DataContext}" />
+		<Setter Property="ItemContainerStyle" Value="{StaticResource UserItemsGridStyle}" />
 		<Setter Property="ItemTemplate" Value="{StaticResource UserEntityItemTemplate}" />
 	</Style>
 </ResourceDictionary>

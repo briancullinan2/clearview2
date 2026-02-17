@@ -75,37 +75,7 @@
                     </ResourceDictionary>
                 </FrameworkElement.Resources>
                 <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                    <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition MinWidth="200" />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition />
-                            <RowDefinition />
-                            <RowDefinition />
-                            <RowDefinition />
-                            <RowDefinition />
-                            <RowDefinition />
-                        </Grid.RowDefinitions>
-
-                        <Label Content="User Name:" />
-                        <TextBox
-                            Grid.Row="1"
-                            Margin="5"
-                            Text="{Binding User.Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}" />
-                        <Label Grid.Row="2" Content="Password:" />
-                        <PasswordBox Grid.Row="3" Margin="5" />
-                        <Label Grid.Row="4" Content="Confirm Password:" />
-                        <PasswordBox Grid.Row="5" Margin="5" />
-                        <CheckBox
-                            Grid.RowSpan="6"
-                            Grid.Column="1"
-                            Margin="5"
-                            VerticalAlignment="Top"
-                            Content="Enabled"
-                            IsChecked="{Binding User.IsActive, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}" />
-                    </Grid>
+                    <user:AddLogin Panel.ZIndex="9" Style="{StaticResource UserLoginEntityStyle}" />
                 </ScrollViewer>
             </GroupBox>
             <GroupBox
