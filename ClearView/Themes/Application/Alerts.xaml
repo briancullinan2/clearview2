@@ -67,32 +67,6 @@
         </ribbon:RibbonGroup>
 
     </x:Array>
-    <Style x:Key="ContextualHeaderStyle" TargetType="{x:Type ribbon:RibbonTabHeader}">
-        <Setter Property="ContentTemplate">
-            <Setter.Value>
-                <DataTemplate>
-                    <TextBlock
-                        Margin="-10,-10,-10,0"
-                        Padding="10,10,10,0"
-                        Text="{Binding}">
-                        <TextBlock.Background>
-                            <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
-                                <LinearGradientBrush.GradientStops>
-                                    <GradientStop Offset="0" Color="#AAFFFF00" />
-                                    <GradientStop Offset="1" Color="#00FFFF00" />
-                                </LinearGradientBrush.GradientStops>
-                            </LinearGradientBrush>
-                        </TextBlock.Background>
-                    </TextBlock>
-                </DataTemplate>
-            </Setter.Value>
-        </Setter>
-
-    </Style>
-    <Style x:Key="ContextualTabStyle" TargetType="{x:Type ribbon:RibbonTab}">
-        <Setter Property="IsSelected" Value="True" />
-        <Setter Property="HeaderStyle" Value="{StaticResource ContextualHeaderStyle}" />
-    </Style>
 
     <ControlTemplate x:Key="SearchControlTemplate">
         <Grid Row="0">
