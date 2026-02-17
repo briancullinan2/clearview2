@@ -24,17 +24,16 @@ namespace EPIC.ClearView.Pages.User
         }
 
         public Models ViewModel { get; private set; }
-        public System.Collections.ObjectModel.ObservableCollection<System.Reflection.PropertyInfo> UserProperties { get; set; }
 
 
         // Token: 0x06000262 RID: 610 RVA: 0x00014044 File Offset: 0x00012244
         public Add()
         {
-            ViewModel = new MedicalControls.Themes.Models()
-            {
-                //    Page = this
-            };
-            DataContext = ViewModel;
+            //ViewModel = new MedicalControls.Themes.Models()
+            //{
+            //    Page = this
+            //};
+            //DataContext = ViewModel;
             //var view2 = CollectionViewSource.GetDefaultView(ViewModel.UserProperties);
             //view2.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
 

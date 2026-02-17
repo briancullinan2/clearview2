@@ -16,7 +16,7 @@ namespace EPIC.DataLayer.Entities
         //abstract internal static IEntity Wrap(IEntity target);
     }
 
-    public interface IEntity<T> : INotifyPropertyChanged, IEntity
+    public interface IEntity<T> : INotifyPropertyChanged, IEntity where T : IEntity
     {
         abstract public event PropertyChangedEventHandler? PropertyChanged;
         abstract internal static T Create(T target);
@@ -39,7 +39,7 @@ namespace EPIC.DataLayer.Entities
         }
     }
 
-    public class Entity<T> : Entity, IEntity<T>, INotifyPropertyChanged
+    public class Entity<T> : Entity, IEntity<T>, INotifyPropertyChanged where T : IEntity
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 

@@ -5,7 +5,7 @@ namespace EPIC.DataLayer.Entities
 {
     [PrimaryKey(nameof(Name), nameof(Guid), nameof(Role))]
     [Table("Setting")]
-    public class Setting
+    public class Setting : Entity<Setting>
     {
         public string Name { get; set; }
         public string Value { get; set; }

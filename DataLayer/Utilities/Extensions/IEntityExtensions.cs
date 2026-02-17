@@ -1,5 +1,4 @@
 ﻿using EPIC.DataLayer.Entities;
-using EPIC.DataLayer.Utilities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -14,7 +13,7 @@ namespace EPIC.DataLayer.Utilities.Extensions
         /// Rehydrates the entity by discarding local changes and fetching 
         /// the latest data from the database.
         /// </summary>
-        public static void Refetch<T>(this IEntity<T> entity)
+        public static void Refetch<T>(this IEntity<T> entity) where T : IEntity
         {
             if (entity == null) throw new ArgumentNullException(nameof(entity));
 
