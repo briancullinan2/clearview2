@@ -9,6 +9,8 @@
     xmlns:ribbon="clr-namespace:System.Windows.Controls.Ribbon;assembly=System.Windows.Controls.Ribbon"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
     Title="Add User"
+    d:Height="600"
+    d:Width="800"
     SizeChanged="Page_SizeChanged"
     SnapsToDevicePixels="True"
     UseLayoutRounding="True"
@@ -62,11 +64,29 @@
             </ribbon:RibbonTab>
 
             <Style x:Key="UserEntityStyle" TargetType="{x:Type ItemsControl}">
-                <Style.Triggers />
+                <Setter Property="ItemContainerStyle">
+                    <Setter.Value>
+                        <Style TargetType="ContentPresenter">
+                            <Setter Property="Grid.Column" Value="0" />
+
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Name}" Value="MiddleInitial">
+                                    <Setter Property="Grid.Column" Value="1" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Name}" Value="LastName">
+                                    <Setter Property="Grid.Column" Value="2" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Setter.Value>
+                </Setter>
                 <Setter Property="ItemTemplate">
                     <Setter.Value>
                         <DataTemplate>
-                            <ContentPresenter x:Name="Presenter">
+                            <ContentPresenter
+                                x:Name="Presenter"
+                                MaxWidth="Infinity"
+                                Margin="5">
                                 <ContentPresenter.ContentTemplate>
                                     <DataTemplate>
                                         <Label Content="{Binding Name}" Foreground="Gray" />
@@ -75,16 +95,14 @@
                             </ContentPresenter>
 
                             <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding Name}" Value="MiddleInitial">
+                                    <Setter TargetName="Presenter" Property="MaxWidth" Value="100" />
+                                </DataTrigger>
                                 <DataTrigger Binding="{Binding PropertyType}" Value="{x:Type system:String}">
                                     <Setter TargetName="Presenter" Property="ContentTemplate">
                                         <Setter.Value>
                                             <DataTemplate>
-                                                <DataTemplate.Triggers>
-                                                    <DataTrigger Binding="{Binding Name}" Value="MiddleInitial">
-                                                        <Setter TargetName="PropertyName" Property="MaxWidth" Value="60" />
-                                                    </DataTrigger>
-                                                </DataTemplate.Triggers>
-                                                <StackPanel>
+                                                <StackPanel Name="ControlWrapper">
                                                     <Label Content="{Binding Name}" FontWeight="Bold" />
                                                     <TextBox Name="PropertyName" Text="{Binding Value}" />
                                                 </StackPanel>
@@ -177,16 +195,8 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Header="General Info">
-                <FrameworkElement.Resources>
-                    <ResourceDictionary>
-                        <ResourceDictionary.MergedDictionaries>
-                            <ResourceDictionary Source="/MedicalControls;component/Themes/ClearView.xaml" />
-                        </ResourceDictionary.MergedDictionaries>
-                    </ResourceDictionary>
-                </FrameworkElement.Resources>
                 <ScrollViewer
                     Grid.ColumnSpan="2"
-                    Padding="5"
                     HorizontalScrollBarVisibility="Auto"
                     VerticalScrollBarVisibility="Auto">
                     <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
@@ -203,7 +213,23 @@
                         <ItemsControl
                             Panel.ZIndex="9"
                             ItemsSource="{Binding Path=UserProperties}"
-                            Style="{StaticResource UserEntityStyle}" />
+                            Style="{StaticResource UserEntityStyle}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                    </Grid>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
 
                         <!--<Label Content="First Name:" />
                             <TextBox

@@ -43,12 +43,7 @@ namespace EPIC.MedicalControls.Themes
 
 
         public static readonly DependencyProperty PassPageToViewModelProperty =
-            DependencyProperty.RegisterAttached("PassPageToViewModel", typeof(bool), typeof(Models),
-            new PropertyMetadata(false, (d, e) =>
-            {
-                //if (d is System.Windows.Controls.Page p && p.DataContext is Models vm)
-                //    vm.UserProperties = InitializeModels();
-            }));
+            DependencyProperty.RegisterAttached("PassPageToViewModel", typeof(bool), typeof(Models), new PropertyMetadata(false));
         public static void SetPassPageToViewModel(UIElement element, bool value) => element.SetValue(PassPageToViewModelProperty, value);
         public static bool GetPassPageToViewModel(UIElement element) => (bool)element.GetValue(PassPageToViewModelProperty);
 
