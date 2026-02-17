@@ -64,11 +64,11 @@ namespace EPIC.MedicalControls.Utilities
             if (d is Page p && p.DataContext is DesignTimePermissionsViewModel vm)
                 vm.RibbonTabs = p.Resources.Values.OfType<RibbonTab>(); // ViewModel property set at design time
         }));
+        public static void SetPassPageToViewModel(UIElement element, bool value) => element.SetValue(PassPageToViewModelProperty, value);
+        public static bool GetPassPageToViewModel(UIElement element) => (bool)element.GetValue(PassPageToViewModelProperty);
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public static void SetPassPageToViewModel(UIElement element, bool value) => element.SetValue(PassPageToViewModelProperty, value);
-        public static bool GetPassPageToViewModel(UIElement element) => (bool)element.GetValue(PassPageToViewModelProperty);
 
         public DesignTimePermissionsViewModel()
         {

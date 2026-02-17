@@ -137,74 +137,62 @@ namespace EPIC.ClearView
         // Token: 0x06000356 RID: 854 RVA: 0x0001B920 File Offset: 0x00019B20
         private void AccountManage_Click(object sender, RoutedEventArgs e)
         {
-            Uri uri = new Uri("/Capture/Manage.xaml", UriKind.Relative);
-            Navigation.ShowTab(uri, true);
+            Navigation.ShowTab<Pages.Capture.Manage>(null, true);
         }
 
         // Token: 0x06000357 RID: 855 RVA: 0x0001B944 File Offset: 0x00019B44
         private void Patients_Click(object sender, RoutedEventArgs e)
         {
-            Uri uri = new Uri("/Patient/Search.xaml", UriKind.Relative);
-            Navigation.ShowTab(uri, true);
+            Navigation.ShowTab<Pages.Patient.Search>(null, true);
         }
 
         // Token: 0x06000358 RID: 856 RVA: 0x0001B968 File Offset: 0x00019B68
         private void Captures_Click(object sender, RoutedEventArgs e)
         {
-            Uri uri = new Uri("/Capture/Search.xaml", UriKind.Relative);
-            Navigation.ShowTab(uri, true);
+            Navigation.ShowTab<Pages.Capture.Search>(null, true);
         }
 
         // Token: 0x06000359 RID: 857 RVA: 0x0001B98C File Offset: 0x00019B8C
         private void UserAdd_Click(object sender, RoutedEventArgs e)
         {
-            Uri uri = new Uri("/User/Add.xaml", UriKind.Relative);
-            Navigation.ShowTab(uri, false);
+            Navigation.ShowTab<Pages.User.Add>(null, true);
         }
 
         // Token: 0x0600035A RID: 858 RVA: 0x0001B9B0 File Offset: 0x00019BB0
         private void UserSearch_Click(object sender, RoutedEventArgs e)
         {
-            Uri uri = new Uri("/User/Search.xaml", UriKind.Relative);
-            Navigation.ShowTab(uri, true);
+            Navigation.ShowTab<Pages.User.Search>(null, true);
         }
 
         // Token: 0x0600035B RID: 859 RVA: 0x0001B9D4 File Offset: 0x00019BD4
         private void ApplicationSettings_Click(object sender, RoutedEventArgs e)
         {
-            Uri uri = new Uri("/Capture/Settings.xaml", UriKind.Relative);
-            Navigation.ShowTab(uri, true);
+            Navigation.ShowTab<Pages.Application.Settings>(null, true);
         }
 
         // Token: 0x0600035C RID: 860 RVA: 0x0001B9F8 File Offset: 0x00019BF8
         private void UserPermission_Click(object sender, RoutedEventArgs e)
         {
-            Uri uri = new Uri("/User/Permissions.xaml", UriKind.Relative);
-            Navigation.ShowTab(uri, true);
+            Navigation.ShowTab<Pages.Application.Permissions>(null, true);
         }
 
         // Token: 0x0600035D RID: 861 RVA: 0x0001BA1C File Offset: 0x00019C1C
         private void Calibrate_Click(object sender, RoutedEventArgs e)
         {
-            Uri uri = new Uri("/Capture/Calibrate.xaml", UriKind.Relative);
-            Navigation.ShowTab(uri, true);
+            Navigation.ShowTab<Pages.Capture.Calibrate>(null, true);
         }
 
         // Token: 0x0600035E RID: 862 RVA: 0x0001BA40 File Offset: 0x00019C40
         private void NewCapture_Click(object sender, RoutedEventArgs e)
         {
-            Uri uri = new Uri("/Capture/Scan.xaml", UriKind.Relative);
-            Navigation.ShowTab(uri, true);
+            Navigation.ShowTab<Pages.Capture.Scan>(null, true);
         }
 
         // Token: 0x0600035F RID: 863 RVA: 0x0001BAB8 File Offset: 0x00019CB8
         private void Alerts_ViewAll(object sender, RoutedEventArgs e)
         {
             Uri uri = new Uri("/Capture/Alerts.xaml", UriKind.Relative);
-            TabItem tabItem = this.Tabs.Items.OfType<TabItem>().FirstOrDefault((TabItem x) => x.Content is Frame && ((Frame)x.Content).Source.OriginalString.Trim(new char[]
-            {
-                '/'
-            }).StartsWith("Capture/Alerts.xaml"));
+            TabItem? tabItem = Navigation.FindTab<Pages.Application.Alerts>();
             if (tabItem != null)
             {
                 ((Frame)tabItem.Content).Source = uri;
@@ -220,19 +208,16 @@ namespace EPIC.ClearView
         private void Alerts_View(object sender, RoutedEventArgs e)
         {
             Uri uri;
-            //if (AlertsBox.SelectedItem != null)
-            //{
-            //    uri = new Uri("/Capture/Alerts.xaml?messageId=" + ((DataLayer.Entities.Message)this.AlertsBox.SelectedItem).MessageId, UriKind.Relative);
-            //}
-            //else
+            if (Alerts?.FirstOrDefault() != null)
             {
-                uri = new Uri("/Capture/Alerts.xaml", UriKind.Relative);
+                uri = new Uri("Alerts.xaml?messageId=" + Alerts.First().MessageId, UriKind.Relative);
+            }
+            else
+            {
+                uri = new Uri("Alerts.xaml", UriKind.Relative);
 
             }
-            TabItem tabItem = this.Tabs.Items.OfType<TabItem>().FirstOrDefault((TabItem x) => x.Content is Frame && ((Frame)x.Content).Source.OriginalString.Trim(new char[]
-            {
-                '/'
-            }).StartsWith("Capture/Alerts.xaml"));
+            TabItem? tabItem = Navigation.FindTab<Pages.Application.Alerts>(); ;
             if (tabItem != null)
             {
                 ((Frame)tabItem.Content).Source = uri;

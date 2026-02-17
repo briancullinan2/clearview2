@@ -1,13 +1,15 @@
 ﻿using EPIC.MedicalControls.Utilities.Extensions;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Markup;
 
-namespace EPIC.MedicalControls.Utilities
+namespace EPIC.MedicalControls.Themes
 {
-    public partial class GeneralTemplate : ResourceDictionary, IStyleConnector
+    public partial class GeneralTemplate : ResourceDictionary, IStyleConnector, INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         private void Hyperlink_Click(object sender, RoutedEventArgs e)
         {

@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace EPIC.ClearView.User
+namespace EPIC.ClearView.Pages.User
 {
     // Token: 0x0200006A RID: 106
     public partial class Search : Page

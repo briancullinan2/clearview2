@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace EPIC.ClearView.Patient
+namespace EPIC.ClearView.Pages.Patient
 {
     // Token: 0x02000069 RID: 105
     public partial class Search : Page

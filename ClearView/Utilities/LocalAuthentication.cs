@@ -6,7 +6,6 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Principal;
-using System.Windows;
 
 namespace EPIC.ClearView.Utilities
 {
@@ -55,7 +54,7 @@ namespace EPIC.ClearView.Utilities
             };
 
             Process.Start(info);
-            Application.Current.Shutdown();
+            System.Windows.Application.Current.Shutdown();
         }
 
     }

@@ -1,11 +1,11 @@
 <Page
-    x:Class="EPIC.ClearView.Patient.Search"
+    x:Class="EPIC.ClearView.Pages.Patient.Search"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:converters="clr-namespace:EPIC.ClearView.Utilities.Converters;assembly=EPICClearView"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:patient="clr-namespace:EPIC.ClearView.Patient;assembly=EPICClearView"
+    xmlns:patient="clr-namespace:EPIC.ClearView.Pages.Patient;assembly=EPICClearView"
     xmlns:ribbon="clr-namespace:System.Windows.Controls.Ribbon;assembly=System.Windows.Controls.Ribbon"
     Title="Search Patients">
     <FrameworkElement.Resources>

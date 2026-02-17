@@ -5,7 +5,6 @@ using EPIC.DataLayer.Utilities.Extensions;
 using log4net.Appender;
 using log4net.Core;
 using log4net.Util;
-using System.Windows;
 
 namespace EPIC.ClearView.Utilities.Logging
 {
@@ -79,11 +78,11 @@ namespace EPIC.ClearView.Utilities.Logging
                         MessageType = 4
                     }.Save();
                 }
-                if (Application.Current != null)
+                if (System.Windows.Application.Current != null)
                 {
-                    Application.Current.Dispatcher.Invoke(delegate ()
+                    System.Windows.Application.Current.Dispatcher.Invoke(delegate ()
                     {
-                        MainWindow? mainWindow = Application.Current.MainWindow as MainWindow;
+                        MainWindow? mainWindow = System.Windows.Application.Current.MainWindow as MainWindow;
                         if (mainWindow == null)
                         {
                             return;

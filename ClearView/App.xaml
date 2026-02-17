@@ -22,6 +22,7 @@
                 <ResourceDictionary Source="/MedicalControls;component/Themes/Scrolls/ScrollViewer.xaml" />
                 <ResourceDictionary Source="/MedicalControls;component/Themes/Scrolls/ScrollBar.xaml" />
                 <ResourceDictionary Source="/MedicalControls;component/Themes/Application/Window.xaml" />
+                <ResourceDictionary Source="/Themes/ActionItems.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

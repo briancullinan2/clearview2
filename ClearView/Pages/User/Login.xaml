@@ -1,5 +1,5 @@
 <Page
-    x:Class="EPIC.ClearView.User.Login"
+    x:Class="EPIC.ClearView.Pages.User.Login"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Title="Login As"

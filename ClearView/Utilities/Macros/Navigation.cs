@@ -16,9 +16,9 @@ namespace EPIC.ClearView.Utilities.Macros
         // Token: 0x0600013F RID: 319 RVA: 0x0000B544 File Offset: 0x00009744
         public static void Add(RibbonButton button, string group)
         {
-            Application.Current.Dispatcher.BeginInvoke(new Action(delegate ()
+            System.Windows.Application.Current.Dispatcher.BeginInvoke(new Action(delegate ()
             {
-                RibbonGroup ribbonGroupBox = ((MainWindow)Application.Current.MainWindow).MainRibbon.FindChild<RibbonGroup>(group);
+                RibbonGroup ribbonGroupBox = ((MainWindow)System.Windows.Application.Current.MainWindow).MainRibbon.FindChild<RibbonGroup>(group);
                 ribbonGroupBox.Items.Add(button);
             }), new object[0]);
         }
@@ -26,16 +26,16 @@ namespace EPIC.ClearView.Utilities.Macros
         // Token: 0x06000140 RID: 320 RVA: 0x0000B74C File Offset: 0x0000994C
         public static void Add(RibbonGroup group, string tab)
         {
-            Application.Current.Dispatcher.BeginInvoke(new Action(delegate ()
+            System.Windows.Application.Current.Dispatcher.BeginInvoke(new Action(delegate ()
             {
-                if (Application.Current.MainWindow != null)
+                if (System.Windows.Application.Current.MainWindow != null)
                 {
-                    RibbonTab tabItem = ((MainWindow)Application.Current.MainWindow).MainRibbon.FindChild<RibbonTab>(tab);
+                    RibbonTab? tabItem = ((MainWindow)System.Windows.Application.Current.MainWindow).MainRibbon.FindChild<RibbonTab>(tab);
                     if (tabItem != null)
                     {
                         tabItem.Items.Add(group);
                     }
-                    ((INotifyCollectionChanged)((MainWindow)Application.Current.MainWindow).MainRibbon.Items).CollectionChanged += delegate (object? sender, NotifyCollectionChangedEventArgs args)
+                    ((INotifyCollectionChanged)((MainWindow)System.Windows.Application.Current.MainWindow).MainRibbon.Items).CollectionChanged += delegate (object? sender, NotifyCollectionChangedEventArgs args)
                     {
                         if (args.NewItems != null && (tabItem = args.NewItems.OfType<RibbonTab>().FirstOrDefault((RibbonTab x) => x.Name == tab)) != null)
                         {
@@ -53,11 +53,11 @@ namespace EPIC.ClearView.Utilities.Macros
         // Token: 0x06000141 RID: 321 RVA: 0x0000B978 File Offset: 0x00009B78
         public static void Add(TabItem item, string tab)
         {
-            Application.Current.Dispatcher.BeginInvoke(new Action(delegate ()
+            System.Windows.Application.Current.Dispatcher.BeginInvoke(new Action(delegate ()
             {
-                if (Application.Current.MainWindow != null)
+                if (System.Windows.Application.Current.MainWindow != null)
                 {
-                    TabControl tabControl = Application.Current.MainWindow.FindChild<TabControl>(tab);
+                    TabControl tabControl = System.Windows.Application.Current.MainWindow.FindChild<TabControl>(tab);
                     if (tabControl != null)
                     {
                         tabControl.Items.Add(item);
@@ -76,7 +76,7 @@ namespace EPIC.ClearView.Utilities.Macros
                             tabControl.Items.Remove(item);
                         }
                     };
-                    Application.Current.LoadCompleted += delegate (object sender, NavigationEventArgs args)
+                    System.Windows.Application.Current.LoadCompleted += delegate (object sender, NavigationEventArgs args)
                     {
                         if (args.Content is Page)
                         {
@@ -131,7 +131,7 @@ namespace EPIC.ClearView.Utilities.Macros
         // Token: 0x06000144 RID: 324 RVA: 0x0000BDA4 File Offset: 0x00009FA4
         public static void InsertRibbon(FrameworkElement frameworkElement)
         {
-            MainWindow? main = Application.Current.MainWindow as MainWindow;
+            MainWindow? main = System.Windows.Application.Current.MainWindow as MainWindow;
             if (main == null)
             {
                 return;
@@ -258,19 +258,45 @@ namespace EPIC.ClearView.Utilities.Macros
             };
         }
 
+
+        public static TabItem? FindTab<T>(Uri? uri = null)
+        {
+            return FindTab(typeof(T), uri);
+        }
+
+        public static TabItem? FindTab(Type? T = null, Uri? uri = null)
+        {
+            MainWindow? mainWindow = System.Windows.Application.Current.MainWindow as MainWindow;
+            if (mainWindow == null)
+            {
+                return null;
+            }
+            TabItem? tabItem = mainWindow.Tabs.Items.OfType<TabItem>().FirstOrDefault((TabItem x) =>
+            {
+                if (x.Content is Frame frame)
+                {
+                    if (T != null && T.IsAssignableFrom(x.Content?.GetType()))
+                        return true;
+
+                    if (uri == null || string.IsNullOrWhiteSpace(uri?.OriginalString))
+                        return false;
+
+                    return frame.Tag?.ToString()?.Trim('/').Contains(uri.OriginalString.Trim('/')) == true
+                        || frame.Source?.OriginalString.Trim('/').Contains(uri.OriginalString.Trim('/')) == true;
+                }
+                return false;
+            });
+            return tabItem;
+        }
+
+
         // Token: 0x06000145 RID: 325 RVA: 0x0000BEC8 File Offset: 0x0000A0C8
         public static void ShowTab(Uri uri, bool onlyOne = true)
         {
-            MainWindow mainWindow = Application.Current.MainWindow as MainWindow;
+            MainWindow? mainWindow = System.Windows.Application.Current.MainWindow as MainWindow;
             if (mainWindow != null)
             {
-                TabItem tabItem = mainWindow.Tabs.Items.OfType<TabItem>().FirstOrDefault((TabItem x) => x.Content is Frame && ((Frame)x.Content).Source.OriginalString.Trim(new char[]
-                {
-                    '/'
-                }) == uri.OriginalString.Trim(new char[]
-                {
-                    '/'
-                }));
+                TabItem? tabItem = FindTab(null, uri);
                 if (onlyOne && tabItem != null)
                 {
                     tabItem.IsSelected = true;
@@ -295,6 +321,42 @@ namespace EPIC.ClearView.Utilities.Macros
                     mainWindow.Tabs.Items.Add(newTab);
                     newTab.IsSelected = true;
                 }
+            }
+        }
+        public static void ShowTab<T>(Uri? uri = null, bool onlyOne = true) where T : Page, new()
+        {
+            var mainWindow = System.Windows.Application.Current.MainWindow as MainWindow;
+            if (mainWindow == null) return;
+
+            // 1. Look for an existing tab where the Frame's content matches the TYPE
+            // This avoids the 'new' keyword until we are certain we need it.
+            TabItem? existingTab = FindTab(typeof(T), uri);
+
+            if (onlyOne && existingTab != null)
+            {
+                existingTab.IsSelected = true;
+            }
+            else
+            {
+                // 2. Create the Frame and the Page instance
+                // Because of 'where T : new()', the compiler guarantees this is safe.
+                var pageInstance = new T();
+
+                Frame frame = new Frame
+                {
+                    Tag = BaseUriHelper.GetBaseUri(pageInstance).LocalPath,
+                    Content = pageInstance,
+                    NavigationUIVisibility = NavigationUIVisibility.Hidden
+                };
+
+                TabItem newTab = new TabItem
+                {
+                    Content = frame,
+                    Header = pageInstance.Title ?? typeof(T).Name // Fallback to class name if title is null
+                };
+
+                mainWindow.Tabs.Items.Add(newTab);
+                newTab.IsSelected = true;
             }
         }
     }

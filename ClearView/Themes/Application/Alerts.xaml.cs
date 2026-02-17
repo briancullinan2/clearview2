@@ -1,0 +1,35 @@
+﻿namespace EPIC.ClearView.Themes.Application
+{
+    public partial class Alerts
+    {
+        private void RibbonToggleButton_Unchecked(object sender, System.Windows.RoutedEventArgs e)
+        {
+
+        }
+
+        private void AddRole_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+
+        }
+
+        private void Search_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+
+        }
+
+        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+
+        }
+
+        private void Dismiss_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+
+        }
+
+        private void Cancel_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+
+        }
+    }
+}

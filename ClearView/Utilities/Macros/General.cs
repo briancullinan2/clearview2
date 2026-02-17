@@ -1,7 +1,6 @@
 ﻿using EPIC.CameraInterface;
 using EPIC.CameraInterface.Interfaces;
 using EPIC.CameraInterface.Utilities;
-using EPIC.ClearView.Utilities;
 using EPIC.DataLayer.Customization;
 using EPIC.DataLayer.Utilities.Extensions;
 using EPIC.MedicalControls.Controls.Capture;
@@ -192,9 +191,9 @@ namespace EPIC.ClearView.Utilities.Macros
                     General.CloseWindows(connectedInfo);
                 };
                 CameraManager.Current.Changed += value;
-                Application.Current.Dispatcher.BeginInvoke(new Action<string>(delegate (string message)
+                System.Windows.Application.Current.Dispatcher.BeginInvoke(new Action<string>(delegate (string message)
                 {
-                    Xceed.Wpf.Toolkit.MessageBox.Show(Application.Current.MainWindow, message);
+                    Xceed.Wpf.Toolkit.MessageBox.Show(System.Windows.Application.Current.MainWindow, message);
                 }), new object[]
                 {
                     connectedInfo.CameraMessage
@@ -241,9 +240,9 @@ namespace EPIC.ClearView.Utilities.Macros
                     Log.Debug("There was an error connecting to the camera, reconnecting.", ex);
                     try
                     {
-                        Application.Current.Dispatcher.BeginInvoke(new Action<string>(delegate (string message)
+                        System.Windows.Application.Current.Dispatcher.BeginInvoke(new Action<string>(delegate (string message)
                         {
-                            Xceed.Wpf.Toolkit.MessageBox.Show(Application.Current.MainWindow, message);
+                            Xceed.Wpf.Toolkit.MessageBox.Show(System.Windows.Application.Current.MainWindow, message);
                         }), new object[]
                         {
                             connectedInfo.ReconnectMessage
@@ -307,9 +306,9 @@ namespace EPIC.ClearView.Utilities.Macros
         // Token: 0x0600014D RID: 333 RVA: 0x0000CCD0 File Offset: 0x0000AED0
         private static void CloseWindows(General.ConnectedInfo connectedInfo)
         {
-            Application.Current.Dispatcher.BeginInvoke(new Action<string, string, string>(delegate (string deviceMessage, string cameraMessage, string reconnectMessage)
+            System.Windows.Application.Current.Dispatcher.BeginInvoke(new Action<string, string, string>(delegate (string deviceMessage, string cameraMessage, string reconnectMessage)
             {
-                foreach (Window window in Application.Current.Windows.OfType<Window>())
+                foreach (Window window in System.Windows.Application.Current.Windows.OfType<Window>())
                 {
                     if (window.Content is Xceed.Wpf.Toolkit.MessageBox && (((Xceed.Wpf.Toolkit.MessageBox)window.Content).Text == cameraMessage || ((Xceed.Wpf.Toolkit.MessageBox)window.Content).Text == deviceMessage || ((Xceed.Wpf.Toolkit.MessageBox)window.Content).Text == reconnectMessage))
                     {

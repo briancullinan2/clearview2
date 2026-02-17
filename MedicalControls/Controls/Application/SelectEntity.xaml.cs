@@ -20,7 +20,7 @@ namespace EPIC.MedicalControls.Controls
         {
             SelectEntity selectEntity = new SelectEntity
             {
-                Owner = Application.Current.Windows.OfType<Window>().FirstOrDefault((Window x) => x.IsActive)
+                Owner = System.Windows.Application.Current.Windows.OfType<Window>().FirstOrDefault((Window x) => x.IsActive)
             };
             selectEntity.Entities.SelectionMode = DataGridSelectionMode.Single;
             if (!string.IsNullOrEmpty(title))
@@ -37,7 +37,7 @@ namespace EPIC.MedicalControls.Controls
         {
             SelectEntity selectEntity = new SelectEntity
             {
-                Owner = Application.Current.Windows.OfType<Window>().FirstOrDefault((Window x) => x.IsActive)
+                Owner = System.Windows.Application.Current.Windows.OfType<Window>().FirstOrDefault((Window x) => x.IsActive)
             };
             selectEntity.Entities.SelectionMode = DataGridSelectionMode.Extended;
             if (!string.IsNullOrEmpty(title))

@@ -89,7 +89,7 @@ namespace EPIC.ClearView
         {
             get
             {
-                return Application.Current.MainWindow.Icon;
+                return System.Windows.Application.Current.MainWindow.Icon;
             }
         }
 

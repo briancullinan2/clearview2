@@ -1,5 +1,5 @@
 <Page
-    x:Class="EPIC.ClearView.Capture.Alerts"
+    x:Class="EPIC.ClearView.Pages.Application.Alerts"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -32,37 +32,23 @@
         </StackPanel>
         <ContentControl
             Grid.Row="1"
-            Grid.Column="2"
+            Grid.Column="1"
             Style="{StaticResource StandardActionFooter}" />
         <DataGrid
             Name="Messages"
             Grid.ColumnSpan="2"
+            CellStyle="{StaticResource CopyPasteDataColumnCellStyle}"
             RowStyle="{StaticResource FlatTerminalRow}"
             Style="{StaticResource FlatTerminalGrid}">
             <FrameworkElement.Resources>
                 <ResourceDictionary />
             </FrameworkElement.Resources>
             <DataGrid.Columns>
-                <DataGridTextColumn
-                    Binding="{Binding Path=CreateTime}"
-                    CellStyle="{StaticResource CopyPasteDataColumnCellStyle}"
-                    Header="Time" />
-                <DataGridTextColumn
-                    Binding="{Binding Path=MessageType}"
-                    CellStyle="{StaticResource CopyPasteDataColumnCellStyle}"
-                    Header="Type" />
-                <DataGridTextColumn
-                    Binding="{Binding Path=Source}"
-                    CellStyle="{StaticResource CopyPasteDataColumnCellStyle}"
-                    Header="Source" />
-                <DataGridTextColumn
-                    Binding="{Binding Path=Title}"
-                    CellStyle="{StaticResource CopyPasteDataColumnCellStyle}"
-                    Header="Title" />
-                <DataGridTextColumn
-                    Binding="{Binding Path=Body}"
-                    CellStyle="{StaticResource CopyPasteDataColumnCellStyle}"
-                    Header="Message" />
+                <DataGridTextColumn Binding="{Binding Path=CreateTime}" Header="Time" />
+                <DataGridTextColumn Binding="{Binding Path=MessageType}" Header="Type" />
+                <DataGridTextColumn Binding="{Binding Path=Source}" Header="Source" />
+                <DataGridTextColumn Binding="{Binding Path=Title}" Header="Title" />
+                <DataGridTextColumn Binding="{Binding Path=Body}" Header="Message" />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

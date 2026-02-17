@@ -1,6 +1,5 @@
 ﻿using Emgu.CV;
 using Emgu.CV.Structure;
-using EPIC.ClearView.Utilities;
 using EPIC.DataAnalysis;
 using Microsoft.CSharp.RuntimeBinder;
 using Microsoft.Office.Interop.Excel;
@@ -25,9 +24,9 @@ namespace EPIC.ClearView.Utilities.Macros
             {
                 reportProgress("Starting Excel for OLE", 0);
             }
-            Application application = (Application)Activator.CreateInstance(Marshal.GetTypeFromCLSID(new Guid("00024500-0000-0000-C000-000000000046")));
+            Microsoft.Office.Interop.Excel.Application application = (Microsoft.Office.Interop.Excel.Application)Activator.CreateInstance(Marshal.GetTypeFromCLSID(new Guid("00024500-0000-0000-C000-000000000046")));
             application.Visible = false;
-            Application application2 = application;
+            Microsoft.Office.Interop.Excel.Application application2 = application;
             Workbook workbook = application2.Workbooks.Add(Missing.Value);
             if (reportProgress != null)
             {

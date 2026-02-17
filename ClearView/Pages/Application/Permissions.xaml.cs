@@ -9,7 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 
-namespace EPIC.ClearView.User
+namespace EPIC.ClearView.Pages.Application
 {
     // Token: 0x0200004C RID: 76
     public partial class Permissions : Page
@@ -357,13 +357,13 @@ namespace EPIC.ClearView.User
                 }
             }
             this._collectionChanged = true;
-            this.Save.IsEnabled = true;
+            //this.Save.IsEnabled = true;
         }
 
         // Token: 0x06000293 RID: 659 RVA: 0x00015C58 File Offset: 0x00013E58
         private void OnChanged(object sender, RoutedEventArgs routedEventArgs)
         {
-            this.Save.IsEnabled = true;
+            //this.Save.IsEnabled = true;
         }
 
         // Token: 0x06000294 RID: 660 RVA: 0x00015C68 File Offset: 0x00013E68
@@ -371,7 +371,7 @@ namespace EPIC.ClearView.User
         {
             if (!this._collectionChanged)
             {
-                this.Save.IsEnabled = false;
+                //this.Save.IsEnabled = false;
             }
         }
 

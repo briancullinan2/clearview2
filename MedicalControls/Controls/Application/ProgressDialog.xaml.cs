@@ -18,11 +18,11 @@ namespace EPIC.MedicalControls.Controls
         // Token: 0x06000125 RID: 293 RVA: 0x0000AA97 File Offset: 0x00008C97
         private static void ResetTaskOnElapsed(object? sender, ElapsedEventArgs elapsedEventArgs)
         {
-            Application.Current.Dispatcher.Invoke(delegate ()
+            System.Windows.Application.Current.Dispatcher.Invoke(delegate ()
             {
-                Application.Current.MainWindow.TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
-                Application.Current.MainWindow.TaskbarItemInfo.ProgressValue = 0.0;
-                Application.Current.MainWindow.TaskbarItemInfo.Changed -= ProgressDialog.TaskbarItemInfoOnChanged;
+                System.Windows.Application.Current.MainWindow.TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
+                System.Windows.Application.Current.MainWindow.TaskbarItemInfo.ProgressValue = 0.0;
+                System.Windows.Application.Current.MainWindow.TaskbarItemInfo.Changed -= ProgressDialog.TaskbarItemInfoOnChanged;
             });
         }
 
@@ -30,10 +30,10 @@ namespace EPIC.MedicalControls.Controls
         public static ProgressDialog Show(string titleMessage, params string[] stati)
         {
             ProgressDialog progress = new ProgressDialog();
-            Application.Current.Dispatcher.Invoke(delegate ()
+            System.Windows.Application.Current.Dispatcher.Invoke(delegate ()
             {
                 progress.Title = titleMessage;
-                progress.Owner = (Application.Current.Windows.OfType<Window>().FirstOrDefault((Window x) => x.IsActive) ?? Application.Current.MainWindow);
+                progress.Owner = (System.Windows.Application.Current.Windows.OfType<Window>().FirstOrDefault((Window x) => x.IsActive) ?? System.Windows.Application.Current.MainWindow);
                 foreach (string content in stati)
                 {
                     progress.Stati.Children.Add(new Label
@@ -54,7 +54,7 @@ namespace EPIC.MedicalControls.Controls
         // Token: 0x06000127 RID: 295 RVA: 0x0000ADD4 File Offset: 0x00008FD4
         public void Update(params Tuple<string, double>[] stati)
         {
-            Application.Current.Dispatcher.Invoke(delegate ()
+            System.Windows.Application.Current.Dispatcher.Invoke(delegate ()
             {
                 int num = 0;
                 foreach (Tuple<string, double> tuple in stati)
@@ -78,9 +78,9 @@ namespace EPIC.MedicalControls.Controls
                     var color = (System.Windows.Media.Brush?)new BrushConverter().ConvertFromString("#FF01D328");
                     if (color != null) progressBar2.Foreground = color;
                     else progressBar2.ClearValue(ProgressBar.ForegroundProperty);
-                    Application.Current.MainWindow.TaskbarItemInfo.ProgressState = (progressBar2.IsIndeterminate ? TaskbarItemProgressState.Indeterminate : TaskbarItemProgressState.Normal);
-                    Application.Current.MainWindow.TaskbarItemInfo.ProgressValue = progressBar2.Value;
-                    Application.Current.MainWindow.TaskbarItemInfo.Changed += ProgressDialog.TaskbarItemInfoOnChanged;
+                    System.Windows.Application.Current.MainWindow.TaskbarItemInfo.ProgressState = (progressBar2.IsIndeterminate ? TaskbarItemProgressState.Indeterminate : TaskbarItemProgressState.Normal);
+                    System.Windows.Application.Current.MainWindow.TaskbarItemInfo.ProgressValue = progressBar2.Value;
+                    System.Windows.Application.Current.MainWindow.TaskbarItemInfo.Changed += ProgressDialog.TaskbarItemInfoOnChanged;
                     ProgressDialog.ResetTask.Enabled = true;
                 }
             });
@@ -90,7 +90,7 @@ namespace EPIC.MedicalControls.Controls
         private static void TaskbarItemInfoOnChanged(object? sender, EventArgs eventArgs)
         {
             ProgressDialog.ResetTask.Stop();
-            Application.Current.MainWindow.TaskbarItemInfo.Changed -= ProgressDialog.TaskbarItemInfoOnChanged;
+            System.Windows.Application.Current.MainWindow.TaskbarItemInfo.Changed -= ProgressDialog.TaskbarItemInfoOnChanged;
         }
 
         // Token: 0x06000129 RID: 297 RVA: 0x0000AE50 File Offset: 0x00009050
@@ -107,7 +107,7 @@ namespace EPIC.MedicalControls.Controls
         // Token: 0x0600012A RID: 298 RVA: 0x0000AF01 File Offset: 0x00009101
         public void Pause()
         {
-            Application.Current.Dispatcher.Invoke(delegate ()
+            System.Windows.Application.Current.Dispatcher.Invoke(delegate ()
             {
                 ProgressBar? progressBar = this.Stati.Children.OfType<ProgressBar>().LastOrDefault<ProgressBar>();
                 if (progressBar != null)
@@ -115,17 +115,17 @@ namespace EPIC.MedicalControls.Controls
                     progressBar.IsIndeterminate = true;
                     progressBar.Foreground = System.Windows.Media.Brushes.Yellow;
                 }
-                Application.Current.MainWindow.TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Paused;
-                Application.Current.MainWindow.TaskbarItemInfo.Changed += ProgressDialog.TaskbarItemInfoOnChanged;
+                System.Windows.Application.Current.MainWindow.TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Paused;
+                System.Windows.Application.Current.MainWindow.TaskbarItemInfo.Changed += ProgressDialog.TaskbarItemInfoOnChanged;
             });
         }
 
         // Token: 0x0600012B RID: 299 RVA: 0x0000AF2C File Offset: 0x0000912C
         public new void Close()
         {
-            if (!Application.Current.Dispatcher.CheckAccess())
+            if (!System.Windows.Application.Current.Dispatcher.CheckAccess())
             {
-                Application.Current.Dispatcher.Invoke(delegate ()
+                System.Windows.Application.Current.Dispatcher.Invoke(delegate ()
                 {
                     base.Close();
                 });
@@ -139,7 +139,7 @@ namespace EPIC.MedicalControls.Controls
         // Token: 0x0600012C RID: 300 RVA: 0x0000B009 File Offset: 0x00009209
         public void Error(string message = "")
         {
-            Application.Current.Dispatcher.Invoke(delegate ()
+            System.Windows.Application.Current.Dispatcher.Invoke(delegate ()
             {
                 ProgressBar? progressBar = this.Stati.Children.OfType<ProgressBar>().LastOrDefault<ProgressBar>();
                 if (progressBar != null)
@@ -148,8 +148,8 @@ namespace EPIC.MedicalControls.Controls
                     progressBar.Foreground = System.Windows.Media.Brushes.Red;
                     progressBar.Value = 100.0;
                 }
-                Application.Current.MainWindow.TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Error;
-                Application.Current.MainWindow.TaskbarItemInfo.Changed += ProgressDialog.TaskbarItemInfoOnChanged;
+                System.Windows.Application.Current.MainWindow.TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Error;
+                System.Windows.Application.Current.MainWindow.TaskbarItemInfo.Changed += ProgressDialog.TaskbarItemInfoOnChanged;
                 ProgressDialog.ResetTask.Enabled = true;
             });
         }

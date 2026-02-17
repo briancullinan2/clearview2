@@ -15,7 +15,7 @@ using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
-namespace EPIC.ClearView.Capture
+namespace EPIC.ClearView.Pages.Capture
 {
     // Token: 0x02000005 RID: 5
     public partial class Scan : Page
@@ -271,7 +271,7 @@ namespace EPIC.ClearView.Capture
                     Multiselect = true,
                     RestoreDirectory = true
                 };
-                if (!(dialog.ShowDialog(Application.Current.MainWindow) != true))
+                if (!(dialog.ShowDialog(System.Windows.Application.Current.MainWindow) != true))
                 {
                     Task.Run(() => this.StoreAndProcessImages(dialog.FileNames, clicked, clickedImages, unfilteredImages, filteredImages))
                            .ContinueWith(t =>

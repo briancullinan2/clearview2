@@ -1,5 +1,5 @@
 <ResourceDictionary
-    x:Class="EPIC.MedicalControls.Utilities.GeneralTemplate"
+    x:Class="EPIC.MedicalControls.Themes.GeneralTemplate"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:entity="EPIC.DataLayer.Entities;assembly=DataLayer"

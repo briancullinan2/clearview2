@@ -4,7 +4,7 @@ using System.Web;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace EPIC.ClearView.Capture
+namespace EPIC.ClearView.Pages.Application
 {
     // Token: 0x02000002 RID: 2
     public partial class Alerts : Page
@@ -63,7 +63,7 @@ namespace EPIC.ClearView.Capture
             //    x.IsActive = false;
             //    x.Save();
             //});
-            MainWindow mainWindow = Application.Current.MainWindow as MainWindow;
+            MainWindow mainWindow = System.Windows.Application.Current.MainWindow as MainWindow;
             if (mainWindow != null)
             {
                 mainWindow.UpdateAlerts();

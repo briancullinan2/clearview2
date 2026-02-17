@@ -10,7 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 
-namespace EPIC.ClearView.Capture
+namespace EPIC.ClearView.Pages.Application
 {
     // Token: 0x02000006 RID: 6
     public partial class Settings : Page
@@ -89,13 +89,13 @@ namespace EPIC.ClearView.Capture
         // Token: 0x06000073 RID: 115 RVA: 0x0000574B File Offset: 0x0000394B
         private void OnChanged(object sender, RoutedEventArgs routedEventArgs)
         {
-            this.Save.IsEnabled = true;
+            //this.Save.IsEnabled = true;
         }
 
         // Token: 0x06000074 RID: 116 RVA: 0x0000575B File Offset: 0x0000395B
         private void OnUnchanged(object sender, RoutedEventArgs routedEventArgs)
         {
-            this.Save.IsEnabled = false;
+            //this.Save.IsEnabled = false;
         }
 
         // Token: 0x06000075 RID: 117 RVA: 0x0000576B File Offset: 0x0000396B
@@ -335,7 +335,7 @@ namespace EPIC.ClearView.Capture
 
         private void FrameCallback(IntPtr hBitmap)
         {
-            Application.Current.Dispatcher.Invoke(() =>
+            System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
                 DevicePreview.Source = Imaging.CreateBitmapSourceFromHBitmap(
                     hBitmap,

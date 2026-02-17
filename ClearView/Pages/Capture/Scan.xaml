@@ -1,5 +1,5 @@
 <Page
-    x:Class="EPIC.ClearView.Capture.Scan"
+    x:Class="EPIC.ClearView.Pages.Capture.Scan"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:EPIC.MedicalControls.Controls.Capture;assembly=MedicalControls"

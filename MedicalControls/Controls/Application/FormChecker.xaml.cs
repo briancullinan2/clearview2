@@ -7,11 +7,14 @@ using System.Windows.Controls;
 using System.Windows.Markup;
 using Xceed.Wpf.Toolkit;
 
-namespace EPIC.MedicalControls.Utilities
+namespace EPIC.MedicalControls.Controls.Application
 {
     // Token: 0x02000044 RID: 68
     public partial class FormChecker : ResourceDictionary, IStyleConnector
     {
+        //public static 
+
+
         // Token: 0x17000080 RID: 128
         // (get) Token: 0x06000237 RID: 567 RVA: 0x00012548 File Offset: 0x00010748
         // (set) Token: 0x06000238 RID: 568 RVA: 0x0001255E File Offset: 0x0001075E
@@ -51,7 +54,7 @@ namespace EPIC.MedicalControls.Utilities
         // Token: 0x0600023C RID: 572 RVA: 0x00012C2C File Offset: 0x00010E2C
         private void ElementLoaded(object sender, RoutedEventArgs e)
         {
-            FrameworkElement frameworkElement = sender as FrameworkElement;
+            FrameworkElement? frameworkElement = sender as FrameworkElement;
             if (frameworkElement != null && !this._valuesDictionary.ContainsKey(frameworkElement))
             {
                 using (Dictionary<FrameworkElement, FormChecker.CheckEvents>.Enumerator enumerator = FormChecker.Subscriptions.GetEnumerator())
@@ -80,10 +83,10 @@ namespace EPIC.MedicalControls.Utilities
                         }
                     }
                 }
-                TextBox textBox = sender as TextBox;
+                TextBox? textBox = sender as TextBox;
                 if (textBox != null)
                 {
-                    this._savingDictionary[textBox] = delegate (object o)
+                    this._savingDictionary[textBox] = delegate (object? o)
                     {
                         this._valuesDictionary[o] = textBox.Text;
                     };
@@ -93,10 +96,10 @@ namespace EPIC.MedicalControls.Utilities
                         this.OnChanged(o, (string)this._valuesDictionary[o] != textBox.Text, args);
                     };
                 }
-                CheckBox checkBox = sender as CheckBox;
+                CheckBox? checkBox = sender as CheckBox;
                 if (checkBox != null)
                 {
-                    this._savingDictionary[checkBox] = delegate (object o)
+                    this._savingDictionary[checkBox] = delegate (object? o)
                     {
                         this._valuesDictionary[o] = checkBox.IsChecked;
                     };
@@ -110,10 +113,10 @@ namespace EPIC.MedicalControls.Utilities
                         this.OnChanged(o, (bool?)this._valuesDictionary[o] != checkBox.IsChecked, args);
                     };
                 }
-                ListBox listbox = sender as ListBox;
+                ListBox? listbox = sender as ListBox;
                 if (listbox != null)
                 {
-                    this._savingDictionary[listbox] = delegate (object o)
+                    this._savingDictionary[listbox] = delegate (object? o)
                     {
                         this._valuesDictionary[o] = listbox.SelectedItems.OfType<object>().ToList<object>();
                     };
@@ -123,23 +126,23 @@ namespace EPIC.MedicalControls.Utilities
                         this.OnChanged(o, !listbox.SelectedItems.OfType<object>().All(new Func<object, bool>(((List<object>)this._valuesDictionary[o]).Contains)) || !((List<object>)this._valuesDictionary[o]).All(new Func<object, bool>(listbox.SelectedItems.OfType<object>().Contains<object>)), args);
                     };
                 }
-                DatePicker datePicker = sender as DatePicker;
+                DatePicker? datePicker = sender as DatePicker;
                 if (datePicker != null)
                 {
-                    this._savingDictionary[datePicker] = delegate (object o)
+                    this._savingDictionary[datePicker] = delegate (object? o)
                     {
                         this._valuesDictionary[o] = datePicker.SelectedDate;
                     };
                     this._savingDictionary[datePicker](datePicker);
-                    datePicker.SelectedDateChanged += delegate (object o, SelectionChangedEventArgs args)
+                    datePicker.SelectedDateChanged += delegate (object? o, SelectionChangedEventArgs args)
                     {
                         this.OnChanged(o, datePicker.SelectedDate != (DateTime?)this._valuesDictionary[o], args);
                     };
                 }
-                ComboBox comboBox = sender as ComboBox;
+                ComboBox? comboBox = sender as ComboBox;
                 if (comboBox != null)
                 {
-                    this._savingDictionary[comboBox] = delegate (object o)
+                    this._savingDictionary[comboBox] = delegate (object? o)
                     {
                         this._valuesDictionary[o] = comboBox.SelectedItem;
                     };
@@ -149,10 +152,10 @@ namespace EPIC.MedicalControls.Utilities
                         this.OnChanged(o, (comboBox.SelectedItem == null && this._valuesDictionary[o] != null) || (comboBox.SelectedItem != null && this._valuesDictionary[o] == null) || (comboBox.SelectedItem != null && !comboBox.SelectedItem.Equals(this._valuesDictionary[o])), args);
                     };
                 }
-                DecimalUpDown decimalUpDown = sender as DecimalUpDown;
+                DecimalUpDown? decimalUpDown = sender as DecimalUpDown;
                 if (decimalUpDown != null)
                 {
-                    this._savingDictionary[decimalUpDown] = delegate (object o)
+                    this._savingDictionary[decimalUpDown] = delegate (object? o)
                     {
                         this._valuesDictionary[o] = decimalUpDown.Value;
                     };
@@ -162,10 +165,10 @@ namespace EPIC.MedicalControls.Utilities
                         this.OnChanged(o, decimalUpDown.Value != (decimal?)this._valuesDictionary[o], args);
                     };
                 }
-                IntegerUpDown integerUpDown = sender as IntegerUpDown;
+                IntegerUpDown? integerUpDown = sender as IntegerUpDown;
                 if (integerUpDown != null)
                 {
-                    this._savingDictionary[integerUpDown] = delegate (object o)
+                    this._savingDictionary[integerUpDown] = delegate (object? o)
                     {
                         this._valuesDictionary[o] = integerUpDown.Value;
                     };
@@ -175,10 +178,10 @@ namespace EPIC.MedicalControls.Utilities
                         this.OnChanged(o, integerUpDown.Value != (int?)this._valuesDictionary[o], args);
                     };
                 }
-                RadioButton radionButton = sender as RadioButton;
+                RadioButton? radionButton = sender as RadioButton;
                 if (radionButton != null)
                 {
-                    this._savingDictionary[radionButton] = delegate (object o)
+                    this._savingDictionary[radionButton] = delegate (object? o)
                     {
                         this._valuesDictionary[o] = radionButton.IsChecked;
                     };
@@ -274,10 +277,10 @@ namespace EPIC.MedicalControls.Utilities
         private readonly Dictionary<object, bool> _changedDictionary = new Dictionary<object, bool>();
 
         // Token: 0x04000128 RID: 296
-        private readonly Dictionary<object, object> _valuesDictionary = new Dictionary<object, object>();
+        private readonly Dictionary<object, object?> _valuesDictionary = new Dictionary<object, object?>();
 
         // Token: 0x04000129 RID: 297
-        private readonly Dictionary<object, Action<object>> _savingDictionary = new Dictionary<object, Action<object>>();
+        private readonly Dictionary<object, Action<object?>> _savingDictionary = new Dictionary<object, Action<object?>>();
 
         // Token: 0x0400012A RID: 298
         private static readonly Dictionary<FrameworkElement, FormChecker.CheckEvents> Subscriptions = new Dictionary<FrameworkElement, FormChecker.CheckEvents>();

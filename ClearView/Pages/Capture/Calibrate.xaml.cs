@@ -20,7 +20,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
 
-namespace EPIC.ClearView.Capture
+namespace EPIC.ClearView.Pages.Capture
 {
     // Token: 0x02000003 RID: 3
     public partial class Calibrate : Page
@@ -239,7 +239,7 @@ namespace EPIC.ClearView.Capture
                     Multiselect = true,
                     RestoreDirectory = true
                 };
-                if (!(dialog.ShowDialog(Application.Current.MainWindow) != true))
+                if (!(dialog.ShowDialog(System.Windows.Application.Current.MainWindow) != true))
                 {
                     this.Reset_Click(null, null);
                     if (this._calibration == null)
@@ -366,12 +366,12 @@ namespace EPIC.ClearView.Capture
                     General.Delete(this._outputFile);
                     this._saveLocation = null;
                     this._outputFile = null;
-                    Application.Current.Dispatcher.BeginInvoke(new Action(delegate ()
+                    System.Windows.Application.Current.Dispatcher.BeginInvoke(new Action(delegate ()
                     {
                         this._progress.Close();
                         new OpenWith(toFile)
                         {
-                            Owner = Application.Current.MainWindow
+                            Owner = System.Windows.Application.Current.MainWindow
                         }.ShowDialog();
                     }), new object[0]);
                 }
@@ -438,7 +438,7 @@ namespace EPIC.ClearView.Capture
                                 Filter = "Compressed Zip Files|*.zip",
                                 FilterIndex = 1
                             };
-                            if (saveFileDialog.ShowDialog(Application.Current.MainWindow) == true)
+                            if (saveFileDialog.ShowDialog(System.Windows.Application.Current.MainWindow) == true)
                             {
                                 this._saveLocation = saveFileDialog.FileName;
                                 if (this._outputFile != null)

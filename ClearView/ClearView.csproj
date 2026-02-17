@@ -40,6 +40,7 @@
 	</Target>-->
 
 	<ItemGroup>
+		<Compile Remove="Themes\Application\AlertsMenu.xaml.cs" />
 		<Compile Remove="Utilities\Converters\DeviceSettingStringConverter.cs" />
 		<Compile Remove="Utilities\Converters\PermissionBooleanConverter.cs" />
 		<Compile Remove="Utilities\Converters\PermissionHasChildrenFontWeightConverter.cs" />
@@ -59,6 +60,10 @@
 		<None Remove="Resources\ClearViewLogo.png" />
 		<None Remove="Resources\Select-Language-small.png" />
 		<None Remove="Resources\Select-Language.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Page Remove="Themes\Application\AlertsMenu.xaml" />
 	</ItemGroup>
 
 	<!-- ApplicationDefinition is implicitly included by the SDK when UseWPF is true;
@@ -166,7 +171,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Themes\Application\" />
 	  <Folder Include="Themes\Capture\" />
 	  <Folder Include="Themes\User\" />
 	  <Folder Include="Themes\Patient\" />

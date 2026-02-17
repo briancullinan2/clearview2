@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace EPIC.ClearView
+namespace EPIC.ClearView.Pages.Application
 {
     // Token: 0x0200006C RID: 108
     public partial class Welcome : Page

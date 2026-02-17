@@ -7,7 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Markup;
 using EPIC.ClearView.Utilities.Macros;
 
-namespace EPIC.ClearView.Capture
+namespace EPIC.ClearView.Pages.Capture
 {
 	// Token: 0x0200006D RID: 109
 	public partial class Manage : Page

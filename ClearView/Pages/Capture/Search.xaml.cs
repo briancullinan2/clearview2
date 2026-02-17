@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace EPIC.ClearView.Capture
+namespace EPIC.ClearView.Pages.Capture
 {
     // Token: 0x02000068 RID: 104
     public partial class Search : Page
