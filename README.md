@@ -23,7 +23,7 @@ This version solved some major critical design flaws. The most major and technic
 Maybe there is a bug in Maths.cs or maybe the bug it further embedded into the missing MATLAB code, which was basically just running linear regression.
 The most major part I shot for an tested was using existing calibration images and passing known results and getting the same numbers.
 This would mean the database and MATLAB and wiring all worked correctly compared to the previous version.
-The previous version had a handful of minor but dibilitating bugs that this version fixed, I'll list them now.
+The previous version had a handful of minor but debilitating bugs that this version fixed, I'll list them now.
 When a web cam was plugged in, if two applications tried to access the same camera, it would blue screen. This was a windows bug and even the
 scanner add could trigger it.
 When the application was opened, sometimes it would trigger this bug if the camera settings dialog was also opened. We fixed this in the 
@@ -37,6 +37,18 @@ The installer program made some GPO changes to turn off indexing and virus prote
 The original version had so much extra weight of UI controls that panels would flash as they load. The whole pluggable extensions that do a ton and very little at the same time was a huge burden on the whole system.
 
 ### Log
+
+#### 2/17/2026
+
+Finally started work on permissions but its been slow. Having fun adding templated forms tied directly to the static type on the DataLayer entity model.
+Doing lots of abstracting so my templates are more concise. Trying to get general pages down to less than 200 LOC. I've abstracted the searching into a control template in a resource file.
+I also abstracted the RibbonTabs into their respective resources. The nice thing it is makes it possible to override with some templating trickery I can do on page load with the resources.
+The shitty thing is it makes it impossible to view the control templates in the editor. But I am betting I could override/extend ContentControl and get it to load editable template.
+
+![ClearView][./Docs/Screenshot%202026-02-17%20133251.png?raw=true]
+
+![ClearView][./Docs/Screenshot%202026-02-17%20133342.png?raw=true]
+
 
 #### 2/14/2026
 
@@ -52,11 +64,12 @@ There was another calibration page for listing tons of calibration images vertic
 that I created from within the MATLAB subscription to speed up processing I figured all the machined with Intel processors could run it, and I also built a general version too.
 I added MATLAB functionality I'll probably never see again from comprehending their previous PhD code, I added the colorization functions back into the app and I added some parameter efficiency fixes.
 
-I started to enterain the idea of using open CV to do the exact same work as MATLAB but all comprehendable from C#, I had this level of understanding of the MATLAB code and it wasn't very complicated for a seasoned mathemetician.
+I started to entertain the idea of using open CV to do the exact same work as MATLAB but all comprehendible from C#, I had this level of understanding of the MATLAB code and it wasn't very complicated for a seasoned mathemetician.
 When I was planning the 3D organ system mapping feature I needed some extra gaming virtual worlds polymath that I have now from working on the engine, so I could probably tack this next after permissions/i18n.
 All the i18n stuff in my old worked on version was loading from the database. There we're open file dialogs for loading old records off the hard drive, it was really turning in to a medical information
 development tool, and that's what I'll make this one do. Maybe someday, I'll turn the app part into the life tracker or home security system I was dreaming of with a bunch of plugins and hard functionality sorted out.
 Never too late for a pivot.
+
 
 
 
