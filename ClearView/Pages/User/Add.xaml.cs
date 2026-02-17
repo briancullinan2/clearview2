@@ -118,7 +118,7 @@ namespace EPIC.ClearView.Pages.User
         }
 
         // Token: 0x04000140 RID: 320
-        public static readonly DependencyProperty UserProperty = DependencyProperty.Register("User", typeof(DataLayer.Entities.User), typeof(Add), new PropertyMetadata(new DataLayer.Entities.User()));
+        public static readonly DependencyProperty UserProperty = DependencyProperty.Register("User", typeof(DataLayer.Entities.User), typeof(Add), new System.Windows.PropertyMetadata(new DataLayer.Entities.User()));
 
         private void RibbonToggleButton_Unchecked(object sender, RoutedEventArgs e)
         {

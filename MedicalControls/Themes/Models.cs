@@ -10,10 +10,83 @@ using System.Windows.Controls;
 
 namespace EPIC.MedicalControls.Themes
 {
+    public class PropertyMetadata
+    {
+        // The "Old Object" we are wrapping
+        protected readonly PropertyInfo _info;
+
+        public string Name => _info.Name;
+        public Type PropertyType => _info.PropertyType;
+        public MemberTypes MemberType => _info.MemberType;
+        public Type DeclaringType => _info.DeclaringType;
+
+        // Your custom extended properties
+        public int? MaxLength { get; private set; }
+        public string DisplayName { get; private set; }
+        public string? GroupName { get; private set; }
+        public string? Category { get; private set; }
+
+        internal PropertyMetadata(PropertyInfo info)
+        {
+            _info = info ?? throw new ArgumentNullException(nameof(info));
+
+            // Initialize your custom lookups once here
+            MaxLength = _info.GetCustomAttribute<MaxLengthAttribute>()?.Length ?? _info.GetCustomAttribute<StringLengthAttribute>()?.MaximumLength;
+            DisplayName = _info.GetCustomAttribute<DisplayAttribute>()?.Name ?? _info.Name;
+            GroupName = _info.GetCustomAttribute<DisplayAttribute>()?.GroupName;
+            Category = _info.GetCustomAttribute<CategoryAttribute>()?.Category;
+        }
+
+        // You can even wrap the actual Get/Set calls
+        public object? GetValue(object obj) => _info.GetValue(obj);
+        public void SetValue(object obj, object? value) => _info.SetValue(obj, value);
+    }
+
+
+    public class AttributeValueIndexer<TValue>
+    {
+        private readonly IEnumerable<PropertyMetadata> _source;
+        private readonly Func<PropertyMetadata, TValue> _selector;
+        private readonly Dictionary<string, TValue?> _cache = new();
+
+        public AttributeValueIndexer(IEnumerable<PropertyMetadata> source, Func<PropertyMetadata, TValue> selector)
+        {
+            _source = source;
+            _selector = selector;
+        }
+
+        public TValue? this[string propertyName]
+        {
+            get
+            {
+                if (_cache.TryGetValue(propertyName, out var value)) return value;
+
+                var prop = _source.FirstOrDefault(p => p.Name == propertyName);
+                return _cache[propertyName] = (prop != null) ? _selector(prop) : default;
+            }
+        }
+    }
+    public class AttributeIndexer
+    {
+        private readonly IEnumerable<PropertyMetadata> _source;
+        private readonly Func<PropertyMetadata, string?> _selector;
+        private readonly Dictionary<string, ObservableCollection<PropertyMetadata>> _cache = new();
+
+        public AttributeIndexer(IEnumerable<PropertyMetadata> source, Func<PropertyMetadata, string?> selector)
+        {
+            _source = source;
+            _selector = selector;
+        }
+
+        public ObservableCollection<PropertyMetadata> this[string key] =>
+            _cache.TryGetValue(key, out var list) ? list : _cache[key] =
+            new ObservableCollection<PropertyMetadata>(_source.Where(p => _selector(p) == key));
+    }
+
     public class EntityMetadata : DependencyObject, INotifyPropertyChanged
     {
         public static readonly DependencyProperty EntityTypeProperty =
-        DependencyProperty.RegisterAttached("EntityType", typeof(Type), typeof(EntityMetadata), new PropertyMetadata(null, OnEntityTypeChanged));
+        DependencyProperty.RegisterAttached("EntityType", typeof(Type), typeof(EntityMetadata), new System.Windows.PropertyMetadata(null, OnEntityTypeChanged));
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -41,20 +114,22 @@ namespace EPIC.MedicalControls.Themes
                                  .Select(x => x.p)
                                  .ToList();
 
-                AllProperties = new ObservableCollection<PropertyInfo>(props);
+                AllProperties = new ObservableCollection<PropertyMetadata>(props.Select(p => new PropertyMetadata(p)));
 
                 // Nested Indexers for the XAML [Brackets]
-                Groups = new AttributeIndexer(AllProperties, p => p.GetCustomAttribute<DisplayAttribute>()?.GroupName);
-                Categories = new AttributeIndexer(AllProperties, p => p.GetCustomAttribute<CategoryAttribute>()?.Category);
+                Groups = new AttributeIndexer(AllProperties, p => p.GroupName);
+                Categories = new AttributeIndexer(AllProperties, p => p.Category);
+                MaxLength = new AttributeValueIndexer<int?>(AllProperties, p => p.MaxLength);
 
             }
         }
 
         public static void SetEntityType(UIElement element, Type value) => element.SetValue(EntityTypeProperty, value);
         public static Type GetEntityType(UIElement element) => (Type)element.GetValue(EntityTypeProperty);
-        public ObservableCollection<PropertyInfo> AllProperties { get; private set; }
-        public AttributeIndexer Groups { get; private set; }
-        public AttributeIndexer Categories { get; private set; }
+        public ObservableCollection<PropertyMetadata>? AllProperties { get; private set; }
+        public AttributeIndexer? Groups { get; private set; }
+        public AttributeIndexer? Categories { get; private set; }
+        public AttributeValueIndexer<int?>? MaxLength { get; private set; }
 
         public EntityMetadata() : base()
         {
@@ -68,22 +143,6 @@ namespace EPIC.MedicalControls.Themes
             // Reflect and Sort - The "One Line" Engine
         }
 
-        public class AttributeIndexer
-        {
-            private readonly IEnumerable<PropertyInfo> _source;
-            private readonly Func<PropertyInfo, string?> _selector;
-            private readonly Dictionary<string, ObservableCollection<PropertyInfo>> _cache = new();
-
-            public AttributeIndexer(IEnumerable<PropertyInfo> source, Func<PropertyInfo, string?> selector)
-            {
-                _source = source;
-                _selector = selector;
-            }
-
-            public ObservableCollection<PropertyInfo> this[string key] =>
-                _cache.TryGetValue(key, out var list) ? list : _cache[key] =
-                new ObservableCollection<PropertyInfo>(_source.Where(p => _selector(p) == key));
-        }
     }
 
     public class EntityMetadata<T> : EntityMetadata where T : DataLayer.Entities.IEntity<T>
@@ -174,11 +233,11 @@ namespace EPIC.MedicalControls.Themes
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public ObservableCollection<System.Reflection.PropertyInfo> UserProperties
+        public ObservableCollection<System.Reflection.PropertyMetadata> UserProperties
         {
             get
             {
-                return (ObservableCollection<System.Reflection.PropertyInfo>)base.GetValue(UserPropertiesProperty);
+                return (ObservableCollection<System.Reflection.PropertyMetadata>)base.GetValue(UserPropertiesProperty);
             }
             private set
             {
@@ -186,7 +245,7 @@ namespace EPIC.MedicalControls.Themes
             }
         }
 
-        public ObservableCollection<System.Reflection.PropertyInfo> UserGroups[string value]
+        public ObservableCollection<System.Reflection.PropertyMetadata> UserGroups[string value]
         {
             get
             {
@@ -194,22 +253,22 @@ namespace EPIC.MedicalControls.Themes
             }
         }
 
-        public static ObservableCollection<System.Reflection.PropertyInfo> User = InitializeModels();
-        private static ObservableCollection<System.Reflection.PropertyInfo> InitializeModels()
+        public static ObservableCollection<System.Reflection.PropertyMetadata> User = InitializeModels();
+        private static ObservableCollection<System.Reflection.PropertyMetadata> InitializeModels()
         {
             var props = typeof(DataLayer.Entities.User).GetProperties();
             var orders = props.Select(x => (prop: x, attr: x.GetCustomAttribute<DisplayAttribute>()))
                               .Select(x => (x.prop, x.attr, order: x.attr?.GetOrder() ?? 1000));
             var sorted = orders.OrderBy(x => x.order).Select(x => x.prop).ToList();
 
-            var collection = new ObservableCollection<System.Reflection.PropertyInfo>(sorted);
+            var collection = new ObservableCollection<System.Reflection.PropertyMetadata>(sorted);
             //var view = CollectionViewSource.GetDefaultView(collection);
             //view.SortDescriptions.Clear();
             return collection;
         }
 
         public static readonly DependencyProperty UserPropertiesProperty =
-        DependencyProperty.RegisterAttached("UserProperties", typeof(ObservableCollection<System.Reflection.PropertyInfo>), typeof(Models),
+        DependencyProperty.RegisterAttached("UserProperties", typeof(ObservableCollection<System.Reflection.PropertyMetadata>), typeof(Models),
         new PropertyMetadata(User));
 
 

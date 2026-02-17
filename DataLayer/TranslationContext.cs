@@ -136,6 +136,19 @@ namespace EPIC.DataLayer
             modelBuilder.Entity<Permission>().ToTable("Permission");
             modelBuilder.Entity<Role>().ToTable("Role");
             modelBuilder.Entity<User>().ToTable("User");
+
+            /*
+            modelBuilder.Entity<User>()
+                .Property(u => u.FirstName)
+                .HasMaxLength(50); // This is the "Gold Standard" for EF
+            */
+
+            /*
+            modelBuilder.Entity<MedicalMessage>()
+                .Property(e => e.VoltageSetting)
+                .HasConversion<int>();
+            */
+
         }
 
         public static TranslationContext Current => Get(_currentString);

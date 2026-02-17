@@ -24,7 +24,7 @@
 		</Grid>
 	</ItemsPanelTemplate>
 
-	<DataTemplate x:Key="UserEntityItemTemplate">
+	<DataTemplate x:Key="UserEntityItemTemplate" DataType="{x:Type general:PropertyMetadata}">
 		<ContentPresenter
             x:Name="Presenter"
             MaxWidth="Infinity"
@@ -46,7 +46,10 @@
 						<DataTemplate>
 							<StackPanel Name="ControlWrapper">
 								<Label Content="{Binding Name}" FontWeight="Bold" />
-								<TextBox Name="PropertyName" Text="{Binding Value}" />
+								<TextBox
+                                    Name="PropertyName"
+                                    MaxLength="{Binding MaxLength}"
+                                    Text="{Binding Value}" />
 							</StackPanel>
 						</DataTemplate>
 					</Setter.Value>
