@@ -45,9 +45,11 @@ Doing lots of abstracting so my templates are more concise. Trying to get genera
 I also abstracted the RibbonTabs into their respective resources. The nice thing it is makes it possible to override with some templating trickery I can do on page load with the resources.
 The shitty thing is it makes it impossible to view the control templates in the editor. But I am betting I could override/extend ContentControl and get it to load editable template.
 
-![ClearView][./Docs/Screenshot%202026-02-17%20133251.png?raw=true]
+![Splash](./Docs/Screenshot%202026-02-17%20134653.png?raw=true)
 
-![ClearView][./Docs/Screenshot%202026-02-17%20133342.png?raw=true]
+![ClearView](./Docs/Screenshot%202026-02-17%20133251.png?raw=true)
+
+![UserAdd](./Docs/Screenshot%202026-02-17%20133342.png?raw=true)
 
 
 #### 2/14/2026
