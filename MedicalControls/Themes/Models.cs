@@ -18,7 +18,7 @@ namespace EPIC.MedicalControls.Themes
         public string Name => _info.Name;
         public Type PropertyType => _info.PropertyType;
         public MemberTypes MemberType => _info.MemberType;
-        public Type DeclaringType => _info.DeclaringType;
+        public Type? DeclaringType => _info.DeclaringType;
 
         // Your custom extended properties
         public int? MaxLength { get; private set; }
@@ -78,9 +78,18 @@ namespace EPIC.MedicalControls.Themes
             _selector = selector;
         }
 
-        public ObservableCollection<PropertyMetadata> this[string key] =>
-            _cache.TryGetValue(key, out var list) ? list : _cache[key] =
-            new ObservableCollection<PropertyMetadata>(_source.Where(p => _selector(p) == key));
+        public ObservableCollection<PropertyMetadata>? this[string key]
+        {
+            get
+            {
+                if (_cache.TryGetValue(key, out var list)) return list;
+
+                var props = _source.Where(p => _selector(p) == key);
+                if (props.Count() > 0) return new ObservableCollection<PropertyMetadata>(props);
+                return null;
+
+            }
+        }
     }
 
     public class EntityMetadata : DependencyObject, INotifyPropertyChanged
@@ -115,10 +124,12 @@ namespace EPIC.MedicalControls.Themes
                                  .ToList();
 
                 AllProperties = new ObservableCollection<PropertyMetadata>(props.Select(p => new PropertyMetadata(p)));
+                Uncategorized = new ObservableCollection<PropertyMetadata>(AllProperties.Where(p => string.IsNullOrWhiteSpace(p.Category) && string.IsNullOrWhiteSpace(p.GroupName)));
 
                 // Nested Indexers for the XAML [Brackets]
                 Groups = new AttributeIndexer(AllProperties, p => p.GroupName);
                 Categories = new AttributeIndexer(AllProperties, p => p.Category);
+                Ungrouped = new AttributeIndexer(AllProperties.Where(p => string.IsNullOrWhiteSpace(p.GroupName)), p => p.Category);
                 MaxLength = new AttributeValueIndexer<int?>(AllProperties, p => p.MaxLength);
 
             }
@@ -127,8 +138,10 @@ namespace EPIC.MedicalControls.Themes
         public static void SetEntityType(UIElement element, Type value) => element.SetValue(EntityTypeProperty, value);
         public static Type GetEntityType(UIElement element) => (Type)element.GetValue(EntityTypeProperty);
         public ObservableCollection<PropertyMetadata>? AllProperties { get; private set; }
+        public ObservableCollection<PropertyMetadata>? Uncategorized { get; private set; }
         public AttributeIndexer? Groups { get; private set; }
         public AttributeIndexer? Categories { get; private set; }
+        public AttributeIndexer? Ungrouped { get; private set; }
         public AttributeValueIndexer<int?>? MaxLength { get; private set; }
 
         public EntityMetadata() : base()
@@ -213,14 +226,28 @@ namespace EPIC.MedicalControls.Themes
             ViewModel = new EntityMetadata<T>();
             DataContext = ViewModel;
             ItemsSource = ViewModel.AllProperties;
-            Style = FindResource(typeof(T).Name + "EntityStyle") as System.Windows.Style;
+            Style = TryFindResource(typeof(T).Name + "EntityStyle") as System.Windows.Style;
         }
 
-        public ModelItemsControl(string GroupName)
+        public ModelItemsControl(string GroupName, bool? Uncategorized = false)
         {
             ViewModel = new EntityMetadata<T>();
             DataContext = ViewModel;
-            ItemsSource = ViewModel.Groups[GroupName];
+            if (Uncategorized == true || string.IsNullOrWhiteSpace(GroupName))
+            {
+                if (Uncategorized == true)
+                {
+                    ItemsSource = ViewModel.Ungrouped?[GroupName]; // Category name
+                }
+                else
+                {
+                    ItemsSource = ViewModel.Uncategorized;
+                }
+            }
+            else
+            {
+                ItemsSource = ViewModel.Groups?[GroupName] ?? ViewModel.Categories?[GroupName];
+            }
             Style = TryFindResource(typeof(T).Name + SafeUrlToTitle(GroupName) + "EntityStyle") as System.Windows.Style;
         }
 
