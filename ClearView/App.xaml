@@ -11,6 +11,7 @@
                 <ResourceDictionary Source="/MedicalControls;component/Themes/Application/RibbonGallery.xaml" />
                 <ResourceDictionary Source="/MedicalControls;component/Themes/Application/RibbonGroup.xaml" />
                 <ResourceDictionary Source="/MedicalControls;component/Themes/Application/RibbonTab.xaml" />
+                <ResourceDictionary Source="/MedicalControls;component/Themes/Application/SearchBar.xaml" />
                 <ResourceDictionary Source="/MedicalControls;component/Themes/Textboxes/PasswordBox.xaml" />
                 <ResourceDictionary Source="/MedicalControls;component/Themes/Textboxes/RichTextBox.xaml" />
                 <ResourceDictionary Source="/MedicalControls;component/Themes/Textboxes/TextBox.xaml" />

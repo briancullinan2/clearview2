@@ -13,59 +13,17 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/MedicalControls;component/Themes/ClearView.xaml" />
+                <ResourceDictionary Source="/Themes/User/Search.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <BitmapImage x:Key="Find" UriSource="/Resources/0025-search.png" />
             <BitmapImage x:Key="NewUser" UriSource="/Resources/4505-user_add.png" />
             <BitmapImage x:Key="ViewUser" UriSource="/Resources/4504-user_search.png" />
             <BitmapImage x:Key="SearchUser" UriSource="/Resources/4504-user_search.png" />
             <BitmapImage x:Key="Permissions" UriSource="/Resources/0080-doc_ok.png" />
-            <ribbon:RibbonTab x:Key="SearchOptions">
-                <RibbonTab.Header>
-                    <TextBlock
-                        Margin="-10,-10,-10,0"
-                        Padding="10,10,10,0"
-                        Text="Options">
-                        <TextBlock.Background>
-                            <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
-                                <LinearGradientBrush.GradientStops>
-                                    <GradientStop Offset="0" Color="#AA008000" />
-                                    <GradientStop Offset="1" Color="#00008000" />
-                                </LinearGradientBrush.GradientStops>
-                            </LinearGradientBrush>
-                        </TextBlock.Background>
-                    </TextBlock>
-                </RibbonTab.Header>
-                <ribbon:RibbonGroup Header="User Options">
-                    <ribbon:RibbonToggleButton
-                        IsChecked="True"
-                        Label="Search"
-                        LargeImageSource="{StaticResource SearchUser}"
-                        Unchecked="RibbonToggleButton_Unchecked" />
-                </ribbon:RibbonGroup>
-                <ribbon:RibbonGroup Header="Actions">
-                    <ribbon:RibbonButton
-                        Click="NewUser_Click"
-                        Label="New User"
-                        LargeImageSource="{StaticResource NewUser}" />
-                </ribbon:RibbonGroup>
-                <ribbon:RibbonGroup Name="UserOptions" Header="User Options">
-                    <ribbon:RibbonButton
-                        Name="UserPermission"
-                        Click="UserPermission_Click"
-                        Label="Permissions"
-                        LargeImageSource="{StaticResource Permissions}" />
-                </ribbon:RibbonGroup>
-            </ribbon:RibbonTab>
+
         </ResourceDictionary>
     </FrameworkElement.Resources>
     <Grid>
-        <FrameworkElement.Resources>
-            <ResourceDictionary>
-                <ResourceDictionary.MergedDictionaries>
-                    <ResourceDictionary Source="/MedicalControls;component/Themes/ClearView.xaml" />
-                </ResourceDictionary.MergedDictionaries>
-            </ResourceDictionary>
-        </FrameworkElement.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -74,44 +32,19 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <Grid Row="0">
-            <Grid.RowDefinitions>
-                <RowDefinition />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-            <Label
-                Grid.Column="0"
-                VerticalAlignment="Center"
-                Content="Search:" />
-            <TextBox
-                Name="SearchText"
-                Grid.Row="1"
-                Grid.Column="1"
-                MinWidth="100"
-                Margin="5"
-                VerticalAlignment="Center"
-                TextChanged="Search_TextChanged" />
-            <Button
-                Grid.RowSpan="2"
-                Grid.Column="2"
-                Margin="5"
-                Padding="3"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Center">
-                <StackPanel Orientation="Horizontal">
-                    <Image
-                        Width="20"
-                        Height="20"
-                        Margin="3,0"
-                        Source="{StaticResource Find}" />
-                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Find</TextBlock>
-                </StackPanel>
-            </Button>
-        </Grid>
+
+        <ribbon:Ribbon Margin="0,-120,0,0" Style="{StaticResource PlainRibbonStyle}">
+            <ribbon:RibbonTab
+                Background="#AA008000"
+                Header="Options"
+                HeaderStyle="{StaticResource ContextualHeaderStyle}"
+                ItemsSource="{StaticResource SearchOptions}"
+                Style="{StaticResource ContextualTabStyle}" />
+        </ribbon:Ribbon>
+
+        <ContentControl Style="{StaticResource SearchControlStyle}" />
+
+
         <Grid Column="0" Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />

@@ -14,9 +14,6 @@
     <d:Page.DataContext>
         <d:DesignInstance IsDesignTimeCreatable="True" Type="controls:DesignTimePermissionsViewModel" />
     </d:Page.DataContext>
-    <controls:DesignTimePermissionsViewModel.PassPageToViewModel>
-        True
-    </controls:DesignTimePermissionsViewModel.PassPageToViewModel>
     <FrameworkElement.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -50,6 +47,7 @@
                 ItemsSource="{StaticResource AlertsTabs}"
                 Style="{StaticResource ContextualTabStyle}" />
         </ribbon:Ribbon>
+
         <ContentControl Style="{StaticResource SearchControlStyle}" />
 
         <TabControl Grid.Row="1" TabStripPlacement="Left">

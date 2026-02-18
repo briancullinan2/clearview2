@@ -41,12 +41,6 @@
                 Style="{StaticResource ContextualTabStyle}" />
         </ribbon:Ribbon>
 
-        <!--<DataGrid
-            Panel.ZIndex="10"
-            AutoGenerateColumns="True"
-            ItemsSource="{Binding Path=UserProperties}"
-            Visibility="Collapsed" />-->
-
         <ContentControl
             Grid.Row="2"
             Grid.ColumnSpan="2"

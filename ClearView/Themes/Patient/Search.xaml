@@ -1,0 +1,36 @@
+<ResourceDictionary
+    x:Class="EPIC.ClearView.Themes.Patient.Search"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ribbon="clr-namespace:System.Windows.Controls.Ribbon;assembly=System.Windows.Controls.Ribbon"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit">
+    <BitmapImage x:Key="Find" UriSource="/Resources/0025-search.png" />
+    <BitmapImage x:Key="NewPatient" UriSource="/Resources/Person-add.jpg" />
+    <BitmapImage x:Key="NewCapture" UriSource="/Resources/0175-camera.png" />
+    <BitmapImage x:Key="ViewPatient" UriSource="/Resources/member-search-icon.gif" />
+    <BitmapImage x:Key="Patients" UriSource="/Resources/4502-users.png" />
+    <BitmapImage x:Key="ExportData" UriSource="/Resources/0002-folder_doc.png" />
+    <BitmapImage x:Key="ViewReport" UriSource="/Resources/0009-doc_search.png" />
+    <BitmapImage x:Key="ViewCalibration" UriSource="/Resources/0021-options_search.png" />
+    <BitmapImage x:Key="ViewCapture" UriSource="/Resources/0175-camera.png" />
+    <BitmapImage x:Key="Compare" UriSource="/Resources/billing_update.gif" />
+    <BitmapImage x:Key="Captures" UriSource="/Resources/0176-scaner.png" />
+    <x:Array x:Key="SearchOptions" Type="{x:Type ribbon:RibbonGroup}">
+        <ribbon:RibbonGroup Header="Patient">
+            <ribbon:RibbonToggleButton
+                IsChecked="True"
+                Label="Search"
+                LargeImageSource="{StaticResource Captures}"
+                Unchecked="RibbonToggleButton_Unchecked" />
+        </ribbon:RibbonGroup>
+        <ribbon:RibbonGroup Header="Actions">
+            <ribbon:RibbonButton Label="Export Data" LargeImageSource="{StaticResource ExportData}" />
+            <ribbon:RibbonButton Label="View Report" LargeImageSource="{StaticResource ViewReport}" />
+            <ribbon:RibbonButton Label="View Calibration" LargeImageSource="{StaticResource ViewCalibration}" />
+            <ribbon:RibbonButton Label="View Capture" LargeImageSource="{StaticResource ViewCapture}" />
+            <ribbon:RibbonButton Label="Compare" LargeImageSource="{StaticResource Compare}" />
+        </ribbon:RibbonGroup>
+    </x:Array>
+</ResourceDictionary>

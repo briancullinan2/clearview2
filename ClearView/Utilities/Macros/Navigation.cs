@@ -281,8 +281,8 @@ namespace EPIC.ClearView.Utilities.Macros
                     if (uri == null || string.IsNullOrWhiteSpace(uri?.OriginalString))
                         return false;
 
-                    return frame.Tag?.ToString()?.Trim('/').Contains(uri.OriginalString.Trim('/')) == true
-                        || frame.Source?.OriginalString.Trim('/').Contains(uri.OriginalString.Trim('/')) == true;
+                    return frame.Tag?.ToString()?.Trim('/').Contains(uri.OriginalString.Trim('/'), StringComparison.CurrentCultureIgnoreCase) == true
+                        || frame.Source?.OriginalString.Trim('/').Contains(uri.OriginalString.Trim('/'), StringComparison.CurrentCultureIgnoreCase) == true;
                 }
                 return false;
             });
@@ -323,14 +323,20 @@ namespace EPIC.ClearView.Utilities.Macros
                 }
             }
         }
-        public static void ShowTab<T>(Uri? uri = null, bool onlyOne = true) where T : Page, new()
+
+        public static void ShowTab(string uri, bool onlyOne = true)
+        {
+            ShowTab(new Uri(uri, UriKind.Relative), onlyOne);
+        }
+
+        public static void ShowTab(Type T, Uri? uri = null, bool onlyOne = true)
         {
             var mainWindow = System.Windows.Application.Current.MainWindow as MainWindow;
             if (mainWindow == null) return;
 
             // 1. Look for an existing tab where the Frame's content matches the TYPE
             // This avoids the 'new' keyword until we are certain we need it.
-            TabItem? existingTab = FindTab(typeof(T), uri);
+            TabItem? existingTab = FindTab(T, uri);
 
             if (onlyOne && existingTab != null)
             {
@@ -340,7 +346,20 @@ namespace EPIC.ClearView.Utilities.Macros
             {
                 // 2. Create the Frame and the Page instance
                 // Because of 'where T : new()', the compiler guarantees this is safe.
-                var pageInstance = new T();
+                var pageInstance = Activator.CreateInstance(T) as Page;
+
+                /*
+                ConstructorInfo ctor = type.GetConstructor(
+                    BindingFlags.Instance | BindingFlags.Public, 
+                    null, 
+                    Type.EmptyTypes, 
+                    null);
+
+                if (ctor != null)
+                {
+                    object instance = ctor.Invoke(null);
+                }
+                */
 
                 Frame frame = new Frame
                 {
@@ -352,12 +371,28 @@ namespace EPIC.ClearView.Utilities.Macros
                 TabItem newTab = new TabItem
                 {
                     Content = frame,
-                    Header = pageInstance.Title ?? typeof(T).Name // Fallback to class name if title is null
+                    Header = pageInstance?.Title ?? T.Name // Fallback to class name if title is null
                 };
 
                 mainWindow.Tabs.Items.Add(newTab);
                 newTab.IsSelected = true;
             }
+
+        }
+
+        public static void ShowTab(Type T, string uri, bool onlyOne = true)
+        {
+            ShowTab(T, new Uri(uri, UriKind.Relative), onlyOne);
+        }
+
+        public static void ShowTab<T>(Uri? uri = null, bool onlyOne = true) where T : Page, new()
+        {
+            ShowTab(typeof(T), uri, onlyOne);
+        }
+
+        public static void ShowTab<T>(string uri, bool onlyOne = true) where T : Page, new()
+        {
+            ShowTab(typeof(T), new Uri(uri, UriKind.Relative), onlyOne);
         }
     }
 }

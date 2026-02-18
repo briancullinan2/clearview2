@@ -10,94 +10,94 @@
     xmlns:ribbon="clr-namespace:System.Windows.Controls.Ribbon;assembly=System.Windows.Controls.Ribbon"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
     mc:Ignorable="d">
-	<ItemsPanelTemplate x:Key="UserEntityPanelTemplate">
-		<Grid>
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="*" />
-				<ColumnDefinition Width="Auto" />
-				<ColumnDefinition Width="*" />
-			</Grid.ColumnDefinitions>
-			<Grid.RowDefinitions>
-				<RowDefinition />
-				<RowDefinition />
-			</Grid.RowDefinitions>
-		</Grid>
-	</ItemsPanelTemplate>
+    <ItemsPanelTemplate x:Key="UserEntityPanelTemplate">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+        </Grid>
+    </ItemsPanelTemplate>
 
-	<DataTemplate x:Key="UserEntityItemTemplate" DataType="{x:Type general:PropertyMetadata}">
-		<ContentPresenter
+
+    <DataTemplate x:Key="PlainTextFieldTemplate" DataType="{x:Type general:PropertyMetadata}">
+        <StackPanel Name="ControlWrapper">
+            <Label Content="{Binding DisplayName}" FontWeight="Bold" />
+            <TextBox
+                Name="PropertyName"
+                MaxLength="{Binding MaxLength}"
+                Text="{Binding Value}" />
+        </StackPanel>
+    </DataTemplate>
+    <DataTemplate x:Key="DefaultFieldTemplate" DataType="{x:Type general:PropertyMetadata}">
+        <StackPanel Name="ControlWrapper">
+            <Label Content="{Binding Name}" Foreground="Gray" />
+            <Label Content="{Binding PropertyType}" Foreground="Gray" />
+        </StackPanel>
+    </DataTemplate>
+
+    <DataTemplate x:Key="UserEntityItemTemplate" DataType="{x:Type general:PropertyMetadata}">
+        <ContentPresenter
             x:Name="Presenter"
             MaxWidth="Infinity"
-            Margin="5">
-			<ContentPresenter.ContentTemplate>
-				<DataTemplate>
-					<Label Content="{Binding Name}" Foreground="Gray" />
-				</DataTemplate>
-			</ContentPresenter.ContentTemplate>
-		</ContentPresenter>
+            Margin="5"
+            ContentTemplate="{StaticResource DefaultFieldTemplate}" />
 
-		<DataTemplate.Triggers>
-			<DataTrigger Binding="{Binding Name}" Value="MiddleInitial">
-				<Setter TargetName="Presenter" Property="MaxWidth" Value="100" />
-			</DataTrigger>
-			<DataTrigger Binding="{Binding PropertyType}" Value="{x:Type system:String}">
-				<Setter TargetName="Presenter" Property="ContentTemplate">
-					<Setter.Value>
-						<DataTemplate>
-							<StackPanel Name="ControlWrapper">
-								<Label Content="{Binding Name}" FontWeight="Bold" />
-								<TextBox
-                                    Name="PropertyName"
-                                    MaxLength="{Binding MaxLength}"
-                                    Text="{Binding Value}" />
-							</StackPanel>
-						</DataTemplate>
-					</Setter.Value>
-				</Setter>
-			</DataTrigger>
-		</DataTemplate.Triggers>
-	</DataTemplate>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding Name}" Value="MiddleInitial">
+                <Setter TargetName="Presenter" Property="MaxWidth" Value="100" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding PropertyType}" Value="{x:Type system:String}">
+                <Setter TargetName="Presenter" Property="ContentTemplate" Value="{StaticResource PlainTextFieldTemplate}" />
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
 
 
-	<Style x:Key="UserItemsGridStyle" TargetType="ContentPresenter">
-		<Setter Property="Grid.Column" Value="0" />
+    <Style x:Key="UserItemsGridStyle" TargetType="ContentPresenter">
+        <Setter Property="Grid.Column" Value="0" />
 
-		<Style.Triggers>
-			<DataTrigger Binding="{Binding Name}" Value="MiddleInitial">
-				<Setter Property="Grid.Column" Value="1" />
-			</DataTrigger>
-			<DataTrigger Binding="{Binding Name}" Value="LastName">
-				<Setter Property="Grid.Column" Value="2" />
-			</DataTrigger>
-		</Style.Triggers>
-	</Style>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Name}" Value="MiddleInitial">
+                <Setter Property="Grid.Column" Value="1" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Name}" Value="LastName">
+                <Setter Property="Grid.Column" Value="2" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
 
-	<Style x:Key="PlainEntityStyle" TargetType="{x:Type ItemsControl}">
-		<Style.Triggers>
-			<DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=Items.Count}" Value="0">
-				<Setter Property="Visibility" Value="Collapsed" />
-			</DataTrigger>
-		</Style.Triggers>
-	</Style>
+    <Style x:Key="PlainEntityStyle" TargetType="{x:Type ItemsControl}">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=Items.Count}" Value="0">
+                <Setter Property="Visibility" Value="Collapsed" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
 
-	<Style
+    <Style
         x:Key="UserEntityStyle"
         BasedOn="{StaticResource PlainEntityStyle}"
         TargetType="{x:Type ItemsControl}">
-		<Setter Property="ItemsSource" Value="{Binding DataContext}" />
-		<Setter Property="ItemsPanel" Value="{StaticResource UserEntityPanelTemplate}" />
+        <Setter Property="ItemsSource" Value="{Binding DataContext}" />
+        <Setter Property="ItemsPanel" Value="{StaticResource UserEntityPanelTemplate}" />
 
-		<Setter Property="ItemContainerStyle" Value="{StaticResource UserItemsGridStyle}" />
-		<Setter Property="ItemTemplate" Value="{StaticResource UserEntityItemTemplate}" />
-	</Style>
+        <Setter Property="ItemContainerStyle" Value="{StaticResource UserItemsGridStyle}" />
+        <Setter Property="ItemTemplate" Value="{StaticResource UserEntityItemTemplate}" />
+    </Style>
 
 
-	<Style
+    <Style
         x:Key="UserLoginEntityStyle"
         BasedOn="{StaticResource PlainEntityStyle}"
         TargetType="{x:Type ItemsControl}">
-		<Setter Property="ItemsSource" Value="{Binding DataContext}" />
-		<Setter Property="ItemContainerStyle" Value="{StaticResource UserItemsGridStyle}" />
-		<Setter Property="ItemTemplate" Value="{StaticResource UserEntityItemTemplate}" />
-	</Style>
+        <Setter Property="ItemsSource" Value="{Binding DataContext}" />
+        <Setter Property="ItemContainerStyle" Value="{StaticResource UserItemsGridStyle}" />
+        <Setter Property="ItemTemplate" Value="{StaticResource UserEntityItemTemplate}" />
+    </Style>
 </ResourceDictionary>

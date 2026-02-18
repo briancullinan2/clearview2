@@ -1,5 +1,4 @@
-﻿using SQLitePCL;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
@@ -181,6 +180,7 @@ namespace EPIC.MedicalControls.Themes
     }
 
     //[DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(EntityMetadata))]
+    /*
     [Preserve]
     public class UserProperties : EntityMetadata<DataLayer.Entities.User>
     {
@@ -196,6 +196,7 @@ namespace EPIC.MedicalControls.Themes
     {
 
     }
+    */
 
 
     public class ModelItemsControl<T> : ItemsControl where T : DataLayer.Entities.IEntity<T>

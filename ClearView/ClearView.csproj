@@ -172,7 +172,6 @@
 
 	<ItemGroup>
 	  <Folder Include="Themes\Capture\" />
-	  <Folder Include="Themes\Patient\" />
 	</ItemGroup>
 
 </Project>

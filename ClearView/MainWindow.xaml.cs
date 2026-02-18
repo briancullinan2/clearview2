@@ -5,24 +5,42 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Ribbon;
+using System.Windows.Input;
 using System.Windows.Navigation;
 
 namespace EPIC.ClearView
 {
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static readonly RoutedUICommand ShowTab = new RoutedUICommand("Show Tab", "ShowTab", typeof(MainWindow));
         public MainWindow()
         {
             ContentRendered += MainWindow_OnContentRendered;
-            //base.InputBindings.Add(new InputBinding(new RelayCommand(new Action<object>(this.NextTab), null), new KeyGesture(Key.Tab, ModifierKeys.Control)));
-            //base.InputBindings.Add(new InputBinding(new RelayCommand(new Action<object>(this.PreviousTab), null), new KeyGesture(Key.Tab, ModifierKeys.Control | ModifierKeys.Shift)));
-            //Task.Run(new Action(this.ClockThread));
+            CommandBindings.Add(new CommandBinding(ShowTab, (s, e) =>
+            {
+                if (typeof(Type).IsAssignableFrom(e.Parameter?.GetType()))
+                {
+                    Navigation.ShowTab(e.Parameter as Type);
+                }
+                else
+                {
+                    Navigation.ShowTab(e.Parameter?.ToString());
+                }
+            }));
+            Resources["ShowTabCommand"] = ShowTab;
+            System.Windows.Application.Current.Resources["ShowTabCommand"] = ShowTab;
+            //CommandBindings.Add(new CommandBinding(NavigationCommands.CloseTab, (s, e) =>
+            //{
+            //    var relay = new Utilities.Commands.RelayCommand(new Action<object>(this.NextTab), null)
+            //}));
 
             InitializeComponent();
-
+            InputBindings.Add(new InputBinding(new Utilities.Commands.RelayCommand(new Action<object>(this.NextTab), null), new KeyGesture(Key.Tab, ModifierKeys.Control)));
+            InputBindings.Add(new InputBinding(new Utilities.Commands.RelayCommand(new Action<object>(this.PreviousTab), null), new KeyGesture(Key.Tab, ModifierKeys.Control | ModifierKeys.Shift)));
             Task.Run(new Action(ClockThread));
             /*
             // apply invert
@@ -61,7 +79,7 @@ namespace EPIC.ClearView
         // Token: 0x06000353 RID: 851 RVA: 0x0001B508 File Offset: 0x00019708
         private void NextTab(object o)
         {
-            TabItem tabItem = this.Tabs.Items.OfType<TabItem>().FirstOrDefault((TabItem x) => x.IsSelected);
+            TabItem? tabItem = this.Tabs.Items.OfType<TabItem>().FirstOrDefault((TabItem x) => x.IsSelected);
             if (tabItem != null)
             {
                 int num = this.Tabs.Items.IndexOf(tabItem);
@@ -72,7 +90,7 @@ namespace EPIC.ClearView
         // Token: 0x06000354 RID: 852 RVA: 0x0001B5BC File Offset: 0x000197BC
         private void PreviousTab(object o)
         {
-            TabItem tabItem = this.Tabs.Items.OfType<TabItem>().FirstOrDefault((TabItem x) => x.IsSelected);
+            TabItem? tabItem = this.Tabs.Items.OfType<TabItem>().FirstOrDefault((TabItem x) => x.IsSelected);
             if (tabItem != null)
             {
                 int num = this.Tabs.Items.IndexOf(tabItem);
@@ -137,55 +155,55 @@ namespace EPIC.ClearView
         // Token: 0x06000356 RID: 854 RVA: 0x0001B920 File Offset: 0x00019B20
         private void AccountManage_Click(object sender, RoutedEventArgs e)
         {
-            Navigation.ShowTab<Pages.Capture.Manage>(null, true);
+            Navigation.ShowTab<Pages.Capture.Manage>("capture/manage.xaml", true);
         }
 
         // Token: 0x06000357 RID: 855 RVA: 0x0001B944 File Offset: 0x00019B44
         private void Patients_Click(object sender, RoutedEventArgs e)
         {
-            Navigation.ShowTab<Pages.Patient.Search>(null, true);
+            Navigation.ShowTab<Pages.Patient.Search>("patient/search.xaml", true);
         }
 
         // Token: 0x06000358 RID: 856 RVA: 0x0001B968 File Offset: 0x00019B68
         private void Captures_Click(object sender, RoutedEventArgs e)
         {
-            Navigation.ShowTab<Pages.Capture.Search>(null, true);
+            Navigation.ShowTab<Pages.Capture.Search>("capture/search.xaml", true);
         }
 
         // Token: 0x06000359 RID: 857 RVA: 0x0001B98C File Offset: 0x00019B8C
         private void UserAdd_Click(object sender, RoutedEventArgs e)
         {
-            Navigation.ShowTab<Pages.User.Add>(null, true);
+            Navigation.ShowTab<Pages.User.Add>("user/add.xaml", true);
         }
 
         // Token: 0x0600035A RID: 858 RVA: 0x0001B9B0 File Offset: 0x00019BB0
         private void UserSearch_Click(object sender, RoutedEventArgs e)
         {
-            Navigation.ShowTab<Pages.User.Search>(null, true);
+            Navigation.ShowTab<Pages.User.Search>("user/search.xaml", true);
         }
 
         // Token: 0x0600035B RID: 859 RVA: 0x0001B9D4 File Offset: 0x00019BD4
         private void ApplicationSettings_Click(object sender, RoutedEventArgs e)
         {
-            Navigation.ShowTab<Pages.Application.Settings>(null, true);
+            Navigation.ShowTab<Pages.Application.Settings>("settings.xaml", true);
         }
 
         // Token: 0x0600035C RID: 860 RVA: 0x0001B9F8 File Offset: 0x00019BF8
         private void UserPermission_Click(object sender, RoutedEventArgs e)
         {
-            Navigation.ShowTab<Pages.Application.Permissions>(null, true);
+            Navigation.ShowTab<Pages.Application.Permissions>("permissions.xaml", true);
         }
 
         // Token: 0x0600035D RID: 861 RVA: 0x0001BA1C File Offset: 0x00019C1C
         private void Calibrate_Click(object sender, RoutedEventArgs e)
         {
-            Navigation.ShowTab<Pages.Capture.Calibrate>(null, true);
+            Navigation.ShowTab<Pages.Capture.Calibrate>("calibrate.xaml", true);
         }
 
         // Token: 0x0600035E RID: 862 RVA: 0x0001BA40 File Offset: 0x00019C40
         private void NewCapture_Click(object sender, RoutedEventArgs e)
         {
-            Navigation.ShowTab<Pages.Capture.Scan>(null, true);
+            Navigation.ShowTab<Pages.Capture.Scan>("scan.xaml", true);
         }
 
         // Token: 0x0600035F RID: 863 RVA: 0x0001BAB8 File Offset: 0x00019CB8
@@ -328,13 +346,17 @@ namespace EPIC.ClearView
 
         private void AccountWelcome_Checked(object sender, RoutedEventArgs e)
         {
-            Uri uri = new Uri("/Pages/Application/Welcome.xaml", UriKind.Relative);
-            Navigation.ShowTab(uri, true);
+            //Uri uri = new Uri("/Pages/Application/Welcome.xaml", UriKind.Relative);
+            Navigation.ShowTab<Pages.Application.Welcome>("welcome.xaml", true);
         }
 
         private void AccountWelcome_Unchecked(object sender, RoutedEventArgs e)
         {
             var tab = this.Tabs.Items.OfType<TabItem>().FirstOrDefault(x => (x.Content as Frame).Source.OriginalString.Trim('/').Contains("Pages/Application/Welcome.xaml"));
+            if (tab == null)
+            {
+                return;
+            }
             Navigation.CloseTab(tab);
         }
 

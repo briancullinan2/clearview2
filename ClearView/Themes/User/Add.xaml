@@ -8,24 +8,24 @@
     xmlns:primitives="clr-namespace:System.Windows.Controls.Ribbon.Primitives;assembly=System.Windows.Controls.Ribbon"
     xmlns:ribbon="clr-namespace:System.Windows.Controls.Ribbon;assembly=System.Windows.Controls.Ribbon"
     xmlns:system="clr-namespace:System;assembly=mscorlib">
-	<BitmapImage x:Key="Save" UriSource="/Resources/0040-save.png" />
-	<BitmapImage x:Key="Cancel" UriSource="/Resources/1001-cancel.png" />
-	<BitmapImage x:Key="NewUser" UriSource="/Resources/4505-user_add.png" />
-	<x:Array x:Key="AddTabs" Type="{x:Type ribbon:RibbonGroup}">
-		<ribbon:RibbonGroup Header="User Options">
-			<ribbon:RibbonToggleButton
+    <BitmapImage x:Key="Save" UriSource="/Resources/0040-save.png" />
+    <BitmapImage x:Key="Cancel" UriSource="/Resources/1001-cancel.png" />
+    <BitmapImage x:Key="NewUser" UriSource="/Resources/4505-user_add.png" />
+    <x:Array x:Key="AddTabs" Type="{x:Type ribbon:RibbonGroup}">
+        <ribbon:RibbonGroup Header="User Options">
+            <ribbon:RibbonToggleButton
                 IsChecked="True"
                 Label="New User"
                 LargeImageSource="{StaticResource NewUser}"
                 Unchecked="RibbonToggleButton_Unchecked" />
-		</ribbon:RibbonGroup>
-		<ribbon:RibbonGroup Header="Actions">
-			<ribbon:RibbonButton
+        </ribbon:RibbonGroup>
+        <ribbon:RibbonGroup Header="Actions">
+            <ribbon:RibbonButton
                 Click="SaveClose_Click"
                 Label="Save and Close"
                 LargeImageSource="{StaticResource Save}" />
-		</ribbon:RibbonGroup>
-	</x:Array>
+        </ribbon:RibbonGroup>
+    </x:Array>
 
 
 </ResourceDictionary>

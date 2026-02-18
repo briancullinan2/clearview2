@@ -137,7 +137,7 @@ namespace EPIC.ClearView.Pages.Capture
         private void Scan_Loaded(object sender, RoutedEventArgs e)
         {
             General.Connect(new CameraInterface.Utilities.FrameCallback(this.FrameCallback), ClearViewConfiguration.Current.Device?.Camera, "Loading cameras...", "Loading devices...", "Reconnecting...");
-            if (base.NavigationService != null)
+            if (base.NavigationService != null && NavigationService.CurrentSource != null)
             {
                 int num = base.NavigationService.CurrentSource.OriginalString.IndexOf("?", StringComparison.InvariantCultureIgnoreCase);
                 int patientId;
