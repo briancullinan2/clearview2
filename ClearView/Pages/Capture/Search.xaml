@@ -6,9 +6,13 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ribbon="clr-namespace:System.Windows.Controls.Ribbon;assembly=System.Windows.Controls.Ribbon"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-    Title="Search Captures">
+    Title="Search Captures"
+    mc:Ignorable="d">
     <FrameworkElement.Resources>
         <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Themes/Capture/Search.xaml" />
+            </ResourceDictionary.MergedDictionaries>
             <BitmapImage x:Key="Find" UriSource="/Resources/0025-search.png" />
             <BitmapImage x:Key="ExportData" UriSource="/Resources/0002-folder_doc.png" />
             <BitmapImage x:Key="ViewReport" UriSource="/Resources/0009-doc_search.png" />
@@ -16,37 +20,6 @@
             <BitmapImage x:Key="ViewCapture" UriSource="/Resources/0175-camera.png" />
             <BitmapImage x:Key="Compare" UriSource="/Resources/billing_update.gif" />
             <BitmapImage x:Key="Captures" UriSource="/Resources/0176-scaner.png" />
-            <ribbon:RibbonTab x:Key="SearchOptions">
-                <RibbonTab.Header>
-                    <TextBlock
-                        Margin="-10,-10,-10,0"
-                        Padding="10,10,10,0"
-                        Text="Search">
-                        <TextBlock.Background>
-                            <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
-                                <LinearGradientBrush.GradientStops>
-                                    <GradientStop Offset="0" Color="#AA0000FF" />
-                                    <GradientStop Offset="1" Color="#000000FF" />
-                                </LinearGradientBrush.GradientStops>
-                            </LinearGradientBrush>
-                        </TextBlock.Background>
-                    </TextBlock>
-                </RibbonTab.Header>
-                <ribbon:RibbonGroup Header="Patient">
-                    <ribbon:RibbonToggleButton
-                        IsChecked="True"
-                        Label="Search"
-                        LargeImageSource="{StaticResource Captures}"
-                        Unchecked="RibbonToggleButton_Unchecked" />
-                </ribbon:RibbonGroup>
-                <ribbon:RibbonGroup Header="Actions">
-                    <ribbon:RibbonButton Label="Export Data" LargeImageSource="{StaticResource ExportData}" />
-                    <ribbon:RibbonButton Label="View Report" LargeImageSource="{StaticResource ViewReport}" />
-                    <ribbon:RibbonButton Label="View Calibration" LargeImageSource="{StaticResource ViewCalibration}" />
-                    <ribbon:RibbonButton Label="View Capture" LargeImageSource="{StaticResource ViewCapture}" />
-                    <ribbon:RibbonButton Label="Compare" LargeImageSource="{StaticResource Compare}" />
-                </ribbon:RibbonGroup>
-            </ribbon:RibbonTab>
         </ResourceDictionary>
     </FrameworkElement.Resources>
     <Grid>
@@ -58,42 +31,27 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <Grid Row="0">
-            <Grid.RowDefinitions>
-                <RowDefinition />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-            <Label
-                Grid.Column="0"
-                VerticalAlignment="Center"
-                Content="Search:" />
-            <TextBox
-                Name="SearchText"
-                Grid.Column="1"
-                MinWidth="100"
-                Margin="5"
-                VerticalAlignment="Center"
-                TextChanged="Search_TextChanged" />
-            <Button
-                Grid.Column="2"
-                Margin="5"
-                Padding="3"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Center">
-                <StackPanel Orientation="Horizontal">
-                    <Image
-                        Width="20"
-                        Height="20"
-                        Margin="3,0"
-                        Source="{StaticResource Find}" />
-                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Find</TextBlock>
-                </StackPanel>
-            </Button>
-        </Grid>
+
+        <ribbon:Ribbon
+            Grid.ColumnSpan="3"
+            Margin="0,-120,0,0"
+            Style="{StaticResource PlainRibbonStyle}">
+            <ribbon:RibbonTab
+                Header="Search"
+                ItemsSource="{StaticResource SearchOptions}"
+                Style="{StaticResource ContextualTabStyle}">
+                <ribbon:RibbonTab.HeaderStyle>
+                    <Style BasedOn="{StaticResource ContextualHeaderStyle}" TargetType="{x:Type ribbon:RibbonTabHeader}">
+                        <Setter Property="FocusedBackground" Value="#AA0000FF" />
+
+                    </Style>
+                </ribbon:RibbonTab.HeaderStyle>
+            </ribbon:RibbonTab>
+        </ribbon:Ribbon>
+
+
+        <ContentControl Style="{StaticResource SearchControlStyle}" />
+
         <Grid Column="0" Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
@@ -166,6 +124,7 @@
         <DataGrid
             Name="Treatments"
             Grid.Row="1"
+            d:MinHeight="300"
             AutoGenerateColumns="False"
             CanUserResizeRows="False"
             IsReadOnly="True"

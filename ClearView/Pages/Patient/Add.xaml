@@ -14,7 +14,7 @@
     <FrameworkElement.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/MedicalControls;component/Themes/ClearView.xaml" />
+                <ResourceDictionary Source="/Themes/Patient/Add.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <BitmapImage x:Key="NewCapture" UriSource="/Resources/0175-camera.png" />
             <BitmapImage x:Key="Save" UriSource="/Resources/0040-save.png" />
@@ -28,37 +28,7 @@
                     <x:Type TypeName="customization:Gender" />
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
-            <ribbon:RibbonTab x:Key="AddOptions">
-                <RibbonTab.Header>
-                    <TextBlock
-                        Margin="-10,-10,-10,0"
-                        Padding="10,10,10,0"
-                        Text="Options">
-                        <TextBlock.Background>
-                            <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
-                                <LinearGradientBrush.GradientStops>
-                                    <GradientStop Offset="0" Color="#AA008080" />
-                                    <GradientStop Offset="1" Color="#00008080" />
-                                </LinearGradientBrush.GradientStops>
-                            </LinearGradientBrush>
-                        </TextBlock.Background>
-                    </TextBlock>
-                </RibbonTab.Header>
-                <ribbon:RibbonGroup Header="Search">
-                    <ribbon:RibbonToggleButton
-                        IsChecked="True"
-                        Label="New Patient"
-                        LargeImageSource="{StaticResource NewPatient}"
-                        Unchecked="RibbonToggleButton_Unchecked" />
-                </ribbon:RibbonGroup>
-                <ribbon:RibbonGroup Header="Actions">
-                    <ribbon:RibbonButton
-                        Click="SaveClose_Click"
-                        Label="Save and Close"
-                        LargeImageSource="{StaticResource Save}" />
-                    <ribbon:RibbonButton Label="New Capture" LargeImageSource="{StaticResource NewCapture}" />
-                </ribbon:RibbonGroup>
-            </ribbon:RibbonTab>
+
         </ResourceDictionary>
     </FrameworkElement.Resources>
     <Grid>
@@ -66,6 +36,16 @@
             <RowDefinition />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+
+        <ribbon:Ribbon Margin="0,-120,0,0" Style="{StaticResource PlainRibbonStyle}">
+            <ribbon:RibbonTab
+                Background="#AA008080"
+                Header="Search"
+                HeaderStyle="{StaticResource ContextualHeaderStyle}"
+                ItemsSource="{StaticResource AddOptions}"
+                Style="{StaticResource ContextualTabStyle}" />
+        </ribbon:Ribbon>
+
         <StackPanel
             Grid.Row="2"
             HorizontalAlignment="Right"

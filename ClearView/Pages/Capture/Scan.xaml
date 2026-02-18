@@ -5,6 +5,7 @@
     xmlns:controls="clr-namespace:EPIC.MedicalControls.Controls.Capture;assembly=MedicalControls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ribbon="clr-namespace:System.Windows.Controls.Ribbon;assembly=System.Windows.Controls.Ribbon"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     Title="New Scan"
     d:DesignHeight="600"
@@ -16,6 +17,9 @@
     mc:Ignorable="d controls">
     <FrameworkElement.Resources>
         <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Themes/Capture/Scan.xaml" />
+            </ResourceDictionary.MergedDictionaries>
             <BitmapImage x:Key="Cancel" UriSource="/Resources/1001-cancel.png" />
             <BitmapImage x:Key="ExportData" UriSource="/Resources/0002-folder_doc.png" />
             <BitmapImage x:Key="ViewReport" UriSource="/Resources/0009-doc_search.png" />
@@ -40,433 +44,453 @@
             <BitmapImage x:Key="Hand5R" UriSource="/Resources/5R.gif" />
         </ResourceDictionary>
     </FrameworkElement.Resources>
-    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-        <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <StackPanel
-                Grid.Column="0"
-                HorizontalAlignment="Right"
-                Orientation="Vertical">
-                <Label HorizontalAlignment="Center" Content="Captured Image" />
-                <Border
-                    Margin="5"
-                    HorizontalAlignment="Center"
-                    BorderThickness="1">
-                    <FrameworkElement.Style>
-                        <Style TargetType="{x:Type Border}">
-                            <Setter Property="BorderBrush" Value="{x:Null}" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding ElementName=Capture, Path=Source}" Value="{x:Null}">
-                                    <Setter Property="BorderBrush" Value="#FF000000" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </FrameworkElement.Style>
-                    <Grid>
-                        <Image
-                            Name="Capture"
-                            Width="320"
-                            Height="240"
-                            Source="{Binding Selected.Image}" />
-                        <Image Source="{Binding Selected.Orientation}" Stretch="None">
-                            <FrameworkElement.Style>
-                                <Style TargetType="{x:Type Image}">
-                                    <Setter Property="Visibility" Value="Visible" />
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding ElementName=ShowAxis, Path=IsChecked}" Value="False">
-                                            <Setter Property="Visibility" Value="Hidden" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </FrameworkElement.Style>
-                        </Image>
-                    </Grid>
-                </Border>
-                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                    <Label
-                        Padding="2"
-                        VerticalAlignment="Center"
-                        Content="Angle:" />
-                    <RepeatButton
-                        VerticalAlignment="Center"
-                        Click="Move_Click"
-                        Tag="CounterClockwise">
-                        <Image Source="{StaticResource CCW}" />
-                    </RepeatButton>
-                    <xctk:IntegerUpDown
-                        x:Name="Angle"
-                        FrameworkElement.MinWidth="45"
-                        FrameworkElement.VerticalAlignment="Center"
-                        Maximum="359"
-                        Value="{Binding Selected.Result.Angle}" />
-                    <RepeatButton
-                        VerticalAlignment="Center"
-                        Click="Move_Click"
-                        Tag="Clockwise">
-                        <Image Source="{StaticResource CW}" />
-                    </RepeatButton>
-                    <Label
-                        Padding="2"
-                        VerticalAlignment="Center"
-                        Content="X:" />
-                    <RepeatButton
-                        VerticalAlignment="Center"
-                        Click="Move_Click"
-                        Tag="Left">
-                        <Image Source="{StaticResource Left}" />
-                    </RepeatButton>
-                    <xctk:IntegerUpDown
-                        x:Name="X"
-                        FrameworkElement.MinWidth="45"
-                        FrameworkElement.VerticalAlignment="Center"
-                        Minimum="0"
-                        Value="{Binding Selected.Result.CenterX}" />
-                    <RepeatButton
-                        VerticalAlignment="Center"
-                        Click="Move_Click"
-                        Tag="Right">
-                        <Image Source="{StaticResource Right}" />
-                    </RepeatButton>
-                    <Label
-                        Padding="2"
-                        VerticalAlignment="Center"
-                        Content="Y:" />
-                    <RepeatButton
-                        VerticalAlignment="Center"
-                        Click="Move_Click"
-                        Tag="Up">
-                        <Image Source="{StaticResource Up}" />
-                    </RepeatButton>
-                    <xctk:IntegerUpDown
-                        x:Name="Y"
-                        FrameworkElement.MinWidth="45"
-                        FrameworkElement.VerticalAlignment="Center"
-                        Value="{Binding Selected.Result.CenterY}" />
-                    <RepeatButton
-                        VerticalAlignment="Center"
-                        Click="Move_Click"
-                        Tag="Down">
-                        <Image Source="{StaticResource Down}" />
-                    </RepeatButton>
-                </StackPanel>
-            </StackPanel>
-            <StackPanel
-                Grid.Column="1"
-                HorizontalAlignment="Left"
-                Orientation="Vertical">
-                <Label HorizontalAlignment="Center" Content="Finger Preview" />
-                <Border
-                    Margin="5"
-                    HorizontalAlignment="Center"
-                    BorderThickness="1">
-                    <FrameworkElement.Style>
-                        <Style TargetType="{x:Type Border}">
-                            <Setter Property="BorderBrush" Value="{x:Null}" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding ElementName=Preview, Path=Source}" Value="{x:Null}">
-                                    <Setter Property="BorderBrush" Value="#FF000000" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </FrameworkElement.Style>
-                    <Grid>
-                        <Image
-                            Name="Preview"
-                            Width="320"
-                            Height="240" />
-                        <Image Source="{Binding Selected.Orientation}" Stretch="None">
-                            <FrameworkElement.Style>
-                                <Style TargetType="{x:Type Image}">
-                                    <Setter Property="Visibility" Value="Visible" />
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding ElementName=ShowAxis, Path=IsChecked}" Value="False">
-                                            <Setter Property="Visibility" Value="Hidden" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </FrameworkElement.Style>
-                        </Image>
-                    </Grid>
-                </Border>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <CheckBox
-                        Name="ShowAxis"
-                        Margin="5"
-                        VerticalAlignment="Center"
-                        Content="Show Axis/Angle"
-                        IsChecked="True" />
-                    <Button
-                        Grid.Column="1"
-                        Margin="1"
-                        HorizontalAlignment="Center"
-                        Click="Live_Click"
-                        Content="Live Preview" />
-                    <Label
-                        Grid.Column="2"
-                        Padding="2"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Center" />
-                </Grid>
-            </StackPanel>
-            <Grid Column="2">
+
+    <Grid>
+
+        <ribbon:Ribbon Margin="0,-120,0,0" Style="{StaticResource PlainRibbonStyle}">
+            <ribbon:RibbonTab
+                Header="Capture"
+                ItemsSource="{StaticResource ScanOptions}"
+                Style="{StaticResource ContextualTabStyle}">
+                <ribbon:RibbonTab.HeaderStyle>
+                    <Style BasedOn="{StaticResource ContextualHeaderStyle}" TargetType="{x:Type ribbon:RibbonTabHeader}">
+                        <Setter Property="FocusedBackground" Value="#AA0000FF" />
+
+                    </Style>
+                </ribbon:RibbonTab.HeaderStyle>
+            </ribbon:RibbonTab>
+        </ribbon:Ribbon>
+
+
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
                     <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <Border
-                    Margin="0,30,0,0"
-                    BorderBrush="#FF808080"
-                    BorderThickness="2">
-                    <StackPanel Orientation="Horizontal">
-                        <Image
-                            Name="LeftHand"
-                            Width="138"
-                            Height="138"
-                            RenderOptions.BitmapScalingMode="HighQuality"
-                            Source="{StaticResource Hand0L}" />
-                        <Image
-                            Name="RightHand"
-                            Width="138"
-                            Height="138"
-                            RenderOptions.BitmapScalingMode="HighQuality"
-                            Source="{StaticResource Hand0R}" />
-                    </StackPanel>
-                </Border>
-                <GroupBox Grid.Row="1" Header="System Messages">
-                    <Label Content="" />
-                </GroupBox>
-            </Grid>
-            <GroupBox
-                Grid.Row="1"
-                Grid.ColumnSpan="3"
-                Margin="5"
-                Header="Images without Capacitive Barrier">
                 <StackPanel
-                    Name="ImagesWOBarrier"
-                    HorizontalAlignment="Center"
-                    Orientation="Horizontal">
-                    <controls:FingerImage
+                    Grid.Column="0"
+                    HorizontalAlignment="Right"
+                    Orientation="Vertical">
+                    <Label HorizontalAlignment="Center" Content="Captured Image" />
+                    <Border
                         Margin="5"
-                        Finished="FingerImage_Finished"
-                        MouseLeftButtonUp="Select_Image"
-                        MouseRightButtonUp="Load_Image"
-                        Tag="1R" />
-                    <controls:FingerImage
-                        Margin="5"
-                        Finished="FingerImage_Finished"
-                        MouseLeftButtonUp="Select_Image"
-                        MouseRightButtonUp="Load_Image"
-                        Tag="2R" />
-                    <controls:FingerImage
-                        Margin="5"
-                        Finished="FingerImage_Finished"
-                        MouseLeftButtonUp="Select_Image"
-                        MouseRightButtonUp="Load_Image"
-                        Tag="3R" />
-                    <controls:FingerImage
-                        Margin="5"
-                        Finished="FingerImage_Finished"
-                        MouseLeftButtonUp="Select_Image"
-                        MouseRightButtonUp="Load_Image"
-                        Tag="4R" />
-                    <controls:FingerImage
-                        Margin="5"
-                        Finished="FingerImage_Finished"
-                        MouseLeftButtonUp="Select_Image"
-                        MouseRightButtonUp="Load_Image"
-                        Tag="5R" />
-                    <controls:FingerImage
-                        Margin="5"
-                        Finished="FingerImage_Finished"
-                        MouseLeftButtonUp="Select_Image"
-                        MouseRightButtonUp="Load_Image"
-                        Tag="1L" />
-                    <controls:FingerImage
-                        Margin="5"
-                        Finished="FingerImage_Finished"
-                        MouseLeftButtonUp="Select_Image"
-                        MouseRightButtonUp="Load_Image"
-                        Tag="2L" />
-                    <controls:FingerImage
-                        Margin="5"
-                        Finished="FingerImage_Finished"
-                        MouseLeftButtonUp="Select_Image"
-                        MouseRightButtonUp="Load_Image"
-                        Tag="3L" />
-                    <controls:FingerImage
-                        Margin="5"
-                        Finished="FingerImage_Finished"
-                        MouseLeftButtonUp="Select_Image"
-                        MouseRightButtonUp="Load_Image"
-                        Tag="4L" />
-                    <controls:FingerImage
-                        Margin="5"
-                        Finished="FingerImage_Finished"
-                        MouseLeftButtonUp="Select_Image"
-                        MouseRightButtonUp="Load_Image"
-                        Tag="5L" />
-                </StackPanel>
-            </GroupBox>
-            <GroupBox
-                Grid.Row="2"
-                Grid.ColumnSpan="3"
-                Margin="5"
-                Header="Images with Capacitive Barrier">
-                <StackPanel
-                    Name="ImagesWBarrier"
-                    HorizontalAlignment="Center"
-                    Orientation="Horizontal">
-                    <controls:FingerImage
-                        Margin="5"
-                        Filtered="True"
-                        Finished="FingerImage_Finished"
-                        MouseLeftButtonUp="Select_Image"
-                        MouseRightButtonUp="Load_Image"
-                        Tag="1R" />
-                    <controls:FingerImage
-                        Margin="5"
-                        Filtered="True"
-                        Finished="FingerImage_Finished"
-                        MouseLeftButtonUp="Select_Image"
-                        MouseRightButtonUp="Load_Image"
-                        Tag="2R" />
-                    <controls:FingerImage
-                        Margin="5"
-                        Filtered="True"
-                        Finished="FingerImage_Finished"
-                        MouseLeftButtonUp="Select_Image"
-                        MouseRightButtonUp="Load_Image"
-                        Tag="3R" />
-                    <controls:FingerImage
-                        Margin="5"
-                        Filtered="True"
-                        Finished="FingerImage_Finished"
-                        MouseLeftButtonUp="Select_Image"
-                        MouseRightButtonUp="Load_Image"
-                        Tag="4R" />
-                    <controls:FingerImage
-                        Margin="5"
-                        Filtered="True"
-                        Finished="FingerImage_Finished"
-                        MouseLeftButtonUp="Select_Image"
-                        MouseRightButtonUp="Load_Image"
-                        Tag="5R" />
-                    <controls:FingerImage
-                        Margin="5"
-                        Filtered="True"
-                        Finished="FingerImage_Finished"
-                        MouseLeftButtonUp="Select_Image"
-                        MouseRightButtonUp="Load_Image"
-                        Tag="1L" />
-                    <controls:FingerImage
-                        Margin="5"
-                        Filtered="True"
-                        Finished="FingerImage_Finished"
-                        MouseLeftButtonUp="Select_Image"
-                        MouseRightButtonUp="Load_Image"
-                        Tag="2L" />
-                    <controls:FingerImage
-                        Margin="5"
-                        Filtered="True"
-                        Finished="FingerImage_Finished"
-                        MouseLeftButtonUp="Select_Image"
-                        MouseRightButtonUp="Load_Image"
-                        Tag="3L" />
-                    <controls:FingerImage
-                        Margin="5"
-                        Filtered="True"
-                        Finished="FingerImage_Finished"
-                        MouseLeftButtonUp="Select_Image"
-                        MouseRightButtonUp="Load_Image"
-                        Tag="4L" />
-                    <controls:FingerImage
-                        Margin="5"
-                        Filtered="True"
-                        Finished="FingerImage_Finished"
-                        MouseLeftButtonUp="Select_Image"
-                        MouseRightButtonUp="Load_Image"
-                        Tag="5L" />
-                </StackPanel>
-            </GroupBox>
-            <Button
-                Grid.Row="3"
-                Margin="5"
-                Padding="3"
-                HorizontalAlignment="Left">
-                <StackPanel Orientation="Horizontal">
-                    <Image
-                        Width="25"
-                        Height="25"
-                        Margin="3,0"
-                        Source="{StaticResource ExportData}" />
-                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Export Data</TextBlock>
-                </StackPanel>
-            </Button>
-            <StackPanel
-                Grid.Row="3"
-                Grid.Column="1"
-                Grid.ColumnSpan="2"
-                HorizontalAlignment="Right"
-                Orientation="Horizontal">
-                <Button
-                    Margin="5"
-                    Padding="3"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Click="ViewReport_Click">
-                    <StackPanel Orientation="Horizontal">
-                        <Image
-                            Width="25"
-                            Height="25"
-                            Margin="3,0"
-                            Source="{StaticResource ViewReport}" />
-                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">View Report</TextBlock>
-                    </StackPanel>
-                </Button>
-                <Button
-                    Margin="5"
-                    Padding="3"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Click="Capture_Click">
-                    <StackPanel Orientation="Horizontal">
-                        <Image
-                            Width="25"
-                            Height="25"
-                            Margin="3,0"
-                            Source="{StaticResource ViewCapture}" />
-                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Capture Image</TextBlock>
-                    </StackPanel>
-                </Button>
-                <Button Margin="5" Padding="3">
-                    <StackPanel Orientation="Horizontal">
-                        <Image
-                            Width="25"
-                            Height="25"
-                            Margin="3,0"
-                            Source="{StaticResource Cancel}" />
-                        <TextBlock
-                            HorizontalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        BorderThickness="1">
+                        <FrameworkElement.Style>
+                            <Style TargetType="{x:Type Border}">
+                                <Setter Property="BorderBrush" Value="{x:Null}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ElementName=Capture, Path=Source}" Value="{x:Null}">
+                                        <Setter Property="BorderBrush" Value="#FF000000" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </FrameworkElement.Style>
+                        <Grid>
+                            <Image
+                                Name="Capture"
+                                Width="320"
+                                Height="240"
+                                Source="{Binding Selected.Image}" />
+                            <Image Source="{Binding Selected.Orientation}" Stretch="None">
+                                <FrameworkElement.Style>
+                                    <Style TargetType="{x:Type Image}">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ElementName=ShowAxis, Path=IsChecked}" Value="False">
+                                                <Setter Property="Visibility" Value="Hidden" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </FrameworkElement.Style>
+                            </Image>
+                        </Grid>
+                    </Border>
+                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                        <Label
+                            Padding="2"
                             VerticalAlignment="Center"
-                            Text="Close" />
+                            Content="Angle:" />
+                        <RepeatButton
+                            VerticalAlignment="Center"
+                            Click="Move_Click"
+                            Tag="CounterClockwise">
+                            <Image Source="{StaticResource CCW}" />
+                        </RepeatButton>
+                        <xctk:IntegerUpDown
+                            x:Name="Angle"
+                            FrameworkElement.MinWidth="45"
+                            FrameworkElement.VerticalAlignment="Center"
+                            Maximum="359"
+                            Value="{Binding Selected.Result.Angle}" />
+                        <RepeatButton
+                            VerticalAlignment="Center"
+                            Click="Move_Click"
+                            Tag="Clockwise">
+                            <Image Source="{StaticResource CW}" />
+                        </RepeatButton>
+                        <Label
+                            Padding="2"
+                            VerticalAlignment="Center"
+                            Content="X:" />
+                        <RepeatButton
+                            VerticalAlignment="Center"
+                            Click="Move_Click"
+                            Tag="Left">
+                            <Image Source="{StaticResource Left}" />
+                        </RepeatButton>
+                        <xctk:IntegerUpDown
+                            x:Name="X"
+                            FrameworkElement.MinWidth="45"
+                            FrameworkElement.VerticalAlignment="Center"
+                            Minimum="0"
+                            Value="{Binding Selected.Result.CenterX}" />
+                        <RepeatButton
+                            VerticalAlignment="Center"
+                            Click="Move_Click"
+                            Tag="Right">
+                            <Image Source="{StaticResource Right}" />
+                        </RepeatButton>
+                        <Label
+                            Padding="2"
+                            VerticalAlignment="Center"
+                            Content="Y:" />
+                        <RepeatButton
+                            VerticalAlignment="Center"
+                            Click="Move_Click"
+                            Tag="Up">
+                            <Image Source="{StaticResource Up}" />
+                        </RepeatButton>
+                        <xctk:IntegerUpDown
+                            x:Name="Y"
+                            FrameworkElement.MinWidth="45"
+                            FrameworkElement.VerticalAlignment="Center"
+                            Value="{Binding Selected.Result.CenterY}" />
+                        <RepeatButton
+                            VerticalAlignment="Center"
+                            Click="Move_Click"
+                            Tag="Down">
+                            <Image Source="{StaticResource Down}" />
+                        </RepeatButton>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel
+                    Grid.Column="1"
+                    HorizontalAlignment="Left"
+                    Orientation="Vertical">
+                    <Label HorizontalAlignment="Center" Content="Finger Preview" />
+                    <Border
+                        Margin="5"
+                        HorizontalAlignment="Center"
+                        BorderThickness="1">
+                        <FrameworkElement.Style>
+                            <Style TargetType="{x:Type Border}">
+                                <Setter Property="BorderBrush" Value="{x:Null}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ElementName=Preview, Path=Source}" Value="{x:Null}">
+                                        <Setter Property="BorderBrush" Value="#FF000000" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </FrameworkElement.Style>
+                        <Grid>
+                            <Image
+                                Name="Preview"
+                                Width="320"
+                                Height="240" />
+                            <Image Source="{Binding Selected.Orientation}" Stretch="None">
+                                <FrameworkElement.Style>
+                                    <Style TargetType="{x:Type Image}">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ElementName=ShowAxis, Path=IsChecked}" Value="False">
+                                                <Setter Property="Visibility" Value="Hidden" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </FrameworkElement.Style>
+                            </Image>
+                        </Grid>
+                    </Border>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <CheckBox
+                            Name="ShowAxis"
+                            Margin="5"
+                            VerticalAlignment="Center"
+                            Content="Show Axis/Angle"
+                            IsChecked="True" />
+                        <Button
+                            Grid.Column="1"
+                            Margin="1"
+                            HorizontalAlignment="Center"
+                            Click="Live_Click"
+                            Content="Live Preview" />
+                        <Label
+                            Grid.Column="2"
+                            Padding="2"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center" />
+                    </Grid>
+                </StackPanel>
+                <Grid Column="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Border
+                        Margin="0,30,0,0"
+                        BorderBrush="#FF808080"
+                        BorderThickness="2">
+                        <StackPanel Orientation="Horizontal">
+                            <Image
+                                Name="LeftHand"
+                                Width="138"
+                                Height="138"
+                                RenderOptions.BitmapScalingMode="HighQuality"
+                                Source="{StaticResource Hand0L}" />
+                            <Image
+                                Name="RightHand"
+                                Width="138"
+                                Height="138"
+                                RenderOptions.BitmapScalingMode="HighQuality"
+                                Source="{StaticResource Hand0R}" />
+                        </StackPanel>
+                    </Border>
+                    <GroupBox Grid.Row="1" Header="System Messages">
+                        <Label Content="" />
+                    </GroupBox>
+                </Grid>
+                <GroupBox
+                    Grid.Row="1"
+                    Grid.ColumnSpan="3"
+                    Margin="5"
+                    Header="Images without Capacitive Barrier">
+                    <StackPanel
+                        Name="ImagesWOBarrier"
+                        HorizontalAlignment="Center"
+                        Orientation="Horizontal">
+                        <controls:FingerImage
+                            Margin="5"
+                            Finished="FingerImage_Finished"
+                            MouseLeftButtonUp="Select_Image"
+                            MouseRightButtonUp="Load_Image"
+                            Tag="1R" />
+                        <controls:FingerImage
+                            Margin="5"
+                            Finished="FingerImage_Finished"
+                            MouseLeftButtonUp="Select_Image"
+                            MouseRightButtonUp="Load_Image"
+                            Tag="2R" />
+                        <controls:FingerImage
+                            Margin="5"
+                            Finished="FingerImage_Finished"
+                            MouseLeftButtonUp="Select_Image"
+                            MouseRightButtonUp="Load_Image"
+                            Tag="3R" />
+                        <controls:FingerImage
+                            Margin="5"
+                            Finished="FingerImage_Finished"
+                            MouseLeftButtonUp="Select_Image"
+                            MouseRightButtonUp="Load_Image"
+                            Tag="4R" />
+                        <controls:FingerImage
+                            Margin="5"
+                            Finished="FingerImage_Finished"
+                            MouseLeftButtonUp="Select_Image"
+                            MouseRightButtonUp="Load_Image"
+                            Tag="5R" />
+                        <controls:FingerImage
+                            Margin="5"
+                            Finished="FingerImage_Finished"
+                            MouseLeftButtonUp="Select_Image"
+                            MouseRightButtonUp="Load_Image"
+                            Tag="1L" />
+                        <controls:FingerImage
+                            Margin="5"
+                            Finished="FingerImage_Finished"
+                            MouseLeftButtonUp="Select_Image"
+                            MouseRightButtonUp="Load_Image"
+                            Tag="2L" />
+                        <controls:FingerImage
+                            Margin="5"
+                            Finished="FingerImage_Finished"
+                            MouseLeftButtonUp="Select_Image"
+                            MouseRightButtonUp="Load_Image"
+                            Tag="3L" />
+                        <controls:FingerImage
+                            Margin="5"
+                            Finished="FingerImage_Finished"
+                            MouseLeftButtonUp="Select_Image"
+                            MouseRightButtonUp="Load_Image"
+                            Tag="4L" />
+                        <controls:FingerImage
+                            Margin="5"
+                            Finished="FingerImage_Finished"
+                            MouseLeftButtonUp="Select_Image"
+                            MouseRightButtonUp="Load_Image"
+                            Tag="5L" />
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox
+                    Grid.Row="2"
+                    Grid.ColumnSpan="3"
+                    Margin="5"
+                    Header="Images with Capacitive Barrier">
+                    <StackPanel
+                        Name="ImagesWBarrier"
+                        HorizontalAlignment="Center"
+                        Orientation="Horizontal">
+                        <controls:FingerImage
+                            Margin="5"
+                            Filtered="True"
+                            Finished="FingerImage_Finished"
+                            MouseLeftButtonUp="Select_Image"
+                            MouseRightButtonUp="Load_Image"
+                            Tag="1R" />
+                        <controls:FingerImage
+                            Margin="5"
+                            Filtered="True"
+                            Finished="FingerImage_Finished"
+                            MouseLeftButtonUp="Select_Image"
+                            MouseRightButtonUp="Load_Image"
+                            Tag="2R" />
+                        <controls:FingerImage
+                            Margin="5"
+                            Filtered="True"
+                            Finished="FingerImage_Finished"
+                            MouseLeftButtonUp="Select_Image"
+                            MouseRightButtonUp="Load_Image"
+                            Tag="3R" />
+                        <controls:FingerImage
+                            Margin="5"
+                            Filtered="True"
+                            Finished="FingerImage_Finished"
+                            MouseLeftButtonUp="Select_Image"
+                            MouseRightButtonUp="Load_Image"
+                            Tag="4R" />
+                        <controls:FingerImage
+                            Margin="5"
+                            Filtered="True"
+                            Finished="FingerImage_Finished"
+                            MouseLeftButtonUp="Select_Image"
+                            MouseRightButtonUp="Load_Image"
+                            Tag="5R" />
+                        <controls:FingerImage
+                            Margin="5"
+                            Filtered="True"
+                            Finished="FingerImage_Finished"
+                            MouseLeftButtonUp="Select_Image"
+                            MouseRightButtonUp="Load_Image"
+                            Tag="1L" />
+                        <controls:FingerImage
+                            Margin="5"
+                            Filtered="True"
+                            Finished="FingerImage_Finished"
+                            MouseLeftButtonUp="Select_Image"
+                            MouseRightButtonUp="Load_Image"
+                            Tag="2L" />
+                        <controls:FingerImage
+                            Margin="5"
+                            Filtered="True"
+                            Finished="FingerImage_Finished"
+                            MouseLeftButtonUp="Select_Image"
+                            MouseRightButtonUp="Load_Image"
+                            Tag="3L" />
+                        <controls:FingerImage
+                            Margin="5"
+                            Filtered="True"
+                            Finished="FingerImage_Finished"
+                            MouseLeftButtonUp="Select_Image"
+                            MouseRightButtonUp="Load_Image"
+                            Tag="4L" />
+                        <controls:FingerImage
+                            Margin="5"
+                            Filtered="True"
+                            Finished="FingerImage_Finished"
+                            MouseLeftButtonUp="Select_Image"
+                            MouseRightButtonUp="Load_Image"
+                            Tag="5L" />
+                    </StackPanel>
+                </GroupBox>
+                <Button
+                    Grid.Row="3"
+                    Margin="5"
+                    Padding="3"
+                    HorizontalAlignment="Left">
+                    <StackPanel Orientation="Horizontal">
+                        <Image
+                            Width="25"
+                            Height="25"
+                            Margin="3,0"
+                            Source="{StaticResource ExportData}" />
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Export Data</TextBlock>
                     </StackPanel>
                 </Button>
-            </StackPanel>
-        </Grid>
-    </ScrollViewer>
+                <StackPanel
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    Grid.ColumnSpan="2"
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal">
+                    <Button
+                        Margin="5"
+                        Padding="3"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Click="ViewReport_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <Image
+                                Width="25"
+                                Height="25"
+                                Margin="3,0"
+                                Source="{StaticResource ViewReport}" />
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">View Report</TextBlock>
+                        </StackPanel>
+                    </Button>
+                    <Button
+                        Margin="5"
+                        Padding="3"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Click="Capture_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <Image
+                                Width="25"
+                                Height="25"
+                                Margin="3,0"
+                                Source="{StaticResource ViewCapture}" />
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Capture Image</TextBlock>
+                        </StackPanel>
+                    </Button>
+                    <Button Margin="5" Padding="3">
+                        <StackPanel Orientation="Horizontal">
+                            <Image
+                                Width="25"
+                                Height="25"
+                                Margin="3,0"
+                                Source="{StaticResource Cancel}" />
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Text="Close" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
+
+    </Grid>
 </Page>

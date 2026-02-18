@@ -33,7 +33,7 @@ namespace EPIC.CameraInterface
 
         // Token: 0x17000002 RID: 2
         // (get) Token: 0x06000012 RID: 18 RVA: 0x000027FB File Offset: 0x000009FB
-        public List<ICapturable> Cameras
+        public List<ICapturable>? Cameras
         {
             get
             {

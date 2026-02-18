@@ -44,6 +44,7 @@ namespace EPIC.ClearView.Pages.Capture
         public Calibrate()
         {
             this.InitializeComponent();
+            Navigation.InsertRibbon(this);
             base.Loaded += delegate (object sender, RoutedEventArgs args)
             {
                 General.Connect(new FrameCallback(this.FrameCallback), ClearViewConfiguration.Current?.Device?.Camera, "Loading cameras...", "Loading devices...", "Reconnecting...");
@@ -56,6 +57,7 @@ namespace EPIC.ClearView.Pages.Capture
             {
                 this._calibration = null;
             };
+
         }
 
 

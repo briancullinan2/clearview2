@@ -20,42 +20,13 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/MedicalControls;component/Themes/Application/DataGridStyles.xaml" />
+                <ResourceDictionary Source="/Themes/Application/Settings.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <BitmapImage x:Key="NewDevice" UriSource="/Resources/0176-scaner.png" />
             <BitmapImage x:Key="Save" UriSource="/Resources/0040-save.png" />
             <BitmapImage x:Key="Cancel" UriSource="/Resources/1001-cancel.png" />
             <BitmapImage x:Key="Captures" UriSource="/Resources/0176-scaner.png" />
             <BitmapImage x:Key="Settings" UriSource="/Resources/0020-options_edit.png" />
-            <ribbon:RibbonTab x:Key="SettingsOptions" Name="SettingsOptions">
-                <RibbonTab.Header>
-                    <TextBlock
-                        Margin="-10,-10,-10,0"
-                        Padding="10,10,10,0"
-                        Text="Settings">
-                        <TextBlock.Background>
-                            <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
-                                <LinearGradientBrush.GradientStops>
-                                    <GradientStop Offset="0" Color="#AA800080" />
-                                    <GradientStop Offset="1" Color="#00800080" />
-                                </LinearGradientBrush.GradientStops>
-                            </LinearGradientBrush>
-                        </TextBlock.Background>
-                    </TextBlock>
-                </RibbonTab.Header>
-                <ribbon:RibbonGroup Header="Application">
-                    <ribbon:RibbonToggleButton
-                        IsChecked="True"
-                        Label="Settings"
-                        LargeImageSource="{StaticResource Settings}"
-                        Unchecked="RibbonToggleButton_Unchecked" />
-                </ribbon:RibbonGroup>
-                <ribbon:RibbonGroup Header="Device Settings">
-                    <ribbon:RibbonButton
-                        Click="SaveClose_Click"
-                        Label="Save and Close"
-                        LargeImageSource="{StaticResource Save}" />
-                </ribbon:RibbonGroup>
-            </ribbon:RibbonTab>
         </ResourceDictionary>
     </Page.Resources>
     <Grid>
@@ -68,6 +39,25 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
+
+        <ribbon:Ribbon
+            Grid.ColumnSpan="2"
+            Margin="0,-120,0,0"
+            Style="{StaticResource PlainRibbonStyle}">
+            <ribbon:RibbonTab
+                Header="Settings"
+                ItemsSource="{StaticResource SettingsTabs}"
+                Style="{StaticResource ContextualTabStyle}">
+                <ribbon:RibbonTab.HeaderStyle>
+                    <Style BasedOn="{StaticResource ContextualHeaderStyle}" TargetType="{x:Type ribbon:RibbonTabHeader}">
+                        <Setter Property="FocusedBackground" Value="#AA800080" />
+
+                    </Style>
+                </ribbon:RibbonTab.HeaderStyle>
+            </ribbon:RibbonTab>
+        </ribbon:Ribbon>
+
+
         <DataGrid Name="Errors" Visibility="Collapsed">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Error}" Header="Error" />

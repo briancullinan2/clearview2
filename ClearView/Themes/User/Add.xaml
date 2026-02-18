@@ -14,14 +14,14 @@
     <x:Array x:Key="AddTabs" Type="{x:Type ribbon:RibbonGroup}">
         <ribbon:RibbonGroup Header="User Options">
             <ribbon:RibbonToggleButton
+                Command="{DynamicResource CloseTabCommand}"
                 IsChecked="True"
                 Label="New User"
-                LargeImageSource="{StaticResource NewUser}"
-                Unchecked="RibbonToggleButton_Unchecked" />
+                LargeImageSource="{StaticResource NewUser}" />
         </ribbon:RibbonGroup>
         <ribbon:RibbonGroup Header="Actions">
             <ribbon:RibbonButton
-                Click="SaveClose_Click"
+                Command="{DynamicResource CloseTabCommand}"
                 Label="Save and Close"
                 LargeImageSource="{StaticResource Save}" />
         </ribbon:RibbonGroup>

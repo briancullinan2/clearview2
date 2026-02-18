@@ -90,7 +90,7 @@
                                             Padding="3"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center"
-                                            Click="RemoveRole_Click">
+                                            Command="{DynamicResource RemoveRoleCommand}">
                                             <StackPanel Orientation="Horizontal">
                                                 <Image
                                                     Width="25"

@@ -35,23 +35,23 @@
                 <ResourceDictionary Source="/MedicalControls;component/Themes/Application/RibbonGroup.xaml" />
                 <ResourceDictionary Source="/MedicalControls;component/Themes/Textboxes/RibbonComboBox.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <BitmapImage x:Key="Globe" UriSource="Resources/5001-web_search.png" />
-            <BitmapImage x:Key="Patients" UriSource="Resources/4502-users.png" />
-            <BitmapImage x:Key="Captures" UriSource="Resources/0176-scaner.png" />
-            <BitmapImage x:Key="Reports" UriSource="Resources/0197-report.png" />
-            <BitmapImage x:Key="AddUser" UriSource="Resources/4505-user_add.png" />
-            <BitmapImage x:Key="SearchUser" UriSource="Resources/4504-user_search.png" />
-            <BitmapImage x:Key="ViewAlert" UriSource="Resources/0204-scroll_search.png" />
-            <BitmapImage x:Key="ViewAlerts" UriSource="Resources/1004-warning.png" />
-            <BitmapImage x:Key="ChangeLogin" UriSource="Resources/0155-keys.png" />
-            <BitmapImage x:Key="Settings" UriSource="Resources/0020-options_edit.png" />
-            <BitmapImage x:Key="UpdateLogin" UriSource="Resources/0145-task_edit.png" />
-            <BitmapImage x:Key="Exit" UriSource="Resources/1005-exit.png" />
-            <BitmapImage x:Key="ClearView" UriSource="Resources/Clearview.png" />
-            <BitmapImage x:Key="Permissions" UriSource="Resources/0080-doc_ok.png" />
-            <BitmapImage x:Key="Calibrate" UriSource="Resources/0175-camera.png" />
-            <BitmapImage x:Key="Themes" UriSource="Resources/Art.png" />
-            <BitmapImage x:Key="Languages" UriSource="Resources/Select-Language-small.png" />
+            <BitmapImage x:Key="Globe" UriSource="/Resources/5001-web_search.png" />
+            <BitmapImage x:Key="Patients" UriSource="/Resources/4502-users.png" />
+            <BitmapImage x:Key="Captures" UriSource="/Resources/0176-scaner.png" />
+            <BitmapImage x:Key="Reports" UriSource="/Resources/0197-report.png" />
+            <BitmapImage x:Key="AddUser" UriSource="/Resources/4505-user_add.png" />
+            <BitmapImage x:Key="SearchUser" UriSource="/Resources/4504-user_search.png" />
+            <BitmapImage x:Key="ViewAlert" UriSource="/Resources/0204-scroll_search.png" />
+            <BitmapImage x:Key="ViewAlerts" UriSource="/Resources/1004-warning.png" />
+            <BitmapImage x:Key="ChangeLogin" UriSource="/Resources/0155-keys.png" />
+            <BitmapImage x:Key="Settings" UriSource="/Resources/0020-options_edit.png" />
+            <BitmapImage x:Key="UpdateLogin" UriSource="/Resources/0145-task_edit.png" />
+            <BitmapImage x:Key="Exit" UriSource="/Resources/1005-exit.png" />
+            <BitmapImage x:Key="ClearView" UriSource="/Resources/Clearview.png" />
+            <BitmapImage x:Key="Permissions" UriSource="/Resources/0080-doc_ok.png" />
+            <BitmapImage x:Key="Calibrate" UriSource="/Resources/0175-camera.png" />
+            <BitmapImage x:Key="Themes" UriSource="/Resources/Art.png" />
+            <BitmapImage x:Key="Languages" UriSource="/Resources/Select-Language-small.png" />
             <ImageBrush
                 x:Key="ClearViewBackground"
                 AlignmentX="Center"
@@ -70,17 +70,17 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <Frame
+        <!--<Frame
             Name="Login"
             Grid.Row="1"
-            Grid.RowSpan="2"
+            Grid.RowSpan="3"
             Grid.Column="0"
             Grid.ColumnSpan="2"
-            Panel.ZIndex="1"
+            Panel.ZIndex="10"
             Background="#FFFFFFFF"
             LoadCompleted="Login_OnLoadCompleted"
             NavigationUIVisibility="Hidden"
-            Source="/EPIC.ClearView;component/User/Login.xaml"
+            Source="/Pages/User/Login.xaml"
             Visibility="Hidden">
             <FrameworkElement.Style>
                 <Style>
@@ -89,7 +89,7 @@
                     </Style.Triggers>
                 </Style>
             </FrameworkElement.Style>
-        </Frame>
+        </Frame>-->
         <ribbon:Ribbon
             x:Name="MainRibbon"
             Grid.ColumnSpan="2"

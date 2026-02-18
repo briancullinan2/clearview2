@@ -20,6 +20,7 @@ namespace EPIC.ClearView
         public MainWindow()
         {
             ContentRendered += MainWindow_OnContentRendered;
+            Loaded += MainWindow_Loaded;
 
             InitializeComponent();
             InputBindings.Add(new InputBinding(new Utilities.Commands.RelayCommand(new Action<object>(this.NextTab), null), new KeyGesture(Key.Tab, ModifierKeys.Control)));
@@ -55,11 +56,8 @@ namespace EPIC.ClearView
             MedicalControls.Utilities.Macros.Mica.SubscribeFuzz(this, Tabs, BackgroundLayer);
         }
 
-        private void MainWindow_OnContentRendered(object? sender, EventArgs e)
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            SplashWindow.MainWindowOnContentRendered();
-            ContentRendered -= MainWindow_OnContentRendered;
-            UpdateSize();
 
             //CommandBindings.Add(new CommandBinding(new Utilities.Commands.RelayCommand(new Action<object>(this.HandleShowTab), null)));
             CommandBindings.Add(new CommandBinding(System.Windows.Application.Current.FindResource("ShowTabCommand") as ICommand, (s, e) =>
@@ -91,6 +89,14 @@ namespace EPIC.ClearView
                 }
                 e.Handled = true;
             }));
+
+        }
+
+        private void MainWindow_OnContentRendered(object? sender, EventArgs e)
+        {
+            SplashWindow.MainWindowOnContentRendered();
+            ContentRendered -= MainWindow_OnContentRendered;
+            UpdateSize();
 
         }
 

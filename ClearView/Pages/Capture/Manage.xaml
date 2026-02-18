@@ -26,7 +26,7 @@
         </Grid.ColumnDefinitions>
         <ribbon:Ribbon Margin="0,-120,0,0" Style="{StaticResource PlainRibbonStyle}">
             <ribbon:RibbonTab
-                Header="Permissions"
+                Header="EPIC Central"
                 ItemsSource="{StaticResource ManageOptions}"
                 Style="{StaticResource ContextualTabStyle}">
                 <ribbon:RibbonTab.HeaderStyle>

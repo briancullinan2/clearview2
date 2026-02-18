@@ -105,27 +105,42 @@ namespace EPIC.ClearView.Utilities.Macros
         }
 
         // Token: 0x06000143 RID: 323 RVA: 0x0000BA4C File Offset: 0x00009C4C
-        public static void CloseTab(object o)
+        public static void CloseTab(object? o)
         {
-            if (o is FrameworkElement)
+            if (o is not FrameworkElement)
             {
-                if (!(o is TabItem))
+                throw new NotImplementedException();
+            }
+
+            if (!(o is TabItem))
+            {
+                var root = ((DependencyObject)o).FindAncestor<TabItem>();
+                if (root == null)
                 {
-                    o = ((DependencyObject)o).FindAncestor<TabItem>();
+                    var ribbon = ((DependencyObject)o).FindAncestor<RibbonTab>();
+                    o = (ribbon.Tag as FrameworkElement)?.FindAncestor<TabItem>() as TabItem;
                 }
-                MessageBoxResult messageBoxResult = MessageBoxResult.Yes;
-                //if (FormChecker.Events.Keys.Any((FrameworkElement x) => x.GetAncestors().Any((DependencyObject y) => y.Equals(o)) && FormChecker.Events[x].IsChanged))
-                //{
-                //	messageBoxResult = Xceed.Wpf.Toolkit.MessageBox.Show("Some items have not been saved, are you sure you want to close?", null, MessageBoxButton.YesNo);
-                //}
-                if (messageBoxResult == MessageBoxResult.Yes)
-                {
-                    TabControl tabControl = ((TabItem)o).FindAncestor<TabControl>();
-                    tabControl.Items.Remove(o);
-                }
+            }
+
+            if (o == null)
+            {
                 return;
             }
-            throw new NotImplementedException();
+
+            MessageBoxResult messageBoxResult = MessageBoxResult.Yes;
+            //if (FormChecker.Events.Keys.Any((FrameworkElement x) => x.GetAncestors().Any((DependencyObject y) => y.Equals(o)) && FormChecker.Events[x].IsChanged))
+            //{
+            //	messageBoxResult = Xceed.Wpf.Toolkit.MessageBox.Show("Some items have not been saved, are you sure you want to close?", null, MessageBoxButton.YesNo);
+            //}
+            if (messageBoxResult == MessageBoxResult.Yes)
+            {
+                TabControl? tabControl = (o as TabItem)?.FindAncestor<TabControl>();
+                if (tabControl == null)
+                {
+                    return;
+                }
+                tabControl.Items.Remove(o);
+            }
         }
 
         // Token: 0x06000144 RID: 324 RVA: 0x0000BDA4 File Offset: 0x00009FA4
@@ -152,7 +167,6 @@ namespace EPIC.ClearView.Utilities.Macros
                     foreach (Ribbon ribbon in ribbons)
                     {
                         var temporary = new Collection<Control>();
-                        frameworkElement.Resources.Values.OfType<Ribbon>().FirstOrDefault()?.Items.OfType<RibbonTab>()?.FirstOrDefault()?.IsSelected = true;
                         foreach (Control item in ribbon.Items)
                         {
                             temporary.Add(item);
@@ -173,14 +187,18 @@ namespace EPIC.ClearView.Utilities.Macros
                 }
                 if (frameworkElement.Resources.Values.OfType<IEnumerable<RibbonTab>>().Any())
                 {
+                    frameworkElement.Resources.Values.OfType<IEnumerable<RibbonTab>>().FirstOrDefault()?.FirstOrDefault()?.IsSelected = true;
                     foreach (IEnumerable<RibbonTab> ribbon in frameworkElement.Resources.Values.OfType<IEnumerable<RibbonTab>>())
                     {
                         foreach (Control item in ribbon)
                         {
                             main.MainRibbon.Items.Add(item);
+                            if (typeof(RibbonTab).IsAssignableFrom(item.GetType()))
+                            {
+                                (item as RibbonTab)?.Tag = frameworkElement;
+                            }
                         }
                     }
-                    frameworkElement.Resources.Values.OfType<IEnumerable<RibbonTab>>().FirstOrDefault()?.FirstOrDefault()?.IsSelected = true;
                 }
 
                 if (frameworkElement.Resources.Values.OfType<RibbonContextualTabGroup>().Any<RibbonContextualTabGroup>())
@@ -188,15 +206,24 @@ namespace EPIC.ClearView.Utilities.Macros
                     foreach (RibbonContextualTabGroup item in frameworkElement.Resources.Values.OfType<RibbonContextualTabGroup>())
                     {
                         main.MainRibbon.ContextualTabGroups.Add(item);
+                        if (typeof(RibbonContextualTabGroup).IsAssignableFrom(item.GetType()))
+                        {
+                            (item as RibbonContextualTabGroup)?.Tag = frameworkElement;
+                        }
                     }
                 }
                 if (frameworkElement.Resources.Values.OfType<RibbonTab>().Any<RibbonTab>())
                 {
+                    frameworkElement.Resources.Values.OfType<RibbonTab>().First<RibbonTab>().IsSelected = true;
                     foreach (RibbonTab item2 in frameworkElement.Resources.Values.OfType<RibbonTab>())
                     {
                         main.MainRibbon.Items.Add(item2);
+                        if (typeof(RibbonTab).IsAssignableFrom(item2.GetType()))
+                        {
+                            (item2 as RibbonTab)?.Tag = frameworkElement;
+                        }
+
                     }
-                    frameworkElement.Resources.Values.OfType<RibbonTab>().First<RibbonTab>().IsSelected = true;
                 }
             };
             frameworkElement.Unloaded += delegate (object sender, RoutedEventArgs e)

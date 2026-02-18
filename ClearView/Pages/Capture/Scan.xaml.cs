@@ -79,10 +79,11 @@ namespace EPIC.ClearView.Pages.Capture
         public Scan()
         {
             this.InitializeComponent();
-            base.Unloaded += delegate (object sender, RoutedEventArgs args)
-            {
-                General.Connect(new CameraInterface.Utilities.FrameCallback(this.FrameCallback), ClearViewConfiguration.Current?.Device?.Camera, "Loading cameras...", "Loading devices...", "Reconnecting...");
-            };
+            Navigation.InsertRibbon(this);
+            //base.Unloaded += delegate (object sender, RoutedEventArgs args)
+            //{
+            //    General.Connect(new CameraInterface.Utilities.FrameCallback(this.FrameCallback), ClearViewConfiguration.Current?.Device?.Camera, "Loading cameras...", "Loading devices...", "Reconnecting...");
+            //};
         }
 
         // Token: 0x06000053 RID: 83 RVA: 0x00003E29 File Offset: 0x00002029
@@ -152,6 +153,8 @@ namespace EPIC.ClearView.Pages.Capture
                     base.Title = "View Scan";
                 }
             }
+            // TODO: fix messages to wait until after devices initialize
+            /*
             if (this.FingerSet == null && (ClearViewConfiguration.Current.Calibration == null || ClearViewConfiguration.Current.Calibration.TimeCalibrated < DateTime.UtcNow.Subtract(new TimeSpan(24, 0, 0))))
             {
                 MessageBoxResult messageBoxResult = Xceed.Wpf.Toolkit.MessageBox.Show("A calibration has not been performed in the last 24 hours, would you like to perform a calibration now?", "Calibration Error", MessageBoxButton.YesNo);
@@ -160,6 +163,7 @@ namespace EPIC.ClearView.Pages.Capture
                     Navigation.ShowTab(new Uri("/Capture/Calibrate.xaml", UriKind.Relative), true);
                 }
             }
+            */
             else if (this.FingerSet == null)
             {
                 List<FingerImage> list = this.ImagesWOBarrier.Children.OfType<FingerImage>().ToList<FingerImage>();

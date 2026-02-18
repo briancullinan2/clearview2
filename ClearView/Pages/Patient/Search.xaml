@@ -7,7 +7,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:patient="clr-namespace:EPIC.ClearView.Pages.Patient"
     xmlns:ribbon="clr-namespace:System.Windows.Controls.Ribbon;assembly=System.Windows.Controls.Ribbon"
-    Title="Search Patients">
+    Title="Search Patients"
+    mc:Ignorable="d">
     <FrameworkElement.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -113,6 +114,7 @@
         <DataGrid
             Name="Patients"
             Grid.Row="1"
+            d:MinHeight="300"
             AutoGenerateColumns="False"
             CanUserResizeRows="False"
             IsReadOnly="True"

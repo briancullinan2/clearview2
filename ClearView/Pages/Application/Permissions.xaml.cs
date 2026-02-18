@@ -15,7 +15,6 @@ namespace EPIC.ClearView.Pages.Application
     // Token: 0x0200004C RID: 76
     public partial class Permissions : Page
     {
-        public static readonly RoutedUICommand AddRole = new RoutedUICommand("Add Rp;e", "AddRole", typeof(Permissions));
         // Token: 0x0600028D RID: 653 RVA: 0x0001519C File Offset: 0x0001339C
         public Permissions()
         {
@@ -25,25 +24,21 @@ namespace EPIC.ClearView.Pages.Application
             };
             DataContext = ViewModel;
 
+            CommandBindings.Add(new CommandBinding(System.Windows.Application.Current.FindResource("AddRoleCommand") as ICommand, AddRole_Click));
+
             this.InitializeComponent();
 
             Navigation.InsertRibbon(this);
-            base.Loaded += delegate (object sender2, RoutedEventArgs args2)
-            {
-                //FormChecker.Events[this].Changed += this.OnChanged;
-                //FormChecker.Events[this].Unchanged += this.OnUnchanged;
-            };
 
-            CommandBindings.Add(new CommandBinding(AddRole, AddRole_Click));
-            Resources["AddRoleCommand"] = AddRole;
-            System.Windows.Application.Current.Resources["AddRoleCommand"] = AddRole;
+            Loaded += Permissions_Loaded;
+
 
 
             // we specify the memory data context here because we know the information will be synchronized before close.
             //   this will be a standard formchecker.xaml function
             ViewModel.RolesData.CollectionChanged += this.OnRoleCollectionChanged;
             var view = CollectionViewSource.GetDefaultView(ViewModel.RolesData);
-            view.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
+            view.SortDescriptions.Add(new SortDescription("Priority", ListSortDirection.Ascending));
 
             AddMissingRoles();
 
@@ -55,6 +50,12 @@ namespace EPIC.ClearView.Pages.Application
             AddInitialRoleColumns();
 
             AddXamlPermissions();
+        }
+
+        private void Permissions_Loaded(object sender, RoutedEventArgs e)
+        {
+            //FormChecker.Events[this].Changed += this.OnChanged;
+            //FormChecker.Events[this].Unchanged += this.OnUnchanged;
         }
 
 
@@ -563,38 +564,6 @@ namespace EPIC.ClearView.Pages.Application
 
         public MedicalControls.Utilities.DesignTimePermissionsViewModel ViewModel { get; private set; }
 
-        private void RibbonToggleButton_Unchecked(object sender, RoutedEventArgs e)
-        {
-            Navigation.CloseTab(this);
-        }
-
-        private void Search_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
-
-        private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
-        {
-
-        }
-
-        /*
-        private void Hyperlink_Click(object sender, RoutedEventArgs e)
-        {
-            var assembly = Assembly.GetExecutingAssembly();
-            var frameworkElement = sender as Hyperlink;
-            if (frameworkElement == null) return;
-
-            // 2. The DataContext IS your row's Model/ViewModel
-            var selectedEntity = frameworkElement.DataContext as VirtualPermission;
-            var Permissions = Utilities.Permissions.IntrospectXaml(assembly, selectedEntity.Baml);
-            foreach (var permission in Permissions)
-            {
-                PermissionData.Add(permission);
-            }
-
-        }
-        */
     }
 
 }

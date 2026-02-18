@@ -32,7 +32,7 @@ namespace EPIC.DeviceInterface
 
         // Token: 0x17000002 RID: 2
         // (get) Token: 0x06000004 RID: 4 RVA: 0x000020D3 File Offset: 0x000002D3
-        public List<IControllable> Devices
+        public List<IControllable>? Devices
         {
             get
             {

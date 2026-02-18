@@ -327,14 +327,14 @@ namespace EPIC.ClearView.Utilities.Macros
         // Token: 0x0600014E RID: 334 RVA: 0x0000CD5C File Offset: 0x0000AF5C
         public static void Disconnect(FrameCallback frameCallback, string cameraName)
         {
-            ICapturable capturable = CameraManager.Current.Cameras.FirstOrDefault((ICapturable x) => x.DisplayName.Equals(cameraName));
+            ICapturable? capturable = CameraManager.Current.Cameras?.FirstOrDefault((ICapturable x) => x.DisplayName.Equals(cameraName));
             if (capturable != null)
             {
                 capturable.Captured -= frameCallback;
             }
 
             // TODO: finish device
-            IControllable controllable = DeviceManager.Current.Devices.FirstOrDefault<IControllable>();
+            IControllable? controllable = DeviceManager.Current.Devices?.FirstOrDefault<IControllable>();
             if (controllable != null)
             {
                 controllable.Close();

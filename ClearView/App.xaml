@@ -29,6 +29,7 @@
             <RoutedUICommand x:Key="ShowTabCommand" Text="Show Tab" />
             <RoutedUICommand x:Key="ToggleTabCommand" Text="Toggle Tab" />
             <RoutedUICommand x:Key="CloseTabCommand" Text="Close Tab" />
+            <RoutedUICommand x:Key="AddRoleCommand" Text="Add Role" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>
