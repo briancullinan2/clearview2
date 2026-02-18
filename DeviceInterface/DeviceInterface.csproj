@@ -14,6 +14,7 @@
 		<EmbedAllSources>true</EmbedAllSources>
 		<RootNamespace>EPIC.DeviceInterface</RootNamespace>
 		<AssemblyName>DeviceInterface</AssemblyName>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<Deterministic>true</Deterministic>
 	</PropertyGroup>
 

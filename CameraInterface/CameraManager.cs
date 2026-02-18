@@ -127,29 +127,30 @@ namespace EPIC.CameraInterface
             var oldCameras = _currentCameras;
             _currentCameras = result;
 
-            if (this.Changed != null)
+            if (this.Changed == null)
             {
-                // Determine differences based on UniqueIdentifier (Index)
-                var newCameras = result.Where(r => !oldCameras.Any(o => o.UniqueIdentifier.ToString() == r.UniqueIdentifier.ToString())).ToList();
-                var removedCameras = oldCameras.Where(o => !result.Any(r => r.UniqueIdentifier.ToString() == o.UniqueIdentifier.ToString())).ToList();
+                return;
+            }
+            // Determine differences based on UniqueIdentifier (Index)
+            var newCameras = result.Where(r => !oldCameras.Any(o => o.UniqueIdentifier.ToString() == r.UniqueIdentifier.ToString())).ToList();
+            var removedCameras = oldCameras.Where(o => !result.Any(r => r.UniqueIdentifier.ToString() == o.UniqueIdentifier.ToString())).ToList();
 
-                if (newCameras.Any() || removedCameras.Any())
+            if (newCameras.Any() || removedCameras.Any())
+            {
+                this.Changed(new CamerasChangedEventArgs
                 {
-                    this.Changed(new CamerasChangedEventArgs
-                    {
-                        NewCameras = newCameras,
-                        OldCameras = removedCameras
-                    });
-                }
-                // Determine if this is the very first load
-                else if (oldCameras.Count == 0 && result.Count > 0)
+                    NewCameras = newCameras,
+                    OldCameras = removedCameras
+                });
+            }
+            // Determine if this is the very first load
+            else if (oldCameras.Count == 0 && result.Count > 0)
+            {
+                this.Changed(new CamerasChangedEventArgs
                 {
-                    this.Changed(new CamerasChangedEventArgs
-                    {
-                        NewCameras = result,
-                        OldCameras = null
-                    });
-                }
+                    NewCameras = result,
+                    OldCameras = null
+                });
             }
         }
 

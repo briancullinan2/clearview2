@@ -111,8 +111,7 @@ namespace EPIC.ClearView.Utilities.Macros
             {
                 if (!(o is TabItem))
                 {
-                    var root = ((DependencyObject)o).FindAncestor<Page>();
-                    o = root.FindAncestor<TabItem>();
+                    o = ((DependencyObject)o).FindAncestor<TabItem>();
                 }
                 MessageBoxResult messageBoxResult = MessageBoxResult.Yes;
                 //if (FormChecker.Events.Keys.Any((FrameworkElement x) => x.GetAncestors().Any((DependencyObject y) => y.Equals(o)) && FormChecker.Events[x].IsChanged))

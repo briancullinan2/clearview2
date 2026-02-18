@@ -3,6 +3,8 @@ using EPIC.CameraInterface.Interfaces;
 using EPIC.CameraInterface.Utilities;
 using EPIC.DataLayer.Customization;
 using EPIC.DataLayer.Utilities.Extensions;
+using EPIC.DeviceInterface;
+using EPIC.DeviceInterface.Interfaces;
 using EPIC.MedicalControls.Controls.Capture;
 using Microsoft.VisualBasic.FileIO;
 using System.Diagnostics;
@@ -32,7 +34,7 @@ namespace EPIC.ClearView.Utilities.Macros
             {
                 Camera = CameraManager.Current.Cameras.FirstOrDefault<ICapturable>(),
                 // TODO: finish device
-                //Device = DeviceManager.Current.Devices.FirstOrDefault<IControllable>(),
+                Device = DeviceManager.Current.Devices.FirstOrDefault<IControllable>(),
                 Callback = callback,
                 DeviceEntity = deviceEntity,
                 Duration = duration,
@@ -205,28 +207,27 @@ namespace EPIC.ClearView.Utilities.Macros
                 CameraManager.Current.Changed -= value;
             }
             // TODO: finish device
-            /*
-             if (DeviceManager.Current.Devices == null)
-             {
-                 DeviceManager.DevicesChanged value2 = delegate (DeviceManager.DevicesChangedEventArgs args)
-                 {
-                     General.CloseWindows(connectedInfo);
-                 };
-                 DeviceManager.Current.Changed += value2;
-                 Application.Current.Dispatcher.BeginInvoke(new Action<string>(delegate (string message)
-                 {
-                     Xceed.Wpf.Toolkit.MessageBox.Show(Application.Current.MainWindow, message);
-                 }), new object[]
-                 {
+            if (DeviceManager.Current.Devices == null)
+            {
+                DeviceManager.DevicesChanged value2 = delegate (DeviceManager.DevicesChangedEventArgs args)
+                {
+                    General.CloseWindows(connectedInfo);
+                };
+                DeviceManager.Current.Changed += value2;
+                Application.Current.Dispatcher.BeginInvoke(new Action<string>(delegate (string message)
+                {
+                    Xceed.Wpf.Toolkit.MessageBox.Show(Application.Current.MainWindow, message);
+                }), new object[]
+                {
                      connectedInfo.DeviceMessage
-                 });
-                 while (DeviceManager.Current.Devices == null)
-                 {
-                     Thread.Sleep(100);
-                 }
-                 DeviceManager.Current.Changed -= value2;
-             }
-             */
+                });
+                while (DeviceManager.Current.Devices == null)
+                {
+                    Thread.Sleep(100);
+                }
+                DeviceManager.Current.Changed -= value2;
+            }
+
             ICapturable capturable = CameraManager.Current.Cameras.FirstOrDefault((ICapturable x) => x.DisplayName.Equals(connectedInfo.CameraName));
             if (capturable != null)
             {
@@ -263,7 +264,7 @@ namespace EPIC.ClearView.Utilities.Macros
                 }
             }
             // TODO: finish device
-            /*
+
             IControllable controllable = DeviceManager.Current.Devices.FirstOrDefault<IControllable>();
             if (controllable != null)
             {
@@ -299,7 +300,7 @@ namespace EPIC.ClearView.Utilities.Macros
                     }
                 }
             }
-            */
+
             return connectedInfo;
         }
 
@@ -331,14 +332,13 @@ namespace EPIC.ClearView.Utilities.Macros
             {
                 capturable.Captured -= frameCallback;
             }
+
             // TODO: finish device
-            /*
             IControllable controllable = DeviceManager.Current.Devices.FirstOrDefault<IControllable>();
             if (controllable != null)
             {
                 controllable.Close();
             }
-            */
         }
 
         // Token: 0x0600014F RID: 335 RVA: 0x0000CDC8 File Offset: 0x0000AFC8
@@ -413,7 +413,7 @@ namespace EPIC.ClearView.Utilities.Macros
             // (get) Token: 0x06000166 RID: 358 RVA: 0x0000CEDC File Offset: 0x0000B0DC
             // (set) Token: 0x06000167 RID: 359 RVA: 0x0000CEF3 File Offset: 0x0000B0F3
             // TODO: finish device
-            //public IControllable Device { get; set; }
+            public IControllable Device { get; set; }
 
             // Token: 0x17000050 RID: 80
             // (get) Token: 0x06000168 RID: 360 RVA: 0x0000CEFC File Offset: 0x0000B0FC
@@ -509,7 +509,7 @@ namespace EPIC.ClearView.Utilities.Macros
 
             // Token: 0x040000CE RID: 206
             // TODO: finish device
-            //public IControllable Device;
+            public IControllable Device;
         }
     }
 }

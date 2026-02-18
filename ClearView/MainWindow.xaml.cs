@@ -28,37 +28,6 @@ namespace EPIC.ClearView
 
 
 
-            //CommandBindings.Add(new CommandBinding(new Utilities.Commands.RelayCommand(new Action<object>(this.HandleShowTab), null)));
-            CommandBindings.Add(new CommandBinding(System.Windows.Application.Current.FindResource("ShowTabCommand") as ICommand, (s, e) =>
-            {
-                if (e.Parameter is Type type)
-                {
-                    Navigation.ShowTab(type);
-                }
-                else if (e.Parameter is string path && !string.IsNullOrWhiteSpace(path))
-                {
-                    Navigation.ShowTab(path);
-                }
-                e.Handled = true;
-            }));
-            CommandBindings.Add(new CommandBinding(System.Windows.Application.Current.FindResource("CloseTabCommand") as ICommand, (s, e) =>
-            {
-                Navigation.CloseTab(e.Parameter ?? e.OriginalSource ?? e.Source ?? s);
-                e.Handled = true;
-            }));
-            CommandBindings.Add(new CommandBinding(System.Windows.Application.Current.FindResource("ToggleTabCommand") as ICommand, (s, e) =>
-            {
-                if (e.Parameter is Type type)
-                {
-                    Navigation.ToggleTab(type);
-                }
-                else if (e.Parameter is string path && !string.IsNullOrWhiteSpace(path))
-                {
-                    Navigation.ToggleTab(path);
-                }
-                e.Handled = true;
-            }));
-
             /*
             // apply invert
             
@@ -91,6 +60,38 @@ namespace EPIC.ClearView
             SplashWindow.MainWindowOnContentRendered();
             ContentRendered -= MainWindow_OnContentRendered;
             UpdateSize();
+
+            //CommandBindings.Add(new CommandBinding(new Utilities.Commands.RelayCommand(new Action<object>(this.HandleShowTab), null)));
+            CommandBindings.Add(new CommandBinding(System.Windows.Application.Current.FindResource("ShowTabCommand") as ICommand, (s, e) =>
+            {
+                if (e.Parameter is Type type)
+                {
+                    Navigation.ShowTab(type);
+                }
+                else if (e.Parameter is string path && !string.IsNullOrWhiteSpace(path))
+                {
+                    Navigation.ShowTab(path);
+                }
+                e.Handled = true;
+            }));
+            CommandBindings.Add(new CommandBinding(System.Windows.Application.Current.FindResource("CloseTabCommand") as ICommand, (s, e) =>
+            {
+                Navigation.CloseTab(e.Parameter ?? e.OriginalSource ?? e.Source ?? s);
+                e.Handled = true;
+            }));
+            CommandBindings.Add(new CommandBinding(System.Windows.Application.Current.FindResource("ToggleTabCommand") as ICommand, (s, e) =>
+            {
+                if (e.Parameter is Type type)
+                {
+                    Navigation.ToggleTab(type);
+                }
+                else if (e.Parameter is string path && !string.IsNullOrWhiteSpace(path))
+                {
+                    Navigation.ToggleTab(path);
+                }
+                e.Handled = true;
+            }));
+
         }
 
         // Token: 0x06000353 RID: 851 RVA: 0x0001B508 File Offset: 0x00019708
@@ -130,11 +131,11 @@ namespace EPIC.ClearView
                         {
                             Assembly.Content = string.Format("Assembly: {0}", System.Reflection.Assembly.GetAssembly(typeof(App)));
                             this.Clock.Content = DateTime.Now.ToLongTimeString();
-                            //if (DeviceManager.Current.Devices != null && DeviceManager.Current.Devices.Any<IControllable>())
-                            //{
-                            //    Scanner.Content = string.Format("Scanner: {0}", "Available");
-                            //}
-                            //else
+                            if (DeviceInterface.DeviceManager.Current.Devices != null && DeviceInterface.DeviceManager.Current.Devices.Any<DeviceInterface.Interfaces.IControllable>())
+                            {
+                                Scanner.Content = string.Format("Scanner: {0}", "Available");
+                            }
+                            else
                             {
                                 Scanner.Content = string.Format("Scanner: {0}", "Unavailable");
                             }

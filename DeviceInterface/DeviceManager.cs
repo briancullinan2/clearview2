@@ -2,7 +2,7 @@
 using FTD2XX_NET;
 using log4net;
 
-namespace DeviceInterface
+namespace EPIC.DeviceInterface
 {
     /// <summary>
     /// General manager for connecting and disconnecting to devices.

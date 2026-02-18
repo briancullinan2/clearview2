@@ -86,6 +86,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\CameraInterface\CameraInterface.csproj" />
 		<ProjectReference Include="..\DataLayer\DataLayer.csproj" />
+		<ProjectReference Include="..\DeviceInterface\DeviceInterface.csproj" />
 		<ProjectReference Include="..\MedicalControls\MedicalControls.csproj" />
 	</ItemGroup>
 
