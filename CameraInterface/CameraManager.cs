@@ -1,19 +1,15 @@
 ﻿// System.Management is available on Windows; add conditional using if package is present
-using DirectShowLib;
 using EPIC.CameraInterface.Interfaces;
 using EPIC.CameraInterface.Utilities;
-using Microsoft.Win32; // Registry
-using System.Management;
-using System.Reflection;
+using OpenCvSharp;
 using System.Text.RegularExpressions;
-using System.Windows;
 //using Windows.Devices.Enumeration;
 //using Windows.Media.Capture;
 
 namespace EPIC.CameraInterface
 {
     // Token: 0x02000007 RID: 7
-    public class CameraManager
+    public class CameraManager : IDisposable
     {
         // Token: 0x14000001 RID: 1
         // (add) Token: 0x0600000F RID: 15 RVA: 0x00002778 File Offset: 0x00000978
@@ -45,71 +41,124 @@ namespace EPIC.CameraInterface
             }
         }
 
-        // Token: 0x06000013 RID: 19 RVA: 0x00002844 File Offset: 0x00000A44
-        private CameraManager()
+        private bool _isScanning = false;
+
+        // Configurable limit: Most systems won't have more than 4 cameras connected.
+        // Scanning is slow (requires opening the device), so keep this reasonable.
+        private const int MaxCameraIndexSearch = 8;
+
+
+        public CameraManager()
         {
-            // Watch for PnP device instance operation events (plug/unplug) and forward them
-            // to the existing WmiWatcherOnPluggedIn handler as a dictionary of properties.
+            // Initial scan
+            Task.Run(() => ScanCameras());
+        }
+
+        /// <summary>
+        /// Call this from your higher-level library when you detect a hardware change.
+        /// </summary>
+        public void OnDevicesChanged()
+        {
+            if (!_isScanning)
+            {
+                Task.Run(() => ScanCameras());
+            }
+        }
+
+        private void ScanCameras()
+        {
+            lock (this)
+            {
+                if (_isScanning) return;
+                _isScanning = true;
+            }
+
             try
             {
-                var query = new WqlEventQuery("SELECT * FROM __InstanceOperationEvent WITHIN 2 WHERE TargetInstance ISA 'Win32_PnPEntity'");
-                this._deviceWatcher = new ManagementEventWatcher(query);
-                this._deviceWatcher.EventArrived += (s, e) =>
+                List<ICapturable> foundCameras = new List<ICapturable>();
+
+                // Pure OpenCV approach: "Brute Force" scan indices 0 to N.
+                // Note: This can be slow as opening a non-existent camera takes time to timeout.
+                for (int i = 0; i < MaxCameraIndexSearch; i++)
                 {
+                    // We use 'using' to immediately close the test connection
+                    // We just want to check if it exists.
                     try
                     {
-                        var target = e.NewEvent["TargetInstance"] as ManagementObject;
-                        if (target == null) return;
-                        var props = new Dictionary<string, object>();
-                        foreach (PropertyData pd in target.Properties)
+                        // VideoCapture(i) attempts to open the hardware driver
+                        using (var tempCapture = new VideoCapture(i))
                         {
-                            props[pd.Name] = pd.Value;
+                            if (tempCapture.IsOpened())
+                            {
+                                // Success: A camera exists at this index.
+                                // Since we can't get the registry name via OpenCV easily,
+                                // we name it generically.
+                                string name = $"Camera {i}";
+                                string id = $"opencv_index_{i}";
+
+                                // Create the wrapper
+                                var camera = new OpenCvGeneric
+                                {
+                                    DeviceIndex = i,
+                                    DisplayName = name,
+                                    UniqueIdentifier = id
+                                };
+
+                                foundCameras.Add(camera);
+                            }
                         }
-                        this.WmiWatcherOnPluggedIn(props);
                     }
                     catch (Exception ex)
                     {
-                        Log.Error("Error handling device arrival event.", ex);
+                        Log.Debug($"Index {i} skipped or failed: {ex.Message}");
                     }
-                };
-                this._deviceWatcher.Start();
+                }
+
+                UpdateList(foundCameras);
             }
-            catch (Exception)
+            finally
             {
-                // ignore when ManagementEventWatcher isn't available or fails to start
+                _isScanning = false;
             }
-            this._interfaces = from x in Assembly.GetAssembly(typeof(CameraManager)).GetTypes()
-                               where x.GetInterfaces().Contains(typeof(ICapturable))
-                               select x;
-            // Use ParallelWork.Start.Work if available; otherwise run synchronously
-            try
+        }
+
+        private void UpdateList(List<ICapturable> result)
+        {
+            var oldCameras = _currentCameras;
+            _currentCameras = result;
+
+            if (this.Changed != null)
             {
-                Application.Current.Dispatcher.Invoke(new Action(this.GetCameras));
-            }
-            catch
-            {
-                // fallback to synchronous execution if ParallelWork isn't present
-                try { this.GetCameras(); } catch (Exception ex) { Log.Error("There was an error getting the cameras.", ex); }
-            }
-            // Register application shutdown if WPF Application is available
-            try
-            {
-                Application.Current.Dispatcher.Invoke(delegate ()
+                // Determine differences based on UniqueIdentifier (Index)
+                var newCameras = result.Where(r => !oldCameras.Any(o => o.UniqueIdentifier.ToString() == r.UniqueIdentifier.ToString())).ToList();
+                var removedCameras = oldCameras.Where(o => !result.Any(r => r.UniqueIdentifier.ToString() == o.UniqueIdentifier.ToString())).ToList();
+
+                if (newCameras.Any() || removedCameras.Any())
                 {
-                    Application.Current.Exit += this.ShutdownCameras;
-                });
-            }
-            catch
-            {
-                // ignore when not running under WPF host during build or headless execution
+                    this.Changed(new CamerasChangedEventArgs
+                    {
+                        NewCameras = newCameras,
+                        OldCameras = removedCameras
+                    });
+                }
+                // Determine if this is the very first load
+                else if (oldCameras.Count == 0 && result.Count > 0)
+                {
+                    this.Changed(new CamerasChangedEventArgs
+                    {
+                        NewCameras = result,
+                        OldCameras = null
+                    });
+                }
             }
         }
 
         // Token: 0x06000014 RID: 20 RVA: 0x00002910 File Offset: 0x00000B10
-        private void ShutdownCameras(object sender, EventArgs eventArgs)
+        private void ShutdownCameras()
         {
             try
             {
+                /*
                 if (this._deviceWatcher != null)
                 {
                     this._deviceWatcher.Stop();
@@ -117,6 +166,7 @@ namespace EPIC.CameraInterface
                     this._deviceWatcher.Dispose();
                     this._deviceWatcher = null;
                 }
+                */
             }
             catch
             {
@@ -131,16 +181,26 @@ namespace EPIC.CameraInterface
             }
         }
 
+
+        public void Dispose()
+        {
+            this.ShutdownCameras();
+        }
+
         // Token: 0x06000015 RID: 21 RVA: 0x0000296C File Offset: 0x00000B6C
+        /*
         private void WmiWatcherOnPluggedIn(Dictionary<string, object> properties)
         {
             if (properties.ContainsKey("Description") && properties["Description"].ToString().Contains("Camera"))
             {
-                Application.Current.Dispatcher.Invoke(new Action(this.GetCameras));
+                Task.Run(new Action(this.GetCameras));
             }
         }
+        */
+
 
         // Token: 0x06000016 RID: 22 RVA: 0x000029BC File Offset: 0x00000BBC
+        /*
         private void GetCameras()
         {
             //var devices = await DeviceInformation.FindAllAsync(DeviceClass.VideoCapture);
@@ -170,8 +230,10 @@ namespace EPIC.CameraInterface
                 });
             }
         }
+        */
 
         // Token: 0x06000017 RID: 23 RVA: 0x00002CFC File Offset: 0x00000EFC
+        /*
         private IEnumerable<string> GetPluggedInDevices()
         {
             // Filter by 'Present' status and limit to likely camera categories
@@ -194,8 +256,10 @@ namespace EPIC.CameraInterface
             }
             return devices;
         }
+        */
 
         // Token: 0x06000018 RID: 24 RVA: 0x00003178 File Offset: 0x00001378
+        /*
         private IEnumerable<ICapturable> GetValidCameras(IEnumerable<DsDevice> devices)
         {
             List<string> pluggedin = this.GetPluggedInDevices().ToList<string>();
@@ -256,6 +320,7 @@ namespace EPIC.CameraInterface
             }
             yield break;
         }
+        */
 
         // Token: 0x06000019 RID: 25 RVA: 0x0000319C File Offset: 0x0000139C
         public TCapturable Connect<TCapturable>() where TCapturable : class, ICapturable
@@ -275,6 +340,7 @@ namespace EPIC.CameraInterface
             return result;
         }
 
+
         // Token: 0x04000006 RID: 6
         private static CameraManager _instance;
 
@@ -288,7 +354,7 @@ namespace EPIC.CameraInterface
         private readonly IEnumerable<Type> _interfaces;
 
         // ManagementEventWatcher to observe plug/unplug events for PnP devices
-        private ManagementEventWatcher? _deviceWatcher;
+        //private ManagementEventWatcher? _deviceWatcher;
 
         // Token: 0x02000008 RID: 8
         public class CamerasChangedEventArgs

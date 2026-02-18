@@ -17,12 +17,13 @@ namespace EPIC.DataLayer.Customization
     [Obfuscation(Exclude = true, ApplyToMembers = true)]
     public enum Voltage : int
     {
+        V80 = 80,
         V90 = 90,
         V100 = 100,
         V110 = 110,
         V120 = 120,
-        V130 = 130,
-        V140 = 140
+        //V130 = 130,
+        //V140 = 140
     }
 
     [Obfuscation(Exclude = true, ApplyToMembers = true)]
@@ -31,13 +32,18 @@ namespace EPIC.DataLayer.Customization
         [EnumMember(Value = "P800")]
         [Description("P800")]
         [Display(Description = "P800")]
+        P750 = 750,
         P800 = 800,
+        P850 = 850,
         P900 = 900,
+        P950 = 950,
         P1100 = 1100,
+        P1150 = 1150,
         P1200 = 1200,
-        P1300 = 1300,
-        P1400 = 1400,
-        P1500 = 1500
+        P1250 = 1250,
+        //P1300 = 1300,
+        //P1400 = 1400,
+        //P1500 = 1500
     }
 
     [Obfuscation(Exclude = true, ApplyToMembers = true)]
@@ -84,7 +90,7 @@ namespace EPIC.DataLayer.Customization
         MS1800 = 1800,
         MS1900 = 1900,
         MS2000 = 2000,
-
+        MS30000 = 30000,
     }
 
     [Obfuscation(Exclude = true, ApplyToMembers = true)]

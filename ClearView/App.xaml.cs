@@ -17,6 +17,7 @@ namespace EPIC.ClearView
 
         public App()
         {
+            InitializeComponent();
             //Application.ResourceAssembly = typeof(App).Assembly;
         }
 

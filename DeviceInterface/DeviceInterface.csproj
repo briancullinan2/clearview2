@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<UseWPF>false</UseWPF>
+		<OutputType>Library</OutputType>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<BaseOutputPath>..\ClearView\bin\</BaseOutputPath>
+		<SupportedOSPlatformVersion>8.0</SupportedOSPlatformVersion>
+		<IncrementalBuild>false</IncrementalBuild>
+		<EmbedAllSources>true</EmbedAllSources>
+		<RootNamespace>EPIC.DeviceInterface</RootNamespace>
+		<AssemblyName>DeviceInterface</AssemblyName>
+		<Deterministic>true</Deterministic>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="log4net" Version="3.2.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\DataLayer\DataLayer.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Reference Include="FTD2XX_NET">
+			<HintPath>..\3rdPartyLibraries\FTD2XX_NET.dll</HintPath>
+		</Reference>
+	</ItemGroup>
+
+</Project>

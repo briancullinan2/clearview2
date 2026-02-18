@@ -1,12 +1,9 @@
 ﻿using EPIC.CameraInterface.Native;
 using EPIC.CameraInterface.Utilities;
-using EPIC.CameraInterface.Utilities.Rasterizer;
+using OpenCvSharp;
 using SensorTechnology;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.Runtime.CompilerServices;
-using System.Windows;
-using System.Windows.Threading;
+using System.Runtime.InteropServices;
 
 namespace EPIC.CameraInterface.Interfaces
 {
@@ -208,62 +205,6 @@ namespace EPIC.CameraInterface.Interfaces
             }
         }
 
-        /// <summary>
-        /// Sets the format of the pixels, Sentech supports 8 bit raw, 24 BGR or 32 BGR.
-        /// </summary>
-        // Token: 0x17000023 RID: 35
-        // (get) Token: 0x06000079 RID: 121 RVA: 0x000038E8 File Offset: 0x00001AE8
-        // (set) Token: 0x0600007A RID: 122 RVA: 0x00003948 File Offset: 0x00001B48
-        public PixelFormat PixelFormat
-        {
-            get
-            {
-                if (!StCam.GetPreviewPixelFormat(this._cameraCapture, out this._dwPreviewPixelFormat))
-                {
-                    this.LogError(StCam.GetLastError(this._cameraCapture));
-                }
-                uint dwPreviewPixelFormat = this._dwPreviewPixelFormat;
-                if (dwPreviewPixelFormat == 1U)
-                {
-                    return PixelFormat.Format8bppIndexed;
-                }
-                if (dwPreviewPixelFormat == 4U)
-                {
-                    return PixelFormat.Format24bppRgb;
-                }
-                if (dwPreviewPixelFormat != 8U)
-                {
-                    throw new NotImplementedException();
-                }
-                return PixelFormat.Format32bppRgb;
-            }
-            set
-            {
-                if (value != PixelFormat.Format24bppRgb)
-                {
-                    if (value != PixelFormat.Format32bppRgb)
-                    {
-                        if (value != PixelFormat.Format8bppIndexed)
-                        {
-                            throw new NotImplementedException();
-                        }
-                        this._dwPreviewPixelFormat = 1U;
-                    }
-                    else
-                    {
-                        this._dwPreviewPixelFormat = 8U;
-                    }
-                }
-                else
-                {
-                    this._dwPreviewPixelFormat = 4U;
-                }
-                if (!StCam.SetPreviewPixelFormat(this._cameraCapture, this._dwPreviewPixelFormat))
-                {
-                    this.LogError(StCam.GetLastError(this._cameraCapture));
-                }
-            }
-        }
 
         // Token: 0x0600007B RID: 123 RVA: 0x000039C8 File Offset: 0x00001BC8
         public void Open()
@@ -276,7 +217,7 @@ namespace EPIC.CameraInterface.Interfaces
             {
                 if (!this._waiter.WaitOne(0))
                 {
-                    Application.Current.Dispatcher.BeginInvoke(new Action(this.Open), DispatcherPriority.Send, new object[0]);
+                    Task.Run(new Action(this.Open));
                 }
                 else
                 {
@@ -296,7 +237,7 @@ namespace EPIC.CameraInterface.Interfaces
                         this.LogError(StCam.GetLastError(this._cameraCapture));
                     }
                     StCam.SetMirrorMode(this._cameraCapture, 3);
-                    this.PixelFormat = PixelFormat.Format32bppRgb;
+                    this.PixelFormat = MatType.CV_8UC3;
                     this.Clock = Sentech.ClockSpeed.Diviging2;
                     this.Gain = 115;
                     this.Brightness = 115;
@@ -360,7 +301,7 @@ namespace EPIC.CameraInterface.Interfaces
                 while (log != handler2);
                 if (this._cameraCapture == IntPtr.Zero)
                 {
-                    Application.Current.Dispatcher.BeginInvoke(new Action(this.Open), DispatcherPriority.Send, new object[0]);
+                    Task.Run(new Action(this.Open));
                 }
             }
             [MethodImpl(MethodImplOptions.Synchronized)]
@@ -377,58 +318,190 @@ namespace EPIC.CameraInterface.Interfaces
                 while (log != handler2);
                 if (this._captured == null)
                 {
-                    Application.Current.Dispatcher.BeginInvoke(new Action(this.Close), DispatcherPriority.Send, new object[0]);
+                    Task.Run(new Action(this.Close));
+                }
+            }
+        }
+        /// <summary>
+        /// Sets the format of the pixels.
+        /// Mapped Sentech formats to OpenCvSharp MatType:
+        /// 1U -> 8 bit (Gray) -> CV_8UC1
+        /// 4U -> 24 bit (BGR) -> CV_8UC3
+        /// 8U -> 32 bit (BGRA) -> CV_8UC4
+        /// </summary>
+        public MatType PixelFormat
+        {
+            get
+            {
+                if (!StCam.GetPreviewPixelFormat(this._cameraCapture, out this._dwPreviewPixelFormat))
+                {
+                    this.LogError(StCam.GetLastError(this._cameraCapture));
+                }
+
+                uint dwPreviewPixelFormat = this._dwPreviewPixelFormat;
+
+                if (dwPreviewPixelFormat == 1U) return MatType.CV_8UC1; // 8-bit Gray
+                if (dwPreviewPixelFormat == 4U) return MatType.CV_8UC3; // 24-bit BGR
+                if (dwPreviewPixelFormat == 8U) return MatType.CV_8UC4; // 32-bit BGRA
+
+                throw new NotImplementedException($"Unknown Sentech format: {dwPreviewPixelFormat}");
+            }
+            set
+            {
+                // Convert MatType back to Sentech ID
+                if (value == MatType.CV_8UC3)
+                {
+                    this._dwPreviewPixelFormat = 4U;
+                }
+                else if (value == MatType.CV_8UC4)
+                {
+                    this._dwPreviewPixelFormat = 8U;
+                }
+                else if (value == MatType.CV_8UC1)
+                {
+                    this._dwPreviewPixelFormat = 1U;
+                }
+                else
+                {
+                    throw new NotImplementedException($"MatType {value} not supported by Sentech wrapper");
+                }
+
+                if (!StCam.SetPreviewPixelFormat(this._cameraCapture, this._dwPreviewPixelFormat))
+                {
+                    this.LogError(StCam.GetLastError(this._cameraCapture));
                 }
             }
         }
 
-        // Token: 0x0600007E RID: 126 RVA: 0x00003CAC File Offset: 0x00001EAC
         private void Callback(IntPtr pbyteBitmap, uint dwBufferSize, uint width, uint height, uint dwFrameNo, uint previewPixelFormat, IntPtr lpContext, IntPtr lpReserved)
         {
             this._waiter.WaitOne();
-            int stride = (int)width;
-            PixelFormat pixelFormat;
-            if (previewPixelFormat != 1U)
+
+            try
             {
-                if (previewPixelFormat != 4U)
+                // 1. Determine OpenCV Type and Stride based on Sentech format
+                MatType type;
+                int stride = (int)width; // Base stride (width * channels)
+
+                if (previewPixelFormat == 1U)
                 {
-                    if (previewPixelFormat != 8U)
-                    {
-                        throw new NotImplementedException();
-                    }
+                    type = MatType.CV_8UC1;
+                    // stride *= 1;
+                }
+                else if (previewPixelFormat == 4U)
+                {
+                    type = MatType.CV_8UC3;
+                    stride *= 3;
+                }
+                else if (previewPixelFormat == 8U)
+                {
+                    type = MatType.CV_8UC4;
                     stride *= 4;
-                    pixelFormat = PixelFormat.Format32bppRgb;
                 }
                 else
                 {
-                    stride *= 3;
-                    pixelFormat = PixelFormat.Format24bppRgb;
+                    throw new NotImplementedException($"Format {previewPixelFormat} not supported");
+                }
+
+                // 2. Create a Mat wrapper around the existing memory (Zero Copy)
+                // Note: pbyteBitmap comes from the camera driver. We only read it.
+                using (Mat rawMat = Mat.FromPixelData((int)height, (int)width, type, pbyteBitmap, stride))
+                {
+                    // 3. Perform Binning using your new OpenCvSharp Binner
+                    using (Mat resized = Utilities.Rasterizer.Binner.Bin(rawMat, 2, Utilities.Rasterizer.BinMethod.Maximum))
+                    {
+                        // 4. Convert Mat to HBITMAP (GDI Handle) for legacy interop
+                        if (this._captured != null)
+                        {
+                            IntPtr hBitmap = MatToHBitmap(resized);
+
+                            // Pass ownership of hBitmap to the subscriber
+                            this._captured(hBitmap);
+
+                            // Clean up local reference if the subscriber is expected to delete it. 
+                            // *HOWEVER*: Your original code had "Gdi32.DeleteObject(hBitmap)" INSIDE this try block.
+                            // If the _captured event is synchronous and consumes the bitmap immediately (e.g. draws it to UI), 
+                            // we delete it here.
+                            Gdi32.DeleteObject(hBitmap);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Assuming Log is available
+                // Log.Error("Error in frame callback, continuing.", ex);
+                Console.WriteLine(ex);
+            }
+            finally
+            {
+                this._waiter.Release();
+            }
+        }
+
+        /// <summary>
+        /// Creates a GDI HBITMAP from an OpenCvSharp Mat without using System.Drawing.
+        /// </summary>
+        private IntPtr MatToHBitmap(Mat mat)
+        {
+            int width = mat.Width;
+            int height = mat.Height;
+            int channels = mat.Channels();
+
+            // Prepare BITMAPINFO
+            Gdi32.BITMAPINFO bmi = new Gdi32.BITMAPINFO();
+            bmi.bmiHeader.biSize = Marshal.SizeOf(typeof(Gdi32.BITMAPINFOHEADER));
+            bmi.bmiHeader.biWidth = width;
+            // Negative height creates a top-down DIB (matches OpenCV memory layout)
+            bmi.bmiHeader.biHeight = -height;
+            bmi.bmiHeader.biPlanes = 1;
+            bmi.bmiHeader.biBitCount = (short)(channels * 8);
+            bmi.bmiHeader.biCompression = 0; // BI_RGB
+
+            // Create DIB Section
+            IntPtr bitsPtr;
+            IntPtr hBitmap = Gdi32.CreateDIBSection(IntPtr.Zero, in bmi, 0, out bitsPtr, IntPtr.Zero, 0);
+
+            if (hBitmap == IntPtr.Zero)
+                throw new Exception("Failed to create DIB section");
+
+            // Copy pixels from Mat to GDI Buffer
+            // We must handle stride (Step) differences. 
+            // DIB sections are DWORD aligned (multiple of 4 bytes).
+            // OpenCV Mats are also usually aligned, but we should be careful.
+
+            long srcStep = mat.Step();
+            int rowLength = width * channels; // bytes per row (unpadded)
+
+            // Calculate DIB stride (must be multiple of 4)
+            int destStride = (rowLength + 3) & ~3;
+
+            if (srcStep == destStride && mat.IsContinuous())
+            {
+                // Fast copy: Everything is contiguous and aligned
+                unsafe
+                {
+                    Buffer.MemoryCopy((void*)mat.Data, (void*)bitsPtr, destStride * height, destStride * height);
                 }
             }
             else
             {
-                pixelFormat = PixelFormat.Format8bppIndexed;
-            }
-            using (Bitmap bitmap = new Bitmap((int)width, (int)height, stride, pixelFormat, pbyteBitmap))
-            {
-                using (Bitmap resized = Binner.Bin(bitmap, 2, BinMethod.Maximum))
+                // Row-by-row copy
+                unsafe
                 {
-                    try
+                    byte* srcPtr = (byte*)mat.Data;
+                    byte* dstPtr = (byte*)bitsPtr;
+
+                    for (int y = 0; y < height; y++)
                     {
-                        IntPtr hBitmap = resized.GetHbitmap();
-                        if (this._captured != null)
-                        {
-                            this._captured(hBitmap);
-                        }
-                        Gdi32.DeleteObject(hBitmap);
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Error("Error in frame callback, continuing.", ex);
+                        Buffer.MemoryCopy(srcPtr, dstPtr, destStride, rowLength);
+                        srcPtr += srcStep;
+                        dstPtr += destStride;
                     }
                 }
             }
-            this._waiter.Release();
+
+            return hBitmap;
         }
 
         // Token: 0x0600007F RID: 127 RVA: 0x00003DA0 File Offset: 0x00001FA0
@@ -449,7 +522,7 @@ namespace EPIC.CameraInterface.Interfaces
                 this._captured = null;
                 if (!this._waiter.WaitOne(0))
                 {
-                    Application.Current.Dispatcher.BeginInvoke(new Action(this.Close), DispatcherPriority.Send, new object[0]);
+                    Task.Run(new Action(this.Close));
                 }
                 else
                 {

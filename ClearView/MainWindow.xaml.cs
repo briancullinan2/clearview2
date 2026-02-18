@@ -16,52 +16,49 @@ namespace EPIC.ClearView
     /// </summary>
     public partial class MainWindow : Window
     {
-        public static readonly RoutedUICommand ShowTab = new RoutedUICommand("Show Tab", "ShowTab", typeof(MainWindow));
-        public static readonly RoutedUICommand ToggleTab = new RoutedUICommand("Toggle Tab", "ToggleTab", typeof(MainWindow));
-        public static readonly RoutedUICommand CloseTab = new RoutedUICommand("Close Tab", "CloseTab", typeof(MainWindow));
+
         public MainWindow()
         {
             ContentRendered += MainWindow_OnContentRendered;
-
-            CommandBindings.Add(new CommandBinding(ShowTab, (s, e) =>
-            {
-                if (typeof(Type).IsAssignableFrom(e.Parameter?.GetType()))
-                {
-                    Navigation.ShowTab(e.Parameter as Type);
-                }
-                else if ((e.Parameter?.ToString() is string parameter) && !string.IsNullOrWhiteSpace(parameter))
-                {
-                    Navigation.ShowTab(parameter);
-                }
-            }));
-            Resources["ShowTabCommand"] = ShowTab;
-            System.Windows.Application.Current.Resources["ShowTabCommand"] = ShowTab;
-
-            CommandBindings.Add(new CommandBinding(ToggleTab, (s, e) =>
-            {
-                if (typeof(Type).IsAssignableFrom(e.Parameter?.GetType()))
-                {
-                    Navigation.ToggleTab(e.Parameter as Type);
-                }
-                else if ((e.Parameter?.ToString() is string parameter) && !string.IsNullOrWhiteSpace(parameter))
-                {
-                    Navigation.ToggleTab(parameter);
-                }
-            }));
-            Resources["ToggleTabCommand"] = ToggleTab;
-            System.Windows.Application.Current.Resources["ToggleTabCommand"] = ToggleTab;
-
-            CommandBindings.Add(new CommandBinding(CloseTab, (s, e) =>
-            {
-                Navigation.CloseTab(e.Parameter ?? e.OriginalSource ?? e.Source ?? s);
-            }));
-            Resources["CloseTabCommand"] = CloseTab;
-            System.Windows.Application.Current.Resources["CloseTabCommand"] = CloseTab;
 
             InitializeComponent();
             InputBindings.Add(new InputBinding(new Utilities.Commands.RelayCommand(new Action<object>(this.NextTab), null), new KeyGesture(Key.Tab, ModifierKeys.Control)));
             InputBindings.Add(new InputBinding(new Utilities.Commands.RelayCommand(new Action<object>(this.PreviousTab), null), new KeyGesture(Key.Tab, ModifierKeys.Control | ModifierKeys.Shift)));
             Task.Run(new Action(ClockThread));
+
+
+
+            //CommandBindings.Add(new CommandBinding(new Utilities.Commands.RelayCommand(new Action<object>(this.HandleShowTab), null)));
+            CommandBindings.Add(new CommandBinding(System.Windows.Application.Current.FindResource("ShowTabCommand") as ICommand, (s, e) =>
+            {
+                if (e.Parameter is Type type)
+                {
+                    Navigation.ShowTab(type);
+                }
+                else if (e.Parameter is string path && !string.IsNullOrWhiteSpace(path))
+                {
+                    Navigation.ShowTab(path);
+                }
+                e.Handled = true;
+            }));
+            CommandBindings.Add(new CommandBinding(System.Windows.Application.Current.FindResource("CloseTabCommand") as ICommand, (s, e) =>
+            {
+                Navigation.CloseTab(e.Parameter ?? e.OriginalSource ?? e.Source ?? s);
+                e.Handled = true;
+            }));
+            CommandBindings.Add(new CommandBinding(System.Windows.Application.Current.FindResource("ToggleTabCommand") as ICommand, (s, e) =>
+            {
+                if (e.Parameter is Type type)
+                {
+                    Navigation.ToggleTab(type);
+                }
+                else if (e.Parameter is string path && !string.IsNullOrWhiteSpace(path))
+                {
+                    Navigation.ToggleTab(path);
+                }
+                e.Handled = true;
+            }));
+
             /*
             // apply invert
             
@@ -171,61 +168,6 @@ namespace EPIC.ClearView
             catch (OperationCanceledException) { /* Handle shutdown */ }
         }
 
-
-        // Token: 0x06000356 RID: 854 RVA: 0x0001B920 File Offset: 0x00019B20
-        private void AccountManage_Click(object sender, RoutedEventArgs e)
-        {
-            Navigation.ShowTab<Pages.Capture.Manage>("capture/manage.xaml", true);
-        }
-
-        // Token: 0x06000357 RID: 855 RVA: 0x0001B944 File Offset: 0x00019B44
-        private void Patients_Click(object sender, RoutedEventArgs e)
-        {
-            Navigation.ShowTab<Pages.Patient.Search>("patient/search.xaml", true);
-        }
-
-        // Token: 0x06000358 RID: 856 RVA: 0x0001B968 File Offset: 0x00019B68
-        private void Captures_Click(object sender, RoutedEventArgs e)
-        {
-            Navigation.ShowTab<Pages.Capture.Search>("capture/search.xaml", true);
-        }
-
-        // Token: 0x06000359 RID: 857 RVA: 0x0001B98C File Offset: 0x00019B8C
-        private void UserAdd_Click(object sender, RoutedEventArgs e)
-        {
-            Navigation.ShowTab<Pages.User.Add>("user/add.xaml", true);
-        }
-
-        // Token: 0x0600035A RID: 858 RVA: 0x0001B9B0 File Offset: 0x00019BB0
-        private void UserSearch_Click(object sender, RoutedEventArgs e)
-        {
-            Navigation.ShowTab<Pages.User.Search>("user/search.xaml", true);
-        }
-
-        // Token: 0x0600035B RID: 859 RVA: 0x0001B9D4 File Offset: 0x00019BD4
-        private void ApplicationSettings_Click(object sender, RoutedEventArgs e)
-        {
-            Navigation.ShowTab<Pages.Application.Settings>("settings.xaml", true);
-        }
-
-        // Token: 0x0600035C RID: 860 RVA: 0x0001B9F8 File Offset: 0x00019BF8
-        private void UserPermission_Click(object sender, RoutedEventArgs e)
-        {
-            Navigation.ShowTab<Pages.Application.Permissions>("permissions.xaml", true);
-        }
-
-        // Token: 0x0600035D RID: 861 RVA: 0x0001BA1C File Offset: 0x00019C1C
-        private void Calibrate_Click(object sender, RoutedEventArgs e)
-        {
-            Navigation.ShowTab<Pages.Capture.Calibrate>("calibrate.xaml", true);
-        }
-
-        // Token: 0x0600035E RID: 862 RVA: 0x0001BA40 File Offset: 0x00019C40
-        private void NewCapture_Click(object sender, RoutedEventArgs e)
-        {
-            Navigation.ShowTab<Pages.Capture.Scan>("scan.xaml", true);
-        }
-
         // Token: 0x0600035F RID: 863 RVA: 0x0001BAB8 File Offset: 0x00019CB8
         private void Alerts_ViewAll(object sender, RoutedEventArgs e)
         {
@@ -303,6 +245,7 @@ namespace EPIC.ClearView
                     return;
                 }
 
+                // TODO: this was to make the gallery a little more efficient by only grabbing the fully query when opened
                 //if (this.AlertsBox == null /* || this.AlertsBox.Visibility != Visibility.Visible */)
                 //{
                 //    return;
@@ -348,6 +291,7 @@ namespace EPIC.ClearView
         {
         }
 
+        // TODO: this was to make the gallery a little more efficient by only grabbing the fully query when opened
         // Token: 0x06000365 RID: 869 RVA: 0x0001BEA5 File Offset: 0x0001A0A5
         private void AlertsBox_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
@@ -364,11 +308,6 @@ namespace EPIC.ClearView
         public static readonly DependencyProperty UserProperty = DependencyProperty.Register("User", typeof(object), typeof(MainWindow), new PropertyMetadata(null));
         private bool _isClosing;
 
-        private void AccountWelcome_Checked(object sender, RoutedEventArgs e)
-        {
-            //Uri uri = new Uri("/Pages/Application/Welcome.xaml", UriKind.Relative);
-            Navigation.ShowTab<Pages.Application.Welcome>("welcome.xaml", true);
-        }
 
 
     }

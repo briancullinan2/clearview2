@@ -26,6 +26,9 @@
                 <ResourceDictionary Source="/MedicalControls;component/Themes/Application/Window.xaml" />
                 <ResourceDictionary Source="/Themes/ActionItems.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <RoutedUICommand x:Key="ShowTabCommand" Text="Show Tab" />
+            <RoutedUICommand x:Key="ToggleTabCommand" Text="Toggle Tab" />
+            <RoutedUICommand x:Key="CloseTabCommand" Text="Close Tab" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>
