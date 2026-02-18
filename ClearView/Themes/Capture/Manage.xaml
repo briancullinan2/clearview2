@@ -1,0 +1,107 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ribbon="clr-namespace:System.Windows.Controls.Ribbon;assembly=System.Windows.Controls.Ribbon"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit">
+    <BitmapImage x:Key="Globe" UriSource="/Resources/5001-web_search.png" />
+    <x:Array x:Key="ManageOptions" Type="{x:Type ribbon:RibbonGroup}">
+        <ribbon:RibbonGroup Header="Account">
+            <!--
+                UIElement.Focusable="False"
+                UIElement.IsHitTestVisible="False"
+            -->
+            <ribbon:RibbonToggleButton
+                Command="{DynamicResource CloseTabCommand}"
+                IsChecked="True"
+                Label="Manage"
+                LargeImageSource="{StaticResource Globe}" />
+        </ribbon:RibbonGroup>
+        <ribbon:RibbonGroup Header="EPIC Central">
+            <ribbon:RibbonToggleButton Label="Locations" LargeImageSource="{StaticResource Globe}" />
+        </ribbon:RibbonGroup>
+        <ribbon:RibbonGroup
+            Grid.Row="0"
+            Grid.Column="0"
+            Header="Account Information">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Label
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Padding="2,2,2,2"
+                    VerticalAlignment="Center"
+                    Content="Last Sync" />
+                <Label
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Padding="2,2,2,2"
+                    VerticalAlignment="Center"
+                    Content="Never" />
+                <Label
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Padding="2,2,2,2"
+                    VerticalAlignment="Center"
+                    Content="Scans Remaining" />
+                <Label
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Padding="2,2,2,2"
+                    VerticalAlignment="Center"
+                    Content="0" />
+                <Label
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Padding="2,2,2,2"
+                    VerticalAlignment="Center"
+                    Content="Grace Scans" />
+                <Label
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    Padding="2,2,2,2"
+                    VerticalAlignment="Center"
+                    Content="0" />
+            </Grid>
+        </ribbon:RibbonGroup>
+        <ribbon:RibbonGroup
+            Grid.Row="0"
+            Grid.Column="1"
+            Header="Configuration">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Label
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    VerticalAlignment="Center"
+                    Content="Scan threashold:" />
+                <xctk:IntegerUpDown
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    FrameworkElement.VerticalAlignment="Center"
+                    ToolTip="Warn when the remaining scan balance is less than or equal to the number specified below." />
+                <ribbon:RibbonButton
+                    Grid.Row="1"
+                    Grid.ColumnSpan="2"
+                    Label="Apply Settings" />
+            </Grid>
+        </ribbon:RibbonGroup>
+    </x:Array>
+</ResourceDictionary>

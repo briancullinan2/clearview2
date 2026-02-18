@@ -13,138 +13,36 @@
     <FrameworkElement.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/MedicalControls;component/Themes/ClearView.xaml" />
+                <ResourceDictionary Source="/Themes/Capture/Manage.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <BitmapImage x:Key="Globe" UriSource="/Resources/5001-web_search.png" />
-            <ribbon:RibbonTab x:Key="ManageOptions">
-                <RibbonTab.Header>
-                    <TextBlock
-                        Margin="-10,-10,-10,0"
-                        Padding="10,10,10,0"
-                        Text="EPIC Central">
-                        <TextBlock.Background>
-                            <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
-                                <LinearGradientBrush.GradientStops>
-                                    <GradientStop Offset="0" Color="#AAFF0000" />
-                                    <GradientStop Offset="1" Color="#00FF0000" />
-                                </LinearGradientBrush.GradientStops>
-                            </LinearGradientBrush>
-                        </TextBlock.Background>
-                    </TextBlock>
-                </RibbonTab.Header>
-                <ribbon:RibbonGroup Header="Account">
-                    <!--
-                        UIElement.Focusable="False"
-                        UIElement.IsHitTestVisible="False"
-                    -->
-                    <ribbon:RibbonToggleButton
-                        IsChecked="True"
-                        Label="Manage"
-                        LargeImageSource="{StaticResource Globe}"
-                        Unchecked="RibbonToggleButton_Unchecked" />
-                </ribbon:RibbonGroup>
-                <ribbon:RibbonGroup Header="EPIC Central">
-                    <ribbon:RibbonToggleButton
-                        Click="Locations_Click"
-                        Label="Locations"
-                        LargeImageSource="{StaticResource Globe}" />
-                </ribbon:RibbonGroup>
-                <ribbon:RibbonGroup
-                    Grid.Row="0"
-                    Grid.Column="0"
-                    Header="Account Information">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        <Label
-                            Grid.Row="0"
-                            Grid.Column="0"
-                            Padding="2,2,2,2"
-                            VerticalAlignment="Center"
-                            Content="Last Sync" />
-                        <Label
-                            Grid.Row="0"
-                            Grid.Column="1"
-                            Padding="2,2,2,2"
-                            VerticalAlignment="Center"
-                            Content="Never" />
-                        <Label
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            Padding="2,2,2,2"
-                            VerticalAlignment="Center"
-                            Content="Scans Remaining" />
-                        <Label
-                            Grid.Row="1"
-                            Grid.Column="1"
-                            Padding="2,2,2,2"
-                            VerticalAlignment="Center"
-                            Content="0" />
-                        <Label
-                            Grid.Row="2"
-                            Grid.Column="0"
-                            Padding="2,2,2,2"
-                            VerticalAlignment="Center"
-                            Content="Grace Scans" />
-                        <Label
-                            Grid.Row="2"
-                            Grid.Column="1"
-                            Padding="2,2,2,2"
-                            VerticalAlignment="Center"
-                            Content="0" />
-                    </Grid>
-                </ribbon:RibbonGroup>
-                <ribbon:RibbonGroup
-                    Grid.Row="0"
-                    Grid.Column="1"
-                    Header="Configuration">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        <Label
-                            Grid.Row="0"
-                            Grid.Column="0"
-                            VerticalAlignment="Center"
-                            Content="Scan threashold:" />
-                        <xctk:IntegerUpDown
-                            Grid.Row="0"
-                            Grid.Column="1"
-                            FrameworkElement.VerticalAlignment="Center"
-                            ToolTip="Warn when the remaining scan balance is less than or equal to the number specified below." />
-                        <ribbon:RibbonButton
-                            Grid.Row="1"
-                            Grid.ColumnSpan="2"
-                            Label="Apply Settings" />
-                    </Grid>
-                </ribbon:RibbonGroup>
-            </ribbon:RibbonTab>
         </ResourceDictionary>
     </FrameworkElement.Resources>
-    <Grid ClipToBounds="True">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
+        <ribbon:Ribbon Margin="0,-120,0,0" Style="{StaticResource PlainRibbonStyle}">
+            <ribbon:RibbonTab
+                Header="Permissions"
+                ItemsSource="{StaticResource ManageOptions}"
+                Style="{StaticResource ContextualTabStyle}">
+                <ribbon:RibbonTab.HeaderStyle>
+                    <Style BasedOn="{StaticResource ContextualHeaderStyle}" TargetType="{x:Type ribbon:RibbonTabHeader}">
+                        <Setter Property="FocusedBackground" Value="#AAFF0000" />
+
+                    </Style>
+                </ribbon:RibbonTab.HeaderStyle>
+            </ribbon:RibbonTab>
+        </ribbon:Ribbon>
+
         <StackPanel MaxWidth="250" />
         <Frame
             Name="Navigator"
             Grid.Column="1"
+            ClipToBounds="True"
             Source="https://google.com" />
     </Grid>
 </Page>
