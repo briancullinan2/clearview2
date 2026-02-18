@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ribbon="clr-namespace:System.Windows.Controls.Ribbon;assembly=System.Windows.Controls.Ribbon"
+    xmlns:user="clr-namespace:EPIC.ClearView.Pages.User"
     Title="Search Users"
     d:DesignHeight="400"
     d:DesignWidth="600"
@@ -44,7 +45,6 @@
 
         <ContentControl Style="{StaticResource SearchControlStyle}" />
 
-
         <Grid Column="0" Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
@@ -60,7 +60,8 @@
                     Padding="3"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Click="NewUser_Click">
+                    Command="{DynamicResource ShowTabCommand}"
+                    CommandParameter="{x:Type user:Add}">
                     <StackPanel Orientation="Horizontal">
                         <Image
                             Width="25"

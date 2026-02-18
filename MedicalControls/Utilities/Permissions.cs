@@ -13,6 +13,7 @@ using System.Windows.Controls.Ribbon;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using System.Xaml;
 using System.Xml;
 using System.Xml.Linq;
@@ -188,7 +189,7 @@ namespace EPIC.MedicalControls.Utilities
         }
         */
 
-        public static IEnumerable<DataLayer.Entities.Permission> IntrospectXaml(System.Reflection.Assembly assembly, string bamlPath)
+        public static async Task<IEnumerable<DataLayer.Entities.Permission>> IntrospectXaml(System.Reflection.Assembly assembly, string bamlPath)
         {
             // Load the object graph without rendering it
             var qualified = new Uri("pack://application:,,,/" + assembly.GetName().Name + ";component/" + bamlPath, UriKind.Absolute);
@@ -200,10 +201,41 @@ namespace EPIC.MedicalControls.Utilities
                 return [];
             }
             var root = Application.LoadComponent(new Uri(bamlPath.Replace(".baml", ".xaml"), UriKind.Relative)) as FrameworkElement;
-            //var name = Path.GetFileNameWithoutExtension();
+            if (root != null)
+            {
+                root.ApplyTemplate();
+                root.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+                root.Arrange(new Rect(root.DesiredSize));
+                root.UpdateLayout();
+                await Dispatcher.Yield(DispatcherPriority.Render);
+                await WaitForLoaded(root);
 
-            return IntrospectXaml(assembly, root, bamlPath);
+                var permissions = IntrospectXaml(assembly, root, bamlPath);
+
+                return permissions;
+            }
+
+            return [];
         }
+        private static Task WaitForLoaded(FrameworkElement element)
+        {
+            var tcs = new TaskCompletionSource<bool>();
+
+            if (element.IsLoaded) return Task.FromResult(true);
+
+            // Define the handler so we can unsubscribe from it
+            RoutedEventHandler handler = null;
+            handler = (s, e) =>
+            {
+                element.Loaded -= handler; // The "Magic" Cleanup
+                tcs.TrySetResult(true);
+            };
+
+            element.Loaded += handler;
+            return tcs.Task;
+        }
+
+
 
         /*
 
@@ -827,17 +859,20 @@ namespace EPIC.MedicalControls.Utilities
 
             // 3. Remove the filename (MainWindow) to get just the folder structure
             // Result: "MyProject/Views"
-            string folderPath = System.IO.Path.GetDirectoryName(cleanPath);
-
+            string? folderPath = System.IO.Path.GetDirectoryName(cleanPath);
+            if (string.IsNullOrWhiteSpace(folderPath))
+            {
+                return "";
+            }
             // 4. Convert slashes to dots and ensure CamelCase
             // Result: "MyProject.Views"
-            return String.Join(",\n    ", folderPath.Replace('\\', '/').TrimStart('/')
+            return String.Join(".", folderPath.Replace('\\', '/').TrimStart('/')
                                 .Split('/')
                                 .Select(s => System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(s)));
         }
 
 
-        public static void MakePermissions(Uri baseUri, FrameworkElement root, System.Reflection.Assembly assembly, string _outputPath = ".")
+        public static async void MakePermissions(Uri baseUri, FrameworkElement root, System.Reflection.Assembly assembly, string _outputPath = ".")
         {
             var name = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(System.IO.Path.GetFileNameWithoutExtension(baseUri.LocalPath));
 

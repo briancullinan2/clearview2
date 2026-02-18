@@ -111,7 +111,8 @@ namespace EPIC.ClearView.Utilities.Macros
             {
                 if (!(o is TabItem))
                 {
-                    o = ((DependencyObject)o).FindAncestor<TabItem>();
+                    var root = ((DependencyObject)o).FindAncestor<Page>();
+                    o = root.FindAncestor<TabItem>();
                 }
                 MessageBoxResult messageBoxResult = MessageBoxResult.Yes;
                 //if (FormChecker.Events.Keys.Any((FrameworkElement x) => x.GetAncestors().Any((DependencyObject y) => y.Equals(o)) && FormChecker.Events[x].IsChanged))
@@ -259,6 +260,7 @@ namespace EPIC.ClearView.Utilities.Macros
         }
 
 
+
         public static TabItem? FindTab<T>(Uri? uri = null)
         {
             return FindTab(typeof(T), uri);
@@ -275,7 +277,7 @@ namespace EPIC.ClearView.Utilities.Macros
             {
                 if (x.Content is Frame frame)
                 {
-                    if (T != null && T.IsAssignableFrom(x.Content?.GetType()))
+                    if (T != null && T.IsAssignableFrom(frame.Content?.GetType()))
                         return true;
 
                     if (uri == null || string.IsNullOrWhiteSpace(uri?.OriginalString))
@@ -290,38 +292,30 @@ namespace EPIC.ClearView.Utilities.Macros
         }
 
 
+        public static void ToggleTab(string uri)
+        {
+            ToggleTab(null, new Uri(uri, UriKind.Relative));
+        }
+
+        public static void ToggleTab(Type? T = null, Uri? uri = null)
+        {
+            var tab = FindTab(T, uri);
+            if (tab == null)
+            {
+                ShowTab(T, uri, true);
+            }
+            else
+            {
+                CloseTab(tab);
+            }
+
+        }
+
+
         // Token: 0x06000145 RID: 325 RVA: 0x0000BEC8 File Offset: 0x0000A0C8
         public static void ShowTab(Uri uri, bool onlyOne = true)
         {
-            MainWindow? mainWindow = System.Windows.Application.Current.MainWindow as MainWindow;
-            if (mainWindow != null)
-            {
-                TabItem? tabItem = FindTab(null, uri);
-                if (onlyOne && tabItem != null)
-                {
-                    tabItem.IsSelected = true;
-                }
-                else
-                {
-                    Frame frame = new Frame
-                    {
-                        Source = uri,
-                        NavigationUIVisibility = NavigationUIVisibility.Hidden
-                    };
-                    TabItem newTab = new TabItem
-                    {
-                        Content = frame,
-                        Header = new Grid(),
-                        //HeaderTemplate = mainWindow.TryFindResource("TabClosable") as DataTemplate
-                    };
-                    frame.LoadCompleted += delegate (object sender, NavigationEventArgs args)
-                    {
-                        newTab.Header = ((Page)frame.Content).Title;
-                    };
-                    mainWindow.Tabs.Items.Add(newTab);
-                    newTab.IsSelected = true;
-                }
-            }
+            ShowTab(null, uri, onlyOne);
         }
 
         public static void ShowTab(string uri, bool onlyOne = true)
@@ -329,7 +323,7 @@ namespace EPIC.ClearView.Utilities.Macros
             ShowTab(new Uri(uri, UriKind.Relative), onlyOne);
         }
 
-        public static void ShowTab(Type T, Uri? uri = null, bool onlyOne = true)
+        public static void ShowTab(Type? T, Uri? uri = null, bool onlyOne = true)
         {
             var mainWindow = System.Windows.Application.Current.MainWindow as MainWindow;
             if (mainWindow == null) return;
@@ -338,40 +332,39 @@ namespace EPIC.ClearView.Utilities.Macros
             // This avoids the 'new' keyword until we are certain we need it.
             TabItem? existingTab = FindTab(T, uri);
 
-            if (onlyOne && existingTab != null)
+            if (/*onlyOne &&*/ existingTab != null)
             {
                 existingTab.IsSelected = true;
+                return;
             }
             else
             {
-                // 2. Create the Frame and the Page instance
-                // Because of 'where T : new()', the compiler guarantees this is safe.
-                var pageInstance = Activator.CreateInstance(T) as Page;
-
-                /*
-                ConstructorInfo ctor = type.GetConstructor(
-                    BindingFlags.Instance | BindingFlags.Public, 
-                    null, 
-                    Type.EmptyTypes, 
-                    null);
-
-                if (ctor != null)
-                {
-                    object instance = ctor.Invoke(null);
-                }
-                */
-
                 Frame frame = new Frame
                 {
-                    Tag = BaseUriHelper.GetBaseUri(pageInstance).LocalPath,
-                    Content = pageInstance,
                     NavigationUIVisibility = NavigationUIVisibility.Hidden
                 };
+
+                if (T == null)
+                {
+                    // TODO: implement loosey url checking by comparing to the list of bamls?
+                    frame.Source = uri;
+                }
+                else
+                {
+                    var pageInstance = Activator.CreateInstance(T) as Page;
+                    frame.Tag = BaseUriHelper.GetBaseUri(pageInstance).LocalPath;
+                    frame.Content = pageInstance;
+                }
 
                 TabItem newTab = new TabItem
                 {
                     Content = frame,
-                    Header = pageInstance?.Title ?? T.Name // Fallback to class name if title is null
+                    Header = (frame.Content as Page)?.Title ?? T?.Name // Fallback to class name if title is null
+                };
+                frame.LoadCompleted += delegate (object sender, NavigationEventArgs args)
+                {
+                    frame.Tag = frame.Source; // to match above if frame is already loaded from Type
+                    newTab.Header = (frame.Content as Page)?.Title;
                 };
 
                 mainWindow.Tabs.Items.Add(newTab);

@@ -13,15 +13,18 @@ namespace EPIC.ClearView.Pages.Application
         public Alerts()
         {
             this.InitializeComponent();
+            Navigation.InsertRibbon(this);
             base.Loaded += delegate (object sender, RoutedEventArgs args)
             {
                 var messages = TranslationContext.Current["Data Source=:memory:"].Messages;
 
                 if (base.NavigationService != null)
                 {
-                    int num = base.NavigationService.CurrentSource.OriginalString.IndexOf("?", StringComparison.InvariantCultureIgnoreCase);
+                    int? num = base.NavigationService.CurrentSource?.OriginalString.IndexOf("?", StringComparison.InvariantCultureIgnoreCase);
                     int messageId;
-                    if (num >= 0 && int.TryParse(HttpUtility.ParseQueryString(base.NavigationService.CurrentSource.OriginalString.Substring(num))["messageId"], out messageId))
+                    if (NavigationService.CurrentSource != null
+                        && num != null && num >= 0
+                        && int.TryParse(HttpUtility.ParseQueryString(base.NavigationService.CurrentSource.OriginalString.Substring((int)num))["messageId"], out messageId))
                     {
                         this.Messages.ItemsSource = (from x in messages
                                                      where x.MessageId == (long)messageId

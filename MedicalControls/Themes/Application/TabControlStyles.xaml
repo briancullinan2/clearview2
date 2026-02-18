@@ -6,7 +6,7 @@
         <ResourceDictionary Source="/MedicalControls;component/Themes/ClearView.xaml" />
     </ResourceDictionary.MergedDictionaries>
     <Style x:Key="CloseButtonStyle" TargetType="{x:Type Button}">
-        <EventSetter Event="Click" Handler="Button_Click" />
+        <!--<EventSetter Event="Click" Handler="Button_Click" />-->
         <Setter Property="Background" Value="#00FFFFFF" />
         <Setter Property="FrameworkElement.Cursor" Value="Hand" />
         <Setter Property="Focusable" Value="False" />
@@ -79,7 +79,7 @@
                                         Height="15"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
-                                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabItem}}}"
+                                        Command="{DynamicResource CloseTabCommand}"
                                         Style="{StaticResource CloseButtonStyle}" />
                                 </Grid>
                                 <ControlTemplate.Triggers>

@@ -21,7 +21,7 @@
                 <ResourceDictionary Source="/MedicalControls;component/Themes/Application/DataGridStyles.xaml" />
                 <ResourceDictionary Source="/MedicalControls;component/Themes/GeneralTemplate.xaml" />
                 <ResourceDictionary Source="/MedicalControls;component/Themes/Application/RibbonMenu.xaml" />
-                <ResourceDictionary Source="/Themes/Application/Alerts.xaml" />
+                <ResourceDictionary Source="/Themes/Application/Permissions.xaml" />
                 <ResourceDictionary Source="/Themes/ActionItems.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <BitmapImage x:Key="Find" UriSource="/Resources/0025-search.png" />
@@ -43,9 +43,15 @@
         <ribbon:Ribbon Margin="0,-120,0,0" Style="{StaticResource PlainRibbonStyle}">
             <ribbon:RibbonTab
                 Header="Permissions"
-                HeaderStyle="{StaticResource ContextualHeaderStyle}"
-                ItemsSource="{StaticResource AlertsTabs}"
-                Style="{StaticResource ContextualTabStyle}" />
+                ItemsSource="{StaticResource PermissionTabs}"
+                Style="{StaticResource ContextualTabStyle}">
+                <ribbon:RibbonTab.HeaderStyle>
+                    <Style BasedOn="{StaticResource ContextualHeaderStyle}" TargetType="{x:Type ribbon:RibbonTabHeader}">
+                        <Setter Property="FocusedBackground" Value="#AAFFFF00" />
+
+                    </Style>
+                </ribbon:RibbonTab.HeaderStyle>
+            </ribbon:RibbonTab>
         </ribbon:Ribbon>
 
         <ContentControl Style="{StaticResource SearchControlStyle}" />

@@ -1,5 +1,4 @@
 ﻿using EPIC.ClearView.Utilities.Macros;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -15,28 +14,6 @@ namespace EPIC.ClearView.Pages.User
         {
             this.InitializeComponent();
             Navigation.InsertRibbon(this);
-        }
-
-        // Token: 0x06000336 RID: 822 RVA: 0x0001AB64 File Offset: 0x00018D64
-        private void NewUser_Click(object sender, RoutedEventArgs e)
-        {
-            Navigation.ShowTab(new Uri("/User/Add.xaml", UriKind.Relative));
-        }
-
-        // Token: 0x06000337 RID: 823 RVA: 0x0001AB98 File Offset: 0x00018D98
-        private void Search_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
-
-        private void RibbonToggleButton_Unchecked(object sender, RoutedEventArgs e)
-        {
-            Navigation.CloseTab(this);
-        }
-
-        private void UserPermission_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

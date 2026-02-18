@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:entityClasses="clr-namespace:EPIC.DataLayer.Entities;assembly=DataLayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ribbon="clr-namespace:System.Windows.Controls.Ribbon;assembly=System.Windows.Controls.Ribbon"
     Title="Alerts"
     d:Height="200"
     d:Width="300"
@@ -23,19 +24,40 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="1">
+        <ribbon:Ribbon
+            Grid.ColumnSpan="2"
+            Margin="0,-120,0,0"
+            Style="{StaticResource PlainRibbonStyle}">
+            <ribbon:RibbonTab
+                Header="Alerts"
+                ItemsSource="{StaticResource AlertsTabs}"
+                Style="{StaticResource ContextualTabStyle}">
+                <ribbon:RibbonTab.HeaderStyle>
+                    <Style BasedOn="{StaticResource ContextualHeaderStyle}" TargetType="{x:Type ribbon:RibbonTabHeader}">
+                        <Setter Property="FocusedBackground" Value="#AAFFFF00" />
+
+                    </Style>
+                </ribbon:RibbonTab.HeaderStyle>
+            </ribbon:RibbonTab>
+        </ribbon:Ribbon>
+
+        <ContentControl Grid.ColumnSpan="2" Style="{StaticResource SearchControlStyle}" />
+
+        <StackPanel Grid.Row="2">
             <Label Content="{Binding ElementName=Messages, Path=Items.Count}" ContentStringFormat="Displaying: {0}" />
             <Label Content="{Binding Total}" ContentStringFormat="Total Records: {0}" />
         </StackPanel>
         <ContentControl
-            Grid.Row="1"
+            Grid.Row="2"
             Grid.Column="1"
             Style="{StaticResource StandardActionFooter}" />
         <DataGrid
             Name="Messages"
+            Grid.Row="1"
             Grid.ColumnSpan="2"
             CellStyle="{StaticResource CopyPasteDataColumnCellStyle}"
             RowStyle="{StaticResource FlatTerminalRow}"

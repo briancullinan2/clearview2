@@ -17,26 +17,46 @@ namespace EPIC.ClearView
     public partial class MainWindow : Window
     {
         public static readonly RoutedUICommand ShowTab = new RoutedUICommand("Show Tab", "ShowTab", typeof(MainWindow));
+        public static readonly RoutedUICommand ToggleTab = new RoutedUICommand("Toggle Tab", "ToggleTab", typeof(MainWindow));
+        public static readonly RoutedUICommand CloseTab = new RoutedUICommand("Close Tab", "CloseTab", typeof(MainWindow));
         public MainWindow()
         {
             ContentRendered += MainWindow_OnContentRendered;
+
             CommandBindings.Add(new CommandBinding(ShowTab, (s, e) =>
             {
                 if (typeof(Type).IsAssignableFrom(e.Parameter?.GetType()))
                 {
                     Navigation.ShowTab(e.Parameter as Type);
                 }
-                else
+                else if ((e.Parameter?.ToString() is string parameter) && !string.IsNullOrWhiteSpace(parameter))
                 {
-                    Navigation.ShowTab(e.Parameter?.ToString());
+                    Navigation.ShowTab(parameter);
                 }
             }));
             Resources["ShowTabCommand"] = ShowTab;
             System.Windows.Application.Current.Resources["ShowTabCommand"] = ShowTab;
-            //CommandBindings.Add(new CommandBinding(NavigationCommands.CloseTab, (s, e) =>
-            //{
-            //    var relay = new Utilities.Commands.RelayCommand(new Action<object>(this.NextTab), null)
-            //}));
+
+            CommandBindings.Add(new CommandBinding(ToggleTab, (s, e) =>
+            {
+                if (typeof(Type).IsAssignableFrom(e.Parameter?.GetType()))
+                {
+                    Navigation.ToggleTab(e.Parameter as Type);
+                }
+                else if ((e.Parameter?.ToString() is string parameter) && !string.IsNullOrWhiteSpace(parameter))
+                {
+                    Navigation.ToggleTab(parameter);
+                }
+            }));
+            Resources["ToggleTabCommand"] = ToggleTab;
+            System.Windows.Application.Current.Resources["ToggleTabCommand"] = ToggleTab;
+
+            CommandBindings.Add(new CommandBinding(CloseTab, (s, e) =>
+            {
+                Navigation.CloseTab(e.Parameter ?? e.OriginalSource ?? e.Source ?? s);
+            }));
+            Resources["CloseTabCommand"] = CloseTab;
+            System.Windows.Application.Current.Resources["CloseTabCommand"] = CloseTab;
 
             InitializeComponent();
             InputBindings.Add(new InputBinding(new Utilities.Commands.RelayCommand(new Action<object>(this.NextTab), null), new KeyGesture(Key.Tab, ModifierKeys.Control)));
@@ -350,15 +370,6 @@ namespace EPIC.ClearView
             Navigation.ShowTab<Pages.Application.Welcome>("welcome.xaml", true);
         }
 
-        private void AccountWelcome_Unchecked(object sender, RoutedEventArgs e)
-        {
-            var tab = this.Tabs.Items.OfType<TabItem>().FirstOrDefault(x => (x.Content as Frame).Source.OriginalString.Trim('/').Contains("Pages/Application/Welcome.xaml"));
-            if (tab == null)
-            {
-                return;
-            }
-            Navigation.CloseTab(tab);
-        }
 
     }
 }

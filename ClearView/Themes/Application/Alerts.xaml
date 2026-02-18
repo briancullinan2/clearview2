@@ -51,19 +51,19 @@
         <GradientStop Offset="0.5" Color="#05FFFFFF" />
         <GradientStop Offset="1.0" Color="#20FFFFFF" />
     </LinearGradientBrush>
+    <BitmapImage x:Key="ViewAlerts" UriSource="/Resources/1004-warning.png" />
+    <BitmapImage x:Key="Cancel" UriSource="/Resources/1001-cancel.png" />
     <x:Array x:Key="AlertsTabs" Type="{x:Type ribbon:RibbonGroup}">
-        <ribbon:RibbonGroup Header="User Options">
+        <ribbon:RibbonGroup Header="Alert Services">
             <ribbon:RibbonToggleButton
+                Command="{DynamicResource CloseTabCommand}"
                 IsChecked="True"
-                Label="Permissions"
-                LargeImageSource="{StaticResource Permissions}"
+                Label="View Alerts"
+                LargeImageSource="{StaticResource ViewAlerts}"
                 Unchecked="RibbonToggleButton_Unchecked" />
         </ribbon:RibbonGroup>
         <ribbon:RibbonGroup Header="Tab Options">
-            <ribbon:RibbonButton
-                Click="AddRole_Click"
-                Label="Add Role"
-                LargeImageSource="{StaticResource Add}" />
+            <ribbon:RibbonButton Label="Clear Alerts" LargeImageSource="{StaticResource Cancel}" />
         </ribbon:RibbonGroup>
 
     </x:Array>

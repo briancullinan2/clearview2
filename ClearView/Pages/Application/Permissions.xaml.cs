@@ -8,12 +8,14 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
+using System.Windows.Input;
 
 namespace EPIC.ClearView.Pages.Application
 {
     // Token: 0x0200004C RID: 76
     public partial class Permissions : Page
     {
+        public static readonly RoutedUICommand AddRole = new RoutedUICommand("Add Rp;e", "AddRole", typeof(Permissions));
         // Token: 0x0600028D RID: 653 RVA: 0x0001519C File Offset: 0x0001339C
         public Permissions()
         {
@@ -31,6 +33,10 @@ namespace EPIC.ClearView.Pages.Application
                 //FormChecker.Events[this].Changed += this.OnChanged;
                 //FormChecker.Events[this].Unchanged += this.OnUnchanged;
             };
+
+            CommandBindings.Add(new CommandBinding(AddRole, AddRole_Click));
+            Resources["AddRoleCommand"] = AddRole;
+            System.Windows.Application.Current.Resources["AddRoleCommand"] = AddRole;
 
 
             // we specify the memory data context here because we know the information will be synchronized before close.
@@ -168,7 +174,7 @@ namespace EPIC.ClearView.Pages.Application
         // Token: 0x0600028E RID: 654 RVA: 0x000154DC File Offset: 0x000136DC
         private void AddColumn(DataLayer.Entities.Role role, bool canResize = false)
         {
-            var col = this.PermissionsGrid.Columns.FirstOrDefault((DataGridColumn x) => x.Header.ToString() == role.Name);
+            var col = this.PermissionsGrid.Columns.FirstOrDefault((DataGridColumn x) => x.Header?.ToString() == role.Name);
             if (col != null)
             {
                 return;

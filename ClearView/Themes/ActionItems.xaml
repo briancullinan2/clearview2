@@ -147,7 +147,7 @@
                             Padding="3"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            Click="AddRole_Click">
+                            Command="{DynamicResource AddRoleCommand}">
                             <StackPanel Orientation="Horizontal">
                                 <Image
                                     Width="25"
