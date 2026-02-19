@@ -93,6 +93,19 @@ namespace EPIC.ClearView
             }
         }
 
+        public bool Interrupted
+        {
+            get
+            {
+                return (bool)base.GetValue(InterruptedProperty);
+            }
+            set
+            {
+                base.SetValue(InterruptedProperty, value);
+            }
+        }
+        public static readonly DependencyProperty InterruptedProperty = DependencyProperty.Register("Interrupted", typeof(bool), typeof(SplashWindow), new PropertyMetadata(false));
+
 
         // Token: 0x06000259 RID: 601 RVA: 0x00013EBE File Offset: 0x000120BE
         private SplashWindow()
@@ -166,6 +179,7 @@ namespace EPIC.ClearView
                     if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.F12) || Keyboard.IsKeyDown(Key.F8) || Keyboard.IsKeyDown(Key.Pause))
                     {
                         // TODO ConfigurationCombo.Visibility = Visible
+                        Interrupted = true;
                         return;
                     }
 
@@ -196,5 +210,10 @@ namespace EPIC.ClearView
 
         // Token: 0x04000139 RID: 313
         private static App _app;
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            StartApp();
+        }
     }
 }

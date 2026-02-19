@@ -2,7 +2,10 @@
     x:Class="EPIC.ClearView.SplashWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:utilities="clr-namespace:EPIC.ClearView.Utilities;assembly=EPICClearView"
+    xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=PresentationFramework"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:utilities="clr-namespace:EPIC.ClearView.Utilities"
     Title="{Binding Path=Version, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Page}}}"
     Width="414"
     Height="236"
@@ -13,7 +16,8 @@
     Topmost="True"
     UseLayoutRounding="True"
     WindowStartupLocation="CenterScreen"
-    WindowStyle="None">
+    WindowStyle="None"
+    mc:Ignorable="d">
     <FrameworkElement.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -37,6 +41,7 @@
         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -71,9 +76,56 @@
                 Height="28"
                 VerticalAlignment="Bottom"
                 Foreground="#FFFFFFFF" />
+            <Grid Grid.Row="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.Style>
+                    <Style TargetType="{x:Type Grid}">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Interrupted, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Value="True">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                            <d:Trigger Property="componentModel:DesignerProperties.IsInDesignMode" Value="True">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </d:Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+                <Label VerticalAlignment="Center" Content="Theme" />
+                <ComboBox
+                    Grid.Column="2"
+                    Margin="5"
+                    VerticalAlignment="Center" />
+                <Label
+                    Grid.Row="1"
+                    VerticalAlignment="Center"
+                    Content="Configuration" />
+                <ComboBox
+                    Grid.Row="1"
+                    Grid.Column="2"
+                    Margin="5"
+                    VerticalAlignment="Center"
+                    ItemsSource="{Binding Path=., Mode=OneWay, Source={x:Static utilities:ClearViewConfiguration.Configurations}}"
+                    SelectedItem="{Binding Path=[0], Mode=OneWay, Source={x:Static utilities:ClearViewConfiguration.Configurations}}" />
+                <Button
+                    Grid.Row="2"
+                    Grid.ColumnSpan="2"
+                    Margin="5"
+                    Click="Button_Click"
+                    Padding="3"
+                    Content="Continue" />
+            </Grid>
             <ProgressBar
                 Name="Progress"
-                Grid.Row="3"
+                Grid.Row="4"
                 Height="15"
                 VerticalAlignment="Bottom"
                 Value="100">

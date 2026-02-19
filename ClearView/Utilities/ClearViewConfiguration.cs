@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Windows;
 
 namespace EPIC.ClearView.Utilities
 {
@@ -38,6 +39,30 @@ namespace EPIC.ClearView.Utilities
             Logging.Log.Debug(_configuration.FilePath);
             this.SetupConfigWatcher();
         }
+
+        public Configuration LoadConfig(string path)
+        {
+            if (!File.Exists(path))
+                throw new FileNotFoundException("Config file not found", path);
+
+            // 1. Map the path
+            ExeConfigurationFileMap fileMap = new ExeConfigurationFileMap();
+            fileMap.ExeConfigFilename = path;
+
+            // 2. Open the mapped configuration
+            Configuration config = ConfigurationManager.OpenMappedExeConfiguration(
+                fileMap,
+                ConfigurationUserLevel.None
+            );
+
+            return config;
+        }
+
+
+        public static IEnumerable<string> Configurations =>
+        Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.config").Select(p => Path.GetFileName(p));
+        public static readonly DependencyProperty ConfigurationsProperty = DependencyProperty.Register("Configurations", typeof(IEnumerable<string>), typeof(MainWindow), new PropertyMetadata(new string[] { "app.config" }));
+
 
         // Make a list of name contexts that lead to the TranslationContext
         public static Dictionary<string, DataLayer.TranslationContext> Contexts

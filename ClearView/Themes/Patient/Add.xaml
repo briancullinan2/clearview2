@@ -23,9 +23,9 @@
     <x:Array x:Key="AddOptions" Type="{x:Type ribbon:RibbonGroup}">
         <ribbon:RibbonGroup Header="Search">
             <ribbon:RibbonToggleButton
+                Command="{DynamicResource CloseTabCommand}"
                 IsChecked="True"
                 Label="New Patient"
-                Command="{DynamicResource CloseTabCommand}"
                 LargeImageSource="{StaticResource NewPatient}" />
         </ribbon:RibbonGroup>
         <ribbon:RibbonGroup Header="Actions">

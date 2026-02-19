@@ -53,7 +53,7 @@ namespace EPIC.ClearView
             targetVisual.Brush = effectBrush;
             */
 
-            MedicalControls.Utilities.Macros.Mica.SubscribeFuzz(this, Tabs, BackgroundLayer);
+            MedicalControls.Utilities.Macros.Mica.SubscribeFuzz(this, this, BackgroundLayer);
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -291,6 +291,22 @@ namespace EPIC.ClearView
         // Token: 0x06000363 RID: 867 RVA: 0x0001BE84 File Offset: 0x0001A084
         private void ApplicationChangeLogin_Click(object sender, RoutedEventArgs e)
         {
+            this._previousUser = this.User;
+            this.User = null;
+        }
+
+        // Token: 0x04000195 RID: 405
+        private DataLayer.Entities.User? _previousUser;
+        public DataLayer.Entities.User? User
+        {
+            get
+            {
+                return (DataLayer.Entities.User)base.GetValue(MainWindow.UserProperty);
+            }
+            set
+            {
+                base.SetValue(MainWindow.UserProperty, value);
+            }
         }
 
         // Token: 0x06000364 RID: 868 RVA: 0x0001BE9B File Offset: 0x0001A09B
@@ -312,7 +328,7 @@ namespace EPIC.ClearView
         }
 
         // Token: 0x04000194 RID: 404
-        public static readonly DependencyProperty UserProperty = DependencyProperty.Register("User", typeof(object), typeof(MainWindow), new PropertyMetadata(null));
+        public static readonly DependencyProperty UserProperty = DependencyProperty.Register("User", typeof(DataLayer.Entities.User), typeof(MainWindow), new PropertyMetadata(null));
         private bool _isClosing;
 
 

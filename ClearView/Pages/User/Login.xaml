@@ -2,10 +2,14 @@
     x:Class="EPIC.ClearView.Pages.User.Login"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=PresentationFramework"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="Login As"
     FocusManager.FocusedElement="{Binding ElementName=Username}"
     SnapsToDevicePixels="True"
-    UseLayoutRounding="True">
+    UseLayoutRounding="True"
+    mc:Ignorable="d">
     <FrameworkElement.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -16,10 +20,13 @@
         </ResourceDictionary>
     </FrameworkElement.Resources>
     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-        <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Grid
+            Margin="50"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="75" />
+                <ColumnDefinition Width="100" />
                 <ColumnDefinition Width="150" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -57,11 +64,15 @@
                 Row="2">
                 <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                     <Button
+                        Margin="5"
+                        Padding="3"
                         HorizontalAlignment="Right"
                         Click="Login_Click"
                         Content="Login"
                         IsDefault="True" />
                     <Button
+                        Margin="5"
+                        Padding="3"
                         HorizontalAlignment="Right"
                         Click="Cancel_Click"
                         Content="Cancel"
@@ -69,6 +80,8 @@
                 </StackPanel>
                 <ToggleButton
                     Name="Options"
+                    Margin="5"
+                    Padding="3"
                     HorizontalAlignment="Left"
                     Content="Options"
                     IsChecked="False" />
@@ -77,12 +90,22 @@
                 Name="DatabaseLabel"
                 Grid.Row="3"
                 Grid.Column="1"
+                VerticalAlignment="Center"
                 Content="Database:">
                 <FrameworkElement.Style>
-                    <Style>
+                    <Style TargetType="{x:Type Label}">
+                        <Setter Property="Visibility" Value="Collapsed" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsChecked, ElementName=Options}" Value="True" />
-                            <DataTrigger Binding="{Binding IsChecked, ElementName=ToggleDatabase}" Value="True" />
+                            <DataTrigger Binding="{Binding IsChecked, ElementName=Options}" Value="True">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsChecked, ElementName=ToggleDatabase}" Value="True">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                            <d:Trigger Property="componentModel:DesignerProperties.IsInDesignMode" Value="True">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </d:Trigger>
+
                         </Style.Triggers>
                     </Style>
                 </FrameworkElement.Style>
@@ -91,13 +114,16 @@
                 Column="2"
                 Row="3"
                 ZIndex="1">
-                <FrameworkElement.Style>
-                    <Style>
+                <!--<FrameworkElement.Style>
+                    <Style TargetType="{x:Type Grid}">
+                        <Setter Property="Visibility" Value="Visible" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsChecked, ElementName=Options}" Value="True" />
+                            <DataTrigger Binding="{Binding IsChecked, ElementName=Options}" Value="True">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
                         </Style.Triggers>
                     </Style>
-                </FrameworkElement.Style>
+                </FrameworkElement.Style>-->
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition Width="Auto" />
@@ -105,18 +131,25 @@
                 <ComboBox
                     Name="Connection"
                     Margin="5"
-                    VerticalAlignment="Top"
+                    VerticalAlignment="Center"
                     IsEditable="True"
                     IsTextSearchEnabled="False"
                     Loaded="Connection_Loaded"
                     TextBoxBase.TextChanged="Connection_TextChanged">
                     <FrameworkElement.Style>
                         <Style TargetType="{x:Type ComboBox}">
-                            <Setter Property="Visibility" Value="Visible" />
+                            <Setter Property="Visibility" Value="Collapsed" />
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsChecked, ElementName=ToggleDatabase}" Value="True">
-                                    <Setter Property="Visibility" Value="Collapsed" />
+                                    <Setter Property="Visibility" Value="Visible" />
                                 </DataTrigger>
+                                <DataTrigger Binding="{Binding IsChecked, ElementName=Options}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                                <d:Trigger Property="componentModel:DesignerProperties.IsInDesignMode" Value="True">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </d:Trigger>
+
                             </Style.Triggers>
                         </Style>
                     </FrameworkElement.Style>
@@ -124,9 +157,21 @@
                 <ToggleButton
                     Name="ToggleDatabase"
                     Grid.Column="1"
+                    Margin="5"
                     Padding="2"
-                    VerticalAlignment="Top"
-                    IsChecked="False">
+                    VerticalAlignment="Center">
+                    <ToggleButton.Style>
+                        <Style TargetType="{x:Type ToggleButton}">
+                            <Setter Property="IsChecked" Value="False" />
+                            <Setter Property="IsEnabled" Value="True" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsChecked, ElementName=Options}" Value="True">
+                                    <Setter Property="IsChecked" Value="True" />
+                                    <Setter Property="IsEnabled" Value="False" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ToggleButton.Style>
                     <Image
                         Width="15"
                         Height="15"
@@ -149,14 +194,15 @@
                 Row="4"
                 ZIndex="0">
                 <FrameworkElement.Style>
-                    <Style>
+                    <Style TargetType="{x:Type Grid}">
+                        <Setter Property="Visibility" Value="Collapsed" />
                         <Style.Triggers>
-                            <MultiDataTrigger>
-                                <MultiDataTrigger.Conditions>
-                                    <Condition Binding="{Binding IsChecked, ElementName=ToggleDatabase}" Value="True" />
-                                    <Condition Binding="{Binding IsChecked, ElementName=Options}" Value="True" />
-                                </MultiDataTrigger.Conditions>
-                            </MultiDataTrigger>
+                            <DataTrigger Binding="{Binding IsChecked, ElementName=Options}" Value="True">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                            <d:Trigger Property="componentModel:DesignerProperties.IsInDesignMode" Value="True">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </d:Trigger>
                         </Style.Triggers>
                     </Style>
                 </FrameworkElement.Style>

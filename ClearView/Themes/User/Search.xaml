@@ -20,14 +20,12 @@
                 Label="Search"
                 LargeImageSource="{StaticResource SearchUser}" />
         </ribbon:RibbonGroup>
-        <ribbon:RibbonGroup Header="Actions">
+        <ribbon:RibbonGroup Header="User Options">
             <ribbon:RibbonButton
                 Command="{DynamicResource ShowTabCommand}"
                 CommandParameter="{x:Type user:Add}"
                 Label="New User"
                 LargeImageSource="{StaticResource NewUser}" />
-        </ribbon:RibbonGroup>
-        <ribbon:RibbonGroup Name="UserOptions" Header="User Options">
             <ribbon:RibbonButton
                 Name="UserPermission"
                 Command="{DynamicResource ShowTabCommand}"

@@ -5,7 +5,7 @@
 		<appender-ref ref="AsyncForwarder" />
 	</root>
 
-	<appender name="AsyncForwarder" type="log4net.Appender.BufferingForwardingAppender">
+	<!--<appender name="AsyncForwarder" type="log4net.Appender.BufferingForwardingAppender">
 		<bufferSize value="1" />
 		<lossy value="false" />
 		<fix value="All" />
@@ -41,5 +41,5 @@
 		<filter type="log4net.Filter.LevelRangeFilter">
 			<levelMin value="WARN" />
 		</filter>
-	</appender>
+	</appender>-->
 </log4net>

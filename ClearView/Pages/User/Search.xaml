@@ -28,7 +28,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="50" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
@@ -36,11 +36,15 @@
 
         <ribbon:Ribbon Margin="0,-120,0,0" Style="{StaticResource PlainRibbonStyle}">
             <ribbon:RibbonTab
-                Background="#AA008000"
                 Header="Options"
-                HeaderStyle="{StaticResource ContextualHeaderStyle}"
                 ItemsSource="{StaticResource SearchOptions}"
-                Style="{StaticResource ContextualTabStyle}" />
+                Style="{StaticResource ContextualTabStyle}">
+                <ribbon:RibbonTab.HeaderStyle>
+                    <Style BasedOn="{StaticResource ContextualHeaderStyle}" TargetType="{x:Type ribbon:RibbonTabHeader}">
+                        <Setter Property="FocusedBackground" Value="#AA008000" />
+                    </Style>
+                </ribbon:RibbonTab.HeaderStyle>
+            </ribbon:RibbonTab>
         </ribbon:Ribbon>
 
         <ContentControl Style="{StaticResource SearchControlStyle}" />

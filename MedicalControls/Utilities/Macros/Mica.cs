@@ -2,7 +2,6 @@
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
-using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
@@ -91,30 +90,32 @@ namespace EPIC.MedicalControls.Utilities.Macros
             // Map your WPF element "WelcomeLeft" to screen coordinates
             Point screenPos = WelcomeLeft.PointToScreen(new Point(0, 0));
 
-            // Grab the pixels behind the element
-            var background = Mica.CaptureRegion(
-                (int)screenPos.X - 80, (int)screenPos.Y - 80,
-                (int)WelcomeLeft.ActualWidth + 160, (int)WelcomeLeft.ActualHeight + 160);
+            if (source != null && source.CompositionTarget != null)
+            {
+                double dpiX = source.CompositionTarget.TransformToDevice.M11; // e.g., 1.5 for 150%
+                double dpiY = source.CompositionTarget.TransformToDevice.M22;
 
-            // Apply to an Image control inside WelcomeLeft
-            // 3. FIX: Convert BitmapSource to an ImageBrush
-            // This solves the "Cannot implicitly convert" error
-            var brush = new System.Windows.Media.ImageBrush(background);
+                // 2. Scale the coordinates and sizes
+                int pxX = (int)(screenPos.X * dpiX);
+                int pxY = (int)(screenPos.Y * dpiY);
+                int pxWidth = (int)(WelcomeLeft.RenderSize.Width * dpiX);
+                int pxHeight = (int)(WelcomeLeft.RenderSize.Height * dpiY);
 
-            // Optional: Ensure the background doesn't stretch weirdly
-            brush.Stretch = System.Windows.Media.Stretch.None;
-            brush.AlignmentX = System.Windows.Media.AlignmentX.Left;
-            brush.AlignmentY = System.Windows.Media.AlignmentY.Top;
+                // 3. Capture using physical pixel values
+                var background = Mica.CaptureRegion(pxX, pxY, pxWidth, pxHeight);
+                var brush = new System.Windows.Media.ImageBrush(background);
+                brush.Stretch = System.Windows.Media.Stretch.Uniform;
+                brush.AlignmentX = System.Windows.Media.AlignmentX.Center;
+                brush.AlignmentY = System.Windows.Media.AlignmentY.Center;
+                property.SetValue(BackgroundLayer, brush);
+            }
 
             // unlock from cloaking
             //DwmApi.DwmSetWindowAttribute(hwnd, DwmApi.DWMWA_CLOAK, ref uncloak, sizeof(int));
             User32.SetWindowDisplayAffinity(hwnd, User32.WDA_NONE);
 
-            // 4. Apply to the Background property
-            property.SetValue(BackgroundLayer, brush);
-
             // Apply your custom ShaderEffect
-            BackgroundLayer.Effect = new BlurEffect() { Radius = 20, KernelType = KernelType.Box, RenderingBias = RenderingBias.Quality }; //new MedicalControls.Shaders.InvertColorEffect();
+            //BackgroundLayer.Effect = new BlurEffect() { Radius = 20, KernelType = KernelType.Box, RenderingBias = RenderingBias.Quality }; //new MedicalControls.Shaders.InvertColorEffect();
         }
     }
 

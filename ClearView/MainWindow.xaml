@@ -70,26 +70,27 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <!--<Frame
+        <Frame
             Name="Login"
-            Grid.Row="1"
+            Grid.Row="0"
             Grid.RowSpan="3"
             Grid.Column="0"
-            Grid.ColumnSpan="2"
             Panel.ZIndex="10"
             Background="#FFFFFFFF"
             LoadCompleted="Login_OnLoadCompleted"
             NavigationUIVisibility="Hidden"
-            Source="/Pages/User/Login.xaml"
-            Visibility="Hidden">
+            Source="/Pages/User/Login.xaml">
             <FrameworkElement.Style>
-                <Style>
+                <Style TargetType="{x:Type Frame}">
+                    <Setter Property="Visibility" Value="Collapsed" />
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding Path=User}" Value="{x:Null}" />
+                        <DataTrigger Binding="{Binding Path=User, RelativeSource={RelativeSource AncestorType={x:Type Page}}}" Value="{x:Null}">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </FrameworkElement.Style>
-        </Frame>-->
+        </Frame>
         <ribbon:Ribbon
             x:Name="MainRibbon"
             Grid.ColumnSpan="2"
@@ -260,12 +261,12 @@
         </ribbon:Ribbon>
         <Border
             x:Name="BackgroundLayer"
-            Grid.Row="1"
+            Grid.Row="0"
+            Grid.RowSpan="3"
             Margin="-80"
-            Padding="80"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
-            ClipToBounds="False">
+            Panel.ZIndex="-10">
             <Border.Effect>
                 <BlurEffect
                     x:Name="MainBlur"
@@ -275,9 +276,11 @@
             </Border.Effect>
         </Border>
         <Border
-            Grid.Row="1"
+            Grid.Row="0"
+            Grid.RowSpan="3"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
+            Panel.ZIndex="-9"
             Background="#80FFFFFF" />
         <TabControl
             Name="Tabs"
