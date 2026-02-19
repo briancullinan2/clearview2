@@ -10,9 +10,11 @@ using System.Windows.Baml2006;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Controls.Ribbon;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.Xaml;
 using System.Xml;
@@ -137,20 +139,41 @@ namespace EPIC.MedicalControls.Utilities
             if (root == null)
                 return [];
 
-            var titleNamespace = Path.GetDirectoryName(name)?.Replace('\\', '/').Split('/')
+            var titleNamespace = System.IO.Path.GetDirectoryName(name)?.Replace('\\', '/').Split('/')
                                      .Select(s => System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(s));
             string defaultNamespace = string.Join(".", titleNamespace ?? []);
-            var allChildren = root.GetAllLogicalChildren().Concat(root.GetAllChildren()).Distinct();
-            var controlChildren = allChildren
-                                  .OfType<FrameworkElement>()
-                                  .Where(e => e is ICommandSource || e is ButtonBase || !String.IsNullOrWhiteSpace(e.Name) || !String.IsNullOrWhiteSpace(e.GetDescriptor()));
+            var allChildren = root.GetAllLogicalChildren().Concat(root.GetAllChildren()).OfType<FrameworkElement>().Distinct().ToList();
+
+            var controlChildren = allChildren.Where(e => e is ICommandSource || e is ButtonBase).ToList();
             var permissions = controlChildren.Select(e => new DataLayer.Entities.Permission
             {
-                Name = e.BuildAncestralAddress(root), // Using your JS-style logic
+                Name = e.BuildAncestralAddress(root) + ".Enabled", // Using your JS-style logic
                 Description = "Interaction access to " + e.GetType().Name + " labeled " + e.GetDescriptor() + " in " + name.Replace(".baml", ".xaml"),
                 IsActionable = e is ICommandSource || e is ButtonBase
-            });
-            return permissions;
+            }).ToList();
+
+
+            var groupedChildren = allChildren
+                                  .Where(e => e is GroupBox || e is TabItem || e is DataGrid || e is Control || e is ContentPresenter || !String.IsNullOrWhiteSpace(e.Name)).ToList();
+            var groupedPermissions = groupedChildren.Select(e => new DataLayer.Entities.Permission
+            {
+                Name = e.BuildAncestralAddress(root) + ".Collapsed", // Using your JS-style logic
+                Description = "Functional access to " + e.GetType().Name + " labeled " + e.GetDescriptor() + " in " + name.Replace(".baml", ".xaml"),
+                IsActionable = e is ICommandSource || e is ButtonBase
+            }).ToList();
+
+
+            var visualChildren = allChildren
+                                  .Where(e => (!String.IsNullOrWhiteSpace(e.Name) || !String.IsNullOrWhiteSpace(e.GetDescriptor()))
+                                          && !(e is Border || e is Shape || e is Adorner || e is System.Windows.Shapes.Path)).ToList();
+            var visualPermissions = visualChildren.Select(e => new DataLayer.Entities.Permission
+            {
+                Name = e.BuildAncestralAddress(root) + ".Hidden", // Using your JS-style logic
+                Description = "Visual access to " + e.GetType().Name + " labeled " + e.GetDescriptor() + " in " + name.Replace(".baml", ".xaml"),
+                IsActionable = e is ICommandSource || e is ButtonBase
+            }).ToList();
+
+            return permissions.Concat(groupedPermissions).Concat(visualPermissions).ToList();
         }
 
         /*
@@ -208,7 +231,7 @@ namespace EPIC.MedicalControls.Utilities
                 root.Arrange(new Rect(root.DesiredSize));
                 root.UpdateLayout();
                 await Dispatcher.Yield(DispatcherPriority.Render);
-                await WaitForLoaded(root);
+                //await WaitForLoaded(root);
 
                 var permissions = IntrospectXaml(assembly, root, bamlPath);
 
@@ -949,7 +972,7 @@ namespace {application.Namespace}.{defaultNamespace} {{
             var encoder = new PngBitmapEncoder();
             encoder.Frames.Add(BitmapFrame.Create(rtb));
 
-            using (var stream = System.IO.File.Create(Path.Join(path, "RenderedView.png")))
+            using (var stream = System.IO.File.Create(System.IO.Path.Join(path, "RenderedView.png")))
             {
                 encoder.Save(stream);
             }

@@ -1,4 +1,5 @@
-﻿using EPIC.MedicalControls.Utilities.Extensions;
+﻿using EPIC.MedicalControls.Utilities;
+using EPIC.MedicalControls.Utilities.Extensions;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,11 +20,10 @@ namespace EPIC.MedicalControls.Themes
             // 2. The DataContext IS your row's Model/ViewModel
             var selectedEntity = frameworkElement.DataContext as DataLayer.Entities.Permission;
             var Permissions = await Utilities.Permissions.IntrospectXaml(selectedEntity.Assembly, selectedEntity.Baml);
-            var DataGrid = (frameworkElement.FindAncestor<DataGrid>());
-            var PermissionData = DataGrid.ItemsSource as ICollection<DataLayer.Entities.Permission>;
+            var DataGrid = (frameworkElement.FindAncestor<Page>()).DataContext as DesignTimePermissionsViewModel;
             foreach (var permission in Permissions)
             {
-                PermissionData.Add(permission);
+                DataGrid?.PermissionData?.Add(permission);
             }
 
         }
