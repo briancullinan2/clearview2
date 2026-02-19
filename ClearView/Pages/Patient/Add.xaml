@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:EPIC.DataLayer.Helpers;assembly=DataLayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:patient="clr-namespace:EPIC.ClearView.Pages.Patient;assembly=EPICClearView"
+    xmlns:patient="clr-namespace:EPIC.MedicalControls.Controls.Patient;assembly=MedicalControls"
     xmlns:ribbon="clr-namespace:System.Windows.Controls.Ribbon;assembly=System.Windows.Controls.Ribbon"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     Title="Add Patient"
@@ -14,6 +14,7 @@
     <FrameworkElement.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/MedicalControls;component/Controls/Patient/Add.xaml" />
                 <ResourceDictionary Source="/Themes/Patient/Add.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <BitmapImage x:Key="NewCapture" UriSource="/Resources/0175-camera.png" />
@@ -46,137 +47,30 @@
                 Style="{StaticResource ContextualTabStyle}" />
         </ribbon:Ribbon>
 
-        <StackPanel
-            Grid.Row="2"
-            HorizontalAlignment="Right"
-            Orientation="Horizontal">
-            <Button
-                Name="Save"
-                Margin="5"
-                Padding="3"
-                Click="Save_Click"
-                IsEnabled="False">
-                <StackPanel Orientation="Horizontal">
-                    <Image
-                        Width="25"
-                        Height="25"
-                        Margin="3,0"
-                        Source="{StaticResource Save}">
-                        <FrameworkElement.Style>
-                            <Style TargetType="{x:Type Image}">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsEnabled, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}}" Value="False">
-                                        <Setter Property="UIElement.Opacity" Value=".5" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </FrameworkElement.Style>
-                    </Image>
-                    <TextBlock
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Text="Save Changes" />
-                </StackPanel>
-            </Button>
-            <Button
-                Margin="5"
-                Padding="3"
-                CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}}">
-                <StackPanel Orientation="Horizontal">
-                    <Image
-                        Width="25"
-                        Height="25"
-                        Margin="3,0"
-                        Source="{StaticResource Cancel}" />
-                    <TextBlock
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Text="Close" />
-                </StackPanel>
-            </Button>
-        </StackPanel>
+        <ContentControl Grid.Row="1" Style="{StaticResource SaveAndCloseActionFooter}" />
+
         <TabControl TabStripPlacement="Left">
             <TabItem Header="Demographics">
-                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                    <Grid VerticalAlignment="Top">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition />
-                            <RowDefinition />
-                            <RowDefinition />
-                            <RowDefinition />
-                        </Grid.RowDefinitions>
-                        <Label Grid.Row="0" Content="First Name:" />
-                        <TextBox
-                            Name="FirstName"
-                            Grid.Row="1"
-                            MinWidth="150"
-                            Margin="5"
-                            MaxLength="{x:Static helpers:PatientFields+FirstName.MaxLength}"
-                            Text="{Binding Path=Patient.FirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}" />
-                        <Label
-                            Grid.Row="0"
-                            Grid.Column="1"
-                            Content="MI:" />
-                        <TextBox
-                            Name="MiddleInitial"
-                            Grid.Row="1"
-                            Grid.Column="1"
-                            MinWidth="30"
-                            Margin="5"
-                            MaxLength="1"
-                            Text="{Binding Path=Patient.MiddleInitial, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}" />
-                        <Label
-                            Grid.Row="0"
-                            Grid.Column="2"
-                            Content="Last Name:" />
-                        <TextBox
-                            Name="LastName"
-                            Grid.Row="1"
-                            Grid.Column="2"
-                            MinWidth="150"
-                            Margin="5"
-                            MaxLength="{x:Static helpers:PatientFields+FirstName.MaxLength}"
-                            Text="{Binding Path=Patient.LastName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}" />
-                        <Label Grid.Row="2" Content="Birth Date:" />
-                        <DatePicker
-                            Name="BirthDate"
-                            Grid.Row="3"
-                            Margin="5"
-                            VerticalAlignment="Center"
-                            SelectedDateChanged="BirthDate_SelectedDateChanged"
-                            Text="{Binding Path=Patient.BirthDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}" />
-                        <Label
-                            Grid.Row="2"
-                            Grid.Column="1"
-                            Content="Age:" />
-                        <TextBox
-                            Name="Age"
-                            Grid.Row="3"
-                            Grid.Column="1"
-                            MinWidth="30"
-                            Margin="5"
-                            VerticalAlignment="Center"
-                            IsReadOnly="True"
-                            IsTabStop="False" />
-                        <Label
-                            Grid.Row="2"
-                            Grid.Column="2"
-                            Content="Gender:" />
-                        <ComboBox
-                            Name="Gender"
-                            Grid.Row="3"
-                            Grid.Column="2"
-                            Margin="5"
-                            VerticalAlignment="Center"
-                            ItemsSource="{Binding Source={StaticResource GenderData}}"
-                            SelectedItem="{Binding Path=Patient.Gender, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}" />
-                    </Grid>
-                </ScrollViewer>
+                <UniformGrid
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Top"
+                    Columns="2">
+                    <GroupBox
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Top"
+                        Header="Login Info">
+                        <FrameworkElement.Resources>
+                            <ResourceDictionary>
+                                <ResourceDictionary.MergedDictionaries>
+                                    <ResourceDictionary Source="/MedicalControls;component/Themes/ClearView.xaml" />
+                                </ResourceDictionary.MergedDictionaries>
+                            </ResourceDictionary>
+                        </FrameworkElement.Resources>
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                            <patient:AddBasic Panel.ZIndex="9" Style="{StaticResource PatientEntityStyle}" />
+                        </ScrollViewer>
+                    </GroupBox>
+                </UniformGrid>
             </TabItem>
         </TabControl>
     </Grid>

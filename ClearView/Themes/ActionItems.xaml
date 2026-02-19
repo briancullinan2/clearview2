@@ -38,7 +38,7 @@
                             Name="Save"
                             Margin="5"
                             Padding="3"
-                            Click="Save_Click"
+                            Command="{DynamicResource CloseTabCommand}"
                             IsEnabled="False">
                             <StackPanel Orientation="Horizontal">
                                 <Image
@@ -62,7 +62,10 @@
                                     Text="Save Changes" />
                             </StackPanel>
                         </Button>
-                        <Button Margin="5" Padding="3">
+                        <Button
+                            Margin="5"
+                            Padding="3"
+                            Command="{DynamicResource CloseTabCommand}">
                             <StackPanel Orientation="Horizontal">
                                 <Image
                                     Width="25"

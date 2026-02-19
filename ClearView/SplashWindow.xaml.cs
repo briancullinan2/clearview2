@@ -55,7 +55,7 @@ namespace EPIC.ClearView
                 return;
             }
 
-            SplashWindow._app.MainWindow.Dispatcher.BeginInvoke(new Action(delegate ()
+            SplashWindow._app.Dispatcher.BeginInvoke(new Action(delegate ()
             {
                 if (_splash == null)
                 {
@@ -69,7 +69,7 @@ namespace EPIC.ClearView
                 // hide this last
                 SplashWindow._splash.Close();
                 _splash = null;
-            }), DispatcherPriority.SystemIdle, new object[0]);
+            }), DispatcherPriority.ApplicationIdle, new object[0]);
         }
 
         /*

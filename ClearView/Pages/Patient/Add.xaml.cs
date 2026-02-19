@@ -1,5 +1,4 @@
 ﻿using EPIC.ClearView.Utilities.Macros;
-using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -31,26 +30,10 @@ namespace EPIC.ClearView.Pages.Patient
             Navigation.InsertRibbon(this);
         }
 
-        // Token: 0x060001B2 RID: 434 RVA: 0x00011425 File Offset: 0x0000F625
-        private void OnChanged(object sender, RoutedEventArgs routedEventArgs)
-        {
-            this.Save.IsEnabled = true;
-        }
-
-        // Token: 0x060001B3 RID: 435 RVA: 0x00011435 File Offset: 0x0000F635
-        private void OnUnchanged(object sender, RoutedEventArgs routedEventArgs)
-        {
-            this.Save.IsEnabled = false;
-        }
-
-        // Token: 0x060001B4 RID: 436 RVA: 0x00011448 File Offset: 0x0000F648
-        private void Save_Click(object sender, RoutedEventArgs e)
-        {
-        }
-
         // Token: 0x060001B5 RID: 437 RVA: 0x00011488 File Offset: 0x0000F688
         private void BirthDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
+            /*
             DateTime today = DateTime.Today;
             if (this.BirthDate.SelectedDate != null)
             {
@@ -61,21 +44,11 @@ namespace EPIC.ClearView.Pages.Patient
                 }
                 this.Age.Text = num.ToString(CultureInfo.InvariantCulture);
             }
-        }
-
-        // Token: 0x060001B6 RID: 438 RVA: 0x0001151E File Offset: 0x0000F71E
-        private void SaveClose_Click(object sender, RoutedEventArgs e)
-        {
-            this.Save_Click(sender, e);
-            Navigation.CloseTab(this);
+            */
         }
 
         // Token: 0x040000ED RID: 237
         public static readonly DependencyProperty PatientProperty = DependencyProperty.Register("Patient", typeof(DataLayer.Entities.Patient), typeof(Add), new PropertyMetadata(new DataLayer.Entities.Patient()));
 
-        private void RibbonToggleButton_Unchecked(object sender, RoutedEventArgs e)
-        {
-            SaveClose_Click(sender, e);
-        }
     }
 }

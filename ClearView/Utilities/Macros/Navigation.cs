@@ -114,15 +114,30 @@ namespace EPIC.ClearView.Utilities.Macros
 
             if (!(o is TabItem))
             {
-                var root = ((DependencyObject)o).FindAncestor<TabItem>();
+                TabItem? root;
+                var page = ((DependencyObject)o).FindAncestor<Page>();
+                if (page == null)
+                {
+                    root = ((DependencyObject)o).FindAncestor<TabItem>();
+                }
+                else
+                {
+                    root = page.FindAncestor<TabItem>();
+                }
+
                 if (root == null)
                 {
                     var ribbon = ((DependencyObject)o).FindAncestor<RibbonTab>();
-                    o = (ribbon.Tag as FrameworkElement)?.FindAncestor<TabItem>() as TabItem;
+                    root = (ribbon.Tag as FrameworkElement)?.FindAncestor<TabItem>() as TabItem;
+                }
+
+                if (root != null)
+                {
+                    o = root;
                 }
             }
 
-            if (o == null)
+            if (!(o is TabItem))
             {
                 return;
             }

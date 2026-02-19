@@ -59,6 +59,8 @@ namespace EPIC.ClearView.Pages.User
         }
 
         // Token: 0x06000265 RID: 613 RVA: 0x00014140 File Offset: 0x00012340
+        /*
+         * WHY ?????????
         private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             if (e.NewSize.Width < 400.0 || e.NewSize.Height < 400.0)
@@ -103,26 +105,9 @@ namespace EPIC.ClearView.Pages.User
                 ((Grid)base.Content).Children.Add(wrapPanel);
             }
         }
-
-        // Token: 0x06000266 RID: 614 RVA: 0x0001433F File Offset: 0x0001253F
-        private void Save_Click(object sender, RoutedEventArgs e)
-        {
-            //this.User.Save();
-        }
-
-        // Token: 0x06000267 RID: 615 RVA: 0x0001434E File Offset: 0x0001254E
-        private void SaveClose_Click(object sender, RoutedEventArgs e)
-        {
-            this.Save_Click(sender, e);
-            Navigation.CloseTab(this);
-        }
+        */
 
         // Token: 0x04000140 RID: 320
         public static readonly DependencyProperty UserProperty = DependencyProperty.Register("User", typeof(DataLayer.Entities.User), typeof(Add), new System.Windows.PropertyMetadata(new DataLayer.Entities.User()));
-
-        private void RibbonToggleButton_Unchecked(object sender, RoutedEventArgs e)
-        {
-            Navigation.CloseTab(this);
-        }
     }
 }

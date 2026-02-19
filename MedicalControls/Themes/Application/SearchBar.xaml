@@ -6,9 +6,7 @@
     xmlns:entities="clr-namespace:EPIC.DataLayer.Entities;assembly=DataLayer"
     xmlns:general="clr-namespace:EPIC.MedicalControls.Themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:reflection="clr-namespace:System.Reflection;assembly=mscorlib"
     xmlns:ribbon="clr-namespace:System.Windows.Controls.Ribbon;assembly=System.Windows.Controls.Ribbon"
-    xmlns:system="clr-namespace:System;assembly=mscorlib"
     mc:Ignorable="d">
     <BitmapImage x:Key="Find" UriSource="/Resources/0025-search.png" />
     <ControlTemplate x:Key="SearchControlTemplate">

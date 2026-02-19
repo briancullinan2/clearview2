@@ -23,6 +23,7 @@ namespace EPIC.MedicalControls.Themes
         public int? MaxLength { get; private set; }
         public string DisplayName { get; private set; }
         public string? GroupName { get; private set; }
+        public int? Order { get; private set; }
         public string? Category { get; private set; }
 
         internal PropertyMetadata(PropertyInfo info)
@@ -31,9 +32,10 @@ namespace EPIC.MedicalControls.Themes
 
             // Initialize your custom lookups once here
             MaxLength = _info.GetCustomAttribute<MaxLengthAttribute>()?.Length ?? _info.GetCustomAttribute<StringLengthAttribute>()?.MaximumLength;
-            DisplayName = _info.GetCustomAttribute<DisplayAttribute>()?.Name ?? _info.Name;
-            GroupName = _info.GetCustomAttribute<DisplayAttribute>()?.GroupName;
+            DisplayName = _info.GetCustomAttribute<DisplayAttribute>()?.GetName() ?? _info.Name;
+            GroupName = _info.GetCustomAttribute<DisplayAttribute>()?.GetGroupName();
             Category = _info.GetCustomAttribute<CategoryAttribute>()?.Category;
+            Order = _info.GetCustomAttribute<DisplayAttribute>()?.GetOrder();
         }
 
         // You can even wrap the actual Get/Set calls
@@ -226,6 +228,7 @@ namespace EPIC.MedicalControls.Themes
         {
             ViewModel = new EntityMetadata<T>();
             DataContext = ViewModel;
+            // TODO: allow for items source to be attributes to list all the categories/groups
             ItemsSource = ViewModel.AllProperties;
             Style = TryFindResource(typeof(T).Name + "EntityStyle") as System.Windows.Style;
         }

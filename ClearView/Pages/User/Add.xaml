@@ -3,23 +3,18 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:general="clr-namespace:EPIC.MedicalControls.Themes;assembly=MedicalControls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:reflection="clr-namespace:System.Reflection;assembly=mscorlib"
     xmlns:ribbon="clr-namespace:System.Windows.Controls.Ribbon;assembly=System.Windows.Controls.Ribbon"
-    xmlns:system="clr-namespace:System;assembly=mscorlib"
     xmlns:user="clr-namespace:EPIC.MedicalControls.Controls.User;assembly=MedicalControls"
     Title="Add User"
     d:Height="600"
     d:Width="800"
-    SizeChanged="Page_SizeChanged"
     SnapsToDevicePixels="True"
     UseLayoutRounding="True"
-    mc:Ignorable="d">
+    mc:Ignorable="d user">
     <FrameworkElement.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/MedicalControls;component/Themes/ClearView.xaml" />
                 <ResourceDictionary Source="/MedicalControls;component/Controls/User/Add.xaml" />
                 <ResourceDictionary Source="/Themes/User/Add.xaml" />
             </ResourceDictionary.MergedDictionaries>
@@ -33,6 +28,7 @@
             <RowDefinition />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+
         <ribbon:Ribbon Margin="0,-120,0,0" Style="{StaticResource PlainRibbonStyle}">
             <ribbon:RibbonTab
                 Header="Options"
@@ -41,68 +37,70 @@
                 Style="{StaticResource ContextualTabStyle}" />
         </ribbon:Ribbon>
 
-        <ContentControl
-            Grid.Row="2"
-            Grid.ColumnSpan="2"
-            Style="{StaticResource SaveAndCloseActionFooter}" />
-        <UniformGrid
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Top"
-            Columns="2">
-            <GroupBox
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Top"
-                Header="Login Info">
-                <FrameworkElement.Resources>
-                    <ResourceDictionary>
-                        <ResourceDictionary.MergedDictionaries>
-                            <ResourceDictionary Source="/MedicalControls;component/Themes/ClearView.xaml" />
-                        </ResourceDictionary.MergedDictionaries>
-                    </ResourceDictionary>
-                </FrameworkElement.Resources>
-                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                    <user:AddLogin Panel.ZIndex="9" Style="{StaticResource UserLoginEntityStyle}" />
-                </ScrollViewer>
-            </GroupBox>
-            <GroupBox
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Top"
-                Header="General Info">
-                <ScrollViewer
-                    Grid.ColumnSpan="2"
-                    HorizontalScrollBarVisibility="Auto"
-                    VerticalScrollBarVisibility="Auto">
-                    <user:AddUser Panel.ZIndex="9" Style="{StaticResource UserEntityStyle}" />
-                </ScrollViewer>
-            </GroupBox>
-            <GroupBox HorizontalAlignment="Stretch" Header="Role Assignment">
-                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                    <ListBox
-                        MinWidth="300"
-                        MinHeight="150"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Top">
+        <ContentControl Grid.Row="1" Style="{StaticResource SaveAndCloseActionFooter}" />
+
+        <TabControl Style="{x:Null}" TabStripPlacement="Left">
+            <TabItem Header="User Info" IsSelected="True">
+                <UniformGrid
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Top"
+                    Columns="2">
+                    <GroupBox
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Top"
+                        Header="Login Info">
                         <FrameworkElement.Resources>
                             <ResourceDictionary>
-                                <Style x:Key="{x:Type ListBoxItem}" TargetType="{x:Type ListBoxItem}">
-                                    <Setter Property="FrameworkElement.UseLayoutRounding" Value="True" />
-                                    <Setter Property="UIElement.SnapsToDevicePixels" Value="True" />
-                                    <Setter Property="FrameworkElement.OverridesDefaultStyle" Value="True" />
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                                <CheckBox Content="{Binding Path=Name}" IsChecked="{Binding Path=IsSelected, RelativeSource={RelativeSource TemplatedParent}}" />
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
+                                <ResourceDictionary.MergedDictionaries>
+                                    <ResourceDictionary Source="/MedicalControls;component/Themes/ClearView.xaml" />
+                                </ResourceDictionary.MergedDictionaries>
                             </ResourceDictionary>
                         </FrameworkElement.Resources>
-                    </ListBox>
-                </ScrollViewer>
-            </GroupBox>
-            <user:AddUngroupedInfo Panel.ZIndex="9" Style="{StaticResource UserLoginEntityStyle}" />
-            <user:AddUncategorized Panel.ZIndex="9" Style="{StaticResource UserLoginEntityStyle}" />
-        </UniformGrid>
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                            <user:AddLogin Panel.ZIndex="9" Style="{StaticResource UserLoginEntityStyle}" />
+                        </ScrollViewer>
+                    </GroupBox>
+                    <GroupBox
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Top"
+                        Header="General Info">
+                        <ScrollViewer
+                            Grid.ColumnSpan="2"
+                            HorizontalScrollBarVisibility="Auto"
+                            VerticalScrollBarVisibility="Auto">
+                            <user:AddUser Panel.ZIndex="9" Style="{StaticResource UserEntityStyle}" />
+                        </ScrollViewer>
+                    </GroupBox>
+                    <GroupBox HorizontalAlignment="Stretch" Header="Role Assignment">
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                            <ListBox
+                                MinWidth="300"
+                                MinHeight="150"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top">
+                                <FrameworkElement.Resources>
+                                    <ResourceDictionary>
+                                        <Style x:Key="{x:Type ListBoxItem}" TargetType="{x:Type ListBoxItem}">
+                                            <Setter Property="FrameworkElement.UseLayoutRounding" Value="True" />
+                                            <Setter Property="UIElement.SnapsToDevicePixels" Value="True" />
+                                            <Setter Property="FrameworkElement.OverridesDefaultStyle" Value="True" />
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                                        <CheckBox Content="{Binding Path=Name}" IsChecked="{Binding Path=IsSelected, RelativeSource={RelativeSource TemplatedParent}}" />
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </ResourceDictionary>
+                                </FrameworkElement.Resources>
+                            </ListBox>
+                        </ScrollViewer>
+                    </GroupBox>
+                    <user:AddUngroupedInfo Panel.ZIndex="9" Style="{StaticResource UserLoginEntityStyle}" />
+                    <user:AddUncategorized Panel.ZIndex="9" Style="{StaticResource UserLoginEntityStyle}" />
+                </UniformGrid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Page>

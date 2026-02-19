@@ -27,10 +27,9 @@
         </ribbon:RibbonGroup>
         <ribbon:RibbonGroup Header="Actions">
             <ribbon:RibbonButton Label="Export Data" LargeImageSource="{StaticResource ExportData}" />
-            <ribbon:RibbonButton Label="View Report" LargeImageSource="{StaticResource ViewReport}" />
-            <ribbon:RibbonButton Label="View Calibration" LargeImageSource="{StaticResource ViewCalibration}" />
-            <ribbon:RibbonButton Label="View Capture" LargeImageSource="{StaticResource ViewCapture}" />
-            <ribbon:RibbonButton Label="Compare" LargeImageSource="{StaticResource Compare}" />
+            <ribbon:RibbonButton Label="New Patient" LargeImageSource="{StaticResource NewPatient}" />
+            <ribbon:RibbonButton Label="New Capture" LargeImageSource="{StaticResource NewCapture}" />
+            <ribbon:RibbonButton Label="View Patient" LargeImageSource="{StaticResource ViewPatient}" />
         </ribbon:RibbonGroup>
     </x:Array>
 </ResourceDictionary>
