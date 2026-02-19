@@ -1,9 +1,11 @@
-﻿using System;
+﻿using EPIC.DataLayer.Utilities.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 
 namespace EPIC.DataLayer
@@ -168,10 +170,44 @@ namespace EPIC.DataLayer
         public event PropertyChangedEventHandler PropertyChanged;
     }
 
+    // TODO: syntax sugar to allow for EntityMetadata.User.MaxLength[x => x.Name]
+    // LIMITED TO: where TReturn : struct because only primitives and enums are allowed inside attributes and that's what we're matching mostly
+    public class ModelAccessor<TModel, TReturn> where TModel : Entities.IEntity<TModel> where TReturn : struct
+    {
+        private readonly EntityMetadata<TModel> _model;
+        private Func<EntityMetadata<TModel>, string, TReturn> _selector;
+
+        public ModelAccessor(EntityMetadata<TModel> model, Func<EntityMetadata<TModel>, string, TReturn> selector)
+        {
+            _model = model;
+            _selector = selector;
+        }
+
+        // Indexer taking a function/delegate
+        public TReturn this[Expression<Func<TModel, dynamic>> property]
+        {
+            get
+            {
+                return _selector(_model, property.FindProperty().Name);
+            }
+        }
+
+        // Indexer taking a function/delegate
+        public TReturn? this[string property]
+        {
+            get
+            {
+                return _selector(_model, property);
+            }
+        }
+    }
+
     public class EntityMetadata<T> : EntityMetadata where T : Entities.IEntity<T>
     {
+        new public ModelAccessor<T, int> MaxLength;
         public EntityMetadata() : base(typeof(T))
         {
+            MaxLength = new ModelAccessor<T, int>(this, (md, property) => (int)base.MaxLength[property]);
         }
     }
 

@@ -57,7 +57,7 @@ namespace EPIC.ClearView.Utilities.Logging
                     new DataLayer.Entities.Message
                     {
                         Source = loggingEvent.LoggerName,
-                        Title = loggingEvent.ExceptionObject.Message.Limit(DataLayer.EntityMetadata.Message.MaxLength[nameof(DataLayer.Entities.Message.Title)] ?? 1024),
+                        Title = loggingEvent.ExceptionObject.Message.Limit(DataLayer.EntityMetadata.Message.MaxLength[x => x.Title]),
                         Body = loggingEvent.ExceptionObject.StackTrace?.Limit(DataLayer.EntityMetadata.Message.MaxLength[nameof(DataLayer.Entities.Message.Body)] ?? 4096),
                         CreateTime = DateTime.UtcNow,
                         IsActive = true,
