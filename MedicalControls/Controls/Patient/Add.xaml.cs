@@ -1,6 +1,4 @@
-﻿using EPIC.MedicalControls.Themes;
-
-namespace EPIC.MedicalControls.Controls.Patient
+﻿namespace EPIC.MedicalControls.Controls.Patient
 {
     public partial class Add
     {

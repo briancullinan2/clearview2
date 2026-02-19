@@ -1,5 +1,4 @@
-﻿using EPIC.MedicalControls.Themes;
-using System.Windows;
+﻿using System.Windows;
 
 namespace EPIC.MedicalControls.Controls.User
 {

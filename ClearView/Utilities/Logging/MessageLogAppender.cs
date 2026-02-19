@@ -1,6 +1,4 @@
 ﻿using EPIC.ClearView.Utilities.Extensions;
-using EPIC.DataLayer;
-using EPIC.DataLayer.Helpers;
 using EPIC.DataLayer.Utilities.Extensions;
 using log4net.Appender;
 using log4net.Core;
@@ -53,14 +51,14 @@ namespace EPIC.ClearView.Utilities.Logging
         {
             try
             {
-                var context = TranslationContext.Current["Data Source=:memory:"];
+                var context = DataLayer.TranslationContext.Current["Data Source=:memory:"];
                 if (loggingEvent.ExceptionObject != null)
                 {
                     new DataLayer.Entities.Message
                     {
                         Source = loggingEvent.LoggerName,
-                        Title = loggingEvent.ExceptionObject.Message.Limit(MessageFields.Title.MaxLength),
-                        Body = loggingEvent.ExceptionObject.StackTrace?.Limit(MessageFields.Title.MaxLength),
+                        Title = loggingEvent.ExceptionObject.Message.Limit(DataLayer.EntityMetadata.Message.MaxLength[nameof(DataLayer.Entities.Message.Title)] ?? 1024),
+                        Body = loggingEvent.ExceptionObject.StackTrace?.Limit(DataLayer.EntityMetadata.Message.MaxLength[nameof(DataLayer.Entities.Message.Body)] ?? 4096),
                         CreateTime = DateTime.UtcNow,
                         IsActive = true,
                         MessageType = 4
@@ -71,8 +69,8 @@ namespace EPIC.ClearView.Utilities.Logging
                     new DataLayer.Entities.Message
                     {
                         Source = loggingEvent.LoggerName,
-                        Title = (loggingEvent.MessageObject?.ToString() ?? loggingEvent.RenderedMessage)?.Limit(MessageFields.Title.MaxLength),
-                        Body = new System.Diagnostics.StackTrace(true).ToString().Limit(MessageFields.Body.MaxLength),
+                        Title = (loggingEvent.MessageObject?.ToString() ?? loggingEvent.RenderedMessage)?.Limit(DataLayer.EntityMetadata.Message.MaxLength[nameof(DataLayer.Entities.Message.Title)] ?? 1024),
+                        Body = new System.Diagnostics.StackTrace(true).ToString().Limit(DataLayer.EntityMetadata.Message.MaxLength[nameof(DataLayer.Entities.Message.Body)] ?? 4096),
                         CreateTime = DateTime.UtcNow,
                         IsActive = true,
                         MessageType = 4

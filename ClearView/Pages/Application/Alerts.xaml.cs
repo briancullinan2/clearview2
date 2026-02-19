@@ -1,5 +1,4 @@
 ﻿using EPIC.ClearView.Utilities.Macros;
-using EPIC.DataLayer;
 using System.Web;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,7 +15,7 @@ namespace EPIC.ClearView.Pages.Application
             Navigation.InsertRibbon(this);
             base.Loaded += delegate (object sender, RoutedEventArgs args)
             {
-                var messages = TranslationContext.Current["Data Source=:memory:"].Messages;
+                var messages = DataLayer.TranslationContext.Current["Data Source=:memory:"].Messages;
 
                 if (base.NavigationService != null)
                 {
@@ -60,7 +59,7 @@ namespace EPIC.ClearView.Pages.Application
         // Token: 0x06000004 RID: 4 RVA: 0x000022E0 File Offset: 0x000004E0
         private void Dismiss_Click(object sender, RoutedEventArgs e)
         {
-            var messages = TranslationContext.Current["Data Source=:memory:"].Messages;
+            var messages = DataLayer.TranslationContext.Current["Data Source=:memory:"].Messages;
             //new messages.ToList<DataLayer.Entities.Message>().ForEach(delegate (DataLayer.Entities.Message x)
             //{
             //    x.IsActive = false;

@@ -1,5 +1,4 @@
 ﻿using EPIC.ClearView.Utilities.Macros;
-using EPIC.MedicalControls.Themes;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -23,7 +22,7 @@ namespace EPIC.ClearView.Pages.User
             }
         }
 
-        public Models ViewModel { get; private set; }
+        public DataLayer.EntityMetadata<DataLayer.Entities.User> ViewModel { get; private set; }
 
 
         // Token: 0x06000262 RID: 610 RVA: 0x00014044 File Offset: 0x00012244

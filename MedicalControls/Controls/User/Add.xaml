@@ -3,8 +3,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:datalayer="clr-namespace:EPIC.DataLayer;assembly=DataLayer"
     xmlns:entities="clr-namespace:EPIC.DataLayer.Entities;assembly=DataLayer"
-    xmlns:general="clr-namespace:EPIC.MedicalControls.Themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ribbon="clr-namespace:System.Windows.Controls.Ribbon;assembly=System.Windows.Controls.Ribbon"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
@@ -24,7 +24,7 @@
     </ItemsPanelTemplate>
 
 
-    <DataTemplate x:Key="PlainTextFieldTemplate" DataType="{x:Type general:PropertyMetadata}">
+    <DataTemplate x:Key="PlainTextFieldTemplate" DataType="{x:Type datalayer:PropertyMetadata}">
         <StackPanel Name="ControlWrapper">
             <Label Content="{Binding DisplayName}" FontWeight="Bold" />
             <TextBox
@@ -33,14 +33,14 @@
                 Text="{Binding Value}" />
         </StackPanel>
     </DataTemplate>
-    <DataTemplate x:Key="DefaultFieldTemplate" DataType="{x:Type general:PropertyMetadata}">
+    <DataTemplate x:Key="DefaultFieldTemplate" DataType="{x:Type datalayer:PropertyMetadata}">
         <StackPanel Name="ControlWrapper">
             <Label Content="{Binding Name}" Foreground="Gray" />
             <Label Content="{Binding PropertyType}" Foreground="Gray" />
         </StackPanel>
     </DataTemplate>
 
-    <DataTemplate x:Key="UserEntityItemTemplate" DataType="{x:Type general:PropertyMetadata}">
+    <DataTemplate x:Key="UserEntityItemTemplate" DataType="{x:Type datalayer:PropertyMetadata}">
         <ContentPresenter
             x:Name="Presenter"
             MaxWidth="Infinity"

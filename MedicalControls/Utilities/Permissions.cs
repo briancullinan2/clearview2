@@ -1,5 +1,4 @@
-﻿using EPIC.DataLayer;
-using EPIC.MedicalControls.Utilities.Extensions;
+﻿using EPIC.MedicalControls.Utilities.Extensions;
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -88,8 +87,8 @@ namespace EPIC.MedicalControls.Utilities
             }
             else
             {
-                RolesData = new ObservableCollection<DataLayer.Entities.Role>(TranslationContext.Current["Data Source=:memory:"].Roles.ToList());
-                PermissionData = new ObservableCollection<DataLayer.Entities.Permission>(TranslationContext.Current["Data Source=:memory:"].Permissions.ToList());
+                RolesData = new ObservableCollection<DataLayer.Entities.Role>(DataLayer.TranslationContext.Current["Data Source=:memory:"].Roles.ToList());
+                PermissionData = new ObservableCollection<DataLayer.Entities.Permission>(DataLayer.TranslationContext.Current["Data Source=:memory:"].Permissions.ToList());
 
             }
         }
