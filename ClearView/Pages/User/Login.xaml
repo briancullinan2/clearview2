@@ -42,7 +42,10 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Source="{StaticResource Lock}" />
-            <Label Grid.Column="1" Content="Username:" />
+            <Label
+                Grid.Column="1"
+                VerticalAlignment="Center"
+                Content="Username:" />
             <TextBox
                 Name="Username"
                 Grid.Column="2"
@@ -51,6 +54,7 @@
             <Label
                 Grid.Row="1"
                 Grid.Column="1"
+                VerticalAlignment="Center"
                 Content="Password:" />
             <PasswordBox
                 Name="Password"

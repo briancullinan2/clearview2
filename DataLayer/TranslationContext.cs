@@ -28,10 +28,11 @@ namespace EPIC.DataLayer
         public DbSet<DataLayer.Entities.Role> Roles { get; set; }
         public DbSet<DataLayer.Entities.User> Users { get; set; }
         // Add other entities here...
+        public DbSet<DataLayer.Entities.Setting> Settings { get; set; }
 
         public TranslationContext(string connection) : base()
         {
-            _connection = connection;
+            _currentString = _connection = connection;
 
             var conn = this.Database.GetDbConnection();
             if (conn.State != ConnectionState.Open) conn.Open();
@@ -79,12 +80,7 @@ namespace EPIC.DataLayer
         private static readonly ConcurrentDictionary<string, TranslationContext> _contexts = new ConcurrentDictionary<string, TranslationContext>();
 
         // Access a specific database context by its App.config Name
-        public static TranslationContext Get(string name) => _contexts.GetOrAdd(name, (key) =>
-        {
-            // Logic for 45 CFR § 164.312 auditing
-            TranslationContext ctx;
-            return _contexts.TryGetValue(name, out ctx) ? ctx : new TranslationContext(key);
-        });
+        public static TranslationContext Get(string name) => _contexts.GetOrAdd(name, (key) => new TranslationContext(key));
 
         public TranslationContext this[string name]
         {
@@ -95,12 +91,7 @@ namespace EPIC.DataLayer
                     throw new ArgumentNullException(nameof(name));
 
                 _currentString = name;
-                return _contexts.GetOrAdd(name, (key) =>
-                {
-                    // Logic for 45 CFR § 164.312 auditing
-                    TranslationContext ctx;
-                    return _contexts.TryGetValue(name, out ctx) ? ctx : new TranslationContext(key);
-                });
+                return _contexts.GetOrAdd(name, (key) => new TranslationContext(key));
             }
         }
 
@@ -120,22 +111,23 @@ namespace EPIC.DataLayer
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Explicitly map the Message entity to the "Message" table
-            modelBuilder.Entity<Calibration>().ToTable("Calibration");
-            modelBuilder.Entity<Capture>().ToTable("Capture");
-            modelBuilder.Entity<Device>().ToTable("Device");
-            modelBuilder.Entity<DeviceCalibrationSetting>().ToTable("DeviceCalibrationSetting");
-            modelBuilder.Entity<DeviceSetting>().ToTable("DeviceSetting");
-            modelBuilder.Entity<FingerSet>().ToTable("FingerSet");
-            modelBuilder.Entity<Image>().ToTable("Image");
-            modelBuilder.Entity<ImageAlignment>().ToTable("ImageAlignment");
-            modelBuilder.Entity<ImageCalibration>().ToTable("ImageCalibration");
-            modelBuilder.Entity<ImageCapture>().ToTable("ImageCapture");
-            modelBuilder.Entity<ImageSector>().ToTable("ImageSector");
-            modelBuilder.Entity<Message>().ToTable("Message");
-            modelBuilder.Entity<Patient>().ToTable("Patient");
-            modelBuilder.Entity<Permission>().ToTable("Permission");
-            modelBuilder.Entity<Role>().ToTable("Role");
-            modelBuilder.Entity<User>().ToTable("User");
+            modelBuilder.Entity<Calibration>().ToTable(EntityMetadata.Calibration.TableName);
+            modelBuilder.Entity<Capture>().ToTable(EntityMetadata.Capture.TableName);
+            modelBuilder.Entity<Device>().ToTable(EntityMetadata.Device.TableName);
+            modelBuilder.Entity<DeviceCalibrationSetting>().ToTable(EntityMetadata.DeviceCalibrationSetting.TableName);
+            modelBuilder.Entity<DeviceSetting>().ToTable(EntityMetadata.DeviceSetting.TableName);
+            modelBuilder.Entity<FingerSet>().ToTable(EntityMetadata.FingerSet.TableName);
+            modelBuilder.Entity<Image>().ToTable(EntityMetadata.Image.TableName);
+            modelBuilder.Entity<ImageAlignment>().ToTable(EntityMetadata.ImageAlignment.TableName);
+            modelBuilder.Entity<ImageCalibration>().ToTable(EntityMetadata.ImageCalibration.TableName);
+            modelBuilder.Entity<ImageCapture>().ToTable(EntityMetadata.ImageCapture.TableName);
+            modelBuilder.Entity<ImageSector>().ToTable(EntityMetadata.ImageSector.TableName);
+            modelBuilder.Entity<Message>().ToTable(EntityMetadata.Message.TableName);
+            modelBuilder.Entity<Patient>().ToTable(EntityMetadata.Patient.TableName);
+            modelBuilder.Entity<Permission>().ToTable(EntityMetadata.Permission.TableName);
+            modelBuilder.Entity<Role>().ToTable(EntityMetadata.Role.TableName);
+            modelBuilder.Entity<Setting>().ToTable(EntityMetadata.Setting.TableName);
+            modelBuilder.Entity<User>().ToTable(EntityMetadata.User.TableName);
 
             /*
             modelBuilder.Entity<User>()
@@ -155,5 +147,26 @@ namespace EPIC.DataLayer
         private static string _currentString = "Data Source=:memory:";
     }
 
+    public partial class EntityMetadata
+    {
+        public static EntityMetadata<Entities.Calibration> Calibration => new EntityMetadata<Entities.Calibration>();
+        public static EntityMetadata<Entities.Capture> Capture => new EntityMetadata<Entities.Capture>();
+        public static EntityMetadata<Entities.Device> Device => new EntityMetadata<Entities.Device>();
+        public static EntityMetadata<Entities.DeviceCalibrationSetting> DeviceCalibrationSetting => new EntityMetadata<Entities.DeviceCalibrationSetting>();
+        public static EntityMetadata<Entities.DeviceSetting> DeviceSetting => new EntityMetadata<Entities.DeviceSetting>();
+        public static EntityMetadata<Entities.FingerSet> FingerSet => new EntityMetadata<Entities.FingerSet>();
+        public static EntityMetadata<Entities.Image> Image => new EntityMetadata<Entities.Image>();
+        public static EntityMetadata<Entities.ImageCapture> ImageCapture => new EntityMetadata<Entities.ImageCapture>();
+        public static EntityMetadata<Entities.ImageAlignment> ImageAlignment => new EntityMetadata<Entities.ImageAlignment>();
+        public static EntityMetadata<Entities.ImageCalibration> ImageCalibration => new EntityMetadata<Entities.ImageCalibration>();
+        public static EntityMetadata<Entities.ImageSector> ImageSector => new EntityMetadata<Entities.ImageSector>();
+        public static EntityMetadata<Entities.Message> Message => new EntityMetadata<Entities.Message>();
+        public static EntityMetadata<Entities.Patient> Patient => new EntityMetadata<Entities.Patient>();
+        public static EntityMetadata<Entities.Permission> Permission => new EntityMetadata<Entities.Permission>();
+        public static EntityMetadata<Entities.Role> Role => new EntityMetadata<Entities.Role>();
+        public static EntityMetadata<Entities.Setting> Setting => new EntityMetadata<Entities.Setting>();
+        public static EntityMetadata<Entities.User> User => new EntityMetadata<Entities.User>();
+
+    }
 
 }

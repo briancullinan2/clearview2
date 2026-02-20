@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -127,12 +128,8 @@ namespace EPIC.DataLayer
         }
     }
 
-    public class EntityMetadata : INotifyPropertyChanged
+    public partial class EntityMetadata : INotifyPropertyChanged
     {
-        public static EntityMetadata<Entities.User> User => new EntityMetadata<Entities.User>();
-        public static EntityMetadata<Entities.Patient> Patient => new EntityMetadata<Entities.Patient>();
-        public static EntityMetadata<Entities.Setting> Setting => new EntityMetadata<Entities.Setting>();
-        public static EntityMetadata<Entities.Message> Message => new EntityMetadata<Entities.Message>();
         public EntityMetadata? this[string key] => typeof(EntityMetadata).GetProperty(key, BindingFlags.Static | BindingFlags.Public)?.GetValue(null) as EntityMetadata;
 
         public ObservableCollection<PropertyMetadata> AllProperties { get; private set; }
@@ -143,6 +140,7 @@ namespace EPIC.DataLayer
         public AttributeValueIndexer<int?> MaxLength { get; private set; }
         public AttributeTypeIndexer Attributes { get; private set; }
         public Type EntityType { get; private set; }
+        public string? TableName { get; private set; }
 
 
         protected EntityMetadata(Type entityType) : base()
@@ -159,6 +157,7 @@ namespace EPIC.DataLayer
             Uncategorized = new ObservableCollection<PropertyMetadata>(AllProperties.Where(p => string.IsNullOrWhiteSpace(p.Category) && string.IsNullOrWhiteSpace(p.GroupName)));
 
             // Nested Indexers for the XAML [Brackets]
+            TableName = entityType.GetCustomAttributes().OfType<TableAttribute>().FirstOrDefault().Name ?? entityType.Name;
             Groups = new AttributeIndexer(AllProperties, p => p.GroupName);
             Categories = new AttributeIndexer(AllProperties, p => p.Category);
             Ungrouped = new AttributeIndexer(AllProperties.Where(p => string.IsNullOrWhiteSpace(p.GroupName)), p => p.Category);
@@ -175,6 +174,7 @@ namespace EPIC.DataLayer
     public class ModelAccessor<TModel, TReturn> where TModel : Entities.IEntity<TModel> where TReturn : struct
     {
         private readonly EntityMetadata<TModel> _model;
+        // TODO: this is kind of single purpose
         private Func<EntityMetadata<TModel>, string, TReturn> _selector;
 
         public ModelAccessor(EntityMetadata<TModel> model, Func<EntityMetadata<TModel>, string, TReturn> selector)
@@ -183,6 +183,7 @@ namespace EPIC.DataLayer
             _selector = selector;
         }
 
+        // TODO: this is kind of single purpose
         // Indexer taking a function/delegate
         public TReturn this[Expression<Func<TModel, dynamic>> property]
         {
@@ -207,6 +208,7 @@ namespace EPIC.DataLayer
         new public ModelAccessor<T, int> MaxLength;
         public EntityMetadata() : base(typeof(T))
         {
+            // TODO: this is kind of single purpose
             MaxLength = new ModelAccessor<T, int>(this, (md, property) => (int)base.MaxLength[property]);
         }
     }
