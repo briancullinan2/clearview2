@@ -73,7 +73,7 @@ namespace EPIC.DataLayer
 #endif
             else if (_connection.Contains("memory"))
             {
-                _builder = options.UseSqlite("DataSource=:memory:");
+                _builder = options.UseSqlite("Data Source=:memory:");
             }
         }
 
